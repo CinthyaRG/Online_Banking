@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title> Online Banking | Inicio </title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <!-- Bootstrap 3.3.6 -->
+        <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="../static/css/font-awesome.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="../static/css/ionicons.css">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="../static/css/AdminLTE.css">
+        <link rel="stylesheet" href="../static/css/skins/skin-green.css">
+        <link rel="stylesheet" href="../static/css/style.css">
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script type="text/javascript" src="{% static 'js/html5shiv.min.js' %}"></script>
+            <script type="text/javascript" src="{% static 'js/respond.min.js' %}"></script>
+        <![endif]-->
+        <!-- jQuery 2.2.3 -->
+        <script src="../static/plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <!-- Bootstrap 3.3.6 -->
+        <script src="../static/bootstrap/js/bootstrap.min.js"></script>
+        <!-- js app -->
+        <script src="../static/js/app.js"></script>
+        {% block script %}
+
+        {% endblock %}
+    </head>
+
+    <body class="hold-transition skin-green">
+
+        <div id="background-base" class="wrapper">
+            <!-- Main Header -->
+            <header class="main-header">
+                <!-- Logo -->
+                <a href="base-index.html" class="logo">
+                    <!-- mini logo for sidebar mini 50x50 pixels -->
+                    <span class="logo-mini"><b>O B</b></span>
+                    <!-- logo for regular state and mobile devices -->
+                    <span class="logo-lg"><img alt="Online Banking" src="../static/img/logo.png"></span>
+                </a>
+                <!-- Header Navbar -->
+                <nav class="navbar navbar-static-top" role="navigation"></nav>
+            </header>
+            <!-- Content Wrapper. Contains page content -->
+            <div id="content-login" class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                {% block content %}
+                    <section class="content-header">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div id="support" class="col-md-2 col-xs-4 text-center">
+                                    <p class="text-uppercase">
+                                        <strong> soporte banca por internet </strong>
+                                     </p>
+                                    <p>
+                                        Si tiene alguna duda o desea más información comuniquese al teléfono (xxxx)xxx-xx.xx
+                                    </p>
+                                </div>
+
+                                <div id="user-new" class="col-md-2 col-xs-4 text-center">
+                                    <p class="text-uppercase">
+                                        <strong> usuarios nuevos </strong>
+                                     </p>
+                                    <p>
+                                        Si está ingresando por primera vez a nuestro portal
+                                    </p>
+                                        <a class="btn btn-default btn-group" href="#" type="button"> Registrese </a>
+                                </div>
+
+                                <div id="login" class="text-center pull-right col-md-3 col-xs-5">
+                                    <p class="text-uppercase">
+                                        <strong> iniciar sesión </strong>
+                                     </p>
+                                    <i class="fa fa-credit-card"> </i> <span class="text-capitalize"> número de tarjeta </span>
+                                    <br>
+                                    <input class="form-control">
+                                    <i class="fa fa-lock"> </i> <span class="text-capitalize"> contraseña </span>
+                                    <br>
+                                    <input type="password" class="form-control">
+                                    <a  id="a-login" href="#"> Olvidé mi contraseña </a>
+                                    <br>
+                                    <br>
+                                    <a class="btn btn-default btn-group" type="button" href="{% url 'inicio' %}"> Entrar </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </section>
+                    <section class="content">
+                        <!-- Your Page Content Here -->
+                    </section>
+                {% endblock %}
+            </div>
+            <!-- /.content-wrapper -->
+
+            <!-- Main Footer -->
+            <footer id="footer" class="main-footer">
+                <!-- To the right -->
+                <div class="pull-right hidden-xs">
+                    LA INFORMACIÓN CONTENIDA EN ESTE PORTAL ES CONFIDENCIAL.
+                </div>
+                <!-- Default to the left -->
+                <strong>Copyright &copy; 2017 <a href="#">BANCO LOS ROQUES</a>.</strong> Todos Los Derechos Reservados.
+            </footer>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,42 @@
+#footer {
+    margin-left: 0;
+}
+#background-base {
+    background-color: #ecf0f5;
+}
+#content-login {
+    margin: 0 0 0 35px;
+    padding-top: 0;
+}
+#support {
+    background-color: rgba(173, 180, 173, 0.6);
+    border-radius: 10px;
+    padding: 5px;
+    margin-right: 100px;
+}
+#user-new {
+    background-color: rgba(67,141,136,0.58);
+    border-radius: 10px;
+    padding: 5px;
+}
+#user-new > a {
+    background-color: #c0c0c0;
+}
+#login {
+    border-radius: 10px;
+    border: 6px outset rgb(67, 141, 136);
+    padding: 15px;
+    display: block;
+    background-color: #FFF;
+}
+div > div > input {
+    margin-left: auto;
+    margin-right: auto;
+}
+#a-login:focus, #a-login:hover {
+    background-color: rgba(67,141,136,0.57);
+    color: #FFF !important;
+}
+#login > a[type=button]{
+    background-color: #c0c0c0;
+}
