@@ -31,7 +31,7 @@
         <!-- js app -->
         <script src="../static/js/app.js"></script>
         {% block script %}
-
+            <script src="../static/js/effects.js"></script>
         {% endblock %}
     </head>
 
@@ -66,6 +66,8 @@
                                     </p>
                                 </div>
 
+                                <div class="col-md-1 col-xs-2"></div>
+
                                 <div id="user-new" class="col-md-2 col-xs-4 text-center">
                                     <p class="text-uppercase">
                                         <strong> usuarios nuevos </strong>
@@ -76,7 +78,12 @@
                                         <a class="btn btn-default btn-group" href="#" type="button"> Registrese </a>
                                 </div>
 
-                                <div id="login" class="text-center pull-right col-md-3 col-xs-5">
+                                <div class="col-md-2 col-xs-12">
+                                    <p></p>
+                                    <p></p>
+                                </div>
+
+                                <div id="login" class="text-center col-md-3 col-xs-5">
                                     <p class="text-uppercase">
                                         <strong> iniciar sesión </strong>
                                      </p>
@@ -96,7 +103,15 @@
 
                     </section>
                     <section class="content">
-                        <!-- Your Page Content Here -->
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div id="info" class="col-md-6 col-xs-6 text-center">
+{#                                    <i id="icon" class="fa fa-warning fa-4x"> </i>#}
+                                    <img id="icon" src="../static/img/warning2.png">
+                                    <span>
+                                        <strong> Nunca te pediremos más de dos coordenadas de seguridad. </strong>
+                                    </span>
+                                </div>
                     </section>
                 {% endblock %}
             </div>
