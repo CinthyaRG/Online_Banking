@@ -40,7 +40,7 @@
             <!-- Main Header -->
             <header class="main-header">
                 <!-- Logo -->
-                <a href="base-index.html" class="logo">
+                <a href="{% url 'home' %}" class="logo">
                     <!-- mini logo for sidebar mini 50x50 pixels -->
                     <span class="logo-mini"><b>O B</b></span>
                     <!-- logo for regular state and mobile devices -->
@@ -115,7 +115,7 @@
                         </li>
                         <li class="menu"><a href="#"> <i class="fa fa-user-secret"> </i> <span> Perfil De Seguridad </span></a></li>
                         <li class="menu"><a href="#"> <i class="fa  fa-question"> </i> <span> Ayuda En Línea </span></a></li>
-                        <li class="menu"><a href="#"> <i class="fa fa-power-off"> </i> <span> Salir </span></a></li>
+                        <li class="menu"><a href="{% url 'salir' %}"> <i class="fa fa-power-off"> </i> <span> Salir </span></a></li>
                     </ul>
                     <!-- /.sidebar-menu -->
                 </section>

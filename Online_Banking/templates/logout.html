@@ -1,0 +1,22 @@
+{% extends "base-index.html" %}
+{% load static %}
+
+{% block script %}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div id="center" class="center-block text-center">
+                <h3> Ha cerrado sesión exitosamente, gracias por usar nuestro portal.  </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="center-block text-center">
+                <br>
+                <a class="btn btn-default btn-group btn-apps" type="button" href="{% url 'home' %}"> Ingresar Nuevamente </a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -18,6 +18,8 @@
         <link rel="stylesheet" href="../static/css/AdminLTE.css">
         <link rel="stylesheet" href="../static/css/skins/skin-green.css">
         <link rel="stylesheet" href="../static/css/style.css">
+        <link rel="stylesheet" href="../static/css/font.css">
+
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -41,7 +43,7 @@
             <!-- Main Header -->
             <header class="main-header">
                 <!-- Logo -->
-                <a href="base-index.html" class="logo">
+                <a href="{% url 'home' %}" class="logo">
                     <!-- mini logo for sidebar mini 50x50 pixels -->
                     <span class="logo-mini"><b>O B</b></span>
                     <!-- logo for regular state and mobile devices -->
@@ -75,7 +77,7 @@
                                     <p>
                                         Si está ingresando por primera vez a nuestro portal
                                     </p>
-                                        <a class="btn btn-default btn-group" href="#" type="button"> Registrese </a>
+                                        <a  class="btn btn-default btn-group btn-apps" href="#" type="button"> Registrese </a>
                                 </div>
 
                                 <div class="col-md-2 col-xs-12">
@@ -96,7 +98,7 @@
                                     <a  id="a-login" href="#"> Olvidé mi contraseña </a>
                                     <br>
                                     <br>
-                                    <a class="btn btn-default btn-group" type="button" href="{% url 'inicio' %}"> Entrar </a>
+                                    <a class="btn btn-default btn-group btn-apps" type="button" href="{% url 'inicio' %}"> Entrar </a>
                                 </div>
                             </div>
                         </div>
@@ -104,10 +106,10 @@
                     </section>
                     <section class="content">
                         <div class="container-fluid">
-                            <div class="row">
-                                <div id="info" class="col-md-6 col-xs-6 text-center">
+                            <div id="warning" class="row">
+                                <div id="info" class="col-md-5 col-xs-6 text-center">
 {#                                    <i id="icon" class="fa fa-warning fa-4x"> </i>#}
-                                    <img id="icon" src="../static/img/warning2.png">
+                                    <img id="icon" src="../static/img/warning50.png">
                                     <span>
                                         <strong> Nunca te pediremos más de dos coordenadas de seguridad. </strong>
                                     </span>

@@ -8,3 +8,14 @@ class Home(TemplateView):
 
 class Home_Client(TemplateView):
     template_name = 'base.html'
+
+
+class Logout(TemplateView):
+    template_name = 'logout.html'
+
+
+class Register_success(TemplateView):
+    template_name = 'register_success.html'
+
+class Restore_pass_success(TemplateView):
+    template_name = 'restore_pass.html'

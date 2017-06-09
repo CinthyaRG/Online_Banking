@@ -19,10 +19,7 @@
     background-color: rgba(67,141,136,0.58);
     border-radius: 10px;
     padding: 5px;
-    min-width: 100px !important;
-}
-#user-new > a {
-    background-color: #c0c0c0;
+    min-width: 110px !important;
 }
 #login {
     border-radius: 10px;
@@ -41,16 +38,26 @@ div > div > input {
     background-color: rgba(67,141,136,0.57);
     color: #FFF !important;
 }
-#login > a[type=button]{
-    background-color: #c0c0c0;
-}
 #info {
     background-color: rgba(67, 141, 136, 0.3);
-    font-size: 18px;
+    font-size: 15px;
     border-radius: 10px;
-    padding: 5px;
     min-width: 200px;
+    padding: 15px 0 15px 0;
 }
 #icon {
     color: rgb(230, 246, 16);
+}
+#warning {
+    margin-top: 30px;
+}
+#center {
+    margin-top: 250px;
+    font-size: 17px;
+}
+.btn-apps {
+    background-color: #c0c0c0;
+}
+#btn-app {
+    min-width: 150px;
 }
