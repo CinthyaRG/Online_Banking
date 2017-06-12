@@ -24,4 +24,8 @@ urlpatterns = [
         r'^nueva-pass-exitosa',
         Restore_pass_success.as_view(),
         name='nueva-pass-exitosa'),
+    url(
+        r'^registro',
+        Register.as_view(),
+        name='registro'),
 ]

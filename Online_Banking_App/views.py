@@ -17,5 +17,10 @@ class Logout(TemplateView):
 class Register_success(TemplateView):
     template_name = 'register_success.html'
 
+
 class Restore_pass_success(TemplateView):
-    template_name = 'restore_pass.html'
+    template_name = 'restore_pass_success.html'
+
+
+class Register(TemplateView):
+    template_name = 'register.html'

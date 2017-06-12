@@ -61,3 +61,77 @@ div > div > input {
 #btn-app {
     min-width: 150px;
 }
+#title-register > hr {
+    border-radius: 5px;
+    margin-top: 0;
+    margin-bottom: 0px;
+    border: 3px solid rgb(67, 141, 136);
+}
+.step > h4 {
+    padding-left: 20px;
+}
+.step > p {
+    padding-left: 50px;
+}
+.step > div[class="box"] {
+    border: 2px solid rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 600px;
+}
+.step > div > h4 > hr {
+    border-radius: 5px;
+    margin-top: 3px;
+    margin-bottom: 0px;
+    border: 2px solid rgb(67, 141, 136);
+}
+.activate {
+    background-color: rgba(67,141,136,0.58);
+}
+.pagination-register > p {
+    padding-left: 7px;
+    padding-right: 7px;
+    border: 2px solid rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
+    display: inline-block;
+}
+.input-register {
+    border-radius: 5px;
+	border: 2px solid  #d2d6de;
+    padding-left: 6px;
+    padding-right: 6px;
+}
+.label-input {
+    padding: 3px;
+    margin-right: auto;
+    width: 400px;
+}
+.rows {
+    margin-bottom: 5px;
+    padding-left: 0;
+}
+div > dl > div > div > label {
+    padding-top: 2px;
+}
+#numtarj {
+    max-width: 142px;
+}
+#pin {
+    max-width: 44px;
+}
+#ccv {
+    max-width: 36px;
+}
+#ci {
+    max-width: 72px;
+}
+.margin-register {
+    margin-left: 5px;
+}
+#step1 > div > div > a {
+    margin-left: 180px;
+}
+#btn-back {
+    margin-left: 100px;
+}

@@ -1,0 +1,22 @@
+{% extends "base-index.html" %}
+{% load static %}
+
+{% block content %}
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div id="support" class="col-md-2 col-xs-4 text-center">
+                <p class="text-uppercase">
+                    <strong> soporte banca por internet </strong>
+                 </p>
+                <p>
+                    Si tiene alguna duda o desea más información comuniquese al teléfono (xxxx)xxx-xx.xx
+                </p>
+            </div>
+            {% block register %}
+
+            {% endblock %}
+        </div>
+    </div>
+</section>
+{% endblock %}

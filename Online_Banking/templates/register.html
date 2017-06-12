@@ -1,0 +1,125 @@
+{% extends "base-info.html" %}
+{% load static %}
+
+{% block script %}
+    <script src="../static/plugins/select2/select2.full.min.js"></script>
+    <script scr="../static/plugins/select2/select2.css"></script>
+    <script src="../static/css/AdminLTE.min.css"></script>
+    <script src="../static/bootstrap/css/bootstrap.min.css"></script>
+    <script src="../static/js/effects.js"></script>
+{% endblock %}
+
+{% block register %}
+    <div class="col-md-1 col-xs-12">
+        <h1></h1>
+        <h1></h1>
+    </div>
+    <div id="title-register" class="col-md-8 col-xs-12">
+        <div class="row">
+            <div class="col-md-8 col-xs-8">
+                <span class="h3"> Registro Online Banking </span>
+            </div>
+            <div class="col-md-4 col-xs-6 pagination-register text-center">
+                <p id="number1" class="activate">1</p>
+                <p id="number2">2</p>
+                <p id="number3">3</p>
+                <p id="number4">4</p>
+                <p id="number5">5</p>
+            </div>
+        </div>
+        <hr>
+        <div id="step1" class="step">
+            <h4> Paso 1 de 5 </h4>
+            <p> Estimado Usuario: Para verificar que la información suministrada es
+            correcta se solicitará información de su tarjeta de débito por lo que se le
+            recomienda tener sus productos cerca.</p>
+            <div class="box">
+                <h4 class="center-block text-center text-capitalize">
+                    datos de su tarjeta de débito
+                    <hr>
+                </h4>
+                <div class="box-body">
+                    <dl class="dl-horizontal label-input">
+                        <div class="row">
+                            <div class="col-md-6 col-xs-4">
+                                <label class="pull-right">Número de tarjeta: </label>
+                            </div>
+                            <div class="col-md-6 col-xs-5 rows">
+                                <input id="numtarj" maxlength="18" class="input-register">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-4">
+                                <label class="pull-right">Código PIN: </label>
+                            </div>
+                            <div class="col-md-6 col-xs-5 rows">
+                                <input id="pin" maxlength="4" class="input-register">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-5">
+                                <label class="pull-right">Código de validación: </label>
+                            </div>
+                            <div class="col-md-6 col-xs-4 rows">
+                                <input maxlength="3" id="ccv" class="input-register">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-5">
+                                <label class="pull-right">Fecha de vencimiento: </label>
+                            </div>
+                            <div class="col-md-6 col-xs-3 rows">
+                                <span> Año </span>
+                                    <select id="year" class="select2 input-register" onchange="selectMonth()">
+                                    </select>
+                                <span class="margin-register"> Mes </span>
+                                    <select id="month" class="select2 input-register">
+                                    </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-4">
+                                <label class="pull-right">Cédula: </label>
+                            </div>
+                            <div class="col-md-6 col-xs-5 rows">
+                                <select class="select2 input-register">
+                                    <option selected="selected">V- </option>
+                                    <option>E- </option>
+                                </select>
+                                <input id="ci" maxlength="8" class="input-register margin-register">
+                            </div>
+                        </div>
+                  </dl>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6"></div>
+                <div class="col-md-6">
+                    <a id="btn-next" class="btn btn-default btn-group btn-apps" type="button" onclick="pagNext(1)"> Siguiente </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="step2" class="step">
+            <h4> Paso 2 de 5 </h4>
+            <p> Estimado Usuario: Para verificar que la información suministrada es
+            correcta se solicitará información de su tarjeta de débito por lo que se le
+            recomienda tener sus productos cerca.</p>
+            <div class="box">
+                <h4 class="center-block text-center text-capitalize">
+                    datos de su tarjeta de débito
+                    <hr>
+                </h4>
+            </div>
+            <div class="row">
+                <div class="col-md-6"></div>
+                <div class="col-md-6">
+                    <a id="btn-back" class="btn btn-default btn-group btn-apps" type="button" onclick="pagBack(2)"> Anterior </a>
+                    <a id="btn-next" class="btn btn-default btn-group btn-apps" type="button" onclick="pagNext(2)"> Siguiente </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
