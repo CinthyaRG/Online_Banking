@@ -24,3 +24,7 @@ class Restore_pass_success(TemplateView):
 
 class Register(TemplateView):
     template_name = 'register.html'
+
+
+class Restore_pass(TemplateView):
+    template_name = 'forgot_password.html'

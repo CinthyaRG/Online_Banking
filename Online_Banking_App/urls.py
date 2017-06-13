@@ -28,4 +28,8 @@ urlpatterns = [
         r'^registro',
         Register.as_view(),
         name='registro'),
+    url(
+        r'^restablecer-pass',
+        Restore_pass.as_view(),
+        name='restablecer-pass'),
 ]

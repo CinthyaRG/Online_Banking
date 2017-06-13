@@ -150,15 +150,15 @@ div[role="tooltip"] {
     margin-left: 20px;
 }
 .clock {
-    position: relative;
-    left: 210px;
+    position: relative !important;
+    left: 190px;
 }
 #btn-clock {
     position: relative;
     bottom: 70px;
     left: 45px;
 }
-#answ1, #answ2, #resp1, #resp2 {
+#answ1, #answ2, #resp1, #resp2, #answ {
     width: 250px;
 }
 .answers {
@@ -176,4 +176,14 @@ div[role="tooltip"] {
 }
 .progress {
     margin-bottom: -15px;
+}
+.counter {
+    font-size: 12px;
+    margin-left: 217px;
+    display: none;
+}
+.border-red {
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid #f00;
 }

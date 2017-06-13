@@ -2,11 +2,17 @@
  * Created by CinthyaCarolina on 12/6/2017.
  */
 
-
 $(document).ready(function (){
     style_pag();
     drop_years();
     help_tooltip();
+    pass_strength();
+});
+
+$(document).on('focusout', function (e) {
+    $(".counter").css({display: "none"});
+    console.log("aqui");
+    e.preventDefault();
 });
 
 function style_pag() {
@@ -69,10 +75,6 @@ function pagNext(numPag) {
     if (next === 3) {
         counter_down();
     }
-    if (next === 5) {
-        console.log("entro 5")
-        pass_strength();
-    }
 }
 
 function pagBack(numPag) {
@@ -134,4 +136,35 @@ function pass_strength() {
         showVerdictsInsideProgressBar: true,
     };
     $('#password').pwstrength(options);
+}
+
+function count_words(id,input){
+    var this_doc = $(input);
+    maxlength = this_doc.attr('maxlength');
+    maxlengthint = parseInt(maxlength);
+    textoActual = this_doc.val();
+    currentCharacters = this_doc.val().length;
+    remainingCharacters = maxlengthint - currentCharacters;
+    espan = $(id);
+    console.log(espan);
+    espan.css({display: "block"});
+    if (document.addEventListener && !window.requestAnimationFrame) {
+        if (remainingCharacters <= -1) {
+            remainingCharacters = 0;
+        }
+    }
+    espan.html(remainingCharacters+'/'+maxlengthint);
+    if (!!maxlength) {
+        var texto = this_doc.val();
+        if (texto.length >= maxlength) {
+            this_doc.removeClass().addClass("border-red");
+            this_doc.val(text.substring(0, maxlength));
+        }
+    }
+}
+
+function remove_count(id) {
+    espan = $(id);
+    $(".counter").css({display: "none"});
+    espan.css({display: "block"});
 }
