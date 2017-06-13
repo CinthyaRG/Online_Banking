@@ -80,11 +80,11 @@
                                 <label class="pull-right">Fecha de vencimiento: </label>
                             </div>
                             <div class="col-md-6 col-xs-6 rows">
-                                <span> Año </span>
-                                    <select id="year" class="select2 input-register" onchange="selectMonth()">
-                                    </select>
-                                <span class="margin-register"> Mes </span>
+                                <span> Mes </span>
                                     <select id="month" class="select2 input-register">
+                                    </select>
+                                <span class="margin-register"> Año </span>
+                                    <select id="year" class="select2 input-register" onchange="selectMonth()">
                                     </select>
                                 <i id="help-fven" data-toggle="tooltip"
                                    data-placement="right" class="fa fa-lg fa-question-circle-o"> </i>
@@ -192,7 +192,7 @@
                                 <label class="pull-right">Código: </label>
                             </div>
                             <div class="col-md-6 col-xs-5 rows">
-                                <input maxlength="10" class="input-register">
+                                <input maxlength="6" class="input-register">
                             </div>
                         </div>
                         <div class="row">
