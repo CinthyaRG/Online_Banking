@@ -3,10 +3,15 @@
 
 {% block script %}
     <script src="../static/plugins/select2/select2.full.min.js"></script>
-    <script scr="../static/plugins/select2/select2.css"></script>
-    <script src="../static/css/AdminLTE.min.css"></script>
-    <script src="../static/bootstrap/css/bootstrap.min.css"></script>
-    <script src="../static/js/effects.js"></script>
+    <link rel="stylesheet" href="../static/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="../static/plugins/FlipClock-master/compiled/flipclock.css">
+    <script src="../static/plugins/FlipClock-master/compiled/flipclock.js"></script>
+    <link rel="stylesheet" href="../static/plugins/CounterDown/css/timer.css">
+    <script src="../static/plugins/CounterDown/js/timer.js"></script>
+    <script src="../static/plugins/FlipClock-master/compiled/prefixfree.min.js"></script>
+    <script src="../static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../static/js/script-register.js"></script>
+    <script src="../static/plugins/passwordStrength/examples/pwstrength.js"></script>
 {% endblock %}
 
 {% block register %}
@@ -41,44 +46,52 @@
                 <div class="box-body">
                     <dl class="dl-horizontal label-input">
                         <div class="row">
-                            <div class="col-md-6 col-xs-4">
+                            <div class="col-md-6 col-xs-5">
                                 <label class="pull-right">Número de tarjeta: </label>
                             </div>
                             <div class="col-md-6 col-xs-5 rows">
                                 <input id="numtarj" maxlength="18" class="input-register">
+                                <i id="help-tarj" data-toggle="tooltip"
+                                   data-placement="right" class="fa fa-lg fa-question-circle-o"> </i>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-xs-4">
+                            <div class="col-md-6 col-xs-5">
                                 <label class="pull-right">Código PIN: </label>
                             </div>
                             <div class="col-md-6 col-xs-5 rows">
                                 <input id="pin" maxlength="4" class="input-register">
+                                <i id="help-pin" data-toggle="tooltip"
+                                   data-placement="right" class="fa fa-lg fa-question-circle-o"> </i>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 col-xs-5">
                                 <label class="pull-right">Código de validación: </label>
                             </div>
-                            <div class="col-md-6 col-xs-4 rows">
+                            <div class="col-md-6 col-xs-5 rows">
                                 <input maxlength="3" id="ccv" class="input-register">
+                                <i id="help-ccv" data-toggle="tooltip"
+                                   data-placement="right" class="fa fa-lg fa-question-circle-o"> </i>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 col-xs-5">
                                 <label class="pull-right">Fecha de vencimiento: </label>
                             </div>
-                            <div class="col-md-6 col-xs-3 rows">
+                            <div class="col-md-6 col-xs-6 rows">
                                 <span> Año </span>
                                     <select id="year" class="select2 input-register" onchange="selectMonth()">
                                     </select>
                                 <span class="margin-register"> Mes </span>
                                     <select id="month" class="select2 input-register">
                                     </select>
+                                <i id="help-fven" data-toggle="tooltip"
+                                   data-placement="right" class="fa fa-lg fa-question-circle-o"> </i>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-xs-4">
+                            <div class="col-md-6 col-xs-5">
                                 <label class="pull-right">Cédula: </label>
                             </div>
                             <div class="col-md-6 col-xs-5 rows">
@@ -87,6 +100,8 @@
                                     <option>E- </option>
                                 </select>
                                 <input id="ci" maxlength="8" class="input-register margin-register">
+                                <i id="help-ci" data-toggle="tooltip"
+                                   data-placement="right" class="fa fa-lg fa-question-circle-o"></i>
                             </div>
                         </div>
                   </dl>
@@ -102,20 +117,211 @@
 
         <div id="step2" class="step">
             <h4> Paso 2 de 5 </h4>
-            <p> Estimado Usuario: Para verificar que la información suministrada es
-            correcta se solicitará información de su tarjeta de débito por lo que se le
-            recomienda tener sus productos cerca.</p>
+            <p> Estimado Usuario: A continuación se le muestran los datos  que el
+                banco tiene asociados a usted. En caso de estar erróneos diríjase a
+                la agencia de su preferencia.
+            </p>
             <div class="box">
                 <h4 class="center-block text-center text-capitalize">
-                    datos de su tarjeta de débito
+                    verificación de datos
                     <hr>
                 </h4>
+                <div class="box-body">
+                    <dl class="dl-horizontal label-input">
+                        <div class="row">
+                            <div class="col-md-6 col-xs-4">
+                                <label class="pull-right">Nombres: </label>
+                            </div>
+                            <div class="col-md-6 col-xs-5 rows">
+                                <p> María Gabriela </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-4">
+                                <label class="pull-right">Apellidos: </label>
+                            </div>
+                            <div class="col-md-6 col-xs-5 rows">
+                                <p> Pérez López </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-4">
+                                <label class="pull-right">Cédula: </label>
+                            </div>
+                            <div class="col-md-6 col-xs-5 rows">
+                                <p> V-10776133 </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-4">
+                                <label class="pull-right">Email: </label>
+                            </div>
+                            <div class="col-md-6 col-xs-5 rows">
+                                <input id="email" class="input-register">
+                            </div>
+                        </div>
+                    </dl>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-6"></div>
                 <div class="col-md-6">
                     <a id="btn-back" class="btn btn-default btn-group btn-apps" type="button" onclick="pagBack(2)"> Anterior </a>
                     <a id="btn-next" class="btn btn-default btn-group btn-apps" type="button" onclick="pagNext(2)"> Siguiente </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="step3" class="step">
+            <h4> Paso 3 de 5 </h4>
+            <p> Estimado Usuario: Al correo suministrado anteriormente por usted
+                se le ha enviado un código de validación para garantizar su
+                autenticidad. Si no encuentra el correo en la bandeja de entrada,
+                revise en la bandeja de correos no deseados.
+            </p>
+            <div class="box">
+                <h4 class="center-block text-center text-capitalize">
+                    código de confirmación
+                    <hr>
+                </h4>
+                <div class="box-body">
+                    <dl class="dl-horizontal label-input">
+                        <p> Tiene dos minutos para ingresar el código.</p>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-4">
+                                <label class="pull-right">Código: </label>
+                            </div>
+                            <div class="col-md-6 col-xs-5 rows">
+                                <input maxlength="10" class="input-register">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-xs-7 cod-register">
+                                <span>
+                                    <br>
+                                    Si no ha recibido el código o expiró
+                                </span>
+                            </div>
+                            <div class="col-md-10 col-xs-12">
+                                <div class="clock"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                <a id="btn-clock" class="btn btn-default btn-group btn-apps" type="button" onclick="counter_down()">
+                                    Reenviar Código
+                                </a>
+                            </div>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6"></div>
+                <div class="col-md-6">
+                    <a id="btn-back" class="btn btn-default btn-group btn-apps" type="button" onclick="pagBack(3)"> Anterior </a>
+                    <a id="btn-next" class="btn btn-default btn-group btn-apps" type="button" onclick="pagNext(3)"> Siguiente </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="step4" class="step">
+            <h4> Paso 4 de 5 </h4>
+            <p> Estimado Usuario: Para efectos de mayor seguridad se le solicita
+                que ingrese dos preguntas de seguridad las cuales se le exigirán
+                al realizar una operación.
+            </p>
+            <div class="box">
+                <h4 class="center-block text-center text-capitalize">
+                    perfil de seguridad
+                    <hr>
+                </h4>
+                <div class="box-body">
+                    <dl class="dl-horizontal label-input">
+                        <div class="row">
+                            <div class="col-md-6 col-xs-5">
+                                <label class="pull-right">Pregunta 1: </label>
+                            </div>
+                            <div class="col-md-6 col-xs-5 rows">
+                                <input id="answ1" class="input-register">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-5">
+                                <label class="pull-right">Respuesta 1: </label>
+                            </div>
+                            <div class="col-md-6 col-xs-5 rows">
+                                <input id="resp1" class="input-register">
+                            </div>
+                        </div>
+                        <div class="row answers">
+                            <div class="col-md-6 col-xs-5">
+                                <label class="pull-right">Pregunta 2: </label>
+                            </div>
+                            <div class="col-md-6 col-xs-5 rows">
+                                <input id="answ2" class="input-register">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-5">
+                                <label class="pull-right">Respuesta 2: </label>
+                            </div>
+                            <div class="col-md-6 col-xs-5 rows">
+                                <input id="resp2" class="input-register">
+                            </div>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6"></div>
+                <div class="col-md-6">
+                    <a id="btn-back" class="btn btn-default btn-group btn-apps" type="button" onclick="pagBack(4)"> Anterior </a>
+                    <a id="btn-next" class="btn btn-default btn-group btn-apps" type="button" onclick="pagNext(4)"> Siguiente </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="step5" class="step">
+            <h4> Paso 5 de 5 </h4>
+            <p> Estimado Usuario: Tenga en cuenta que ésta contraseña tiene
+                máximo 120 días de vigencia.
+            </p>
+            <div class="box">
+                <h4 class="center-block text-center text-capitalize">
+                    contraseña de acceso
+                    <hr>
+                </h4>
+                <div class="box-body">
+                    <dl class="dl-horizontal label-input">
+                        <div id="pwd-container" class="row">
+                            <div class="col-md-6 col-xs-6">
+                                <label class="pull-right">Contraseña: </label>
+                            </div>
+                            <div class="col-md-6 col-xs-5 rows">
+                                <input type="password" id="password" class="input-register">
+                                <i id="help-pass" data-toggle="tooltip"
+                                   data-placement="right" class="fa fa-lg fa-question-circle-o"></i>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-6">
+                                <label class="pull-right">Confirmación de Contraseña: </label>
+                            </div>
+                            <div class="col-md-6 col-xs-5 rows">
+                                <input type="password" id="confirm-pass" class="input-register">
+                                <i id="help-confirm" data-toggle="tooltip"
+                                   data-placement="right" class="fa fa-lg fa-question-circle-o"></i>
+                            </div>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6"></div>
+                <div class="col-md-6">
+                    <a id="btn-back" class="btn btn-default btn-group btn-apps" type="button" onclick="pagBack(5)"> Anterior </a>
+                    <a id="btn-next" class="btn btn-default btn-group btn-apps" type="button" href="{% url 'registro-exitoso' %}"> Confirmar Registro </a>
                 </div>
             </div>
         </div>

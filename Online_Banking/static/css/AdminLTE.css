@@ -1270,12 +1270,13 @@ a.sidebar-toggle {
  * ---------------
  */
 .form-control {
-    border-radius: 0;
+    border-radius: 5px;
     box-shadow: none;
     border-color: #d2d6de;
+    width: 70%;
 }
 .form-control:focus {
-    border-color: #3c8dbc;
+    border-color: #8AB7B6;
     box-shadow: none;
 }
 .form-control::-moz-placeholder,

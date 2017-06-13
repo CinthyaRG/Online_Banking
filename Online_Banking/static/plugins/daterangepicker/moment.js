@@ -2920,8 +2920,8 @@
     }
 
     var duration_get__milliseconds = makeGetter('milliseconds');
-    var seconds      = makeGetter('seconds');
-    var minutes      = makeGetter('minutes');
+    var seconds      = makeGetter('segundos');
+    var minutes      = makeGetter('minutos');
     var hours        = makeGetter('hours');
     var days         = makeGetter('days');
     var months       = makeGetter('months');

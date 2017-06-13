@@ -102,10 +102,14 @@ div > div > input {
     padding-left: 6px;
     padding-right: 6px;
 }
+.input-register:hover, .input-register:focus {
+    border-color: #8AB7B6;
+    box-shadow: none;
+}
 .label-input {
     padding: 3px;
     margin-right: auto;
-    width: 400px;
+    width: 450px;
 }
 .rows {
     margin-bottom: 5px;
@@ -134,4 +138,42 @@ div > dl > div > div > label {
 }
 #btn-back {
     margin-left: 100px;
+}
+div[role="tooltip"] {
+    min-width: 350px;
+    display: inline-block;
+}
+#help-tarj, #help-ccv, #help-pin, #help-fven, #help-ci {
+    margin-left: 5px;
+}
+.cod-register {
+    margin-left: 20px;
+}
+.clock {
+    position: relative;
+    left: 210px;
+}
+#btn-clock {
+    position: relative;
+    bottom: 70px;
+    left: 45px;
+}
+#answ1, #answ2, #resp1, #resp2 {
+    width: 250px;
+}
+.answers {
+    margin-top: 25px;
+}
+#help-pass {
+    position: relative;
+    bottom: 29px;
+    left: 190px;
+}
+#help-confirm{
+    position: absolute;
+    bottom: 5px;
+    left: 190px;
+}
+.progress {
+    margin-bottom: -15px;
 }
