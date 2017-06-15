@@ -23,7 +23,7 @@ class Restore_pass_success(TemplateView):
 
 
 class Register(TemplateView):
-    template_name = 'register.html'
+    template_name = 'register2.html'
 
 
 class Restore_pass(TemplateView):

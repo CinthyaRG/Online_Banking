@@ -64,6 +64,43 @@ function counter_down() {
 	});
 }
 
+function count_circle() {
+    $('.clock').TimeCircles({count_past_zero: false});
+}
+
+function restore_count_circle() {
+    $('.clock').TimeCircles().destroy();
+    $('.clock').TimeCircles({count_past_zero: false});
+}
+
+function calcula(time, time2) {
+    alert("funcion");
+    var minutos;
+    var segundos;
+    var id = "clock";
+    console.log(time);
+    console.log(time2);
+
+    var diferencia=(time2.getTime()-time.getTime())/1000;
+    var dias=Math.floor(diferencia/86400);
+    diferencia=diferencia-(86400*dias);
+    var horas=Math.floor(diferencia/3600);
+    diferencia=diferencia-(3600*horas);
+    minutos=Math.floor(diferencia/60);
+    diferencia=diferencia-(60*minutos);
+    segundos=Math.floor(diferencia);
+
+    document.getElementById(id).innerText = 'Quedan ' + minutos + ' Minutos, ' + segundos + ' Segundos';
+
+    if (minutos > 0 || segundos > 0) {
+        var count = new Date();
+        console.log("dentro if");
+        console.log(count);
+        console.log(time);
+        setTimeout("calcula(time,count)",1000);
+    }
+}
+
 function pagNext(numPag) {
     var next = numPag +1;
     var step = '#step';
@@ -73,7 +110,15 @@ function pagNext(numPag) {
     $(number+next).addClass("activate");
     $(number+numPag).removeClass("activate");
     if (next === 3) {
-        counter_down();
+        // var time = new Date();
+        // var time2 = new Date(time);
+        //  time2.setSeconds(122);
+        // calcula(time, time2);
+        // counter_down();
+        count_circle();
+    }
+    if (next===4) {
+         $(".clock").TimeCircles().destroy();
     }
 }
 
@@ -86,7 +131,15 @@ function pagBack(numPag) {
     $(number+back).addClass("activate");
     $(number+numPag).removeClass("activate");
     if (back === 3) {
-        counter_down();
+        // var time = new Date();
+        // var time2 = new Date(time);
+        //  time.setSeconds(120);
+        // calcula(time, time2);
+        // counter_down();
+        count_circle();
+    }
+    if (back===2) {
+         $(".clock").TimeCircles().destroy();
     }
 }
 

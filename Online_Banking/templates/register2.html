@@ -4,12 +4,11 @@
 {% block script %}
     <script src="../static/plugins/select2/select2.full.min.js"></script>
     <link rel="stylesheet" href="../static/css/AdminLTE.min.css">
-    <link rel="stylesheet" href="../static/plugins/FlipClock-master/compiled/flipclock.css">
-    <script src="../static/plugins/FlipClock-master/compiled/flipclock.js"></script>
-    <script src="../static/plugins/FlipClock-master/compiled/prefixfree.min.js"></script>
     <script src="../static/bootstrap/js/bootstrap.min.js"></script>
     <script src="../static/js/script-register.js"></script>
     <script src="../static/plugins/passwordStrength/examples/pwstrength.js"></script>
+    <script type="text/javascript" src="../static/plugins/Circular-Countdown/inc/TimeCircles.js"></script>
+    <link href="../static/plugins/Circular-Countdown/inc/TimeCircles.css" rel="stylesheet">
 {% endblock %}
 
 {% block register %}
@@ -201,12 +200,12 @@
                                 </span>
                             </div>
                             <div class="col-md-10 col-xs-12">
-                                <div class="clock"></div>
+                                <div class="clock" data-timer="120"></div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 col-xs-12">
-                                <a id="btn-clock" class="btn btn-default btn-group btn-apps" type="button" onclick="counter_down()">
+                                <a id="btn-clock" class="btn btn-default btn-group btn-apps" type="button" onclick="restore_count_circle()">
                                     Reenviar Código
                                 </a>
                             </div>
@@ -329,7 +328,7 @@
             </div>
             <div class="row">
                 <div class="col-md-5 col-xs-5"></div>
-                <div class="col-md-6 col-xs-6">
+                <div class="col-md-6" col-xs-6>
                     <a id="btn-back" class="btn btn-default btn-group btn-apps" type="button" onclick="pagBack(5)"> Anterior </a>
                     <a id="btn-next" class="btn btn-default btn-group btn-apps" type="button" href="{% url 'registro-exitoso' %}"> Confirmar Registro </a>
                 </div>
