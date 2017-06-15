@@ -192,3 +192,13 @@ div[role="tooltip"] {
 .margin-l-15 {
     margin-left: 45px;
 }
+.img-graph {
+    height: 150px !important;
+}
+#title-graph {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+#icon-graph {
+    padding-top: 0;
+}
