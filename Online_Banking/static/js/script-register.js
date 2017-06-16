@@ -11,7 +11,6 @@ $(document).ready(function (){
 
 $(document).on('focusout', function (e) {
     $(".counter").css({display: "none"});
-    console.log("aqui");
     e.preventDefault();
 });
 
@@ -74,12 +73,9 @@ function restore_count_circle() {
 }
 
 function calcula(time, time2) {
-    alert("funcion");
     var minutos;
     var segundos;
     var id = "clock";
-    console.log(time);
-    console.log(time2);
 
     var diferencia=(time2.getTime()-time.getTime())/1000;
     var dias=Math.floor(diferencia/86400);

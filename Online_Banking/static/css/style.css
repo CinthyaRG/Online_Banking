@@ -57,6 +57,7 @@ div > div > input {
 }
 .btn-apps {
     background-color: #c0c0c0;
+    border-radius: 5px;
 }
 #btn-app {
     min-width: 150px;
@@ -192,11 +193,15 @@ div[role="tooltip"] {
 .margin-l-45 {
     margin-left: 45px !important;
 }
+.margin-l-70 {
+    margin-left: 70px !important;
+}
 .margin-l-13 {
     margin-left: 13px !important;
 }
 .img-graph {
-    height: 150px !important;
+    margin-bottom: 30px !important;
+    margin-top: 20px;
 }
 #title-graph {
     padding-top: 5px;
@@ -220,4 +225,15 @@ div[role="tooltip"] {
 #title-account {
     margin-top: 15px;
     margin-bottom: 10px !important;
+}
+.without-padding {
+    padding-left: 0;
+    padding-right: 0;
+}
+.btn-mov {
+    margin-left: 130px;
+    margin-top: 30px;
+}
+.cursor {
+    cursor: pointer;
 }

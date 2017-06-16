@@ -4,7 +4,7 @@
 {% block script %}
     <!-- bootstrap datepicker -->
     <link rel="stylesheet" href="../static/plugins/datepicker/datepicker3.css">
-    <script type="text/javascript" src="../static/js/script-account.js"></script>
+    <script type="text/javascript" src="../static/js/script-tdc.js"></script>
     <!-- DataTables -->
     <script src="../static/plugins/datatables/jquery.dataTables.js"></script>
     <script src="../static/plugins/datatables/dataTables.bootstrap.js"></script>
@@ -17,19 +17,15 @@
 {% block content %}
     <section class="content-header">
         <div class="row">
-            <div class="col-md-4 col-xs-3"></div>
-            <div class="col-md-8 col-xs-8">
+            <div class="col-md-8 col-xs-8"></div>
+            <div class="col-md-4 col-xs-3">
                 <a class="btn btn-default btn-group btn-apps" type="button" onclick="">
-                    Transferencias a Mis Cuentas </a>
-                <a class="btn btn-default btn-group btn-apps" type="button" onclick="">
-                    Transferencias Mismo Banco </a>
-                <a class="btn btn-default btn-group btn-apps" type="button" onclick="">
-                    Transferencias Otros Bancos </a>
+                    Pagar </a>
             </div>
         </div>
         <dl id="title-account" class="dl-horizontal">
-            <dt class="h3">Cuenta </dt>
-            <dd><select id="account" class="select2"></select>
+            <dt class="h3">Tarjeta de Crédito </dt>
+            <dd><select id="tdc_drop" class="select2"></select>
             </dd>
             <dt class="h4 without-margin margin-l-13">Agencia: </dt>
             <dd class="info-account">Dos Caminos</dd>

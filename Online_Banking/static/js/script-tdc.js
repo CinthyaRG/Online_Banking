@@ -10,24 +10,22 @@ $(document).ready(function (){
 });
 
 function drop_account(){
-    var account = ['Ahorro ****2222', 'Corriente ****1234']
+    var tdc = ['VISA ****1730']
 
-    $.each(account,function (i,val) {
+    $.each(tdc,function (i,val) {
         if (i ===0) {
-            $("#account").append('<option value="'+i+'" selected="selected"> '+val+'</option>');
+            $("#tdc_drop").append('<option value="'+i+'" selected="selected"> '+val+'</option>');
         }
         else {
-           $("#account").append('<option value="'+i+'"> '+val+'</option>');
+           $("#tdc_drop").append('<option value="'+i+'"> '+val+'</option>');
         }
     })
 }
 
 function movement_table() {
     var date = ['21/04/2017','18/04/2017','17/04/2017','17/04/2017','14/04/2017','13/04/2017'];
-    var ref = ['1123456','1113456','1109456','1108756','1106556','1102156'];
-    var trans = ['Depósito','Retiro','Pago','Transferencia','POS','POS'];
+    var details = ['Depósito','Retiro','Pago','Transferencia','POS','POS'];
     var amount = ['+2.000,00','-700,00','-21.000,00','-13.000,00','-1.760,67','-14.743,90'];
-    var balance = ['172.096,77','170.796,77','191.796,77','204.796,77','206.556,67','221.299,64'];
 
     $.each(date,function (i,val) {
         $("#mov-table").append('<tr data-toggle="modal" data-target="#myModal"><td>' +val+ '</td>' +

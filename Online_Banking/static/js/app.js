@@ -432,13 +432,13 @@ function _init() {
             });
     };
 
-     $('.menu').click(function(){
+    $('.menu').click(function(){
             var animationSpeed = $.AdminLTE.options.animationSpeed;
             $('.treeview-menu').not($(this).children('.treeview-menu')).slideUp(animationSpeed);
             $('li').removeClass("active");
             $(this).children('.treeview-menu').slideToggle(animationSpeed);
             $(this).addClass("active");
-        });
+    });
 
   /* ControlSidebar
    * ==============
