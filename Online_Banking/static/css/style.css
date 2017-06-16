@@ -189,8 +189,11 @@ div[role="tooltip"] {
     border-radius: 5px;
     border: 1px solid #f00;
 }
-.margin-l-15 {
-    margin-left: 45px;
+.margin-l-45 {
+    margin-left: 45px !important;
+}
+.margin-l-13 {
+    margin-left: 13px !important;
 }
 .img-graph {
     height: 150px !important;
@@ -201,4 +204,20 @@ div[role="tooltip"] {
 }
 #icon-graph {
     padding-top: 0;
+}
+#account {
+    height: 30px;
+    margin-top: 19px;
+}
+.info-account {
+    margin-top: -2px;
+    font-size: 18px;
+}
+.without-margin{
+    margin-top: 0;
+    margin-bottom: 0;
+}
+#title-account {
+    margin-top: 15px;
+    margin-bottom: 10px !important;
 }

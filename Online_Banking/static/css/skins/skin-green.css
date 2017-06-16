@@ -74,9 +74,10 @@
 }
 .skin-green .sidebar-menu > li:hover > a,
 .skin-green .sidebar-menu > li.active > a {
-    color: #ffffff;
+    /*color: #ffffff;*/
     background: #3a474b;
     border-left-color: #45ac89;
+    color: #45AC89 !important;
 }
 .skin-green .sidebar-menu > li > .treeview-menu {
     margin: 0 1px;

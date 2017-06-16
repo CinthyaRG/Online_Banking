@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block script %}
+    <script type="text/javascript" src="../static/js/script-account.js"></script>
+    <!-- DataTables -->
+    <script src="../static/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="../static/plugins/datatables/dataTables.bootstrap.js"></script>
+    {% endblock %}
+
+{% block content %}
+    <section class="content-header">
+        <div class="row">
+            <div class="col-md-4 col-xs-3"></div>
+            <div class="col-md-8 col-xs-8">
+                <a class="btn btn-default btn-group btn-apps" type="button" onclick=""> Transferencias a Mis Cuentas </a>
+                <a class="btn btn-default btn-group btn-apps" type="button" onclick=""> Transferencias Mismo Banco </a>
+                <a class="btn btn-default btn-group btn-apps" type="button" onclick=""> Transferencias Otros Bancos </a>
+            </div>
+        </div>
+        <dl id="title-account" class="dl-horizontal">
+            <dt class="h3">Cuenta </dt>
+            <dd><select id="account" class="select2 input-register"></select>
+            </dd>
+            <dt class="h4 without-margin margin-l-13">Agencia: </dt>
+            <dd class="info-account">Dos Caminos</dd>
+            <dt class="h4 without-margin margin-l-13">Estado: </dt>
+            <dd class="info-account">Activa</dd>
+        </dl>
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Saldos</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body no-padding">
+                        <table class="table table-bordered table-condensed text-center">
+                            <tbody><tr class="bg-gray">
+                                <th>Disponible</th>
+                                <th>Diferido</th>
+                                <th>Bloqueado</th>
+                            </tr>
+                            <tr>
+                                <td class="text-bold">Bs. 172.096,77</td>
+                                <td>Bs. 25.000,00</td>
+                                <td>Bs. 0 </td>
+                            </tr>
+                            </tbody></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title">Movimientos</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="example2" class="table table-bordered table-hover text-center">
+                        <thead>
+                        <tr class="bg-gray">
+                            <th>Fecha</th>
+                            <th>Referencia</th>
+                            <th>Transacción</th>
+                            <th>Monto</th>
+                            <th>Saldo</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Trident</td>
+                            <td>Internet
+                                Explorer 4.0
+                            </td>
+                            <td>Win 95+</td>
+                            <td> 4</td>
+                            <td>X</td>
+                        </tr>
+                        <tr>
+                            <td>Trident</td>
+                            <td>Internet
+                                Explorer 5.0
+                            </td>
+                            <td>Win 95+</td>
+                            <td>5</td>
+                            <td>C</td>
+                        </tr>
+                        <tr>
+                            <td>Gecko</td>
+                            <td>Mozilla 1.6</td>
+                            <td>Win 95+ / OSX.1+</td>
+                            <td>1.6</td>
+                            <td>A</td>
+                        </tr>
+                        <tr>
+                            <td>Gecko</td>
+                            <td>Mozilla 1.7</td>
+                            <td>Win 98+ / OSX.1+</td>
+                            <td>1.7</td>
+                            <td>A</td>
+                        </tr>
+                        <tr>
+                            <td>Gecko</td>
+                            <td>Mozilla 1.8</td>
+                            <td>Win 98+ / OSX.1+</td>
+                            <td>1.8</td>
+                            <td>A</td>
+                        </tr>
+                        <tr>
+                            <td>KHTML</td>
+                            <td>Konqureror 3.1</td>
+                            <td>KDE 3.1</td>
+                            <td>3.1</td>
+                            <td>C</td>
+                        </tr>
+                        <tr>
+                            <td>Tasman</td>
+                            <td>Internet Explorer 5.1</td>
+                            <td>Mac OS 7.6-9</td>
+                            <td>1</td>
+                            <td>C</td>
+                        </tr>
+                        <tr>
+                            <td>Misc</td>
+                            <td>Links</td>
+                            <td>Text only</td>
+                            <td>-</td>
+                            <td>X</td>
+                        </tr>
+                        <tr>
+                            <td>Other browsers</td>
+                            <td>All others</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>U</td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th>Rendering engine</th>
+                            <th>Browser</th>
+                            <th>Platform(s)</th>
+                            <th>Engine version</th>
+                            <th>CSS grade</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            <!-- /.box-body -->
+          </div>
+        </div>
+    </div>
+    </section>
+
+{% endblock %}
