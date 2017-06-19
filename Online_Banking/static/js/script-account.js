@@ -53,7 +53,7 @@ function movement_table() {
 
     $.each(date,function (i,val) {
         $("#mov-table").append('<tr data-toggle="modal" data-target="#myModal"><td>' +val+ '</td>' +
-            '<td>' +ref[i]+ '</td>' +
+            '<td> <span class="link"> ' +ref[i]+ '</span></td>' +
             '<td>' +trans[i]+ '</td>' +
             '<td>' +amount[i]+ '</td>' +
             '<td class="text-bold">' +balance[i]+ '</td>' +

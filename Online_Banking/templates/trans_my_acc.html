@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block script %}
+    <script type="text/javascript" src="{% static 'js/script-account.js' %}"></script>
+    <script src="{% static 'js/menu.js' %}"></script>
+    <script>
+        $(document).ready(function (){
+            menu();
+
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <section class="content-header">
+        <dl id="title-account" class="dl-horizontal">
+            <dt class="h3">Transferencia Al Mismo Titutar </dt>
+        </dl>
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <div class="box">
+                    <div class="box-body no-padding">
+                        <div class="box-body">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <dl id="title-account" class="dl-horizontal">
+                                    <dt class="h3">Cuenta a debitar: </dt>
+                                    <dd>
+                                        <select id="account" class="select2 input-register drop-trans">
+                                        </select>
+                                    </dd>
+                                    <dt class="h3">Cuenta a debitar: </dt>
+                                    <dd>
+                                        <select id="account" class="select2 input-register drop-trans">
+                                        </select>
+                                    </dd>
+                                </dl>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>Desde:</label>
+                    <div class="input-group date">
+                      <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                      </div>
+                      <input type="text" class="form-control pull-right cursor" id="datepicker">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>Hasta:</label>
+                    <div class="input-group date">
+                      <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                      </div>
+                      <input type="text" class="form-control pull-right cursor" id="datepicker2">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <p id="table-filter">
+                        <label>Tipo de Transacción: </label>
+                        <br>
+                        <select id="trans" class="select2 input-register drop-trans"></select>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="btn-mov pull-right">
+                    <a id="btn-con" class="btn btn-default btn-group btn-apps" type="button" onclick=""> Consultar </a>
+                    <a class="btn btn-default btn-group btn-apps" type="button" onclick=""> Descargar </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-xs-3"></div>
+            <div class="col-md-8 col-xs-8">
+                <a class="btn btn-default btn-group btn-apps" type="button" onclick="">
+                    Transferencias a Mis Cuentas </a>
+                <a class="btn btn-default btn-group btn-apps" type="button" onclick="">
+                    Transferencias Mismo Banco </a>
+                <a class="btn btn-default btn-group btn-apps" type="button" onclick="">
+                    Transferencias Otros Bancos </a>
+            </div>
+        </div>
+
+    </section>
+
+{% endblock %}

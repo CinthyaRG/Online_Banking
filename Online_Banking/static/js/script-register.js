@@ -194,8 +194,7 @@ function count_words(id,input){
     currentCharacters = this_doc.val().length;
     remainingCharacters = maxlengthint - currentCharacters;
     espan = $(id);
-    console.log(espan);
-    espan.css({display: "block"});
+    espan.css({display: "inline"});
     if (document.addEventListener && !window.requestAnimationFrame) {
         if (remainingCharacters <= -1) {
             remainingCharacters = 0;

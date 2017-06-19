@@ -18,7 +18,7 @@
             menu();
             $('#tdc_drop').change(function () {
                 change_drop('#tdc_drop');
-            })
+            });
             $("#example_paginate").addClass("pull-right");
         });
     </script>
@@ -26,16 +26,16 @@
 
 {% block content %}
     <section class="content-header">
+        <div id="title-tdc">
+            <span class="h3">Tarjeta de Crédito </span>
+            <select id="tdc_drop" class="select2 drop-trans input-register"></select>
+        </div>
         <div class="row">
             <div class="col-md-9 col-xs-8"></div>
-            <div class="col-md-3 col-xs-3">
-                <a id="btn-pay" class="btn btn-default btn-group btn-apps" type="button" onclick="">
+            <div class="col-md-2 col-xs-3">
+                <a id="btn-pay" class="btn btn-default btn-group btn-apps pull-right" type="button" onclick="">
                     Pagar </a>
             </div>
-        </div>
-        <div id="title-tdc">
-            <span class="h3 margin-l-80">Tarjeta de Crédito </span>
-            <select id="tdc_drop" class="select2 drop-trans input-register"></select>
         </div>
         <div class="row">
             <div class="col-md-1"></div>
@@ -107,8 +107,8 @@
                     </p>
                 </div>
             </div>
-            <div class="col-md-5">
-                <div class="btn-mov">
+            <div class="col-md-4">
+                <div class="btn-mov pull-right">
                     <a id="btn-con" class="btn btn-default btn-group btn-apps" type="button" onclick=""> Consultar </a>
                     <a class="btn btn-default btn-group btn-apps" type="button" onclick=""> Descargar </a>
                 </div>

@@ -152,7 +152,6 @@ div[role="tooltip"] {
 }
 .clock {
     position: initial !important;
-    /*margin-left: 195px;*/
     width: 250px;
     height: 120px;
 }
@@ -186,13 +185,10 @@ div[role="tooltip"] {
 }
 .counter {
     font-size: 12px;
-    margin-left: 217px;
+    margin-left: 260px;
     display: none;
-}
-.border-red {
-    outline: none;
-    border-radius: 5px;
-    border: 1px solid #f00;
+    position: absolute;
+    bottom: 5px;
 }
 .margin-l-45 {
     margin-left: 45px !important;
@@ -203,8 +199,11 @@ div[role="tooltip"] {
 .margin-l-13 {
     margin-left: 13px !important;
 }
-.margin-l-80 {
-    margin-left: 80px !important;
+.margin-l-85 {
+    margin-left: 85px !important;
+}
+.margin-l-90 {
+    margin-left: 90px !important;
 }
 .img-graph {
     margin-bottom: 30px !important;
@@ -234,13 +233,22 @@ div[role="tooltip"] {
     margin-top: 15px;
     margin-bottom: 10px !important;
 }
+#title-loan {
+    margin-left: 25px;
+    margin-top: 15px;
+    margin-bottom: 0 !important;
+}
+#loan_drop {
+    margin-top: 15px;
+    top: 2px;
+    position: relative;
+}
 .without-padding {
     padding-left: 0;
     padding-right: 0;
 }
 .btn-mov {
-    margin-left: 130px;
-    margin-top: 30px;
+    margin-top: 40px;
 }
 .cursor {
     cursor: pointer;
@@ -257,20 +265,29 @@ div[role="tooltip"] {
     background-color: #FFFFFF;
 }
 .detail-tdc {
-    margin-top: 15px;
     margin-bottom: 20px;
 }
 #title-tdc {
     margin-top: 35px;
+    margin-left: 90px;
 }
 #btn-pay {
     width: 120px;
+    margin-top: 40px;
 }
 #tdc_drop {
     width: 240px;
+    bottom: 3px;
+    position: relative;
+
 }
 .table-filter-container {
     position: relative;
     bottom: 129px;
     left: 375px;
+}
+.link {
+    /*border-bottom: 2px solid #2440d0 !important;*/
+    text-decoration-color: #2440d0 !important;
+    text-decoration: underline;
 }

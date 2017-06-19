@@ -3,7 +3,10 @@
  */
 
 function move_menu(url) {
-    location.href= url;
+    var path = window.location.href.split('/');
+    var new_url = path[0]+'/'+path[1]+'/'+path[2];
+    alert(new_url);
+    location.href= new_url+'/'+url;
 }
 
 function menu() {

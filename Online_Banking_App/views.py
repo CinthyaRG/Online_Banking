@@ -3,36 +3,44 @@ from django.views.generic import *
 
 
 class Home(TemplateView):
-    template_name = 'base-index.html'
+  template_name = 'base-index.html'
 
 
 class Home_Client(TemplateView):
-    template_name = 'base.html'
+  template_name = 'base.html'
 
 
 class Logout(TemplateView):
-    template_name = 'logout.html'
+  template_name = 'logout.html'
 
 
 class Register_success(TemplateView):
-    template_name = 'register_success.html'
+  template_name = 'register_success.html'
 
 
 class Restore_pass_success(TemplateView):
-    template_name = 'restore_pass_success.html'
+  template_name = 'restore_pass_success.html'
 
 
 class Register(TemplateView):
-    template_name = 'register2.html'
+  template_name = 'register2.html'
 
 
 class Restore_pass(TemplateView):
-    template_name = 'forgot_password.html'
+  template_name = 'forgot_password.html'
 
 
 class Account(TemplateView):
-    template_name = 'accounts.html'
+  template_name = 'accounts.html'
 
 
 class Tdc(TemplateView):
-    template_name = 'tdc.html'
+  template_name = 'tdc.html'
+
+
+class Loans(TemplateView):
+  template_name = 'loans.html'
+
+
+class Transfer_my_acc(TemplateView):
+  template_name = 'trans_my_acc.html'

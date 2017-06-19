@@ -1,0 +1,77 @@
+{% extends "accounts.html" %}
+{% load static %}
+
+{% block script %}
+    <!-- bootstrap datepicker -->
+    <link rel="stylesheet" href="{% static 'plugins/datepicker/datepicker3.css' %}">
+    <script type="text/javascript" src="{% static 'js/script-loans.js' %}"></script>
+    <!-- bootstrap datepicker -->
+    <script src="{% static 'plugins/datepicker/bootstrap-datepicker.js' %}"></script>
+    <script src="{% static 'plugins/datepicker/locales/bootstrap-datepicker.es.js' %}"></script>
+    <script src="{% static 'js/moment.min.js' %}"></script>
+    <script src="{% static 'js/menu.js' %}"></script>
+    <script>
+        $(document).ready(function (){
+            menu();
+            $('#loan_drop').change(function () {
+                change_drop('#loan_drop');
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <section class="content-header">
+        <dl id="title-loan" class="dl-horizontal">
+            <dt class="h3">Préstamo </dt>
+            <dd><select id="loan_drop" class="select2 drop-trans input-register"></select>
+            </dd>
+            <dt class="h4 without-margin margin-l-13">Producto asociado: </dt>
+            <dd class="info-account">Ahorro ****2222</dd>
+        </dl>
+        <div class="row">
+            <div class="col-md-9 col-xs-8"></div>
+            <div class="col-md-2 col-xs-3">
+                <a id="btn-pay" class="btn btn-default btn-group btn-apps pull-right" type="button" onclick="">
+                    Pagar </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <div class="bg-white detail-tdc">
+                    <div class="box-body no-padding">
+                        <table class="table table-bordered table-condensed text-center">
+                            <tbody><tr class="bg-gray">
+                                <th>Plazo(meses)</th>
+                                <th>Monto Inicial</th>
+                                <th>Monto Pendiente</th>
+                                <th>Monto Pagado</th>
+                            </tr>
+                            <tr>
+                                <td>36</td>
+                                <td class="text-bold">Bs. 200.000,00</td>
+                                <td class="text-bold">Bs. 56.520,00 </td>
+                                <td>Bs. 144.480,00 </td>
+                            </tr>
+                            </tbody>
+                            <tbody><tr class="bg-gray">
+                                <th>Fecha Otorgamiento</th>
+                                <th>Fecha Vencimiento</th>
+                                <th>Cuotas Pagadas</th>
+                                <th>Cuotas Vencidas</th>
+                            </tr>
+                            <tr>
+                                <td>10/12/2016</td>
+                                <td>10/12/2019</td>
+                                <td>28</td>
+                                <td>0</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
