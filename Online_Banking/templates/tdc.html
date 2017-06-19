@@ -1,58 +1,75 @@
-{% extends "base.html" %}
+{% extends "accounts.html" %}
 {% load static %}
 
 {% block script %}
     <!-- bootstrap datepicker -->
-    <link rel="stylesheet" href="../static/plugins/datepicker/datepicker3.css">
-    <script type="text/javascript" src="../static/js/script-tdc.js"></script>
+    <link rel="stylesheet" href="{% static 'plugins/datepicker/datepicker3.css' %}">
+    <script type="text/javascript" src="{% static 'js/script-tdc.js' %}"></script>
     <!-- DataTables -->
-    <script src="../static/plugins/datatables/jquery.dataTables.js"></script>
-    <script src="../static/plugins/datatables/dataTables.bootstrap.js"></script>
+    <script src="{% static 'plugins/datatables/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'plugins/datatables/dataTables.bootstrap.js' %}"></script>
     <!-- bootstrap datepicker -->
-    <script src="../static/plugins/datepicker/bootstrap-datepicker.js"></script>
-    <script src="../static/plugins/datepicker/locales/bootstrap-datepicker.es.js"></script>
-    <script src="../static/js/moment.min.js"></script>
+    <script src="{% static 'plugins/datepicker/bootstrap-datepicker.js' %}"></script>
+    <script src="{% static 'plugins/datepicker/locales/bootstrap-datepicker.es.js' %}"></script>
+    <script src="{% static 'js/moment.min.js' %}"></script>
+    <script src="{% static 'js/menu.js' %}"></script>
+    <script>
+        $(document).ready(function (){
+            menu();
+            $('#tdc_drop').change(function () {
+                change_drop('#tdc_drop');
+            })
+            $("#example_paginate").addClass("pull-right");
+        });
+    </script>
 {% endblock %}
 
 {% block content %}
     <section class="content-header">
         <div class="row">
-            <div class="col-md-8 col-xs-8"></div>
-            <div class="col-md-4 col-xs-3">
-                <a class="btn btn-default btn-group btn-apps" type="button" onclick="">
+            <div class="col-md-9 col-xs-8"></div>
+            <div class="col-md-3 col-xs-3">
+                <a id="btn-pay" class="btn btn-default btn-group btn-apps" type="button" onclick="">
                     Pagar </a>
             </div>
         </div>
-        <dl id="title-account" class="dl-horizontal">
-            <dt class="h3">Tarjeta de Crédito </dt>
-            <dd><select id="tdc_drop" class="select2"></select>
-            </dd>
-            <dt class="h4 without-margin margin-l-13">Agencia: </dt>
-            <dd class="info-account">Dos Caminos</dd>
-            <dt class="h4 without-margin margin-l-13">Estado: </dt>
-            <dd class="info-account">Activa</dd>
-        </dl>
+        <div id="title-tdc">
+            <span class="h3 margin-l-80">Tarjeta de Crédito </span>
+            <select id="tdc_drop" class="select2 drop-trans input-register"></select>
+        </div>
         <div class="row">
             <div class="col-md-1"></div>
             <div class="col-md-10">
-                <div class="box">
-                    <div class="box-header">
-                        <h3 class="box-title">Saldos</h3>
-                    </div>
-                    <!-- /.box-header -->
+                <div class="bg-white detail-tdc">
                     <div class="box-body no-padding">
                         <table class="table table-bordered table-condensed text-center">
                             <tbody><tr class="bg-gray">
-                                <th>Disponible</th>
-                                <th>Diferido</th>
-                                <th>Bloqueado</th>
+                                <th>Estado</th>
+                                <th>Fecha Último Pago</th>
+                                <th>Monto Último Pago</th>
+                                <th>Saldo Actual</th>
                             </tr>
                             <tr>
-                                <td class="text-bold">Bs. 172.096,77</td>
-                                <td>Bs. 25.000,00</td>
-                                <td>Bs. 0 </td>
+                                <td>Activa</td>
+                                <td>27/05/2017</td>
+                                <td>Bs. 10.000,00 </td>
+                                <td>Bs. 17.089,40 </td>
                             </tr>
-                            </tbody></table>
+                            </tbody>
+                            <tbody><tr class="bg-gray">
+                                <th>Crédito Disponible</th>
+                                <th>Pago Mínimo</th>
+                                <th>Pague Antes De</th>
+                                <th>Límite Crédito</th>
+                            </tr>
+                            <tr>
+                                <td>Bs. 32.910,60</td>
+                                <td>Bs. 5.830,19</td>
+                                <td> 29/06/2017</td>
+                                <td>Bs. 50.000,00 </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -66,7 +83,7 @@
                       <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                       </div>
-                      <input type="text" class="form-control pull-right" id="datepicker">
+                      <input type="text" class="cursor form-control pull-right" id="datepicker">
                     </div>
                 </div>
             </div>
@@ -77,19 +94,22 @@
                       <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                       </div>
-                      <input type="text" class="form-control pull-right" id="datepicker2">
+                      <input type="text" class="cursor form-control pull-right" id="datepicker2">
                     </div>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="form-group">
-                    <label>Tipo de Transacción:</label>
-                    <select id="trans" class="select2"></select>
+                    <p id="table-filter">
+                        <label>Tipo de Transacción: </label>
+                        <br>
+                        <select id="trans" class="select2 input-register drop-trans"></select>
+                    </p>
                 </div>
             </div>
             <div class="col-md-5">
                 <div class="btn-mov">
-                    <a class="btn btn-default btn-group btn-apps" type="button" onclick=""> Consultar </a>
+                    <a id="btn-con" class="btn btn-default btn-group btn-apps" type="button" onclick=""> Consultar </a>
                     <a class="btn btn-default btn-group btn-apps" type="button" onclick=""> Descargar </a>
                 </div>
             </div>
@@ -103,25 +123,21 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body without-padding">
-                        <table id="example2" class="table table-bordered table-hover text-center cursor">
+                        <table id="example" class="table table-bordered table-hover text-center">
                             <thead>
                             <tr class="bg-gray">
                                 <th>Fecha</th>
-                                <th>Referencia</th>
-                                <th>Transacción</th>
+                                <th>Concepto</th>
                                 <th>Monto</th>
-                                <th>Saldo</th>
                             </tr>
                             </thead>
-                            <tbody id="mov-table">
+                            <tbody id="mov-table-tdc">
                             </tbody>
                             <tfoot>
                             <tr class="bg-gray">
                                 <th>Fecha</th>
-                                <th>Referencia</th>
-                                <th>Transacción</th>
+                                <th>Concepto</th>
                                 <th>Monto</th>
-                                <th>Saldo</th>
                             </tr>
                             </tfoot>
                         </table>
@@ -131,37 +147,4 @@
             </div>
         </div>
     </section>
-
-    <div id="myModal" class="modal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header activate">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title text-center">Detalle de Movimiento</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="col-md-2"></div>
-                    <dl class="dl-horizontal margin-l-70">
-                        <dt>Fecha: </dt>
-                        <dd>21/04/2017</dd>
-                        <dt>Referencia: </dt>
-                        <dd>1123456</dd>
-                        <dt>Tipo de Transacción: </dt>
-                        <dd>Depósito</dd>
-                        <dt>Monto: </dt>
-                        <dd>Bs. 2.000,00</dd>
-                        <dt>Detalles: </dt>
-                        <dd>Depósito realizado en la agencia de Los Ruices</dd>
-                    </dl>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-right btn-apps" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
 {% endblock %}

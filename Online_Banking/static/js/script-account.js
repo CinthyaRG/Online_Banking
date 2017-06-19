@@ -7,17 +7,39 @@ $(document).ready(function (){
     movement_table();
     drop_trans();
 
+    var table = $('#example2').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "ordering": true,
+        "order": [ 0, 'desc' ],
+        "info": true,
+        "autoWidth": false,
+        "pageLength":5,
+        dom:'lr<"table-filter-container">tip',
+        initComplete: function () {
+            $('#btn-con').click(function () {
+                if ($('#trans').val() !== 0) {
+                    table.search($('#trans').val()).draw();
+                }
+            });
+        }
+    });
 });
 
 function drop_account(){
-    var account = ['Ahorro ****2222', 'Corriente ****1234']
+    var account = ['Ahorro ****2222', 'Corriente ****1234'];
+    var path = window.location.pathname.split('/');
+    var key = path[2];
 
     $.each(account,function (i,val) {
-        if (i ===0) {
-            $("#account").append('<option value="'+i+'" selected="selected"> '+val+'</option>');
+        if (key === '1' && val.includes("Ahorro")) {
+            $("#account").append('<option value="'+(i+1)+'" selected="selected"> '+val+'</option>');
+        }
+        else if (key === '2' && val.includes("Corriente")) {
+            $("#account").append('<option value="'+(i+1)+'" selected="selected"> '+val+'</option>');
         }
         else {
-           $("#account").append('<option value="'+i+'"> '+val+'</option>');
+           $("#account").append('<option value="'+(i+1)+'"> '+val+'</option>');
         }
     })
 }
@@ -40,26 +62,16 @@ function movement_table() {
 }
 
 function drop_trans(){
-    var type_trans = ['Depósito', 'Retiro', 'POS', 'Transferencias']
-    $("#trans").append('<option value="'+""+'" selected="selected"> '+"Seleccione"+'</option>');
+    var type_trans = ['Depósito', 'Retiro', 'POS', 'Transferencia','Pagos'];
+    $("#trans").append('<option value="'+'0'+'" selected="selected"> '+"Seleccione"+'</option>');
 
     $.each(type_trans,function (i,val) {
-           $("#trans").append('<option value="'+i+'"> '+val+'</option>');
+           $("#trans").append('<option value="'+val+'"> '+val+'</option>');
     })
 }
 
 
 $(function () {
-    $('#example2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "order": [ 0, 'desc' ],
-        "info": true,
-        "autoWidth": false,
-        "pageLength":5
-    });
 
     $('#datepicker').datepicker({
         autoclose: true,

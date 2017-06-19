@@ -33,7 +33,11 @@ urlpatterns = [
         Restore_pass.as_view(),
         name='restablecer-pass'),
     url(
-        r'^consultar-cuenta',
+        r'^consultar-cuenta/(?P<pk>\d+)/',
         Account.as_view(),
         name='consultar-cuenta'),
+    url(
+        r'^consultar-tdc/(?P<pk>\d+)/',
+        Tdc.as_view(),
+        name='consultar-tdc'),
 ]

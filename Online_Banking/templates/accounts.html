@@ -3,15 +3,25 @@
 
 {% block script %}
     <!-- bootstrap datepicker -->
-    <link rel="stylesheet" href="../static/plugins/datepicker/datepicker3.css">
-    <script type="text/javascript" src="../static/js/script-account.js"></script>
+    <link rel="stylesheet" href="{% static 'plugins/datepicker/datepicker3.css' %}">
+    <script type="text/javascript" src="{% static 'js/script-account.js' %}"></script>
     <!-- DataTables -->
-    <script src="../static/plugins/datatables/jquery.dataTables.js"></script>
-    <script src="../static/plugins/datatables/dataTables.bootstrap.js"></script>
+    <script src="{% static 'plugins/datatables/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'plugins/datatables/dataTables.bootstrap.js' %}"></script>
     <!-- bootstrap datepicker -->
-    <script src="../static/plugins/datepicker/bootstrap-datepicker.js"></script>
-    <script src="../static/plugins/datepicker/locales/bootstrap-datepicker.es.js"></script>
-    <script src="../static/js/moment.min.js"></script>
+    <script src="{% static 'plugins/datepicker/bootstrap-datepicker.js' %}"></script>
+    <script src="{% static 'plugins/datepicker/locales/bootstrap-datepicker.es.js' %}"></script>
+    <script src="{% static 'js/moment.min.js' %}"></script>
+    <script src="{% static 'js/menu.js' %}"></script>
+    <script>
+        $(document).ready(function (){
+            menu();
+            $('#account').change(function () {
+                change_drop('#account');
+            })
+            $("#example2_paginate").addClass("pull-right");
+        });
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -29,7 +39,7 @@
         </div>
         <dl id="title-account" class="dl-horizontal">
             <dt class="h3">Cuenta </dt>
-            <dd><select id="account" class="select2"></select>
+            <dd><select id="account" class="select2 input-register drop-trans"></select>
             </dd>
             <dt class="h4 without-margin margin-l-13">Agencia: </dt>
             <dd class="info-account">Dos Caminos</dd>
@@ -70,7 +80,7 @@
                       <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                       </div>
-                      <input type="text" class="form-control pull-right" id="datepicker">
+                      <input type="text" class="form-control pull-right cursor" id="datepicker">
                     </div>
                 </div>
             </div>
@@ -81,19 +91,22 @@
                       <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                       </div>
-                      <input type="text" class="form-control pull-right" id="datepicker2">
+                      <input type="text" class="form-control pull-right cursor" id="datepicker2">
                     </div>
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="form-group">
-                    <label>Tipo de Transacción:</label>
-                    <select id="trans" class="select2"></select>
+                    <p id="table-filter">
+                        <label>Tipo de Transacción: </label>
+                        <br>
+                        <select id="trans" class="select2 input-register drop-trans"></select>
+                    </p>
                 </div>
             </div>
             <div class="col-md-5">
                 <div class="btn-mov">
-                    <a class="btn btn-default btn-group btn-apps" type="button" onclick=""> Consultar </a>
+                    <a id="btn-con" class="btn btn-default btn-group btn-apps" type="button" onclick=""> Consultar </a>
                     <a class="btn btn-default btn-group btn-apps" type="button" onclick=""> Descargar </a>
                 </div>
             </div>
@@ -161,7 +174,7 @@
                     </dl>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-right btn-apps" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default pull-right btn-apps" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
             <!-- /.modal-content -->

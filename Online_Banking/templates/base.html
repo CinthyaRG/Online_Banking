@@ -9,33 +9,34 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
-    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="../static/css/font-awesome.css">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
     <!-- Ionicons -->
-    <link rel="stylesheet" href="../static/css/ionicons.css">
+    <link rel="stylesheet" href="{% static 'css/ionicons.css' %}">
     <!-- Theme style -->
-    <link rel="stylesheet" href="../static/css/AdminLTE.css">
-    <link rel="stylesheet" href="../static/css/skins/skin-green.css">
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="{% static 'css/AdminLTE.css' %}">
+    <link rel="stylesheet" href="{% static 'css/skins/skin-green.css' %} ">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font.css' %}">
     <!-- jQuery 2.2.3 -->
-    <script src="../static/plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="{% static 'plugins/jQuery/jquery-2.2.3.min.js' %}"></script>
     <!-- Bootstrap 3.3.6 -->
-    <script src="../static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     <!-- js app -->
-    <script src="../static/js/app.js"></script>
+    <script src="{% static 'js/app.js' %}"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-<script type="text/javascript" src="{% static 'js/html5shiv.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/respond.min.js' %}"></script>
-<![endif]-->
+        <script type="text/javascript" src="{% static 'js/html5shiv.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/respond.min.js' %}"></script>
+    <![endif]-->
     {% block script %}
         <script type="text/javascript" src="http://www.gstatic.com/charts/loader.js">
         </script>
-        <script type="text/javascript" src="../static/js/charts.js">
+        <script type="text/javascript" src="{% static 'js/charts.js' %}">
         </script>
-        <script type="text/javascript" src="../static/js/menu.js">
+        <script type="text/javascript" src="{% static 'js/menu.js' %}">
         </script>
     {% endblock %}
 </head>
@@ -49,7 +50,7 @@
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><b>O B</b></span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><img alt="Online Banking" src="../static/img/logo.png"></span>
+            <span class="logo-lg"><img alt="Online Banking" src="{% static 'img/logo.png' %}"></span>
         </a>
         <!-- Header Navbar -->
         <nav class="navbar navbar-static-top" role="navigation">
@@ -79,41 +80,41 @@
             <!-- Sidebar Menu -->
             <ul class="sidebar-menu">
                 <!-- Optionally, you can add icons to the links -->
-                <li id="pos_con" class="active menu">
-                    <a href="{% url 'inicio' %}"> <i class="fa  fa-line-chart"> </i>
+                <li class="active menu">
+                    <a id="pos_con" href="{% url 'inicio' %}"> <i class="fa  fa-line-chart"> </i>
                         <span> Posición Consolidada </span>
                     </a>
                 </li>
-                <li id="abc" class="treeview">
-                    <a id="inquiries"> <i class="fa  fa-calculator"> </i> <span> Consultas </span>
+                <li id="inquiries" class="treeview">
+                    <a> <i class="fa  fa-calculator"> </i> <span> Consultas </span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li id="acc_ah"><a href="{% url 'consultar-cuenta' %}"> Cuenta Ahorro </a></li>
-                        <li id="acc_corr"><a href="{% url 'consultar-cuenta' %}"> Cuenta Corriente </a></li>
-                        <li id="tdc"><a href="#"> Tarjeta de Crédito </a></li>
-                        <li id="prest"><a href="#"> Préstamos </a></li>
+                        <li><a id="acc-aho" href="{% url 'consultar-cuenta' 1 %}"> Cuenta Ahorro </a></li>
+                        <li><a id="acc-corr" href="{% url 'consultar-cuenta' 2 %}"> Cuenta Corriente </a></li>
+                        <li><a id="tdc" href="{% url 'consultar-tdc' 1 %}"> Tarjeta de Crédito </a></li>
+                        <li><a id="prest" href="#"> Préstamos </a></li>
                     </ul>
                 </li>
-                <li class="treeview">
+                <li id="transfers" class="treeview">
                     <a> <i class="glyphicon glyphicon-transfer"> </i> <span> Transferencias </span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="#" onclick="move_menu('consultar-cuenta'); return false;"> Mis Cuentas </a></li>
-                        <li class="treeview">
+                        <li><a id="my-acc" href="#"> Mis Cuentas </a></li>
+                        <li id="transfers-others" class="treeview">
                             <a> <i class="fa fa-users"> </i> <span> Terceros </span>
                                 <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a href="#"> Mismo Banco </a></li>
-                                <li><a href="#"> Otros Bancos  </a></li>
+                                <li><a id="my-bank" href="#"> Mismo Banco </a></li>
+                                <li><a id="other-bank" href="#"> Otros Bancos  </a></li>
                             </ul>
                         </li>
                     </ul>
@@ -136,10 +137,89 @@
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         {% block content %}
-            <section id="section" class="content-header">
+            <section class="content-header">
+                <h1 class="text-capitalize margin-l-45">gráfico de productos</h1>
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-10 col-lg-10 margin-l-45">
+                        <div class="img-graph" id="graph"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10">
+                        <div class="box">
+                            <div class="box-header">
+                                <h3 class="box-title">Activos</h3>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body no-padding">
+                                <table class="table table-bordered table-condensed text-center">
+                                    <tbody><tr class="bg-gray bg-gray-active">
+                                        <th>Tipos de Cuenta</th>
+                                        <th>Números de Cuenta</th>
+                                        <th>Estado</th>
+                                        <th>Saldo Disponible</th>
+                                    </tr>
+                                    <tr class="cursor" onclick="move_menu('consultar-cuenta/1/')">
+                                        <td>Ahorros</td>
+                                        <td>017600**********2222</td>
+                                        <td>Activa</td>
+                                        <td class="text-bold">Bs. 172.096,77</td>
+                                    </tr>
+                                    <tr class="cursor" onclick="move_menu('consultar-cuenta/2/')">
+                                        <td>Corriente</td>
+                                        <td>017602**********1234</td>
+                                        <td>Activa</td>
+                                        <td class="text-bold">Bs. 36.289,24</td>
+                                    </tr>
+                                    </tbody></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10">
+                        <div class="box">
+                            <div class="box-header">
+                                <h3 class="box-title">Pasivos</h3>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body no-padding">
+                                <table class="table table-bordered table-condensed text-center">
+                                    <tbody><tr class="bg-gray bg-gray-active">
+                                        <th>Tipos de Tarjeta</th>
+                                        <th>Números de Tarjeta</th>
+                                        <th>Saldo Actual</th>
+                                        <th>Pague antes de</th>
+                                    </tr>
+                                    <tr class="cursor" onclick="move_menu('consultar-tdc/1')">
+                                        <td>Visa</td>
+                                        <td>4541********1730</td>
+                                        <td class="text-bold">Bs.17.089,40</td>
+                                        <td>29/06/2017</td>
+                                    </tr>
+                                    </tbody>
+                                    <tbody><tr class="bg-gray bg-gray-active">
+                                        <th>Número de Préstamo</th>
+                                        <th>Producto Asociado</th>
+                                        <th>Monto Pendiente</th>
+                                        <th>Pague antes de</th>
+                                    </tr>
+                                    <tr class="cursor" onclick="location.href= '{% url 'home' %}'">
+                                        <td>17897001</td>
+                                        <td>Ahorro *****2222</td>
+                                        <td class="text-bold">Bs. 56.520,00</td>
+                                        <td>24/06/2017</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
-
-            <!-- /.content -->
         {% endblock %}
     </div>
     <!-- /.content-wrapper -->

@@ -37,7 +37,6 @@ function drop_years(){
 function selectMonth(){
     var year = $('#year').val();
     var today = new Date().toJSON().slice(0,10);
-    console.log(today);
     var month;
     if (year === "17") {
         month = parseInt(today.slice(5,7));

@@ -32,3 +32,7 @@ class Restore_pass(TemplateView):
 
 class Account(TemplateView):
     template_name = 'accounts.html'
+
+
+class Tdc(TemplateView):
+    template_name = 'tdc.html'

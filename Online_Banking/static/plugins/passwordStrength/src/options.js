@@ -79,7 +79,7 @@ defaultOptions.ui.errorMessages = {
     wordRepetitions: "Too many repetitions",
     wordSequences: "Your password contains sequences"
 };
-defaultOptions.ui.verdicts = ["Weak", "Normal", "Medium", "Strong", "Very Strong"];
+defaultOptions.ui.verdicts = ["Débil", "Normal", "Medio", "Segura", "Muy Segura"];
 defaultOptions.ui.showVerdicts = true;
 defaultOptions.ui.showVerdictsInsideProgressBar = false;
 defaultOptions.ui.showErrors = false;

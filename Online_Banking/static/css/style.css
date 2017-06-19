@@ -52,7 +52,7 @@ div > div > input {
     margin-top: 30px;
 }
 #center {
-    margin-top: 250px;
+    margin-top: 215px;
     font-size: 17px;
 }
 .btn-apps {
@@ -152,7 +152,7 @@ div[role="tooltip"] {
 }
 .clock {
     position: initial !important;
-    margin-left: 195px;
+    /*margin-left: 195px;*/
     width: 250px;
     height: 120px;
 }
@@ -179,6 +179,10 @@ div[role="tooltip"] {
 }
 .progress {
     margin-bottom: -15px;
+    width: 185px;
+}
+.password {
+    width: 185px;
 }
 .counter {
     font-size: 12px;
@@ -199,6 +203,9 @@ div[role="tooltip"] {
 .margin-l-13 {
     margin-left: 13px !important;
 }
+.margin-l-80 {
+    margin-left: 80px !important;
+}
 .img-graph {
     margin-bottom: 30px !important;
     margin-top: 20px;
@@ -213,6 +220,7 @@ div[role="tooltip"] {
 #account {
     height: 30px;
     margin-top: 19px;
+    width: 160px;
 }
 .info-account {
     margin-top: -2px;
@@ -236,4 +244,33 @@ div[role="tooltip"] {
 }
 .cursor {
     cursor: pointer;
+}
+.activate-menu {
+    background: #3a474b;
+    color: #45AC89 !important;
+}
+.drop-trans {
+    height: 34px;
+    width: 140px;
+}
+.bg-white {
+    background-color: #FFFFFF;
+}
+.detail-tdc {
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+#title-tdc {
+    margin-top: 35px;
+}
+#btn-pay {
+    width: 120px;
+}
+#tdc_drop {
+    width: 240px;
+}
+.table-filter-container {
+    position: relative;
+    bottom: 129px;
+    left: 375px;
 }

@@ -9,16 +9,22 @@
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <!-- Bootstrap 3.3.6 -->
-        <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
         <!-- Font Awesome -->
-        <link rel="stylesheet" href="../static/css/font-awesome.css">
+        <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
         <!-- Ionicons -->
-        <link rel="stylesheet" href="../static/css/ionicons.css">
+        <link rel="stylesheet" href="{% static 'css/ionicons.css' %}">
         <!-- Theme style -->
-        <link rel="stylesheet" href="../static/css/AdminLTE.css">
-        <link rel="stylesheet" href="../static/css/skins/skin-green.css">
-        <link rel="stylesheet" href="../static/css/style.css">
-        <link rel="stylesheet" href="../static/css/font.css">
+        <link rel="stylesheet" href="{% static 'css/AdminLTE.css' %}">
+        <link rel="stylesheet" href="{% static 'css/skins/skin-green.css' %} ">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/font.css' %}">
+        <!-- jQuery 2.2.3 -->
+        <script src="{% static 'plugins/jQuery/jquery-2.2.3.min.js' %}"></script>
+        <!-- Bootstrap 3.3.6 -->
+        <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+        <!-- js app -->
+        <script src="{% static 'js/app.js' %}"></script>
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -26,14 +32,8 @@
             <script type="text/javascript" src="{% static 'js/html5shiv.min.js' %}"></script>
             <script type="text/javascript" src="{% static 'js/respond.min.js' %}"></script>
         <![endif]-->
-        <!-- jQuery 2.2.3 -->
-        <script src="../static/plugins/jQuery/jquery-2.2.3.min.js"></script>
-        <!-- Bootstrap 3.3.6 -->
-        <script src="../static/bootstrap/js/bootstrap.min.js"></script>
-        <!-- js app -->
-        <script src="../static/js/app.js"></script>
         {% block script %}
-            <script src="../static/js/effects.js"></script>
+            <script src="{% static 'js/effects.js' %}"></script>
         {% endblock %}
     </head>
 
@@ -47,7 +47,7 @@
                     <!-- mini logo for sidebar mini 50x50 pixels -->
                     <span class="logo-mini"><b>O B</b></span>
                     <!-- logo for regular state and mobile devices -->
-                    <span class="logo-lg"><img alt="Online Banking" src="../static/img/logo.png"></span>
+                    <span class="logo-lg"><img alt="Online Banking" src="{% static 'img/logo.png' %}"></span>
                 </a>
                 <!-- Header Navbar -->
                 <nav class="navbar navbar-static-top" role="navigation"></nav>
