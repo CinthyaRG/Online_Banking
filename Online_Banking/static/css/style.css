@@ -216,7 +216,7 @@ div[role="tooltip"] {
 #icon-graph {
     padding-top: 0;
 }
-#account, #account2 {
+#account, #account1, #account2 {
     height: 30px;
     margin-top: 19px;
     width: 160px;
@@ -310,6 +310,45 @@ div[role="tooltip"] {
     margin-top: 10px;
 }
 #balance-acc {
-    margin-left: 15px;
+    margin-left: 5px;
     display: none;
+}
+.padding-tb {
+    padding-top: 5px;
+    padding-bottom: 0;
+}
+.color-icon {
+    color: rgba(0,11,5,0.78);
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.color-delete {
+    margin-left: 5px;
+    color: #d03e35;
+    margin-right: 5px;
+}
+.modal-trans {
+    max-width: 550px;
+}
+#table-transf_filter {
+    position: relative;
+    bottom: 5px;
+}
+#table-transf_filter > label > input {
+    margin-left: 10px;
+}
+#title-transf-bank {
+    margin-top: 15px;
+    margin-bottom: 30px !important;
+    margin-left: 100px;
+}
+.box-transf {
+    margin-bottom: 0px;
+}
+#table-payments_filter {
+    position: relative;
+    bottom: 5px;
+}
+#table-payments_filter > label > input {
+    margin-left: 10px;
 }

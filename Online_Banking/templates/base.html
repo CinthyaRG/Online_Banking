@@ -34,10 +34,8 @@
     {% block script %}
         <script type="text/javascript" src="http://www.gstatic.com/charts/loader.js">
         </script>
-        <script type="text/javascript" src="{% static 'js/charts.js' %}">
-        </script>
-        <script type="text/javascript" src="{% static 'js/menu.js' %}">
-        </script>
+        <script type="text/javascript" src="{% static 'js/charts.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/menu.js' %}"></script>
     {% endblock %}
 </head>
 
@@ -107,26 +105,33 @@
                     <ul class="treeview-menu">
                         <li><a id="my-acc" href="{% url 'transf-mis-cuentas' %}"> Mis Cuentas </a></li>
                         <li id="transfers-others" class="treeview">
-                            <a> <i class="fa fa-users"> </i> <span> Terceros </span>
+                            <a id="transf-other"> <i class="fa fa-users"> </i> <span> Terceros </span>
                                 <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a id="my-bank" href="#"> Mismo Banco </a></li>
-                                <li><a id="other-bank" href="#"> Otros Bancos  </a></li>
+                                <li><a id="my-bank" href="{% url 'transf-mi-banco' %}">
+                                    Mismo Banco </a></li>
+                                <li><a id="other-bank" href="{% url 'transf-otros-bancos' %}">
+                                    Otros Bancos  </a></li>
                             </ul>
                         </li>
                     </ul>
                 </li>
-                <li class="menu"><a href="#"> <i class="fa  fa-money"> </i> <span> Pagos </span></a></li>
-                <li class="menu"><a href="#"> <i class="fa fa-list"></i> <span> Solicitudes En Línea </span></a></li>
-                <li class="menu"><a href="#"> <i class="fa fa-check-square-o"></i>
+                <li id="payments" class="menu"><a href="{% url 'pagos' %}"> <i class="fa fa-money"> </i>
+                    <span> Pagos </span></a></li>
+                <li id="request" class="menu"><a href="#"> <i class="fa fa-list"></i>
+                    <span> Solicitudes En Línea </span></a></li>
+                <li id="management" class="menu"><a href="#"> <i class="fa fa-check-square-o"></i>
                     <span> Gestión De Productos </span></a>
                 </li>
-                <li class="menu"><a href="#"> <i class="fa fa-user-secret"> </i> <span> Perfil De Seguridad </span></a></li>
-                <li class="menu"><a href="#"> <i class="fa  fa-question"> </i> <span> Ayuda En Línea </span></a></li>
-                <li class="menu"><a href="{% url 'salir' %}"> <i class="fa fa-power-off"> </i> <span> Salir </span></a></li>
+                <li id="profile" class="menu"><a href="#"> <i class="fa fa-user-secret"> </i>
+                    <span> Perfil De Seguridad </span></a></li>
+                <li id="help" class="menu"><a href="#"> <i class="fa  fa-question"> </i>
+                    <span> Ayuda En Línea </span></a></li>
+                <li class="menu"><a href="{% url 'salir' %}"> <i class="fa fa-power-off"> </i>
+                    <span> Salir </span></a></li>
             </ul>
             <!-- /.sidebar-menu -->
         </section>
@@ -161,13 +166,13 @@
                                         <th>Estado</th>
                                         <th>Saldo Disponible</th>
                                     </tr>
-                                    <tr class="cursor" onclick="move_menu('consultar-cuenta/1/')">
+                                    <tr class="cursor" onclick="move('consultar-cuenta/1/')">
                                         <td>Ahorros</td>
                                         <td class="link">017600**********2222</td>
                                         <td>Activa</td>
                                         <td class="text-bold">Bs. 172.096,77</td>
                                     </tr>
-                                    <tr class="cursor" onclick="move_menu('consultar-cuenta/2/')">
+                                    <tr class="cursor" onclick="move('consultar-cuenta/2/')">
                                         <td>Corriente</td>
                                         <td class="link">017602**********1234</td>
                                         <td>Activa</td>
@@ -194,7 +199,7 @@
                                         <th>Saldo Actual</th>
                                         <th>Pague antes de</th>
                                     </tr>
-                                    <tr class="cursor" onclick="move_menu('consultar-tdc/1')">
+                                    <tr class="cursor" onclick="move('consultar-tdc/1')">
                                         <td>Visa</td>
                                         <td class="link">4541********1730</td>
                                         <td class="text-bold">Bs.17.089,40</td>

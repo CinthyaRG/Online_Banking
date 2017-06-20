@@ -2,11 +2,12 @@
  * Created by CinthyaCarolina on 16/6/2017.
  */
 
-function move_menu(url) {
+function move(url) {
     var path = window.location.href.split('/');
     var new_url = path[0]+'/'+path[1]+'/'+path[2];
     location.href= new_url+'/'+url;
 }
+
 
 function menu() {
     var animationSpeed = $.AdminLTE.options.animationSpeed;
@@ -42,6 +43,21 @@ function menu() {
         nivel = 1;
         var _this = $('#transfers-others');
     }
+    else if (act_pat === "pagos") {
+        var _this = $('#payments');
+    }
+    else if (act_pat === "solicitudes") {
+        var _this = $('#request');
+    }
+    else if (act_pat === "gestion-productos") {
+        var _this = $('#management');
+    }
+    else if (act_pat === "perfil-seguridad") {
+        var _this = $('#profile');
+    }
+    else if (act_pat === "ayuda") {
+        var _this = $('#help');
+    }
     else {
         $('#other-bank').addClass("activate-menu");
         nivel= 1;
@@ -59,8 +75,8 @@ function menu() {
         $('li').removeClass("active");
         $(_this).children('.treeview-menu').slideToggle(animationSpeed);
         $(_this).addClass("active");
-        $(_this).addClass("activate-menu");
         $("#transfers").addClass("active");
+        $("#transf-other").addClass("activate-menu");
     }
 }
 

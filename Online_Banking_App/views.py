@@ -44,3 +44,15 @@ class Loans(TemplateView):
 
 class Transfer_my_acc(TemplateView):
   template_name = 'trans_my_acc.html'
+
+
+class Transfer_my_bank(TemplateView):
+  template_name = 'trans_my_bank.html'
+
+
+class Transfer_others_bank(TemplateView):
+  template_name = 'trans_other_bank.html'
+
+
+class Payments(TemplateView):
+  template_name = 'payments.html'

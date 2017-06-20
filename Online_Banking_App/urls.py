@@ -48,4 +48,16 @@ urlpatterns = [
     r'^transf-mis-cuentas',
     Transfer_my_acc.as_view(),
     name='transf-mis-cuentas'),
+  url(
+    r'^transf-mi-banco',
+    Transfer_my_bank.as_view(),
+    name='transf-mi-banco'),
+  url(
+    r'^transf-otros-bancos',
+    Transfer_others_bank.as_view(),
+    name='transf-otros-bancos'),
+  url(
+    r'^pagos',
+    Payments.as_view(),
+    name='pagos'),
 ]

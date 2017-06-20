@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block script %}
+    <!-- DataTables -->
+    <script src="{% static 'plugins/datatables/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'plugins/datatables/dataTables.bootstrap.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/script-payments.js' %}"></script>
+    <script src="{% static 'js/menu.js' %}"></script>
+    <script>
+        $(document).ready(function (){
+            $("#table-payments_paginate").addClass("pull-right");
+            $("#table-payments_filter").addClass("pull-right");
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <section class="content-header">
+        <div class="row" id="title-transf-bank">
+            <h3> Pagos </h3>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-xs-4"></div>
+            <div class="col-md-8 col-xs-8">
+                <a class="btn btn-default btn-group btn-apps pull-right" type="button"
+                   onclick=""> Agregar Servicio </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <div class="box">
+                    <div class="box-header padding-tb">
+                        <h3 class="box-title">Lista de Servicios</h3>
+                        <p>Seleccione un servicio para realizar un pago</p>
+                    </div>
+                    <div class="box-body no-padding">
+                        <table id="table-payments" class="table table-bordered table-hover text-center">
+                            <thead>
+                            <tr class="bg-gray">
+                                <th>Alias</th>
+                                <th>Nombre Servicio</th>
+                                <th>Tipo</th>
+                                <th>Producto</th>
+                                <th>Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody id="body-table-pay">
+                            </tbody>
+                            <tfoot>
+                            <tr class="bg-gray">
+                                <th>Alias</th>
+                                <th>Nombre Servicio</th>
+                                <th>Tipo</th>
+                                <th>Producto</th>
+                                <th>Acciones</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                <!-- /.box-body -->
+              </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="Modal-Delete-Payments" class="modal">
+        <div class="modal-dialog modal-trans">
+            <div class="modal-content">
+                <div class="modal-header activate">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title text-center">Eliminar Afiliado</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-11">
+                            <p> ¿Está seguro que desea eliminar el servicio asociado al producto
+                                <strong> Prestamo-17897001 </strong>de la lista de sus servicios? </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-default btn-apps"
+                                data-dismiss="modal">Cancelar</button>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-default btn-apps"
+                                data-dismiss="modal">Aceptar</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+{% endblock %}

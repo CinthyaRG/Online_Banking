@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block script %}
+    <!-- DataTables -->
+    <script src="{% static 'plugins/datatables/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'plugins/datatables/dataTables.bootstrap.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/script-transfers.js' %}"></script>
+    <script src="{% static 'js/menu.js' %}"></script>
+    <script>
+        $(document).ready(function (){
+            $("#table-transf_paginate").addClass("pull-right");
+            $("#table-transf_filter").addClass("pull-right");
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <section class="content-header">
+        <div class="row" id="title-transf-bank">
+            <h3>Transferencias A Otros Bancos </h3>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-xs-4"></div>
+            <div class="col-md-8 col-xs-8">
+                <a class="btn btn-default btn-group btn-apps pull-right" type="button"
+                   onclick=""> Agregar Afiliado </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <div class="box">
+                    <div class="box-header padding-tb">
+                        <h3 class="box-title">Lista de Afiliados</h3>
+                        <p>Seleccione un afiliado para realizarle una transferencia</p>
+                    </div>
+                    <div class="box-body no-padding">
+                        <table id="table-transf" class="table table-bordered table-hover text-center">
+                            <thead>
+                            <tr class="bg-gray">
+                                <th>Alias</th>
+                                <th>Nombre Afiliado</th>
+                                <th>Documento de Identidad</th>
+                                <th>Banco</th>
+                                <th>Fecha Afiliación</th>
+                                <th>Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody id="table-af-other">
+                            </tbody>
+                            <tfoot>
+                            <tr class="bg-gray">
+                                <th>Alias</th>
+                                <th>Nombre Afiliado</th>
+                                <th>Documento de Identidad</th>
+                                <th>Banco</th>
+                                <th>Fecha Afiliación</th>
+                                <th>Acciones</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                <!-- /.box-body -->
+              </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="Modal-Delete-Other" class="modal">
+        <div class="modal-dialog modal-trans">
+            <div class="modal-content">
+                <div class="modal-header activate">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title text-center">Eliminar Afiliado</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-11">
+                            <p> ¿Está seguro que desea eliminar a
+                                <strong> CasaMil C.A </strong>de la lista de sus afiliados? </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-default btn-apps"
+                                data-dismiss="modal">Cancelar</button>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-default btn-apps"
+                                data-dismiss="modal">Aceptar</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+{% endblock %}
