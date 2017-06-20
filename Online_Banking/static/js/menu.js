@@ -5,7 +5,6 @@
 function move_menu(url) {
     var path = window.location.href.split('/');
     var new_url = path[0]+'/'+path[1]+'/'+path[2];
-    alert(new_url);
     location.href= new_url+'/'+url;
 }
 
@@ -34,21 +33,19 @@ function menu() {
         var _this = $('#inquiries');
         $('#prest').addClass("activate-menu");
     }
-    else {
-        if (key === '1') {
+    else if (act_pat === "transf-mis-cuentas"){
             var _this = $('#transfers');
             $('#my-acc').addClass("activate-menu");
-        }
-        else if (key === '2') {
-            $('#my-bank').addClass("activate-menu");
-            nivel = 1;
-            var _this = $('#transfers-others');
-        }
-        else {
-            $('#other-bank').addClass("activate-menu");
-            nivel= 1;
-            var _this = $('#transfers-others');
-        }
+    }
+    else if (act_pat === "transf-mi-banco") {
+        $('#my-bank').addClass("activate-menu");
+        nivel = 1;
+        var _this = $('#transfers-others');
+    }
+    else {
+        $('#other-bank').addClass("activate-menu");
+        nivel= 1;
+        var _this = $('#transfers-others');
     }
 
     if (nivel === 0) {

@@ -216,7 +216,7 @@ div[role="tooltip"] {
 #icon-graph {
     padding-top: 0;
 }
-#account {
+#account, #account2 {
     height: 30px;
     margin-top: 19px;
     width: 160px;
@@ -232,9 +232,10 @@ div[role="tooltip"] {
 #title-account {
     margin-top: 15px;
     margin-bottom: 10px !important;
+    margin-left: 12px;
 }
 #title-loan {
-    margin-left: 25px;
+    margin-left: 40px;
     margin-top: 15px;
     margin-bottom: 0 !important;
 }
@@ -269,7 +270,7 @@ div[role="tooltip"] {
 }
 #title-tdc {
     margin-top: 35px;
-    margin-left: 90px;
+    margin-left: 97px;
 }
 #btn-pay {
     width: 120px;
@@ -290,4 +291,25 @@ div[role="tooltip"] {
     /*border-bottom: 2px solid #2440d0 !important;*/
     text-decoration-color: #2440d0 !important;
     text-decoration: underline;
+}
+#title-transf {
+    margin-top: 15px;
+    margin-bottom: 70px !important;
+    margin-left: 100px;
+}
+.drop-transf {
+    margin-top: 5px !important;
+}
+#amount-transf {
+    height: 30px;
+    width: 137px;
+    margin-top: 5px;
+}
+#btn-trans {
+    width: 120px;
+    margin-top: 10px;
+}
+#balance-acc {
+    margin-left: 15px;
+    display: none;
 }
