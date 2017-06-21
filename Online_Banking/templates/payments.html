@@ -10,6 +10,7 @@
     <script>
         $(document).ready(function (){
             $("#table-payments_paginate").addClass("pull-right");
+            $("#table-payments_paginate").css({height: '60px'});
             $("#table-payments_filter").addClass("pull-right");
         });
     </script>
@@ -24,16 +25,18 @@
             <div class="col-md-3 col-xs-4"></div>
             <div class="col-md-8 col-xs-8">
                 <a class="btn btn-default btn-group btn-apps pull-right" type="button"
-                   onclick=""> Agregar Servicio </a>
+                   href="{% url 'registro-servicios' %}"> Agregar Servicio </a>
             </div>
         </div>
         <div class="row">
             <div class="col-md-1"></div>
             <div class="col-md-10">
-                <div class="box">
+                <div class="box box-success">
                     <div class="box-header padding-tb">
-                        <h3 class="box-title">Lista de Servicios</h3>
-                        <p>Seleccione un servicio para realizar un pago</p>
+                        <h3 class="box-title margin">Lista de Servicios</h3>
+                        <p class="margin-l-13 without-margin">
+                            Seleccione un servicio para realizar un pago
+                        </p>
                     </div>
                     <div class="box-body no-padding">
                         <table id="table-payments" class="table table-bordered table-hover text-center">

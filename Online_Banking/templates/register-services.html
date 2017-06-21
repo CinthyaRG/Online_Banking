@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block script %}
+    <!-- DataTables -->
+    <script src="{% static 'plugins/datatables/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'plugins/datatables/dataTables.bootstrap.js' %}"></script>
+    <script src="{% static 'js/script-register-service.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <section class="content-header">
+        <div class="row" id="title-transf-bank">
+            <h3> Registro de Servicios </h3>
+        </div>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="box box-success">
+                    <div class="box-body">
+                        <dl class="dl-horizontal label-input no-margin no-pad-bottom">
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right">
+                                        <span class="text-danger"> * </span> Tipo de Pago: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows">
+                                    <select id="type_payment" class="select2 input-register field-register">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right">
+                                        <span class="text-danger"> * </span> Nombre: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows">
+                                    <select id="name_service" class="select2 input-register field-register">
+                                    </select>
+                                </div>
+                            </div>
+                        </dl>
+                        <dl id="input-services" class="dl-horizontal label-input no-padding no-margin">
+                        </dl>
+                        <dl id="dl-nick" class="dl-horizontal label-input no-padding">
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right">Alias: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-6 rows">
+                                    <input id="nickname" maxlength="20" class="input-register">
+                                </div>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <a id="btn-back" class="btn btn-default btn-group btn-apps"
+                   type="button" onclick="window.history.back()"> Cancelar </a>
+                <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
+                   type="button" onclick="window.history.back()"> Agregar </a>
+            </div>
+
+        </div>
+    </section>
+{% endblock %}

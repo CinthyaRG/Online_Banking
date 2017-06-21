@@ -120,16 +120,16 @@ div > dl > div > div > label {
     padding-top: 2px;
 }
 #numtarj {
-    max-width: 142px;
+    max-width: 150px;
 }
 #pin {
-    max-width: 44px;
+    max-width: 46px;
 }
 #ccv {
-    max-width: 36px;
+    max-width: 40px;
 }
 #ci {
-    max-width: 72px;
+    max-width: 80px;
 }
 .margin-register {
     margin-left: 5px;
@@ -354,4 +354,13 @@ div[role="tooltip"] {
 }
 .icon-table:hover, .icon-table:focus{
     background-color: rgb(67, 141, 136) !important;
+}
+.field-register {
+    min-width: 230px;
+}
+#nickname {
+    width: 133px;
+}
+.no-pad-bottom {
+    padding-bottom: 0;
 }

@@ -44,7 +44,8 @@
                     <dl class="dl-horizontal label-input">
                         <div class="row">
                             <div class="col-md-6 col-xs-5">
-                                <label class="pull-right">Número de tarjeta: </label>
+                                <label class="pull-right">
+                                    <span class="text-danger"> * </span> Número de tarjeta: </label>
                             </div>
                             <div class="col-md-6 col-xs-5 rows">
                                 <input id="numtarj" maxlength="18" class="input-register">
@@ -54,7 +55,8 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 col-xs-5">
-                                <label class="pull-right">Código PIN: </label>
+                                <label class="pull-right">
+                                    <span class="text-danger"> * </span> Código PIN: </label>
                             </div>
                             <div class="col-md-6 col-xs-5 rows">
                                 <input id="pin" maxlength="4" class="input-register">
@@ -64,7 +66,8 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 col-xs-5">
-                                <label class="pull-right">Código de validación: </label>
+                                <label class="pull-right">
+                                    <span class="text-danger"> * </span> Código de validación: </label>
                             </div>
                             <div class="col-md-6 col-xs-5 rows">
                                 <input maxlength="3" id="ccv" class="input-register">
@@ -74,14 +77,16 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 col-xs-5">
-                                <label class="pull-right">Fecha de vencimiento: </label>
+                                <label class="pull-right">
+                                    <span class="text-danger"> * </span> Fecha de vencimiento: </label>
                             </div>
                             <div class="col-md-6 col-xs-6 rows">
                                 <span> Mes </span>
                                     <select id="month" class="select2 input-register">
                                     </select>
                                 <span class="margin-register"> Año </span>
-                                    <select id="year" class="select2 input-register" onchange="selectMonth()">
+                                    <select id="year" class="select2 input-register"
+                                            onchange="selectMonth()">
                                     </select>
                                 <i id="help-fven" data-toggle="tooltip"
                                    data-placement="bottom" class="fa fa-lg fa-question-circle-o"> </i>
@@ -89,7 +94,8 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 col-xs-5">
-                                <label class="pull-right">Documento de Identidad: </label>
+                                <label class="pull-right">
+                                    <span class="text-danger"> * </span> Documento de Identidad: </label>
                             </div>
                             <div class="col-md-6 col-xs-5 rows">
                                 <select class="select2 input-register">
@@ -151,7 +157,8 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 col-xs-4">
-                                <label class="pull-right">Email: </label>
+                                <label class="pull-right">
+                                    <span class="text-danger"> * </span> Email: </label>
                             </div>
                             <div class="col-md-6 col-xs-5 rows">
                                 <input id="email" type="email" class="input-register">
@@ -186,7 +193,8 @@
                         <p> Tiene dos minutos para ingresar el código.</p>
                         <div class="row">
                             <div class="col-md-6 col-xs-4">
-                                <label class="pull-right">Código: </label>
+                                <label class="pull-right">
+                                    <span class="text-danger"> * </span> Código: </label>
                             </div>
                             <div class="col-md-6 col-xs-5 rows">
                                 <input maxlength="6" class="input-register">
@@ -220,8 +228,10 @@
             <div class="row">
                 <div class="col-md-6 col-xs-2"></div>
                 <div class="col-md-6 col-xs-9">
-                    <a id="btn-back" class="btn btn-default btn-group btn-apps" type="button" onclick="pagBack(3)"> Anterior </a>
-                    <a id="btn-next" class="btn btn-default btn-group btn-apps" type="button" onclick="pagNext(3)"> Siguiente </a>
+                    <a id="btn-back" class="btn btn-default btn-group btn-apps"
+                       type="button" onclick="pagBack(3)"> Anterior </a>
+                    <a id="btn-next" class="btn btn-default btn-group btn-apps"
+                       type="button" onclick="pagNext(3)"> Siguiente </a>
                 </div>
             </div>
         </div>
@@ -241,7 +251,8 @@
                     <dl class="dl-horizontal label-input">
                         <div class="row">
                             <div class="col-md-6 col-xs-3">
-                                <label class="pull-right">Pregunta 1: </label>
+                                <label class="pull-right">
+                                    <span class="text-danger"> * </span> Pregunta 1: </label>
                             </div>
                             <div class="col-md-6 col-xs-4 rows">
                                 <input maxlength="50" id="answ1" class="input-register"
@@ -252,7 +263,8 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 col-xs-3">
-                                <label class="pull-right">Respuesta 1: </label>
+                                <label class="pull-right">
+                                    <span class="text-danger"> * </span> Respuesta 1: </label>
                             </div>
                             <div class="col-md-6 col-xs-4 rows">
                                 <input maxlength="50" id="resp1" class="input-register"
@@ -263,7 +275,8 @@
                         </div>
                         <div class="row answers">
                             <div class="col-md-6 col-xs-3">
-                                <label class="pull-right">Pregunta 2: </label>
+                                <label class="pull-right">
+                                    <span class="text-danger"> * </span> Pregunta 2: </label>
                             </div>
                             <div class="col-md-6 col-xs-4 rows">
                                 <input maxlength="50" id="answ2" class="input-register"
@@ -274,7 +287,8 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 col-xs-3">
-                                <label class="pull-right">Respuesta 2: </label>
+                                <label class="pull-right">
+                                    <span class="text-danger"> * </span> Respuesta 2: </label>
                             </div>
                             <div class="col-md-6 col-xs-4 rows">
                                 <input maxlength="50" id="resp2" class="input-register"
@@ -309,7 +323,8 @@
                     <dl class="dl-horizontal label-input">
                         <div id="pwd-container" class="row">
                             <div class="col-md-6 col-xs-4">
-                                <label class="pull-right">Contraseña: </label>
+                                <label class="pull-right">
+                                    <span class="text-danger"> * </span> Contraseña: </label>
                             </div>
                             <div class="col-md-6 col-xs-6 rows">
                                 <input type="password" id="password" class="password input-register">
@@ -319,7 +334,8 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 col-xs-4">
-                                <label class="pull-right">Confirmación de Contraseña: </label>
+                                <label class="pull-right">
+                                    <span class="text-danger"> * </span> Confirme Contraseña: </label>
                             </div>
                             <div class="col-md-6 col-xs-5 rows">
                                 <input type="password" id="confirm-pass" class="password input-register">
@@ -333,8 +349,10 @@
             <div class="row">
                 <div class="col-md-5 col-xs-1"></div>
                 <div class="col-md-6 col-xs-11">
-                    <a id="btn-back" class="btn btn-default btn-group btn-apps" type="button" onclick="pagBack(5)"> Anterior </a>
-                    <a id="btn-next" class="btn btn-default btn-group btn-apps" type="button" href="{% url 'registro-exitoso' %}"> Confirmar Registro </a>
+                    <a id="btn-back" class="btn btn-default btn-group btn-apps"
+                       type="button" onclick="pagBack(5)"> Anterior </a>
+                    <a id="btn-next" class="btn btn-default btn-group btn-apps"
+                       type="button" href="{% url 'registro-exitoso' %}"> Confirmar Registro </a>
                 </div>
             </div>
         </div>

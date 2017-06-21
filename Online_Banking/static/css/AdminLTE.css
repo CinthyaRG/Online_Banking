@@ -1586,7 +1586,7 @@ a.sidebar-toggle {
     border-top-color: #f39c12;
 }
 .box.box-success {
-    border-top-color: #00a65a;
+    border-top: 5px solid rgb(67, 141, 136);
 }
 .box.box-default {
     border-top-color: #d2d6de;

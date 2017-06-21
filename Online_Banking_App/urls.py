@@ -25,7 +25,7 @@ urlpatterns = [
     Restore_pass_success.as_view(),
     name='nueva-pass-exitosa'),
   url(
-    r'^registro',
+    r'^registro-usuario',
     Register.as_view(),
     name='registro'),
   url(
@@ -60,4 +60,12 @@ urlpatterns = [
     r'^pagos',
     Payments.as_view(),
     name='pagos'),
+  url(
+    r'^registro-afiliados',
+    Register_Affiliate.as_view(),
+    name='registro-afiliados'),
+  url(
+    r'^registro-servicios',
+    Register_Services.as_view(),
+    name='registro-servicios'),
 ]

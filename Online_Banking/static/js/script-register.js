@@ -55,13 +55,6 @@ function selectMonth(){
     }
 }
 
-function counter_down() {
-	var clock = $('.clock').FlipClock(120, {
-		countdown: true,
-		clockFace: 'MinuteCounter'
-	});
-}
-
 function count_circle() {
     $('.clock').TimeCircles({count_past_zero: false});
 }
@@ -105,11 +98,6 @@ function pagNext(numPag) {
     $(number+next).addClass("activate");
     $(number+numPag).removeClass("activate");
     if (next === 3) {
-        // var time = new Date();
-        // var time2 = new Date(time);
-        //  time2.setSeconds(122);
-        // calcula(time, time2);
-        // counter_down();
         count_circle();
     }
     if (next===4) {
@@ -126,11 +114,6 @@ function pagBack(numPag) {
     $(number+back).addClass("activate");
     $(number+numPag).removeClass("activate");
     if (back === 3) {
-        // var time = new Date();
-        // var time2 = new Date(time);
-        //  time.setSeconds(120);
-        // calcula(time, time2);
-        // counter_down();
         count_circle();
     }
     if (back===2) {
@@ -150,9 +133,9 @@ function help_tooltip() {
     var ci = "Seleccione su nacionalidad y escriba su cédula de identidad sin puntos.";
     var pass = "La contraseña no puede parecerse a sus datos personales, debe" +
         " contener mínimo 8 caracteres alfanuméricos y un símbolo especial. " +
-        "Además debe ser distinta a sus últimas cinco contraseñas."
+        "Además debe ser distinta a sus últimas cinco contraseñas.";
     var confirm = "La confirmación de la contraseña debe ser igual que la " +
-        "contraseña escrita anteriormente."
+        "contraseña escrita anteriormente.";
 
     $("#help-tarj").attr("title",num_tarj);
     $("#help-pin").attr("title",pin);

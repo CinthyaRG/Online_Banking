@@ -56,3 +56,11 @@ class Transfer_others_bank(TemplateView):
 
 class Payments(TemplateView):
   template_name = 'payments.html'
+
+
+class Register_Affiliate(TemplateView):
+  template_name = 'register-affiliate.html'
+
+
+class Register_Services(TemplateView):
+  template_name = 'register-services.html'
