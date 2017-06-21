@@ -352,3 +352,6 @@ div[role="tooltip"] {
 #table-payments_filter > label > input {
     margin-left: 10px;
 }
+.icon-table:hover, .icon-table:focus{
+    background-color: rgb(67, 141, 136) !important;
+}

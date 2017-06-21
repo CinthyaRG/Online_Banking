@@ -34,8 +34,8 @@ function payments_table() {
             '<td class="text-bold text-capitalize">' +val+ '</span></td>' +
             '<td>' +type[i]+ '</td>' +
             '<td class="text-bold text-capitalize">' +product[i]+ '</td>' +
-            '<td><a href="#"><i class="fa fa-pencil color-icon"></i>' +
-            '<a data-toggle="modal" href="#Modal-Delete-Payments">' +
+            '<td><a  class="icon-table" href="#"><i class="fa fa-pencil color-icon"></i>' +
+            '<a  class="icon-table" data-toggle="modal" href="#Modal-Delete-Payments">' +
             '<i class="fa fa-close color-delete"></i></td>' +
             '</tr>')
     })

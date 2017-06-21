@@ -94,8 +94,8 @@ function transf_table() {
             '<td class="text-bold">' +val+ '</span></td>' +
             '<td>' +ci[i]+ '</td>' +
             '<td>' +date_af[i]+ '</td>' +
-            '<td><a href="#"><i class="fa fa-pencil color-icon"></i>' +
-            '<a data-toggle="modal" href="#Modal-Delete"><i class="fa fa-close color-delete"></i></td>' +
+            '<td><a class="icon-table" href="#"><i class="fa fa-pencil color-icon"></i>' +
+            '<a class="icon-table" data-toggle="modal" href="#Modal-Delete"><i class="fa fa-close color-delete"></i></td>' +
             '</tr>')
     })
 }
@@ -114,8 +114,8 @@ function transf_other_table() {
             '<td>' +ci[i]+ '</td>' +
             '<td>' +bank[i]+ '</td>' +
             '<td>' +date_af[i]+ '</td>' +
-            '<td><a href="#"><i class="fa fa-pencil color-icon"></i>' +
-            '<a data-toggle="modal" href="#Modal-Delete-Other"><i class="fa fa-close color-delete"></i></td>' +
+            '<td><a class="icon-table" href="#"><i class="fa fa-pencil color-icon"></i>' +
+            '<a  class="icon-table" data-toggle="modal" href="#Modal-Delete-Other"><i class="fa fa-close color-delete"></i></td>' +
             '</tr>')
     })
 }

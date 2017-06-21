@@ -3,13 +3,12 @@
 
 {% block script %}
     <link rel="stylesheet" href="{% static 'css/AdminLTE.css' %}">
-    <link rel="stylesheet" href="{% static 'plugins/FlipClock-master/compiled/flipclock.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/Circular-Countdown/inc/TimeCircles.css' %}">
     <script src="{% static 'plugins/select2/select2.full.min.js' %}"></script>
-    <script src="{% static 'plugins/FlipClock-master/compiled/flipclock.js' %}"></script>
-    <script src="{% static 'plugins/FlipClock-master/compiled/prefixfree.min.js' %}"></script>
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/script-register.js' %}"></script>
     <script src="{% static 'plugins/passwordStrength/examples/pwstrength.js' %}"></script>
+    <script type="text/javascript" src="{% static 'plugins/Circular-Countdown/inc/TimeCircles.js' %}"></script>
 {% endblock %}
 
 {% block register %}
@@ -20,7 +19,7 @@
     <div id="title-register" class="col-md-8 col-xs-12">
         <div class="row">
             <div class="col-md-8 col-xs-8">
-                <span class="h3"> Registro Online Banking </span>
+                <span class="h3"> Registro Actio Capital </span>
             </div>
             <div class="col-md-4 col-xs-6 pagination-register text-center">
                 <p id="number1" class="activate">1</p>
@@ -102,11 +101,11 @@
                                    data-placement="bottom" class="fa fa-lg fa-question-circle-o"></i>
                             </div>
                         </div>
-                  </dl>
+                    </dl>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 col-xs-5"></div>
+                <div class="col-md-6 col-xs-2"></div>
                 <div class="col-md-6 col-xs-6">
                     <a id="btn-next" class="btn btn-default btn-group btn-apps" type="button" onclick="pagNext(1)"> Siguiente </a>
                 </div>
@@ -162,8 +161,8 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 col-xs-5"></div>
-                <div class="col-md-6 col-xs-6">
+                <div class="col-md-6 col-xs-2"></div>
+                <div class="col-md-6 col-xs-9">
                     <a id="btn-back" class="btn btn-default btn-group btn-apps" type="button" onclick="pagBack(2)"> Anterior </a>
                     <a id="btn-next" class="btn btn-default btn-group btn-apps" type="button" onclick="pagNext(2)"> Siguiente </a>
                 </div>
@@ -200,23 +199,27 @@
                                     Si no ha recibido el código o expiró
                                 </span>
                             </div>
-                            <div class="col-md-10 col-xs-12">
-                                <div class="clock"></div>
-                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-xs-12">
-                                <a id="btn-clock" class="btn btn-default btn-group btn-apps" type="button" onclick="counter_down()">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-4 col-xs-12">
+                                <br>
+                                <br>
+                                <a id="" class="btn btn-default btn-group btn-apps" type="button" onclick="restore_count_circle()">
                                     Reenviar Código
                                 </a>
+                            </div>
+                            <div class="col-md-2 col-xs-3"></div>
+                            <div class="col-md-5 col-xs-7">
+                                <div class="clock" data-timer="120"></div>
                             </div>
                         </div>
                     </dl>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 col-xs-5"></div>
-                <div class="col-md-6 col-xs-6">
+                <div class="col-md-6 col-xs-2"></div>
+                <div class="col-md-6 col-xs-9">
                     <a id="btn-back" class="btn btn-default btn-group btn-apps" type="button" onclick="pagBack(3)"> Anterior </a>
                     <a id="btn-next" class="btn btn-default btn-group btn-apps" type="button" onclick="pagNext(3)"> Siguiente </a>
                 </div>
@@ -237,7 +240,7 @@
                 <div class="box-body">
                     <dl class="dl-horizontal label-input">
                         <div class="row">
-                            <div class="col-md-6 col-xs-4">
+                            <div class="col-md-6 col-xs-3">
                                 <label class="pull-right">Pregunta 1: </label>
                             </div>
                             <div class="col-md-6 col-xs-4 rows">
@@ -248,7 +251,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-xs-4">
+                            <div class="col-md-6 col-xs-3">
                                 <label class="pull-right">Respuesta 1: </label>
                             </div>
                             <div class="col-md-6 col-xs-4 rows">
@@ -259,7 +262,7 @@
                             </div>
                         </div>
                         <div class="row answers">
-                            <div class="col-md-6 col-xs-4">
+                            <div class="col-md-6 col-xs-3">
                                 <label class="pull-right">Pregunta 2: </label>
                             </div>
                             <div class="col-md-6 col-xs-4 rows">
@@ -270,7 +273,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-xs-4">
+                            <div class="col-md-6 col-xs-3">
                                 <label class="pull-right">Respuesta 2: </label>
                             </div>
                             <div class="col-md-6 col-xs-4 rows">
@@ -284,8 +287,8 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 col-xs-5"></div>
-                <div class="col-md-6 col-xs-6">
+                <div class="col-md-6 col-xs-2"></div>
+                <div class="col-md-6 col-xs-9">
                     <a id="btn-back" class="btn btn-default btn-group btn-apps" type="button" onclick="pagBack(4)"> Anterior </a>
                     <a id="btn-next" class="btn btn-default btn-group btn-apps" type="button" onclick="pagNext(4)"> Siguiente </a>
                 </div>
@@ -305,21 +308,21 @@
                 <div class="box-body">
                     <dl class="dl-horizontal label-input">
                         <div id="pwd-container" class="row">
-                            <div class="col-md-6 col-xs-5">
+                            <div class="col-md-6 col-xs-4">
                                 <label class="pull-right">Contraseña: </label>
                             </div>
                             <div class="col-md-6 col-xs-6 rows">
-                                <input type="password" id="password" class="input-register">
+                                <input type="password" id="password" class="password input-register">
                                 <i id="help-pass" data-toggle="tooltip"
                                    data-placement="bottom" class="fa fa-lg fa-question-circle-o"></i>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-xs-6">
+                            <div class="col-md-6 col-xs-4">
                                 <label class="pull-right">Confirmación de Contraseña: </label>
                             </div>
                             <div class="col-md-6 col-xs-5 rows">
-                                <input type="password" id="confirm-pass" class="input-register">
+                                <input type="password" id="confirm-pass" class="password input-register">
                                 <i id="help-confirm" data-toggle="tooltip"
                                    data-placement="bottom" class="fa fa-lg fa-question-circle-o"></i>
                             </div>
@@ -328,8 +331,8 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-5 col-xs-5"></div>
-                <div class="col-md-6 col-xs-6">
+                <div class="col-md-5 col-xs-1"></div>
+                <div class="col-md-6 col-xs-11">
                     <a id="btn-back" class="btn btn-default btn-group btn-apps" type="button" onclick="pagBack(5)"> Anterior </a>
                     <a id="btn-next" class="btn btn-default btn-group btn-apps" type="button" href="{% url 'registro-exitoso' %}"> Confirmar Registro </a>
                 </div>
