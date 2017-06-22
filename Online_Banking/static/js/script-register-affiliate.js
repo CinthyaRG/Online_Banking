@@ -7,6 +7,7 @@ $(document).ready(function (){
 
     $('li').removeClass("active");
     $("#num-acc").val("");
+    $("#ci").attr({maxlength:"8"});
 
     $("#bank").change(function () {
         $.getJSON('static/js/bank.json', function (data) {
@@ -20,10 +21,12 @@ $(document).ready(function (){
 
     $("#select-ci").change(function () {
         if ($("#select-ci").val() === "V-" || $("#select-ci").val() === "E-") {
-
+            $("#ci").val("");
+            $("#ci").attr({maxlength:"8"});
         }
         else {
-
+            $("#ci").val("");
+            $("#ci").attr({maxlength:"9"});
         }
     })
 

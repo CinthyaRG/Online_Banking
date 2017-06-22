@@ -128,7 +128,8 @@ div > dl > div > div > label {
 #ccv {
     max-width: 40px;
 }
-#ci {
+#ci ,#rif_banavih, #rif_info_bank, #num_susc,
+#rif_impuestos_owns , #rif_impuestos_others{
     max-width: 90px;
 }
 .margin-register {
@@ -358,7 +359,7 @@ div[role="tooltip"] {
 .field-register {
     min-width: 230px;
 }
-#nickname {
+#nickname, #num_elec, #num_smart {
     width: 133px;
 }
 .no-pad-bottom {
