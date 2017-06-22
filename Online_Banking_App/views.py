@@ -64,3 +64,7 @@ class Register_Affiliate(TemplateView):
 
 class Register_Services(TemplateView):
   template_name = 'register-services.html'
+
+
+class Elements_Security(TemplateView):
+  template_name = 'security.html'

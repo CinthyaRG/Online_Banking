@@ -29,7 +29,7 @@ function payments_table() {
         'MASTERCARD ****3256','04127330101'];
 
     $.each(name,function (i,val) {
-        $("#body-table-pay").append('<tr class="cursor">' +
+        $("#body-table-pay").append('<tr>' +
             '<td><span class="link">' +alias[i]+ '</span></td>' +
             '<td class="text-bold text-capitalize">' +val+ '</span></td>' +
             '<td>' +type[i]+ '</td>' +

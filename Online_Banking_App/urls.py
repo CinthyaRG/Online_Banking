@@ -68,4 +68,8 @@ urlpatterns = [
     r'^registro-servicios',
     Register_Services.as_view(),
     name='registro-servicios'),
+  url(
+    r'^elementos-seguridad/(?P<pk>\d+)/',
+    Elements_Security.as_view(),
+    name='elementos-seguridad'),
 ]

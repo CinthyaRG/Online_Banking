@@ -33,6 +33,21 @@ function drop_bank(){
 }
 
 
+function drop_codes(valor){
+    $("#codes").append('<option value="'+'0'+'"> '+'Seleccione '+'</option>');
+    $.getJSON('static/js/codes.json', function (data) {
+        $.each( data, function( key, val ) {
+            if (valor === key) {
+                val.sort();
+                $.each( val, function( k, v ) {
+                    $("#codes").append('<option value="' +k+ '"> ' +v+ '</option>');
+                })
+            }
+        });
+    })
+}
+
+
 function drop_type(){
     var type_services = ['Servicio', 'TDC', 'Telefonía'];
     $("#type_payment").append('<option value="'+'0'+'" selected="selected"> '+"Seleccione"+'</option>');
@@ -42,20 +57,12 @@ function drop_type(){
     })
 }
 
-var cod_area = ['0212','0248','0281','0282','0283','0292','0247',
-'0278','0243','0244','0245','0246','0273','0234',
-'0284','0285','0286','0288','0241','0242','0253',
-'0249','0258','0287','0259','0268','0269','0279',
-'0235','0238','0251','0271','0274','0275','0239',
-'0291','0295','0255','0256','0257','0272','0293',
-'0294','0276','0277','0254','0262','0263','0264',
-'0265','0267'];
 
 function drop_type_payment() {
     var valor = $("#type_payment").val();
     var type_name_services = ['Banavih Aportes FAOV', 'Electricidad de Caracas', 'DirecTV Previo Pago',
         'DirecTV Prepago', 'Pago de Impuestos Nacionales Propios','Pago de Impuestos Nacionales Terceros'];
-    var type_name_tdc = ['TDC de Terceros mismo banco', 'TDC de Terceros mismo banco'];
+    var type_name_tdc = ['TDC de Terceros mismo banco', 'TDC de Terceros otros bancos'];
     var type_name_tlf = ['CANTV', 'Digitel', 'Movilnet', 'Movistar'];
     var _this = $("#name_service");
     var type_name;
@@ -79,10 +86,9 @@ function drop_type_payment() {
     })
 }
 
+
 function drop_name() {
     var valor = $("#name_service").val();
-    var type_name_tdc = ['TDC de Terceros mismo banco', 'TDC de Terceros mismo banco'];
-    var type_name_tlf = ['CANTV', 'Digitel', 'Movilnet', 'Movistar'];
     var _this = $("#input-services");
     var info_bank = '<div class="row"><div class="col-md-6 col-xs-5"><label class="pull-right">'+
         '<span class="text-danger"> * </span> Banco: </label></div>'+
@@ -114,8 +120,12 @@ function drop_name() {
         valor=== 'Pago de Impuestos Nacionales Terceros') {
         field_impuestos(info_bank,_this,valor);
     }
-    else if (valor === 'DirecTV Previo Pago') {
-        field_directv(info_bank,_this);
+    else if (valor === 'TDC de Terceros mismo banco' ||
+        valor === 'TDC de Terceros otros bancos') {
+        field_tdc(_this,valor);
+    }
+    else {
+        field_tlf(_this,valor);
     }
 
 }
@@ -149,6 +159,7 @@ function field_banavih(field,_this) {
     });
 }
 
+
 function field_electricidad(field,_this) {
     var elec = '<div class="row"><div class="col-md-6 col-xs-5"><label class="pull-right">'+
         '<span class="text-danger"> * </span> Número de Contrato: </label></div>'+
@@ -170,6 +181,7 @@ function field_electricidad(field,_this) {
         });
     });
 }
+
 
 function field_directv(field,_this,valor) {
     var directv_previo = '<div class="row"><div class="col-md-6 col-xs-5"><label class="pull-right">'+
@@ -203,6 +215,7 @@ function field_directv(field,_this,valor) {
         });
     });
 }
+
 
 function field_impuestos(field,_this,valor) {
     var owns = '<div class="row"><div class="col-md-6 col-xs-5"><label class="pull-right">'+
@@ -244,4 +257,64 @@ function field_impuestos(field,_this,valor) {
             });
         });
     });
+}
+
+
+function field_tdc(_this,valor) {
+    var my_bank = '<div class="row"><div class="col-md-6 col-xs-5"><label class="pull-right">'+
+        '<span class="text-danger"> * </span> Número de Tarjeta: </label></div>'+
+        '<div class="col-md-6 col-xs-5 rows">'+
+        '<input id="num_tdc_mybank" maxlength="16" class="input-register"></div></div>'+
+        '<div class="row"><div class="col-md-6 col-xs-5"><label class="pull-right">'+
+        '<span class="text-danger"> * </span> Nombre del Titular: </label></div>'+
+        '<div class="col-md-6 col-xs-5 rows">'+
+        '<input id="name_tdc_mybank" class="input-register"></div></div>'+
+        '<div class="row"><div class="col-md-6 col-xs-5"><label class="pull-right">'+
+        '<span class="text-danger"> * </span>Documento de Identidad: </label></div>'+
+        '<div class="col-md-6 col-xs-5 rows"><select class="select2 input-register">'+
+        '<option selected="selected">V- </option>'+
+        '<option>E- </option></select>'+
+        '<input id="ci_tdc_mybank" maxlength="8" class="input-register margin-register"></div></div>';
+    var others_banks = '<div class="row"><div class="col-md-6 col-xs-5"><label class="pull-right">'+
+        '<span class="text-danger"> * </span> Número de Tarjeta: </label></div>'+
+        '<div class="col-md-6 col-xs-5 rows">'+
+        '<input id="num_tdc_others" maxlength="16" class="input-register"></div></div>'+
+        '<div class="row"><div class="col-md-6 col-xs-5"><label class="pull-right">'+
+        '<span class="text-danger"> * </span> Nombre del Titular: </label></div>'+
+        '<div class="col-md-6 col-xs-5 rows">'+
+        '<input id="name_tdc_others" class="input-register"></div></div>'+
+        '<div class="row"><div class="col-md-6 col-xs-5"><label class="pull-right">'+
+        '<span class="text-danger"> * </span>Documento de Identidad: </label></div>'+
+        '<div class="col-md-6 col-xs-5 rows"><select class="select2 input-register">'+
+        '<option selected="selected">V- </option>'+
+        '<option>E- </option></select>'+
+        '<input id="ci_tdc_others" maxlength="8" class="input-register margin-register"></div></div>'+
+        '<div class="row"><div class="col-md-6 col-xs-5"><label class="pull-right">'+
+        'Email: </label></div><div class="col-md-6 col-xs-5 rows">'+
+        '<input id="email_tdc" class="input-register field-register"></div></div>';
+    var field_payment;
+
+    if (valor === 'TDC de Terceros mismo banco') {
+        field_payment = my_bank;
+    }
+    else {
+        field_payment = others_banks;
+    }
+
+    _this.append(field_payment);
+    $("#dl-nick").css({visibility:'visible'});
+
+}
+
+
+function field_tlf(_this,valor) {
+    var fields = '<div class="row"><div class="col-md-6 col-xs-5"><label class="pull-right">'+
+        '<span class="text-danger"> * </span>Número de Teléfono: </label></div>'+
+        '<div class="col-md-6 col-xs-5 rows"><select id="codes" class="select2 input-register">'+
+        '<input id="num-tlf" maxlength="7" class="input-register margin-register"></div></div>';
+
+    _this.append(fields);
+    $("#dl-nick").css({visibility:'visible'});
+    drop_codes(valor);
+
 }

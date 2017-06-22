@@ -89,7 +89,8 @@ function transf_table() {
     var date_af = ['21/04/2016','23/08/2017','17/04/2016','17/12/2016','12/02/2016'];
 
     $.each(name,function (i,val) {
-        $("#table-af").append('<tr class="cursor">' +
+        // $("#table-af").append('<tr onclick="move(' +"'elementos-seguridad/21')"+'">' +
+        $("#table-af").append('<tr>'+
             '<td><span class="link">' +alias[i]+ '</span></td>' +
             '<td class="text-bold">' +val+ '</td>' +
             '<td>' +ci[i]+ '</td>' +
@@ -111,7 +112,7 @@ function transf_other_table() {
     var date_af = ['21/04/2016','23/08/2017','17/04/2016','17/12/2016','12/02/2016'];
 
     $.each(name,function (i,val) {
-        $("#table-af-other").append('<tr class="cursor">' +
+        $("#table-af-other").append('<tr>' +
             '<td><span class="link">' +alias[i]+ '</span></td>' +
             '<td class="text-bold">' +val+ '</td>' +
             '<td>' +ci[i]+ '</td>' +

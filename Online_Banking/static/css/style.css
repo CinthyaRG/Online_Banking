@@ -129,7 +129,8 @@ div > dl > div > div > label {
     max-width: 40px;
 }
 #ci ,#rif_banavih, #rif_info_bank, #num_susc,
-#rif_impuestos_owns , #rif_impuestos_others{
+#rif_impuestos_owns , #rif_impuestos_others,
+#ci_tdc_mybank, #ci_tdc_others, #num-tlf {
     max-width: 90px;
 }
 .margin-register {
@@ -361,6 +362,9 @@ div[role="tooltip"] {
 }
 #nickname, #num_elec, #num_smart {
     width: 133px;
+}
+#input_frs_coor, #input_snd_coor {
+    width: 30px;
 }
 .no-pad-bottom {
     padding-bottom: 0;
