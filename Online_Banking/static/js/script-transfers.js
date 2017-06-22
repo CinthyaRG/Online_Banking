@@ -89,13 +89,14 @@ function transf_table() {
     var date_af = ['21/04/2016','23/08/2017','17/04/2016','17/12/2016','12/02/2016'];
 
     $.each(name,function (i,val) {
-        $("#table-af").append('<tr>' +
-            '<td>' +alias[i]+ '</td>' +
-            '<td class="text-bold">' +val+ '</span></td>' +
+        $("#table-af").append('<tr class="cursor">' +
+            '<td><span class="link">' +alias[i]+ '</span></td>' +
+            '<td class="text-bold">' +val+ '</td>' +
             '<td>' +ci[i]+ '</td>' +
             '<td>' +date_af[i]+ '</td>' +
-            '<td><a class="icon-table" href="#"><i class="fa fa-pencil color-icon"></i>' +
-            '<a class="icon-table" data-toggle="modal" href="#Modal-Delete"><i class="fa fa-close color-delete"></i></td>' +
+            '<td><a class="icon-table" href="#"><i class="fa fa-pencil color-icon"></i></a>' +
+            '<a class="icon-table" data-toggle="modal" href="#Modal-Delete">' +
+            '<i class="fa fa-close color-delete"></i></a></td>' +
             '</tr>')
     })
 }
@@ -104,18 +105,21 @@ function transf_other_table() {
     var alias = ['mama','plomero','hermano','empresa','florista'];
     var name = ['Julia Lopez','Luis Navarro','Manuel Perez','CasaMil C.A', 'Lucia Gomez'];
     var ci = ['V-11234256','V-21113456','V-16109456','J-298736476','V-17235431'];
-    var bank = ['Mercantil','Banesco','BOD','Mercantil','Provincial'];
+    var bank = ['BANCO MERCANTIL, C.A.','BANESCO BANCO UNIVERSAL',
+        'BOD BANCO OCCIDENTAL DE DESCUENTO','BANCO MERCANTIL, C.A',
+        'BANCO PROVINCIAL BBVA'];
     var date_af = ['21/04/2016','23/08/2017','17/04/2016','17/12/2016','12/02/2016'];
 
     $.each(name,function (i,val) {
-        $("#table-af-other").append('<tr>' +
-            '<td>' +alias[i]+ '</td>' +
-            '<td class="text-bold">' +val+ '</span></td>' +
+        $("#table-af-other").append('<tr class="cursor">' +
+            '<td><span class="link">' +alias[i]+ '</span></td>' +
+            '<td class="text-bold">' +val+ '</td>' +
             '<td>' +ci[i]+ '</td>' +
             '<td>' +bank[i]+ '</td>' +
             '<td>' +date_af[i]+ '</td>' +
-            '<td><a class="icon-table" href="#"><i class="fa fa-pencil color-icon"></i>' +
-            '<a  class="icon-table" data-toggle="modal" href="#Modal-Delete-Other"><i class="fa fa-close color-delete"></i></td>' +
+            '<td><a class="icon-table" href="#"><i class="fa fa-pencil color-icon"></i></a>' +
+            '<a  class="icon-table" data-toggle="modal" href="#Modal-Delete-Other">' +
+            '<i class="fa fa-close color-delete"></i></a></td>' +
             '</tr>')
     })
 }

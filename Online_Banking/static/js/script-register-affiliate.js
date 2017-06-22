@@ -10,13 +10,23 @@ $(document).ready(function (){
 
     $("#bank").change(function () {
         $.getJSON('static/js/bank.json', function (data) {
-          $.each( data, function( key, val ) {
-              if ($("#bank").val() === val.codigo) {
-                  $("#num-acc").val(val.codigo);
-              }
-          });
+            $.each( data, function( key, val ) {
+                if ($("#bank").val() === val.codigo) {
+                    $("#num-acc").val(val.codigo);
+                }
+            });
         });
+    });
+
+    $("#select-ci").change(function () {
+        if ($("#select-ci").val() === "V-" || $("#select-ci").val() === "E-") {
+
+        }
+        else {
+
+        }
     })
+
 });
 
 

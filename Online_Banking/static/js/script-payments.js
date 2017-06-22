@@ -29,14 +29,14 @@ function payments_table() {
         'MASTERCARD ****3256','04127330101'];
 
     $.each(name,function (i,val) {
-        $("#body-table-pay").append('<tr>' +
-            '<td>' +alias[i]+ '</td>' +
+        $("#body-table-pay").append('<tr class="cursor">' +
+            '<td><span class="link">' +alias[i]+ '</span></td>' +
             '<td class="text-bold text-capitalize">' +val+ '</span></td>' +
             '<td>' +type[i]+ '</td>' +
             '<td class="text-bold text-capitalize">' +product[i]+ '</td>' +
-            '<td><a  class="icon-table" href="#"><i class="fa fa-pencil color-icon"></i>' +
+            '<td><a  class="icon-table" href="#"><i class="fa fa-pencil color-icon"></i></a>' +
             '<a  class="icon-table" data-toggle="modal" href="#Modal-Delete-Payments">' +
-            '<i class="fa fa-close color-delete"></i></td>' +
+            '<i class="fa fa-close color-delete"></i></a></td>' +
             '</tr>')
     })
 }
