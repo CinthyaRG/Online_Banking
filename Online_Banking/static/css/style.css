@@ -369,3 +369,8 @@ div[role="tooltip"] {
 .no-pad-bottom {
     padding-bottom: 0;
 }
+#title-help {
+    margin-left: 100px;
+    margin-top: 34px;
+    margin-bottom: 20px !important;
+}

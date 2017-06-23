@@ -4,22 +4,22 @@
 
 $(document).ready(function (){
 
-    $('li').removeClass("active");
-
 });
 
+function move_back_security() {
+    var url = document.referrer.split('/');
 
-function move_security() {
-    var url = window.location.href;
-    alert(url);
+    if (url[3] === 'consultar-cuenta' ) {
+        window.history.back();
+    }
+    else {
+        url = window.location.href.split('/');
+        var new_url = url[0]+'/'+url[1]+'/'+url[2]+'/'+'inicio';
+        location.href= new_url;
+    }
+}
 
-    if (url[3] === 'pagos') {
-        location.href= "{% url 'registro-servicios' %}";
-    }
-    else if (url[3] === 'transf-otros-bancos') {
-        location.href= "{% url 'consultar-prestamo' %}";
-    }
-    else if (url[3] === 'transf-mi-banco') {
-        location.href= "{% url 'consultar-prestamo' %}";
-    }
+function move_security(id_body,id_sec) {
+    $(id_sec).css({display:'none'});
+    $(id_body).css({display:'block'});
 }

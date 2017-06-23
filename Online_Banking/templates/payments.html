@@ -7,8 +7,10 @@
     <script src="{% static 'plugins/datatables/dataTables.bootstrap.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/script-payments.js' %}"></script>
     <script src="{% static 'js/menu.js' %}"></script>
+    <script src="{% static 'js/script-elem_sec.js' %}"></script>
     <script>
         $(document).ready(function (){
+            $('#body_payment').css({display: 'none'});
             $("#table-payments_paginate").addClass("pull-right");
             $("#table-payments_paginate").css({height: '60px'});
             $("#table-payments_filter").addClass("pull-right");
@@ -17,7 +19,75 @@
 {% endblock %}
 
 {% block content %}
-    <section class="content-header">
+    <section id="sec_payment" class="content-header">
+        <div class="row" id="title-transf-bank">
+            <h3> Elementos de Seguridad </h3>
+        </div>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-7">
+                <div class="box box-success">
+                    <div class="box-body">
+                        <dl class="dl-horizontal label-input no-margin no-pad-bottom">
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right">
+                                        Pregunta de Seguridad: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows no-margin">
+                                    <p> Nombre de mi primera mascota </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right">
+                                        <span class="text-danger"> * </span> Respuesta: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows">
+                                    <input id="resp_seg" maxlength="50" type="password"
+                                           class="input-register">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right">
+                                        <span class="text-danger"> * </span> Coordenadas: </label>
+                                </div>
+                                <div class="col-md-2 col-xs-2 rows">
+                                    <span id="first_coor"> A5
+                                    <input id="input_frs_coor" maxlength="3" type="password"
+                                           class="input-register">
+                                    </span>
+                                    <span id="second_coor"> D2
+                                    <input id="input_snd_coor" maxlength="3" type="password"
+                                           class="input-register">
+                                    </span>
+                                </div>
+                                <div class="col-md-3 col-xs-3 rows">
+                                    <input id="resp_seg" maxlength="50" type="password"
+                                           class="input-register">
+                                </div>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5 col-xs-5"></div>
+            <div class="col-md-4">
+                <a id="btn-back" class="btn btn-default btn-group btn-apps"
+                   type="button" onclick="move_back_security()"> Cancelar
+                </a>
+                <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
+                   type="button" onclick="move_security('#body_payment','#sec_payment')">
+                    Siguiente
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="body_payment" class="content-header">
         <div class="row" id="title-transf-bank">
             <h3> Pagos </h3>
         </div>
