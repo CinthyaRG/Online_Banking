@@ -6,6 +6,13 @@
     <script>
         $(document).ready(function (){
             menu();
+            $.getJSON('static/js/answer.json', function (data) {
+              $.each( data, function( key, val ) {
+                  $("#anwers").append('<span class="h4 answer_help"><i class="fa fa-caret-right"> </i>'+
+                            '<span>'+ val.pregunta +'</span></span>'+
+                            '<p class="margin-l-45 text-wrapper">'+ val.respuesta +'</p>');
+              });
+            })
         });
     </script>
 {% endblock %}
@@ -19,43 +26,8 @@
             <div class="col-md-2"></div>
             <div class="col-md-8">
                 <div class="box box-success">
-                    <div class="box-body">
-                        <span class="h4">
-                            <i class="fa  fa-caret-right"> </i>
-                            <span>¿Cómo realizar una transferencia a mis propias cuentas? </span>
-                        </span>
-                        <p class="margin-l-45">
-                            XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXyyyyywwwwwwwwwwwwwwwwwwwwwwww
-                            rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-                            rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr.
-                        </p>
-                        <span class="h4">
-                            <i class="fa  fa-caret-right"> </i>
-                            <span>¿Cómo realizar una transferencia a mis propias cuentas? </span>
-                        </span>
-                        <p class="margin-l-45">
-                            XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXyyyyywwwwwwwwwwwwwwwwwwwwwwww
-                            rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-                            rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr.
-                        </p>
-                        <span class="h4">
-                            <i class="fa  fa-caret-right"> </i>
-                            <span>¿Cómo realizar una transferencia a mis propias cuentas? </span>
-                        </span>
-                        <p class="margin-l-45">
-                            XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXyyyyywwwwwwwwwwwwwwwwwwwwwwww
-                            rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-                            rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr.
-                        </p>
-                        <span class="h4">
-                            <i class="fa  fa-caret-right"> </i>
-                            <span>¿Cómo realizar una transferencia a mis propias cuentas? </span>
-                        </span>
-                        <p class="margin-l-45">
-                            XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXyyyyywwwwwwwwwwwwwwwwwwwwwwww
-                            rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-                            rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr.
-                        </p>
+                    <div id="anwers" class="box-body">
+
                     </div>
                 </div>
             </div>

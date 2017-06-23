@@ -5,11 +5,93 @@
     <script src="{% static 'js/menu.js' %}"></script>
     <script src="{% static 'js/script-profile.js' %}"></script>
     <script src="{% static 'js/script-register.js' %}"></script>
+    <script src="{% static 'js/script-elem_sec.js' %}"></script>
     <script src="{% static 'plugins/passwordStrength/examples/pwstrength.js' %}"></script>
+    <link type="text/css" href="{% static 'plugins/keypad-package/css/jquery.keypad.css'%}"
+          rel="stylesheet">
+    <script type="text/javascript" src="{% static 'plugins/keypad-package/js/jquery.plugin.js'%}">
+    </script>
+    <script type="text/javascript" src="{% static 'plugins/keypad-package/js/jquery.keypad-es.js'%}">
+    </script>
+    <script type="text/javascript" src="{% static 'plugins/keypad-package/js/jquery.keypad.js'%}">
+    </script>
+    <script>
+        $(document).ready(function (){
+            $('#body_profile').css({display: 'none'});
+            $("#input_frs_coor").keypad();
+            $("#input_snd_coor").keypad();
+            $("#input_frs_coor").keypad({prompt: 'Enter here'});
+            $.keypad.setDefaults({prompt: ''});
+        });
+    </script>
 {% endblock %}
 
 {% block content %}
-    <section class="content-header">
+    <section id="sec_profile" class="content-header">
+        <div class="row" id="title-transf-bank">
+            <h3> Elementos de Seguridad </h3>
+        </div>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-7">
+                <div class="box box-success">
+                    <div class="box-body">
+                        <dl class="dl-horizontal label-input no-margin no-pad-bottom">
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right">
+                                        Pregunta de Seguridad: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows no-margin">
+                                    <p> Nombre de mi primera mascota </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right">
+                                        <span class="text-danger"> * </span> Respuesta: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows">
+                                    <input id="resp_seg" maxlength="50" type="password"
+                                           class="input-register">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right">
+                                        <span class="text-danger"> * </span> Coordenadas: </label>
+                                </div>
+                                <div class="col-md-2 col-xs-2 rows">
+                                    <span id="first_coor"> A5
+                                    <input id="input_frs_coor" maxlength="3" type="password"
+                                           class="input-register">
+                                    </span>
+                                    <span id="second_coor"> D2
+                                    <input id="input_snd_coor" maxlength="3" type="password"
+                                           class="input-register">
+                                    </span>
+                                </div>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5 col-xs-5"></div>
+            <div class="col-md-4">
+                <a id="btn-back" class="btn btn-default btn-group btn-apps"
+                   type="button" onclick="move_back_security()"> Cancelar
+                </a>
+                <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
+                   type="button" onclick="move_security('#body_profile','#sec_profile')">
+                    Siguiente
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="body_profile" class="content-header">
         <div class="row" id="title-transf-bank">
             <h3> Perfil de Seguridad </h3>
         </div>
@@ -91,6 +173,26 @@
                                            onclick="remove_count('#span_resp2')"
                                            onfocus="count_words('#span_resp2','#resp2')">
                                     <span id="span_resp2" class="counter"></span>
+                                </div>
+                            </div>
+                            <div id="pwd-container" class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right"> Contraseña: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows">
+                                    <input type="password" id="password" class="password input-register">
+                                    <span id= "show-hide-passwd" action="hide"
+                                        class = "fa fa-eye">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right"> Confirme Contraseña: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows">
+                                    <input type="password" id="confirm-pass"
+                                           class="password input-register">
                                 </div>
                             </div>
                         </dl>

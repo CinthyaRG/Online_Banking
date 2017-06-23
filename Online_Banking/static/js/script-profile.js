@@ -5,6 +5,20 @@
 $(document).ready(function (){
     menu();
     change_input();
+
+    $("#show-hide-passwd").click(function(e){
+      e.preventDefault();
+      var current = $(this).attr('action');
+
+      if (current == 'hide'){
+        $("#password").attr({type: 'text'});
+        $(this).removeClass('fa-eye').addClass('fa-eye-slash').attr('action','show');
+      }
+      if (current == 'show'){
+        $("#password").attr({type: 'password'});
+        $(this).removeClass('fa-eye-slash').addClass('fa-eye').attr('action','hide');
+      }
+    });
 });
 
 function change_input() {

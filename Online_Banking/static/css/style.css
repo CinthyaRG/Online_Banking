@@ -130,7 +130,7 @@ div > dl > div > div > label {
 }
 #ci ,#rif_banavih, #rif_info_bank, #num_susc,
 #rif_impuestos_owns , #rif_impuestos_others,
-#ci_tdc_mybank, #ci_tdc_others, #num-tlf {
+#ci_tdc_mybank, #ci_tdc_others {
     max-width: 90px;
 }
 .margin-register {
@@ -373,4 +373,26 @@ div[role="tooltip"] {
     margin-left: 100px;
     margin-top: 34px;
     margin-bottom: 20px !important;
+}
+#num-tlf {
+    max-width: 80px;
+}
+#codes {
+    max-width: 100px;
+}
+.text-wrapper {
+    word-break: keep-all;
+    word-wrap: break-word;
+    margin-bottom: 20px;
+}
+#pwd-container {
+    height: 50px;
+}
+#show-hide-passwd {
+    position: absolute;
+    top: 6px;
+    left: 190px;
+}
+.answer_help {
+    color: #438D88;
 }
