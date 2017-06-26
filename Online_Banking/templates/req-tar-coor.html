@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block script %}
+    <script src="{% static 'js/menu.js' %}"></script>
+    <script src="{% static 'js/script-request.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <section class="content-header">
+        <div class="row" id="title-transf-bank">
+            <h3> Solicitud de Tarjeta de Coordenadas </h3>
+        </div>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-7">
+                <div class="box box-success">
+                    <div class="box-body no-padding">
+                        <div class="row row-top">
+                            <div class="col-md-11 col-xs-11 margin-l-13">
+                                <p class="text-wrapper margin-l-13">
+                                    Este es un elemento de seguridad para poder realizar transferencias,
+                                     pagos, entre otras operaciones especiales.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row detail-tdc">
+                            <div class="col-md-2 col-xs-4"></div>
+                            <div id="tarj-coor" class="col-md-4 col-xs-5 without-padding">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-xs-3"></div>
+            <div class="col-md-6">
+                <a id="btn-back" class="btn btn-default btn-group btn-apps"
+                   type="button" href="{% url 'solicitudes' %}"> Ir a Solicitudes
+                </a>
+                <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
+                   type="button" href="#">  Descargar Tarjeta
+                </a>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

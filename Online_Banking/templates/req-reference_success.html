@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block script %}
+    <script src="{% static 'js/menu.js' %}"></script>
+    <script src="{% static 'js/script-request.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <section class="content-header">
+        <div class="row" id="title-transf-bank">
+            <h3> Solicitud de Referencias Bancarias </h3>
+        </div>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-7">
+                <div class="box box-success">
+                    <div class="box-body no-padding">
+                        <div class="row row-top">
+                            <div class="col-md-11 col-xs-11 margin-l-13">
+                                <p class="text-wrapper margin-l-13">
+                                    Su solicitud de referencia bancaria ha sido procesada exitosamente
+                                    bajo el número de operación <strong>5018997</strong> con los siguientes
+                                    datos:
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 col-xs-5 without-padding">
+                                <p class="pull-right"> Cuenta:  </p>
+                            </div>
+                            <div class="col-md-5 col-xs-5">
+                                <p class="pull-left text-bold"> Ahorro 017600**********2222 </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 col-xs-5 without-padding">
+                                <p class="pull-right"> Dirigido a:  </p>
+                            </div>
+                            <div class="col-md-5 col-xs-5">
+                                <p class="pull-left text-bold"> A quién pueda interesar </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 col-xs-5 without-padding">
+                                <p class="pull-right"> Comisión:  </p>
+                            </div>
+                            <div class="col-md-5 col-xs-5">
+                                <p class="pull-left text-bold"> Bs. 0 </p>
+                            </div>
+                        </div>
+                        <div class="row detail-tdc">
+                            <div class="col-md-4 col-xs-5 without-padding">
+                                <p class="pull-right"> Número de operación:  </p>
+                            </div>
+                            <div class="col-md-5 col-xs-5">
+                                <p class="pull-left text-bold"> 5018997 </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-xs-3"></div>
+            <div class="col-md-6">
+                <a id="btn-back" class="btn btn-default btn-group btn-apps"
+                   type="button" href="{% url 'solicitudes' %}"> Ir a Solicitudes
+                </a>
+                <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
+                   type="button" href="#">  Descargar Referencia
+                </a>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

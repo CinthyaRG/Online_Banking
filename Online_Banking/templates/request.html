@@ -19,21 +19,25 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <a id="btn-tarj_seg" class="btn btn-default btn-group btn-apps pull-right"
-                                   type="button" href="#"> Generar Tarjeta de Seguridad </a>
+                                   type="button" href="{% url 'solicitud-tarjeta-coordenadas' %}">
+                                    Generar Tarjeta de Seguridad </a>
                             </div>
                             <div class="margin-l-45 col-md-5">
                                 <a id="btn-cheq" class="btn btn-default btn-group btn-apps pull-left"
-                                   type="button" href="{% url 'solicitud-chequeras' %}"> Solicitud de Chequeras </a>
+                                   type="button" href="{% url 'solicitud-chequeras' %}">
+                                    Solicitud de Chequeras </a>
                             </div>
                         </div>
                         <div class="row title-trans">
                             <div class="col-md-6">
                                 <a id="btn-citas" class="btn btn-default btn-group btn-apps pull-right"
-                                   type="button" href="{% url 'solicitud-referencias' %}"> Solicitud de Referencias Bancarias </a>
+                                   type="button" href="{% url 'solicitud-referencias' %}">
+                                    Solicitud de Referencias Bancarias </a>
                             </div>
                             <div class="margin-l-45 col-md-5">
                                 <a id="btn-ref" class="btn btn-default btn-group btn-apps pull-left"
-                                   type="button" href="{% url 'solicitud-citas' %}"> Solicitud de Citas Bancarias </a>
+                                   type="button" href="{% url 'solicitud-citas' %}">
+                                    Solicitud de Citas Bancarias </a>
                             </div>
                         </div>
                     </div>

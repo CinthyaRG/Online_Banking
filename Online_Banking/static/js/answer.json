@@ -17,5 +17,9 @@
     {
         "pregunta":"¿Qué condiciones aplican para la anulación de una tarjeta de crédito?",
         "respuesta":"Una vez que confirmes la cancelación de tu tarjeta de crédito a través de Actio Capital, se anulará la tarjeta y no podrás utilizarla hasta que esta sea reactivada."
+    },
+    {
+        "pregunta":"¿Dónde puedo obtener más información si tengo otras preguntas?",
+        "respuesta":"Comunícate sin costo alguno al teléfono (0212) XXX.XXXX"
     }
 ]
