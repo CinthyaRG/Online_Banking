@@ -70,21 +70,3 @@ function drop_trans_tdc(){
 }
 
 
-$(function () {
-
-    $('#datepicker').datepicker({
-        autoclose: true,
-        format: 'dd/mm/yyyy',
-        language: 'es',
-        clearBtn: true
-    });
-    $('#datepicker2').datepicker({
-        autoclose: true,
-        format: 'dd/mm/yyyy',
-        language: 'es',
-        clearBtn: true
-    });
-
-});
-
-

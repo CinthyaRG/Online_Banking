@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block script %}
+    <script src="{% static 'js/menu.js' %}"></script>
+    <script src="{% static 'js/script-request.js' %}"></script>
+    <link type="text/css" href="{% static 'plugins/keypad-package/css/jquery.keypad.css'%}"
+          rel="stylesheet">
+    <script type="text/javascript" src="{% static 'plugins/keypad-package/js/jquery.plugin.js'%}">
+    </script>
+    <script type="text/javascript" src="{% static 'plugins/keypad-package/js/jquery.keypad.js'%}">
+    </script>
+{% endblock %}
+
+{% block content %}
+    <section class="content-header">
+        <div class="row" id="title-transf-bank">
+            <h3> Solicitud de Referencias Bancarias </h3>
+        </div>
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="box box-success">
+                    <div class="box-body no-padding">
+                        <div class="row row-top">
+                            <div class="col-md-5 col-xs-5">
+                                <label class="pull-right"> Cuenta: </label>
+                            </div>
+                            <div class="col-md-6 col-xs-5 rows">
+                                <select id="account" class="select2 input-register no-margin">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 col-xs-5">
+                                <label class="pull-right"> Dirigido a: </label>
+                            </div>
+                           <div class="form-group col-md-6 col-xs-5">
+                            <div class="radio">
+                                <label>
+                                    <input name="optionsRadios" id="options1" value="option1" checked="" type="radio"
+                                    onclick="hab_des_text(2)">
+                                    Al Titular
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input name="optionsRadios" id="options2" value="option2" type="radio"
+                                    onclick="hab_des_text(2)">
+                                    A quien pueda Interesar
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input name="optionsRadios" id="options3" value="option3" type="radio"
+                                           onclick="hab_des_text(1)">
+                                    A un tercero:
+                                    <input type="text" id="name_reference" disabled maxlength="20" class="input-register">
+                                </label>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5 col-xs-5"></div>
+            <div class="col-md-4">
+                <a id="btn-back" class="btn btn-default btn-group btn-apps"
+                   type="button" href="{% url 'solicitudes' %}"> Cancelar
+                </a>
+                <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
+                   type="button" href="#">  Aceptar
+                </a>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

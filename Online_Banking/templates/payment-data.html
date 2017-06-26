@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block script %}
+    <script src="{% static 'js/script-data.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <section class="content-header">
+        <div class="row" id="title-transf-bank">
+            <h3> Datos del Pago </h3>
+        </div>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-7">
+                <div class="box box-success">
+                    <div class="box-body">
+                        <dl class="dl-horizontal label-input">
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right">
+                                        <span class="text-danger"> * </span> Cuenta a Debitar: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows">
+                                    <select id="account" class="select2 input-register field-register no-margin">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right">
+                                        Saldo Disponible: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows margin-t-2">
+                                    <span id="balance_transf" class="field-register">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right"> Nombre del Servicio: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows margin-t-2">
+                                    <span id="name_service" class="field-register">
+                                        Electricidad de Caracas
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right">Producto Asociado: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows margin-t-2">
+                                    <span id="product_payment" class="field-register">
+                                        Contrato: 000018219311
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right">
+                                        <span class="text-danger"> * </span> Monto del Pago: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows">
+                                    <span>Bs. </span><input id="amount_payment" maxlength="10" class="input-register">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right">
+                                        <span class="text-danger"> * </span> Descripción: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows">
+                                    <input id="descrip_payment" class="input-register field-register">
+                                </div>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5 col-xs-5"></div>
+            <div class="col-md-4">
+                <a id="btn-back" class="btn btn-default btn-group btn-apps"
+                   type="button" onclick="window.history.back()"> Cancelar </a>
+                <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
+                   type="button" href="{% url 'pago-exitoso' %}"> Aceptar </a>
+            </div>
+
+        </div>
+    </section>
+{% endblock %}

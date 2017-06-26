@@ -54,8 +54,24 @@ class Transfer_others_bank(TemplateView):
     template_name = 'trans_other_bank.html'
 
 
+class DataTransfer(TemplateView):
+    template_name = 'transfer-data.html'
+
+
+class Success(TemplateView):
+    template_name = 'transfer-success.html'
+
+
 class Payments(TemplateView):
     template_name = 'payments.html'
+
+
+class DataPayment(TemplateView):
+    template_name = 'payment-data.html'
+
+
+class Success_Payments(TemplateView):
+    template_name = 'payments-success.html'
 
 
 class Register_Affiliate(TemplateView):
@@ -66,8 +82,29 @@ class Register_Services(TemplateView):
     template_name = 'register-services.html'
 
 
+class Request(TemplateView):
+    template_name = 'request.html'
+
+
+class Request_Checkbook(TemplateView):
+    template_name = 'req-checkb.html'
+
+
+class Request_Appointment(TemplateView):
+    template_name = 'req-appointment.html'
+
+
+class Request_References(TemplateView):
+    template_name = 'req-reference.html'
+
+
+class Management(TemplateView):
+    template_name = 'management-products.html'
+
+
 class Profile(TemplateView):
     template_name = 'profile-security.html'
+
 
 class Help(TemplateView):
     template_name = 'help.html'

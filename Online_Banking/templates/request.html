@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block script %}
+    <script src="{% static 'js/menu.js' %}"></script>
+    <script src="{% static 'js/script-request.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <section class="content-header">
+        <div class="row" id="title-transf-bank">
+            <h3> Solicitudes en Línea </h3>
+        </div>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="box box-success">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <a id="btn-tarj_seg" class="btn btn-default btn-group btn-apps pull-right"
+                                   type="button" href="#"> Generar Tarjeta de Seguridad </a>
+                            </div>
+                            <div class="margin-l-45 col-md-5">
+                                <a id="btn-cheq" class="btn btn-default btn-group btn-apps pull-left"
+                                   type="button" href="{% url 'solicitud-chequeras' %}"> Solicitud de Chequeras </a>
+                            </div>
+                        </div>
+                        <div class="row title-trans">
+                            <div class="col-md-6">
+                                <a id="btn-citas" class="btn btn-default btn-group btn-apps pull-right"
+                                   type="button" href="{% url 'solicitud-referencias' %}"> Solicitud de Referencias Bancarias </a>
+                            </div>
+                            <div class="margin-l-45 col-md-5">
+                                <a id="btn-ref" class="btn btn-default btn-group btn-apps pull-left"
+                                   type="button" href="{% url 'solicitud-citas' %}"> Solicitud de Citas Bancarias </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+{% endblock %}

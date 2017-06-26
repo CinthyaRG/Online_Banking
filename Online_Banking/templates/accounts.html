@@ -21,6 +21,25 @@
             });
             $("#example2_paginate").addClass("pull-right");
             $("#example2_paginate").css({height: '60px'});
+
+            $('#datepicker').datepicker({
+                autoclose: true,
+                format: 'dd/mm/yyyy',
+                endDate: new Date(),
+                language: 'es',
+                clearBtn: true,
+                todayHighlight: true,
+                weekStart: 1
+            });
+            $('#datepicker2').datepicker({
+                autoclose: true,
+                format: 'dd/mm/yyyy',
+                endDate: new Date(),
+                language: 'es',
+                clearBtn: true,
+                todayHighlight: true,
+                weekStart: 1
+            });
         });
     </script>
 {% endblock %}

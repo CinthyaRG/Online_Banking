@@ -8,12 +8,22 @@
     <script type="text/javascript" src="{% static 'js/script-transfers.js' %}"></script>
     <script src="{% static 'js/menu.js' %}"></script>
     <script src="{% static 'js/script-elem_sec.js' %}"></script>
+    <link type="text/css" href="{% static 'plugins/keypad-package/css/jquery.keypad.css'%}"
+          rel="stylesheet">
+    <script type="text/javascript" src="{% static 'plugins/keypad-package/js/jquery.plugin.js'%}">
+    </script>
+    <script type="text/javascript" src="{% static 'plugins/keypad-package/js/jquery.keypad.js'%}">
+    </script>
     <script>
         $(document).ready(function (){
             $('#body_tranf_other_bank').css({display: 'none'});
             $("#table-transf_paginate").addClass("pull-right");
             $("#table-transf_paginate").css({height: '60px'});
             $("#table-transf_filter").addClass("pull-right");
+            $("#input_frs_coor").keypad();
+            $("#input_snd_coor").keypad();
+            $("#input_frs_coor").keypad({prompt: 'Enter here'});
+            $.keypad.setDefaults({prompt: ''});
         });
     </script>
 {% endblock %}
@@ -53,7 +63,7 @@
                                     <label class="pull-right">
                                         <span class="text-danger"> * </span> Coordenadas: </label>
                                 </div>
-                                <div class="col-md-2 col-xs-2 rows">
+                                <div class="col-md-5 col-xs-5 rows">
                                     <span id="first_coor"> A5
                                     <input id="input_frs_coor" maxlength="3" type="password"
                                            class="input-register">
@@ -62,10 +72,6 @@
                                     <input id="input_snd_coor" maxlength="3" type="password"
                                            class="input-register">
                                     </span>
-                                </div>
-                                <div class="col-md-3 col-xs-3 rows">
-                                    <input id="resp_seg" maxlength="50" type="password"
-                                           class="input-register">
                                 </div>
                             </div>
                         </dl>

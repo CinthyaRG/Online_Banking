@@ -11,8 +11,6 @@
           rel="stylesheet">
     <script type="text/javascript" src="{% static 'plugins/keypad-package/js/jquery.plugin.js'%}">
     </script>
-    <script type="text/javascript" src="{% static 'plugins/keypad-package/js/jquery.keypad-es.js'%}">
-    </script>
     <script type="text/javascript" src="{% static 'plugins/keypad-package/js/jquery.keypad.js'%}">
     </script>
     <script>
@@ -61,7 +59,7 @@
                                     <label class="pull-right">
                                         <span class="text-danger"> * </span> Coordenadas: </label>
                                 </div>
-                                <div class="col-md-2 col-xs-2 rows">
+                                <div class="col-md-5 col-xs-5 rows">
                                     <span id="first_coor"> A5
                                     <input id="input_frs_coor" maxlength="3" type="password"
                                            class="input-register">
@@ -102,7 +100,7 @@
                     <div class="box-body">
                         <dl class="dl-horizontal label-input no-margin no-pad-bottom">
                             <div class="row">
-                                <div class="col-md-6 col-xs-5">
+                                <div class="col-md-6 col-xs-6">
                                     <label class="pull-right">
                                         Usuario: </label>
                                 </div>
@@ -111,7 +109,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6 col-xs-5">
+                                <div class="col-md-6 col-xs-6">
                                     <label class="pull-right">
                                         Documento de Identidad: </label>
                                 </div>
@@ -120,7 +118,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6 col-xs-5">
+                                <div class="col-md-6 col-xs-6">
                                     <label class="pull-right"> Email: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows">
@@ -128,7 +126,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6 col-xs-5">
+                                <div class="col-md-6 col-xs-6">
                                     <label class="pull-right"> Pregunta 1: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows">
@@ -140,7 +138,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                            <div class="col-md-6 col-xs-5">
+                            <div class="col-md-6 col-xs-6">
                                 <label class="pull-right"> Respuesta 1: </label>
                             </div>
                             <div class="col-md-6 col-xs-5 rows">
@@ -152,7 +150,7 @@
                             </div>
                         </div>
                             <div class="row ">
-                                <div class="col-md-6 col-xs-5">
+                                <div class="col-md-6 col-xs-6">
                                     <label class="pull-right"> Pregunta 2: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows">
@@ -164,7 +162,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6 col-xs-5">
+                                <div class="col-md-6 col-xs-6">
                                     <label class="pull-right"> Respuesta 2: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows">
@@ -176,18 +174,18 @@
                                 </div>
                             </div>
                             <div id="pwd-container" class="row">
-                                <div class="col-md-6 col-xs-5">
+                                <div class="col-md-6 col-xs-6">
                                     <label class="pull-right"> Contraseña: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows">
                                     <input type="password" id="password" class="password input-register">
                                     <span id= "show-hide-passwd" action="hide"
-                                        class = "fa fa-eye">
+                                        class = "fa fa-eye-slash">
                                     </span>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6 col-xs-5">
+                                <div class="col-md-6 col-xs-6">
                                     <label class="pull-right"> Confirme Contraseña: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows">
@@ -204,7 +202,7 @@
             <div class="col-md-5 col-xs-5"></div>
             <div class="col-md-4">
                 <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
-                   type="button" onclick="">
+                   type="button" href="#">
                     Guardar
                 </a>
             </div>

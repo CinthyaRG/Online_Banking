@@ -173,7 +173,7 @@ try {
 var defaultOptions = {};
 
 defaultOptions.common = {};
-defaultOptions.common.minChar = 6;
+defaultOptions.common.minChar = 8;
 defaultOptions.common.usernameField = "#username";
 defaultOptions.common.userInputs = [
     // Selectors for input fields with user input
@@ -233,28 +233,26 @@ defaultOptions.ui.spanError = function (options, key) {
     return '<span style="color: #d52929">' + text + '</span>';
 };
 defaultOptions.ui.errorMessages = {
-    wordLength: "Your password is too short",
+    wordLength: "Tu contraseña es muy corta",
     wordNotEmail: "Do not use your email as your password",
     wordSimilarToUsername: "Your password cannot contain your username",
-    wordTwoCharacterClasses: "Use different character classes",
+    wordTwoCharacterClasses: "Use diferentes tipos de caracteres",
     wordRepetitions: "Too many repetitions",
-    wordSequences: "Your password contains sequences"
+    wordSequences: "Tu contraseña tiene repeticiones"
 };
 defaultOptions.ui.verdicts = ["Débil", "Normal", "Medio", "Segura", "Muy Segura"];
 defaultOptions.ui.showVerdicts = true;
 defaultOptions.ui.showVerdictsInsideProgressBar = false;
-defaultOptions.ui.showErrors = false;
+defaultOptions.ui.showErrors = true;
 defaultOptions.ui.container = undefined;
 defaultOptions.ui.viewports = {
     progress: undefined,
     verdict: undefined,
     errors: undefined
 };
-defaultOptions.ui.scores = [14, 26, 38, 50];
+defaultOptions.ui.scores = [14, 26, 35, 45];
 
 // Source: src/ui.js
-
-
 
 
 var ui = {};

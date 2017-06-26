@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block script %}
+    <script src="{% static 'js/script-data.js' %}"></script>
+    <script src="{% static 'js/print.js' %}"></script>
+    <script>
+        function download(url) {
+            document.getElementById('myframe').src = url;
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <iframe id="myframe" style="display: none;"></iframe>
+    <section  class="content-header">
+        <div id="print">
+            <div class="row title-trans">
+                <div class="col-md-7 col-xs-8"></div>
+                <div class="col-md-5 col-xs-4">
+                    <h3>Ref. 123458-4  </h3>
+                </div>
+            </div>
+            <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-7">
+                <div class="box box-success">
+                    <div class="box-body">
+                        <dl class="dl-horizontal label-input">
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right"> Nombre del Beneficiario: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows margin-t-2">
+                                    <span id="name_transf" class="field-register">
+                                        Lucia Gomez
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right">Documento de Identidad: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows margin-t-2">
+                                    <span id="ci_transf" class="field-register">
+                                        V-17235431
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right">Número de cuenta: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-6 rows margin-t-2">
+                                    <span id="acc_transf" class="field-register">
+                                        01xx4251789635254125
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right">
+                                        Monto de la Transferencia: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows">
+                                    <span>Bs. 15.000,00 </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right">
+                                        Descripción: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows">
+                                    <span>Pago de bisuteria </span>
+                                </div>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-xs-4"></div>
+            <div class="col-md-5">
+                <a id="btn-back" class="btn btn-default btn-group btn-apps"
+                   type="button" href="{% url 'inicio' %}"> Ir a Posición Consolidada </a>
+                <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
+                   type="button" href="download.pdf" download="referencia.pdf"> Descargar </a>
+            </div>
+        </div>
+    </section>
+{% endblock %}

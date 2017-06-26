@@ -2,12 +2,9 @@
 {% load static %}
 
 {% block script %}
-    <!-- DataTables -->
-    <script src="{% static 'plugins/datatables/jquery.dataTables.js' %}"></script>
-    <script src="{% static 'plugins/datatables/dataTables.bootstrap.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/script-payments.js' %}"></script>
     <script src="{% static 'js/menu.js' %}"></script>
     <script src="{% static 'js/script-elem_sec.js' %}"></script>
+    <script src="{% static 'js/script-request.js' %}"></script>
     <link type="text/css" href="{% static 'plugins/keypad-package/css/jquery.keypad.css'%}"
           rel="stylesheet">
     <script type="text/javascript" src="{% static 'plugins/keypad-package/js/jquery.plugin.js'%}">
@@ -16,10 +13,7 @@
     </script>
     <script>
         $(document).ready(function (){
-            $('#body_payment').css({display: 'none'});
-            $("#table-payments_paginate").addClass("pull-right");
-            $("#table-payments_paginate").css({height: '60px'});
-            $("#table-payments_filter").addClass("pull-right");
+            $('#body_request').css({display: 'none'});
             $("#input_frs_coor").keypad();
             $("#input_snd_coor").keypad();
             $("#input_frs_coor").keypad({prompt: 'Enter here'});
@@ -29,7 +23,7 @@
 {% endblock %}
 
 {% block content %}
-    <section id="sec_payment" class="content-header">
+    <section id="sec_request" class="content-header">
         <div class="row" id="title-transf-bank">
             <h3> Elementos de Seguridad </h3>
         </div>
@@ -86,100 +80,56 @@
                    type="button" onclick="move_back_security()"> Cancelar
                 </a>
                 <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
-                   type="button" onclick="move_security('#body_payment','#sec_payment')">
+                   type="button" onclick="move_security('#body_request','#sec_request')">
                     Siguiente
                 </a>
             </div>
         </div>
     </section>
 
-    <section id="body_payment" class="content-header">
+    <section id="body_request" class="content-header">
         <div class="row" id="title-transf-bank">
-            <h3> Pagos </h3>
+            <h3> Solicitud de Chequeras </h3>
         </div>
         <div class="row">
-            <div class="col-md-3 col-xs-4"></div>
-            <div class="col-md-8 col-xs-8">
-                <a class="btn btn-default btn-group btn-apps pull-right" type="button"
-                   href="{% url 'registro-servicios' %}"> Agregar Servicio </a>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-10">
+            <div class="col-md-3"></div>
+            <div class="col-md-5">
                 <div class="box box-success">
-                    <div class="box-header padding-tb">
-                        <h3 class="box-title margin">Lista de Servicios</h3>
-                        <p class="margin-l-13 without-margin">
-                            Seleccione un servicio para realizar un pago
-                        </p>
-                    </div>
                     <div class="box-body no-padding">
-                        <table id="table-payments" class="table table-bordered table-hover text-center cursor">
-                            <thead>
-                            <tr class="bg-gray">
-                                <th>Alias</th>
-                                <th>Nombre Servicio</th>
-                                <th>Tipo</th>
-                                <th>Producto</th>
-                                <th>Acciones</th>
-                            </tr>
-                            </thead>
-                            <tbody id="body-table-pay">
-                            </tbody>
-                            <tfoot>
-                            <tr class="bg-gray">
-                                <th>Alias</th>
-                                <th>Nombre Servicio</th>
-                                <th>Tipo</th>
-                                <th>Producto</th>
-                                <th>Acciones</th>
-                            </tr>
-                            </tfoot>
-                        </table>
+                        <div class="row row-top">
+                            <div class="col-md-6 col-xs-5">
+                                <label class="pull-right">
+                                    <span class="text-danger"> * </span> Cantidad de Chequeras: </label>
+                            </div>
+                            <div class="col-md-6 col-xs-5 rows">
+                                <input id="amount_cheq" maxlength="1" class="input-register">
+                            </div>
+                        </div>
+                        <div class="row detail-tdc">
+                            <div class="col-md-6 col-xs-5">
+                                <label class="pull-right"> Número de Cheques: </label>
+                            </div>
+                            <div class="col-md-6 col-xs-5 rows">
+                                <select id="num-cheq" class="select2 input-register no-margin">
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 <!-- /.box-body -->
               </div>
             </div>
         </div>
-    </section>
-
-    <div id="Modal-Delete-Payments" class="modal">
-        <div class="modal-dialog modal-trans">
-            <div class="modal-content">
-                <div class="modal-header activate">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title text-center">Eliminar Afiliado</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-11">
-                            <p> ¿Está seguro que desea eliminar el servicio asociado al producto
-                                <strong> Prestamo-17897001 </strong>de la lista de sus servicios? </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div class="row">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-3">
-                            <button type="button" class="btn btn-default btn-apps"
-                                data-dismiss="modal">Cancelar</button>
-                        </div>
-                        <div class="col-md-3">
-                            <button type="button" class="btn btn-default btn-apps"
-                                data-dismiss="modal">Aceptar</button>
-                        </div>
-                    </div>
-
-                </div>
+        <div class="row">
+            <div class="col-md-4 col-xs-5"></div>
+            <div class="col-md-4">
+                <a id="btn-back" class="btn btn-default btn-group btn-apps"
+                   type="button" href="{% url 'solicitudes' %}"> Cancelar
+                </a>
+                <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
+                   type="button" href="#">  Aceptar
+                </a>
             </div>
-            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
-    </div>
+    </section>
 
 {% endblock %}

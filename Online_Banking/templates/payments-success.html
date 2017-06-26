@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block script %}
+    <script src="{% static 'js/script-data.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <section class="content-header">
+        <div id="print">
+            <div class="row title-trans">
+                <div class="col-md-7 col-xs-8"></div>
+                <div class="col-md-5 col-xs-4">
+                    <h3>Ref. 895745-5  </h3>
+                </div>
+            </div>
+            <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-7">
+                <div class="box box-success">
+                    <div class="box-body">
+                        <dl class="dl-horizontal label-input">
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right"> Nombre del Servicio: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows margin-t-2">
+                                    <span id="name_service" class="field-register">
+                                        Electricidad de Caracas
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right">Producto Asociado:  </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows margin-t-2">
+                                    <span id="product_payment" class="field-register">
+                                        Contrato: 000018219311
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right">
+                                        Monto del Pago: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows">
+                                    <span>Bs. 1.420,50 </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right">
+                                        Descripción: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows">
+                                    <span>Pago de la luz 04/2017 </span>
+                                </div>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-xs-4"></div>
+            <div class="col-md-5">
+                <a id="btn-back" class="btn btn-default btn-group btn-apps"
+                   type="button" href="{% url 'inicio' %}"> Ir a Posición Consolidada </a>
+                <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
+                   type="button" onclick="window.print();"> Descargar </a>
+            </div>
+
+        </div>
+    </section>
+{% endblock %}

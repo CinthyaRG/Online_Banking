@@ -5,7 +5,7 @@
     <!-- DataTables -->
     <script src="{% static 'plugins/datatables/jquery.dataTables.js' %}"></script>
     <script src="{% static 'plugins/datatables/dataTables.bootstrap.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/script-transfers.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/script-management.js' %}"></script>
     <script src="{% static 'js/menu.js' %}"></script>
     <script src="{% static 'js/script-elem_sec.js' %}"></script>
     <link type="text/css" href="{% static 'plugins/keypad-package/css/jquery.keypad.css'%}"
@@ -16,10 +16,9 @@
     </script>
     <script>
         $(document).ready(function (){
-            $('#body_tranf_my_bank').css({display: 'none'});
-            $("#table-transf_paginate").addClass("pull-right");
-            $("#table-transf_paginate").css({height: '60px'});
-            $("#table-transf_filter").addClass("pull-right");
+            $('#body_mng').css({display: 'none'});
+            $("#table-mng_paginate").addClass("pull-right");
+            $("#table-mng_paginate").css({height: '60px'});
             $("#input_frs_coor").keypad();
             $("#input_snd_coor").keypad();
             $("#input_frs_coor").keypad({prompt: 'Enter here'});
@@ -29,7 +28,7 @@
 {% endblock %}
 
 {% block content %}
-    <section id="sec_tranf_my_bank" class="content-header">
+    <section id="sec_mng" class="content-header">
         <div class="row" id="title-transf-bank">
             <h3> Elementos de Seguridad </h3>
         </div>
@@ -86,54 +85,44 @@
                    type="button" onclick="move_back_security()"> Cancelar
                 </a>
                 <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
-                   type="button" onclick="move_security('#body_tranf_my_bank','#sec_tranf_my_bank')">
+                   type="button" onclick="move_security('#body_mng','#sec_mng')">
                     Siguiente
                 </a>
             </div>
         </div>
     </section>
 
-    <section id="body_tranf_my_bank" class="content-header">
+    <section id="body_mng" class="content-header">
         <div class="row" id="title-transf-bank">
-            <h3>Transferencias Al Mismo Banco </h3>
+            <h3> Gestión de Productos </h3>
         </div>
         <div class="row">
-            <div class="col-md-3 col-xs-4"></div>
-            <div class="col-md-8 col-xs-8">
-                <a class="btn btn-default btn-group btn-apps pull-right" type="button"
-                   href="{% url 'registro-afiliados'%}"> Agregar Afiliado </a>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-10">
+            <div class="col-md-2"></div>
+            <div class="col-md-7">
                 <div class="box box-success">
                     <div class="box-header padding-tb">
-                        <h3 class="box-title margin">Lista de Afiliados</h3>
-                        <p class="margin without-margin">
-                            Seleccione un afiliado para realizarle una transferencia
+                        <h3 class="box-title margin">Lista de Productos </h3>
+                        <p class="margin-l-13 without-margin">
+                            A continuación se muestran todos los productos asociados
+                            a usted que puede activar o anular.
                         </p>
                     </div>
                     <div class="box-body no-padding">
-                        <table id="table-transf" class="table table-bordered table-hover text-center cursor">
+                        <table id="table-mng" class="table table-bordered table-hover text-center cursor">
                             <thead>
                             <tr class="bg-gray">
-                                <th>Alias</th>
-                                <th>Nombre Afiliado</th>
-                                <th>Documento de Identidad</th>
-                                <th>Fecha Afiliación</th>
-                                <th>Acciones</th>
+                                <th>Producto</th>
+                                <th>Activar</th>
+                                <th>Anular</th>
                             </tr>
                             </thead>
-                            <tbody id="table-af">
+                            <tbody id="body-table-mng">
                             </tbody>
                             <tfoot>
                             <tr class="bg-gray">
-                                <th>Alias</th>
-                                <th>Nombre Afiliado</th>
-                                <th>Documento de Identidad</th>
-                                <th>Fecha Afiliación</th>
-                                <th>Acciones</th>
+                                <th>Producto</th>
+                                <th>Activar</th>
+                                <th>Anular</th>
                             </tr>
                             </tfoot>
                         </table>
@@ -144,7 +133,7 @@
         </div>
     </section>
 
-    <div id="Modal-Delete" class="modal">
+    <div id="Modal-Delete-Payments" class="modal">
         <div class="modal-dialog modal-trans">
             <div class="modal-content">
                 <div class="modal-header activate">
@@ -157,23 +146,24 @@
                     <div class="row">
                         <div class="col-md-1"></div>
                         <div class="col-md-11">
-                            <p> ¿Está seguro que desea eliminar a
-                                <strong> CasaMil C.A </strong>de la lista de sus afiliados? </p>
+                            <p> ¿Está seguro que desea eliminar el servicio asociado al producto
+                                <strong> Prestamo-17897001 </strong>de la lista de sus servicios? </p>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <div class="row">
-                        <div class="col-md-3 col-xs-2"></div>
-                        <div class="col-md-3 col-xs-4">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-3">
                             <button type="button" class="btn btn-default btn-apps"
                                 data-dismiss="modal">Cancelar</button>
                         </div>
-                        <div class="col-md-3 col-xs-3">
+                        <div class="col-md-3">
                             <button type="button" class="btn btn-default btn-apps"
                                 data-dismiss="modal">Aceptar</button>
                         </div>
                     </div>
+
                 </div>
             </div>
             <!-- /.modal-content -->

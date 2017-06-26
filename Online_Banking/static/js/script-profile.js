@@ -12,11 +12,11 @@ $(document).ready(function (){
 
       if (current == 'hide'){
         $("#password").attr({type: 'text'});
-        $(this).removeClass('fa-eye').addClass('fa-eye-slash').attr('action','show');
+        $(this).removeClass('fa-eye-slash').addClass('fa-eye').attr('action','show');
       }
       if (current == 'show'){
         $("#password").attr({type: 'password'});
-        $(this).removeClass('fa-eye-slash').addClass('fa-eye').attr('action','hide');
+        $(this).removeClass('fa-eye').addClass('fa-eye-slash').attr('action','hide');
       }
     });
 });

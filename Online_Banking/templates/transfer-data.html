@@ -2,90 +2,86 @@
 {% load static %}
 
 {% block script %}
-    <script src="{% static 'js/script-register-affiliate.js' %}"></script>
+    <script src="{% static 'js/script-data.js' %}"></script>
 {% endblock %}
 
 {% block content %}
     <section class="content-header">
         <div class="row" id="title-transf-bank">
-            <h3> Registro de Afiliados </h3>
+            <h3> Datos de la Transferencia </h3>
         </div>
         <div class="row">
             <div class="col-md-2"></div>
-            <div class="col-md-8">
+            <div class="col-md-7">
                 <div class="box box-success">
                     <div class="box-body">
                         <dl class="dl-horizontal label-input">
                             <div class="row">
                                 <div class="col-md-6 col-xs-5">
                                     <label class="pull-right">
-                                        <span class="text-danger"> * </span> Banco: </label>
+                                        <span class="text-danger"> * </span> Cuenta a Debitar: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows">
-                                    <select id="bank" class="select2 input-register field-register">
+                                    <select id="account" class="select2 input-register field-register no-margin">
                                     </select>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6 col-xs-5">
                                     <label class="pull-right">
-                                        <span class="text-danger"> * </span>
-                                        Número de cuenta: </label>
+                                        Saldo Disponible: </label>
                                 </div>
-                                <div class="col-md-6 col-xs-5 rows">
-                                    <input id="num-acc" maxlength="20"
-                                           class="input-register field-register">
+                                <div class="col-md-6 col-xs-5 rows margin-t-2">
+                                    <span id="balance_transf" class="field-register">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right"> Nombre del Beneficiario: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows margin-t-2">
+                                    <span id="name_transf" class="field-register">
+                                        Lucia Gomez
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right">Documento de Identidad: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-5 rows margin-t-2">
+                                    <span id="ci_transf" class="field-register">
+                                        V-17235431
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-xs-5">
+                                    <label class="pull-right">Número de cuenta: </label>
+                                </div>
+                                <div class="col-md-6 col-xs-6 rows margin-t-2">
+                                    <span id="acc_transf" class="field-register">
+                                        01xx4251789635254125
+                                    </span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6 col-xs-5">
                                     <label class="pull-right">
-                                        <span class="text-danger"> * </span>
-                                        Nombre del Afiliado: </label>
+                                        <span class="text-danger"> * </span> Monto de la Transferencia: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows">
-                                    <input id="name" class="input-register field-register">
+                                    <span>Bs. </span><input id="amount_transf" maxlength="10" class="input-register">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6 col-xs-5">
                                     <label class="pull-right">
-                                        <span class="text-danger"> * </span>
-                                        Documento de Identidad: </label>
+                                        <span class="text-danger"> * </span> Descripción: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows">
-                                    <select id="select-ci" class="select2 input-register">
-                                        <option selected="selected">V- </option>
-                                        <option>E- </option>
-                                        <option>J- </option>
-                                    </select>
-                                    <input id="ci" class="input-register margin-register">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-xs-5">
-                                    <label class="pull-right">Alias: </label>
-                                </div>
-                                <div class="col-md-6 col-xs-6 rows">
-                                    <input id="nickname" maxlength="20" class="input-register">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-xs-5">
-                                    <label class="pull-right">
-                                        <span class="text-danger"> * </span> Email: </label>
-                                </div>
-                                <div class="col-md-6 col-xs-5 rows">
-                                    <input id="email" class="input-register field-register">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-xs-5">
-                                    <label class="pull-right">
-                                        <span class="text-danger"> * </span> Confirmación Email: </label>
-                                </div>
-                                <div class="col-md-6 col-xs-5 rows">
-                                    <input id="email" class="input-register field-register">
+                                    <input id="descrip_transf" class="input-register field-register">
                                 </div>
                             </div>
                         </dl>
@@ -94,12 +90,12 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6 col-xs-6"></div>
+            <div class="col-md-5 col-xs-5"></div>
             <div class="col-md-4">
                 <a id="btn-back" class="btn btn-default btn-group btn-apps"
                    type="button" onclick="window.history.back()"> Cancelar </a>
                 <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
-                   type="button" onclick="window.history.back()"> Agregar </a>
+                   type="button" href="{% url 'transferencia-exitosa' %}"> Aceptar </a>
             </div>
 
         </div>

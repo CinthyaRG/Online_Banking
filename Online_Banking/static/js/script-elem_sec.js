@@ -9,7 +9,7 @@ $(document).ready(function (){
 function move_back_security() {
     var url = document.referrer.split('/');
 
-    if (url[3] === 'consultar-cuenta' ) {
+    if (url[3] === 'consultar-cuenta' || url[3] === 'solicitudes' ) {
         window.history.back();
     }
     else {

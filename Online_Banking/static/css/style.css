@@ -125,7 +125,7 @@ div > dl > div > div > label {
 #pin {
     max-width: 46px;
 }
-#ccv {
+#ccv , #amount_cheq{
     max-width: 40px;
 }
 #ci ,#rif_banavih, #rif_info_bank, #num_susc,
@@ -182,6 +182,13 @@ div[role="tooltip"] {
     margin-bottom: -15px;
     width: 185px;
 }
+.error-list {
+    position: absolute;
+    left: 215px;
+    top: 0px;
+    width: 170px;
+    padding-left: 5px;
+}
 .password {
     width: 185px;
 }
@@ -219,7 +226,7 @@ div[role="tooltip"] {
     padding-top: 0;
 }
 #account, #account1, #account2 {
-    height: 30px;
+    height: 25px;
     margin-top: 19px;
     width: 160px;
 }
@@ -282,7 +289,6 @@ div[role="tooltip"] {
     width: 240px;
     bottom: 3px;
     position: relative;
-
 }
 .table-filter-container {
     position: relative;
@@ -329,6 +335,11 @@ div[role="tooltip"] {
     color: #d03e35;
     margin-right: 5px;
 }
+.color-active {
+    color: #45AC89;
+    margin-left: 5px;
+    margin-right: 5px;
+}
 .modal-trans {
     max-width: 550px;
 }
@@ -364,7 +375,11 @@ div[role="tooltip"] {
     width: 133px;
 }
 #input_frs_coor, #input_snd_coor {
-    width: 30px;
+    width: 43px;
+    margin-bottom: 100px;
+}
+#second_coor {
+    margin-left: 28px;
 }
 .no-pad-bottom {
     padding-bottom: 0;
@@ -377,8 +392,8 @@ div[role="tooltip"] {
 #num-tlf {
     max-width: 80px;
 }
-#codes {
-    max-width: 100px;
+#codes , #amount_payment{
+    max-width: 110px;
 }
 .text-wrapper {
     word-break: keep-all;
@@ -395,4 +410,19 @@ div[role="tooltip"] {
 }
 .answer_help {
     color: #438D88;
+}
+.disabled {
+    cursor: not-allowed;
+}
+.disabled > i {
+    color: #666666;
+}
+.margin-t-2 {
+    margin-top: 2px;
+}
+.title-trans {
+    margin-top: 50px;
+}
+.row-top {
+    margin-top: 20px;
 }

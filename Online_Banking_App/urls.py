@@ -57,9 +57,25 @@ urlpatterns = [
         Transfer_others_bank.as_view(),
         name='transf-otros-bancos'),
     url(
+        r'^datos-transferencia/(?P<pk>\d+)/',
+        DataTransfer.as_view(),
+        name='datos-transferencia'),
+    url(
+        r'^transferencia-exitosa',
+        Success.as_view(),
+        name='transferencia-exitosa'),
+    url(
         r'^pagos',
         Payments.as_view(),
         name='pagos'),
+    url(
+        r'^datos-pago/(?P<pk>\d+)/',
+        DataPayment.as_view(),
+        name='datos-pago'),
+    url(
+        r'^pago-exitoso',
+        Success_Payments.as_view(),
+        name='pago-exitoso'),
     url(
         r'^registro-afiliados',
         Register_Affiliate.as_view(),
@@ -68,6 +84,26 @@ urlpatterns = [
         r'^registro-servicios',
         Register_Services.as_view(),
         name='registro-servicios'),
+    url(
+        r'^solicitudes$',
+        Request.as_view(),
+        name='solicitudes'),
+    url(
+        r'^solicitudes/Chequeras',
+        Request_Checkbook.as_view(),
+        name='solicitud-chequeras'),
+    url(
+        r'^solicitudes/Cita',
+        Request_Appointment.as_view(),
+        name='solicitud-citas'),
+    url(
+        r'^solicitudes/Referencias',
+        Request_References.as_view(),
+        name='solicitud-referencias'),
+    url(
+        r'^gestion-productos',
+        Management.as_view(),
+        name='gestion-productos'),
     url(
         r'^perfil-seguridad',
         Profile.as_view(),
