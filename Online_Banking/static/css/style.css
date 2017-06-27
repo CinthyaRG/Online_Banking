@@ -463,3 +463,6 @@ div[role="tooltip"] {
     border: 2px solid #438D88;
     max-width: 215px;
 }
+.margin-t-25 {
+    margin-top: 25px;
+}
