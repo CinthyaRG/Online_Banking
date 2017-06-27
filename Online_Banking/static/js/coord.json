@@ -1,20 +1,17 @@
-[   {
-        "A1":"¿Qué tipo de operaciones puedo hacer en Actio Capital?",
+[
+    {
+        "mpn": ["123", "123", "333", "444", "555", "666"]
     },
     {
-        "pregunta":" ¿Cuánto tiempo tardan las transferencias a cuentas del mismo titular y a terceros, en otros bancos?",
+        "mpn": ["333", "333", "222", "222", "444", "111"]
     },
     {
-        "pregunta":"¿Cuánto tiempo tardan los pagos de tarjetas de crédito del mismo titular y de terceros en otros bancos?",
+        "mpn": ["422", "555", "222", "000", "223", "555"]
     },
     {
-        "pregunta":"¿Cuánto tiempo tardan en reflejarse los pagos CANTV y cuál es el horario para realizar esta operación?",
+        "mpn": ["666", "765", "444", "332", "444", "634"]
     },
     {
-        "pregunta":"¿Qué condiciones aplican para la anulación de una tarjeta de crédito?",
-    },
-    {
-        "pregunta":"¿Dónde puedo obtener más información si tengo otras preguntas?",
-        "respuesta":"Comunícate sin costo alguno al teléfono (0212) XXX.XXXX"
+        "mpn": ["555", "234", "088", "654", "234", "765"]
     }
 ]

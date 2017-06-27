@@ -52,7 +52,7 @@ div > div > input {
     margin-top: 30px;
 }
 #center {
-    margin-top: 215px;
+    margin-top: 200px;
     font-size: 17px;
 }
 .btn-apps {
@@ -313,6 +313,9 @@ div[role="tooltip"] {
     width: 137px;
     margin-top: 5px;
 }
+#amount_transf {
+    width: 137px;
+}
 #btn-trans {
     width: 120px;
     margin-top: 10px;
@@ -425,4 +428,38 @@ div[role="tooltip"] {
 }
 .row-top {
     margin-top: 20px;
+}
+#table_coor {
+    background-color: rgba(70,186,181,0.39);
+    border-radius: 10px;
+}
+.height-20 {
+    height: 20px;
+}
+.left-serial {
+    left: 215px;
+}
+.top-p {
+    top: 4px;
+}
+.td-border {
+    border: 1px solid;
+}
+#tarj-coor {
+    padding: 12px 12px 0px;
+}
+.td-w {
+    width: 20px;
+}
+#row-coor {
+    border: 1px dashed;
+    margin-bottom: 20px;
+    margin-left: 35px;
+    margin-right: 35px;
+}
+#img-coor {
+    position: relative;
+    left:100px;
+    border: 2px solid #438D88;
+    max-width: 215px;
 }
