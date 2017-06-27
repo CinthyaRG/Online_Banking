@@ -7,11 +7,32 @@ $(document).ready(function (){
     movement_table_tdc();
     drop_trans_tdc();
 
+    jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+        "date-uk-pre": function ( a ) {
+            var ukDatea = a.split('/');
+            return (ukDatea[2] + ukDatea[1] + ukDatea[0]) * 1;
+        },
+
+        "date-uk-asc": function ( a, b ) {
+            return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+        },
+
+        "date-uk-desc": function ( a, b ) {
+            return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+        }
+    });
+
+
     var table = $('#example').DataTable({
         "paging": true,
         "lengthChange": false,
         "ordering": true,
         "order": [ 0, 'desc' ],
+        "aoColumns": [
+            { "sType": "date-uk" },
+            null,
+            null
+        ],
         "info": true,
         "autoWidth": false,
         "pageLength":5,
