@@ -162,10 +162,10 @@ div[role="tooltip"] {
     bottom: 40px;
     left: 45px;
 }
-#answ1, #answ2, #resp1, #resp2, #answ {
+#quest1, #quest2, #answ1, #answ2, #quest {
     width: 250px;
 }
-.answers {
+.questions {
     margin-top: 25px;
 }
 #help-pass {
@@ -411,7 +411,7 @@ div[role="tooltip"] {
     top: 6px;
     left: 190px;
 }
-.answer_help {
+.quest_help {
     color: #438D88;
 }
 .disabled {

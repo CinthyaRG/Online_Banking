@@ -6,9 +6,9 @@
     <script>
         $(document).ready(function (){
             menu();
-            $.getJSON('static/js/answer.json', function (data) {
+            $.getJSON('static/js/questions.json', function (data) {
               $.each( data, function( key, val ) {
-                  $("#anwers").append('<span class="h4 answer_help"><i class="fa fa-caret-right"> </i>'+
+                  $("#questions").append('<span class="h4 answer_help"><i class="fa fa-caret-right"> </i>'+
                             '<span>'+ val.pregunta +'</span></span>'+
                             '<p class="margin-l-45 text-wrapper">'+ val.respuesta +'</p>');
               });
@@ -26,7 +26,7 @@
             <div class="col-md-2"></div>
             <div class="col-md-8">
                 <div class="box box-success">
-                    <div id="anwers" class="box-body">
+                    <div id="questions" class="box-body">
 
                     </div>
                 </div>

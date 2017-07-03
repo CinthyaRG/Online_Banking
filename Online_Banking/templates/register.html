@@ -98,7 +98,7 @@
                                     <span class="text-danger"> * </span> Documento de Identidad: </label>
                             </div>
                             <div class="col-md-6 col-xs-5 rows">
-                                <select class="select2 input-register">
+                                <select id="nac" class="select2 input-register">
                                     <option selected="selected">V- </option>
                                     <option>E- </option>
                                 </select>
@@ -114,7 +114,8 @@
                 <div class="col-md-6 col-xs-5"></div>
                 <div class="col-md-6 col-xs-4">
                     <a id="btn-next" class="btn btn-default btn-group btn-apps"
-                       type="button" onclick="pagNext(1)"> Siguiente </a>
+                       type="button" onclick="validation('#numtarj','#pin', '#ccv',
+                       '#month', '#year', '#nac', '#ci')"> Siguiente </a>
                 </div>
             </div>
         </div>
@@ -258,11 +259,11 @@
                                     <span class="text-danger"> * </span> Pregunta 1: </label>
                             </div>
                             <div class="col-md-6 col-xs-4 rows">
-                                <input maxlength="50" id="answ1" class="input-register"
-                                       onkeyup="count_words('#span_answ1','#answ1')"
-                                       onfocus="count_words('#span_answ1','#answ1')"
-                                       onclick="remove_count('#span_answ1')">
-                                <span id="span_answ1" class="counter"></span>
+                                <input maxlength="50" id="quest1" class="input-register"
+                                       onkeyup="count_words('#span_quest1','#quest1')"
+                                       onfocus="count_words('#span_quest1','#quest1')"
+                                       onclick="remove_count('#span_quest1')">
+                                <span id="span_quest1" class="counter"></span>
                             </div>
                         </div>
                         <div class="row">
@@ -271,24 +272,24 @@
                                     <span class="text-danger"> * </span> Respuesta 1: </label>
                             </div>
                             <div class="col-md-6 col-xs-4 rows">
-                                <input maxlength="50" id="resp1" class="input-register"
-                                       onkeyup="count_words('#span_resp1','#resp1')"
-                                       onfocus="count_words('#span_resp1','#resp1')"
-                                       onclick="remove_count('#span_resp1')">
-                                <span id="span_resp1" class="counter"></span>
+                                <input maxlength="50" id="answ1" class="input-register"
+                                       onkeyup="count_words('#span_answ1','#answ1')"
+                                       onfocus="count_words('#span_answ1','#answ1')"
+                                       onclick="remove_count('#span_answ1')">
+                                <span id="span_answ1" class="counter"></span>
                             </div>
                         </div>
-                        <div class="row answers">
+                        <div class="row questions">
                             <div class="col-md-6 col-xs-4">
                                 <label class="pull-right">
                                     <span class="text-danger"> * </span> Pregunta 2: </label>
                             </div>
                             <div class="col-md-6 col-xs-4 rows">
-                                <input maxlength="50" id="answ2" class="input-register"
-                                       onkeyup="count_words('#span_answ2','#answ2')"
-                                       onfocus="count_words('#span_answ2','#answ2')"
-                                       onclick="remove_count('#span_answ2')">
-                                <span id="span_answ2" class="counter"></span>
+                                <input maxlength="50" id="quest2" class="input-register"
+                                       onkeyup="count_words('#span_quest2','#quest2')"
+                                       onfocus="count_words('#span_quest2','#quest2')"
+                                       onclick="remove_count('#span_quest2')">
+                                <span id="span_quest2" class="counter"></span>
                             </div>
                         </div>
                         <div class="row">
@@ -297,11 +298,11 @@
                                     <span class="text-danger"> * </span> Respuesta 2: </label>
                             </div>
                             <div class="col-md-6 col-xs-4 rows">
-                                <input maxlength="50" id="resp2" class="input-register"
-                                       onkeyup="count_words('#span_resp2','#resp2')"
-                                       onfocus="count_words('#span_resp2','#resp2')"
-                                       onclick="remove_count('#span_resp2')">
-                                <span id="span_resp2" class="counter"></span>
+                                <input maxlength="50" id="answ2" class="input-register"
+                                       onkeyup="count_words('#span_answ2','#answ2')"
+                                       onfocus="count_words('#span_answ2','#answ2')"
+                                       onclick="remove_count('#span_answ2')">
+                                <span id="span_answ2" class="counter"></span>
                             </div>
                         </div>
                     </dl>

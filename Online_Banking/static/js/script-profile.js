@@ -23,15 +23,15 @@ $(document).ready(function (){
 
 function change_input() {
     var email = "mperez@gmail.com";
-    var answ1 = "Nombre de mi primera mascota";
-    var resp1 = "walle";
-    var answ2 = "Ciudad favorita de mi pais";
-    var resp2= "merida";
+    var quest1 = "Nombre de mi primera mascota";
+    var answ1 = "walle";
+    var quest2 = "Ciudad favorita de mi pais";
+    var answ2 = "merida";
 
 
     $("#email_user").val(email);
+    $("#quest1").val(quest1);
     $("#answ1").val(answ1);
-    $("#resp1").val(resp1);
+    $("#quest2").val(quest2);
     $("#answ2").val(answ2);
-    $("#resp2").val(resp2);
 }

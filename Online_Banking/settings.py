@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Online_Banking_App.apps.OnlineBankingAppConfig',
+    'ob_app.apps.OnlineBankingAppConfig',
 ]
 
 MIDDLEWARE = [

@@ -64,29 +64,8 @@ function restore_count_circle() {
     $('.clock').TimeCircles({count_past_zero: false});
 }
 
-function calcula(time, time2) {
-    var minutos;
-    var segundos;
-    var id = "clock";
-
-    var diferencia=(time2.getTime()-time.getTime())/1000;
-    var dias=Math.floor(diferencia/86400);
-    diferencia=diferencia-(86400*dias);
-    var horas=Math.floor(diferencia/3600);
-    diferencia=diferencia-(3600*horas);
-    minutos=Math.floor(diferencia/60);
-    diferencia=diferencia-(60*minutos);
-    segundos=Math.floor(diferencia);
-
-    document.getElementById(id).innerText = 'Quedan ' + minutos + ' Minutos, ' + segundos + ' Segundos';
-
-    if (minutos > 0 || segundos > 0) {
-        var count = new Date();
-        console.log("dentro if");
-        console.log(count);
-        console.log(time);
-        setTimeout("calcula(time,count)",1000);
-    }
+function validation() {
+    
 }
 
 function pagNext(numPag) {
