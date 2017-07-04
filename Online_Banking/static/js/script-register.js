@@ -74,7 +74,8 @@ function validation(a,b,c,d,e,f,g) {
 
     $.ajax({
         url: 'http://127.0.0.1:8001/ajax/validate_data/',
-        headers :{'X-CSRFToken': getCookie('csrftoken')},
+        origin: 'http://127.0.0.1:8000',
+        headers: {'X-CSRFToken': getCookie('csrftoken')},
         data: {
             numtarj: numtarj,
             pin: pin,
@@ -86,12 +87,20 @@ function validation(a,b,c,d,e,f,g) {
         type: 'POST',
         dataType: 'json',
         success: function (data) {
+            alert(data);
             if (data.correct) {
-                styleError(id_email, error_email, data.error);
-                $("#error_email").fadeToggle(4000);
-
+                alert("regreso");
+                pagNext(1);
             }
+            else {
+                alert(data.error);
+            }
+        },
+        error: function (data) {
+            alert("error");
+            alert(data.correct);
         }
+
     });
 }
 
