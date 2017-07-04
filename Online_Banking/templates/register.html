@@ -16,7 +16,9 @@
         <h1></h1>
         <h1></h1>
     </div>
-    <div id="title-register" class="col-md-8 col-xs-12">
+    <form action="" method="POST" autocomplete="off">
+        {% csrf_token %}
+        <div id="title-register" class="col-md-8 col-xs-12">
         <div class="row">
             <div class="col-md-8 col-xs-8">
                 <span class="h3"> Registro Actio Capital </span>
@@ -367,4 +369,5 @@
             </div>
         </div>
     </div>
+    </form>
 {% endblock %}

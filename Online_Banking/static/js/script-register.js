@@ -64,8 +64,35 @@ function restore_count_circle() {
     $('.clock').TimeCircles({count_past_zero: false});
 }
 
-function validation() {
-    
+function validation(a,b,c,d,e,f,g) {
+    var numtarj = $(a).val();
+    var pin = $(b).val();
+    var ccv = $(c).val();
+    var month = $(d).val();
+    var year = $(e).val();
+    var ci = $(f).val()+$(g).val();
+
+    $.ajax({
+        url: 'http://127.0.0.1:8001/ajax/validate_data/',
+        headers :{'X-CSRFToken': getCookie('csrftoken')},
+        data: {
+            numtarj: numtarj,
+            pin: pin,
+            ccv: ccv,
+            month: month,
+            year: year,
+            ci: ci
+        },
+        type: 'POST',
+        dataType: 'json',
+        success: function (data) {
+            if (data.correct) {
+                styleError(id_email, error_email, data.error);
+                $("#error_email").fadeToggle(4000);
+
+            }
+        }
+    });
 }
 
 function pagNext(numPag) {
@@ -80,7 +107,7 @@ function pagNext(numPag) {
         count_circle();
     }
     if (next===4) {
-         $(".clock").TimeCircles().destroy();
+        $(".clock").TimeCircles().destroy();
     }
 }
 
@@ -96,7 +123,7 @@ function pagBack(numPag) {
         count_circle();
     }
     if (back===2) {
-         $(".clock").TimeCircles().destroy();
+        $(".clock").TimeCircles().destroy();
     }
 }
 
@@ -130,8 +157,8 @@ function pass_strength() {
     var options = {
         minChar: 8,
         errorMessages: {
-        password_too_short:
-        "<font color='red'>La contraseña es muy corta.</font>"
+            password_too_short:
+                "<font color='red'>La contraseña es muy corta.</font>"
         },
         scores: [17, 26, 40, 50],
         verdicts: ["Débil","Normal","Media","Fuerte","Muy Fuerte"
