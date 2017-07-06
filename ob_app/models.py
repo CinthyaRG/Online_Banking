@@ -20,13 +20,13 @@ class Elems_security(models.Model):
     answer1 = models.CharField(max_length=50)
     question2 = models.CharField(max_length=50)
     answer2 = models.CharField(max_length=50)
-    card_coor = models.ForeignKey(Card_coor)
+    card_coor = models.ForeignKey(Card_coor, blank=True, null=True)
 
 
 class Users(models.Model):
     user = models.OneToOneField(User)
     ident = models.CharField(validators=[ID_VALIDATOR], max_length=10, unique=True)
-    elem_security = models.ForeignKey(Elems_security)
+    elem_security = models.ForeignKey(Elems_security, blank=True, null=True)
 
     def get_name(self):
         return self.user.first_name + " " + self.user.last_name
@@ -36,7 +36,7 @@ class Users(models.Model):
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(Users)
+    user = models.OneToOneField(User)
     activation_key = models.CharField(max_length=40, blank=True)
     key_expires = models.DateTimeField()
     intent = models.IntegerField(default=0)

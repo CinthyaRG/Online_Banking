@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Actio Capital | Inicio </title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <!-- Bootstrap 3.3.6 -->
+        <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="{% static 'css/ionicons.css' %}">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="{% static 'css/AdminLTE.css' %}">
+        <link rel="stylesheet" href="{% static 'css/skins/skin-green.css' %} ">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/font.css' %}">
+        <![endif]-->
+        {% block script %}
+            <script src="{% static 'js/effects.js' %}"></script>
+        {% endblock %}
+    </head>
+
+    <body class="hold-transition skin-green">
+
+        <div id="background-base" class="wrapper">
+
+            <div id="content-login" class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                {% block content %}
+
+                {% endblock %}
+            </div>
+            <!-- /.content-wrapper -->
+
+            <!-- Main Footer -->
+            <footer id="footer" class="main-footer">
+                <!-- To the right -->
+                <div class="pull-right hidden-xs">
+                    LA INFORMACIÓN CONTENIDA EN ESTE PORTAL ES CONFIDENCIAL.
+                </div>
+                <!-- Default to the left -->
+                <strong>Copyright &copy; 2017 <a href="#">BANCO LOS ROQUES</a>.</strong> Todos Los Derechos Reservados.
+            </footer>
+        </div>
+    </body>
+</html>

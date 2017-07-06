@@ -40,6 +40,14 @@ urlpatterns = [
         validate_email,
         name='validar-email'),
     url(
+        r'^ajax/validate-cod/$',
+        validate_cod,
+        name='validar-cod'),
+    url(
+        r'^ajax/resend-email/$',
+        resend_email,
+        name='reenvio-confirmacion'),
+    url(
         r'^restablecer-pass',
         Restore_pass.as_view(),
         name='restablecer-pass'),

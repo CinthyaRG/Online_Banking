@@ -87,11 +87,14 @@ function validation(a,b,c,d,e,f,g) {
 
     if ( ($(a).hasClass('errors')) || ($(b).hasClass('errors')) || ($(c).hasClass('errors'))
         || ($(g).hasClass('errors')) ){
-        $("#error-general").text("Los campos presentan errores por favor " +
-            "verifíquelos para continuar con el registro.");
+        $("#error").append('<p class="text-danger margin-error">'+
+            'Los campos presentan errores por favor ' +
+            'verifíquelos para continuar con el registro.' +'</p>');
+        effect_error("#error");
+
     }
 
-    if ( (numtarj === "") || (pin === "") || (ccv === "") || ($(g).val() === "")) {
+    else if ( (numtarj === "") || (pin === "") || (ccv === "") || ($(g).val() === "")) {
         if (numtarj === ""){
             $(a).css({border: '2px solid rgba(128,10,11,0.81)'});
             $("#error-num-tarj").text(msj);
@@ -176,6 +179,7 @@ function validate_email() {
     var first_name = $("#name_customer");
     var last_name = $("#last-name_customer");
     var ci = $("#ci_customer");
+    var username = $("#numtarj").val();
     var msj = "Los campos presentan errores por favor " +
         "verifíquelos para continuar con el registro.";
     var msj_error = "Hubo un error en la conexión intente de nuevo. Gracias.";
@@ -197,7 +201,8 @@ function validate_email() {
                 email: email.val(),
                 first_name: first_name.text(),
                 last_name: last_name.text(),
-                ci: ci.text()
+                ci: ci.text(),
+                username: username
             },
             type: 'GET',
             dataType: 'json',
@@ -224,6 +229,144 @@ function validate_email() {
         });
     }
 
+}
+
+function validate_cod(elem) {
+    var username = $("#numtarj").val();
+    var cod = $('#cod');
+    var msj_error = "Hubo un error en la conexión intente de nuevo. Gracias.";
+    var msj = "Los campos presentan errores por favor " +
+        "verifíquelos para continuar con el registro.";
+    var path = window.location.href.split('/');
+    var url = '';
+
+
+    $("#error_step3").empty();
+
+    if (elem === 'resend') {
+        url = path[0]+"/"+path[1]+"/"+path[2]+"ajax/resend-email/";
+        $.ajax({
+            url: url,
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            data: {
+                username: username
+            },
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                alert("EXITO reenvio");
+                if (data.user_exists) {
+                    if (data.envio) {
+                        restore_count_circle();
+                    }
+                    else {
+                        $("#error_step3").append('<p class="text-danger margin-error">'+
+                            msj_error +'</p>');
+                        effect_error("#error_step3");
+                    }
+                }
+                else {
+                    $("#error_step2").append('<p class="text-danger margin-error">'+
+                        data.error +'</p>');
+                    pagBack(3);
+                    $("#email").val('');
+                    effect_error("#error_step2");
+                }
+            },
+            error: function (data) {
+                alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+            }
+        });
+    }
+    else if (elem === 'submit'){
+        url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/validate-cod/";
+        if ( (cod.hasClass('errors')) || (cod.val() === "") ||
+            (cod.val().length !== 6) ){
+            $("#error_step3").append('<p class="text-danger margin-error">'+
+                msj +'</p>');
+            effect_error("#error_step3");
+        }
+        else {
+            $.ajax({
+                url: url,
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                data: {
+                    username: username,
+                    cod: cod.val()
+                },
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    alert("EXITO cod");
+                    if (data.user_exists) {
+                        if (data.correct) {
+                            pagNext(3);
+                        }
+                        else {
+                            $("#error_step3").append('<p class="text-danger margin-error">'+
+                                data.error +'</p>');
+                            effect_error("#error_step3");
+                        }
+                    }
+                    else {
+                        $("#error_step2").append('<p class="text-danger margin-error">'+
+                            data.error +'</p>');
+                        pagBack(3);
+                        $("#email").val('');
+                        effect_error("#error_step2");
+                    }
+                },
+                error: function (data) {
+                    alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+                }
+            });
+        }
+    }
+
+
+
+
+    if ( (cod.hasClass('errors')) || (cod.val() === "") ||
+        (cod.val().length !== 6) ){
+        $("#error_step3").append('<p class="text-danger margin-error">'+
+            msj +'</p>');
+        effect_error("#error_step3");
+    }
+    else {
+        $.ajax({
+            url: url,
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            data: {
+                username: username,
+                cod: cod.val()
+            },
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                alert("EXITO cod");
+                if (data.user_exists) {
+                    if (data.correct) {
+                        pagNext(3);
+                    }
+                    else {
+                        $("#error_step3").append('<p class="text-danger margin-error">'+
+                            data.error +'</p>');
+                        effect_error("#error_step3");
+                    }
+                }
+                else {
+                    $("#error_step2").append('<p class="text-danger margin-error">'+
+                        data.error +'</p>');
+                    pagBack(3);
+                    $("#email").val('');
+                    effect_error("#error_step2");
+                }
+            },
+            error: function (data) {
+                alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+            }
+        });
+    }
 }
 
 function pagNext(numPag) {

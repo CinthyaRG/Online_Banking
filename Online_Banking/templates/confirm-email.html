@@ -1,4 +1,4 @@
-{% extends "base-index.html" %}
+{% extends "base-email.html" %}
 {% load static %}
 
 {% block script %}
@@ -8,17 +8,19 @@
     <div class="container">
         <div class="row">
             <div  id="center" class="center-block text-center">
-                <h3 class="text-uppercase"> confirmación de email </h3>
+                <h2> Confirmación de Email </h2>
                 <br>
                 <p>Hola <b>{{usuario}}</b>
                 <br>
-                <p>Su código de validación es {{key}}</p>
+                <p>Su código de validación es <b>{{key}}</b></p>
             </div>
         </div>
         <div>
             <h5>
                 Este código estará activo por 2 minutos, pasado este tiempo deberá generar otro código.
             </h5>
+            <br>
+            <br>
         </div>
     </div>
 

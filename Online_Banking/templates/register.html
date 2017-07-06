@@ -193,7 +193,6 @@
                         </div>
                         <div class="row">
                             <div id="error_step2" class="col-md-11 center-block">
-                                <p></p>
                             </div>
                         </div>
                     </dl>
@@ -231,10 +230,10 @@
                                 <label class="pull-right">
                                     <span class="text-danger"> * </span> Código: </label>
                             </div>
-                            <div class="col-md-5 col-xs-5 rows">
-                                <input maxlength="6" class="input-register">
+                            <div class="col-md-4 col-xs-4 rows">
+                                <input id="cod" maxlength="6" class="input-register">
                             </div>
-                            <div class="col-md-3 col-xs-2  margin-t-2 no-padding">
+                            <div class="col-md-4 col-xs-4  margin-t-2 no-padding">
                                 <p id="error-cod" class="text-danger">  </p>
                             </div>
                         </div>
@@ -251,13 +250,18 @@
                             <div class="col-md-4 col-xs-12">
                                 <br>
                                 <br>
-                                <a id="" class="btn btn-default btn-group btn-apps" type="button" onclick="restore_count_circle()">
+                                <a class="btn btn-default btn-group btn-apps" type="button"
+                                   onclick="validate_cod('resend')">
                                     Reenviar Código
                                 </a>
                             </div>
                             <div class="col-md-2 col-xs-3"></div>
                             <div class="col-md-5 col-xs-7">
                                 <div class="clock" data-timer="120"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="error_step3" class="col-md-11 center-block">
                             </div>
                         </div>
                     </dl>
@@ -269,7 +273,7 @@
                     <a id="btn-back" class="btn btn-default btn-group btn-apps"
                        type="button" onclick="pagBack(3)"> Anterior </a>
                     <a id="btn-next" class="btn btn-default btn-group btn-apps"
-                       type="button" onclick="pagNext(3)"> Siguiente </a>
+                       type="button" onclick="validate_cod('submit')"> Siguiente </a>
                 </div>
             </div>
         </div>

@@ -10,6 +10,7 @@ $(document).ready(function () {
     var ccv = '#ccv';
     var ci = '#ci';
     var email = '#email';
+    var cod = '#cod';
     var msj_num = "Sólo se admiten números";
     var msj_email = "Ingrese un email válido";
     var msj = "Este campo es obligatorio";
@@ -157,6 +158,32 @@ $(document).ready(function () {
         $(email).css({'border-color': '#8AB7B6'});
         $('#error-email').empty();
         $("#error_step2").empty();
+    });
+
+    $(cod).on('focusout', function () {
+        if ( $(cod).val() !== ""){
+            if ( $(cod).val().length !== 6) {
+                $('#error-cod').text('El código debe contener ' +
+                    '6 dígitos');
+                $(cod).addClass('errors');
+            }
+            else{
+                $(cod).css({border: '2px solid #d2d6de'});
+                $(cod).removeClass('errors');
+                $('#error-cod').empty();
+            }
+        }
+        else if ($(cod).val() === ""){
+            $('#error-cod').text(msj);
+            $(cod).addClass('errors');
+        }
+    });
+
+    $(cod).on('focus', function () {
+        $(cod).removeClass('errors');
+        $(cod).css({'border-color': '#8AB7B6'});
+        $('#error-cod').empty();
+        $("#error_step3").empty();
     });
 
 });

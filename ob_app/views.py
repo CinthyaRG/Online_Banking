@@ -3,6 +3,9 @@ from django.shortcuts import render
 from django.template.loader import get_template
 from django.contrib.auth.models import User, Group
 from django.views.decorators.csrf import ensure_csrf_cookie
+from email.mime.image import MIMEImage
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from django.core.mail import EmailMessage
 from django.views.generic import *
 from ob_app.forms import *
@@ -10,6 +13,8 @@ from ob_app.models import *
 import datetime
 import random
 import hashlib
+from unipath import Path
+import os.path
 
 
 def groups():
@@ -42,11 +47,16 @@ def validate_email(request):
     last_name = request.GET.get('last_name', None)
     ci = request.GET.get('ci', None)
     username = request.GET.get('username', None)
+    print(username)
     data = {
         'user_exists': Users.objects.filter(ident=ci).exists()
     }
 
-    if not(data['user_exists']):
+    if not (data['user_exists']):
+        if User.objects.filter(username=username).count() > 0:
+            user = User.objects.get(username=username)
+            user.delete()
+
         user = User(first_name=first_name,
                     last_name=last_name,
                     email=email,
@@ -57,6 +67,14 @@ def validate_email(request):
             activation_key = create_token(6)
             while UserProfile.objects.filter(activation_key=activation_key).count() > 0:
                 activation_key = create_token(6)
+            # mypath = os.getcwd()
+            # path = Path('/Online_Banking/static/img/logo.png')
+            # path = mypath + path
+            # print(path)
+            # file = open(path, "rb")
+            # attach_image = MIMEImage(file.read())
+            # attach_image.add_header('Content-Disposition', 'attachment; filename = "logo.png"')
+            # msg.attach(attach_image)
             c = {'usuario': user.get_full_name,
                  'key': activation_key}
             subject = 'Actio Capital - Confirmación de Email'
@@ -75,9 +93,82 @@ def validate_email(request):
                                    activation_key=activation_key,
                                    key_expires=key_expires)
         user_profile.save()
-        user_customer = Users(ident=ci,
-                              user=user)
-        user_customer.save()
+
+    return JsonResponse(data)
+
+
+@ensure_csrf_cookie
+def validate_cod(request):
+    username = request.GET.get('username', None)
+    token = request.GET.get('cod', None)
+    print(username)
+    data = {
+        'user_exists': User.objects.filter(username=username).exists()
+    }
+
+    if data['user_exists']:
+        user = User.objects.get(username=username)
+
+        try:
+            user_profile = UserProfile.objects.get(user=user, activation_key=token)
+        except UserProfile.DoesNotExist:
+            data['profile_exists'] = False
+            data['correct'] = False
+            return JsonResponse(data)
+
+        time = datetime.datetime.today()
+
+        if user_profile.key_expires < time:
+            data['profile_expires'] = True
+            data['correct'] = False
+        else:
+            data['correct'] = True
+
+        if not(data['correct']):
+            if not(data['profile_exists']):
+                data['error'] = 'El código que ingresó es incorrecto.'
+            if data['profile_expires']:
+                data['error'] = 'El código que ingresó ya expiró.'
+    else:
+        data['error'] = 'Ha ocurrido un error por favor reingrese su email.'
+
+    return JsonResponse(data)
+
+
+@ensure_csrf_cookie
+def resend_email(request):
+    username = request.GET.get('username', None)
+    print(username)
+    data = {
+        'user_exists': User.objects.filter(username=username).exists()
+    }
+
+    if data['user_exists']:
+        user = User.objects.get(username=username)
+
+        try:
+            activation_key = create_token(6)
+            while UserProfile.objects.filter(activation_key=activation_key).count() > 0:
+                activation_key = create_token(6)
+            c = {'usuario': user.get_full_name,
+                 'key': activation_key}
+            subject = 'Actio Capital - Reenvío de Código'
+            message_template = 'confirm-email.html'
+            email = user.email
+            send_email(subject, message_template, c, email)
+            data['envio'] = True
+        except:
+            data['envio'] = False
+            return JsonResponse(data)
+
+        key_expires = datetime.datetime.today() + datetime.timedelta(minutes=2)
+        user_profile = UserProfile.objects.get(user=user)
+        user_profile.activation_key = activation_key
+        user_profile.key_expires = key_expires
+        user_profile.save()
+
+    else:
+        data['error'] = 'Ha ocurrido un error por favor reingrese su email.'
 
     return JsonResponse(data)
 
@@ -235,4 +326,3 @@ class Profile(TemplateView):
 
 class Help(TemplateView):
     template_name = 'help.html'
-
