@@ -81,6 +81,12 @@ div > div > input {
     margin-right: auto;
     max-width: 600px;
 }
+#step1 > div[class="box"] {
+    min-height: 280px;
+}
+#step2 > div[class="box"] {
+    min-height: 240px;
+}
 .step > div > h4 > hr {
     border-radius: 5px;
     margin-top: 3px;
@@ -110,11 +116,14 @@ div > div > input {
 .label-input {
     padding: 3px;
     margin-right: auto;
-    width: 450px;
+    /*width: 450px;*/
 }
 .rows {
     margin-bottom: 5px;
     padding-left: 0;
+}
+.num-tarj {
+    max-width: 230px;
 }
 div > dl > div > div > label {
     padding-top: 2px;
@@ -132,9 +141,6 @@ div > dl > div > div > label {
 }
 .margin-register {
     margin-left: 5px;
-}
-#step1 > div > div > a {
-    margin-left: 180px;
 }
 #btn-back {
     margin-left: 100px;
@@ -462,4 +468,11 @@ div[role="tooltip"] {
 }
 .margin-t-25 {
     margin-top: 25px;
+}
+.errors {
+    border: 2px solid rgba(128,10,11,0.81) !important;
+}
+.margin-error {
+    margin-top: 10px;
+    margin-bottom: 0;
 }

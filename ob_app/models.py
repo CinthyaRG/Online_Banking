@@ -25,15 +25,19 @@ class Elems_security(models.Model):
 
 class Users(models.Model):
     user = models.OneToOneField(User)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    ident = models.CharField(validators=[ID_VALIDATOR], max_length=10)
+    ident = models.CharField(validators=[ID_VALIDATOR], max_length=10, unique=True)
     elem_security = models.ForeignKey(Elems_security)
 
+    def get_name(self):
+        return self.user.first_name + " " + self.user.last_name
 
-def get_name(self):
-    return self.first_name + " " + self.last_name
+    def __str__(self):
+        return str(self.ident) + " " + self.user.first_name + " " + self.user.last_name
 
 
-def __str__(self):
-    return str(self.ident) + " " + self.first_name + " " + self.last_name
+class UserProfile(models.Model):
+    user = models.OneToOneField(Users)
+    activation_key = models.CharField(max_length=40, blank=True)
+    key_expires = models.DateTimeField()
+    intent = models.IntegerField(default=0)
+    date_intent = models.DateField(null=True, blank=True)

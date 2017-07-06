@@ -28,9 +28,17 @@ urlpatterns = [
         Restore_pass_success.as_view(),
         name='nueva-pass-exitosa'),
     url(
-        r'^registro-usuario',
+        r'^registro$',
         Register.as_view(),
         name='registro'),
+    url(
+        r'^ajax/validate-user/$',
+        validate_user,
+        name='validar-user'),
+    url(
+        r'^ajax/validate-email/$',
+        validate_email,
+        name='validar-email'),
     url(
         r'^restablecer-pass',
         Restore_pass.as_view(),

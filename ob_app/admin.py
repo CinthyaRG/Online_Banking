@@ -1,3 +1,7 @@
 from django.contrib import admin
+from ob_app.models import *
 
-# Register your models here.
+admin.site.register(Users)
+admin.site.register(UserProfile)
+admin.site.register(Elems_security)
+admin.site.register(Card_coor)

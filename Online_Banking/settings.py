@@ -75,13 +75,6 @@ WSGI_APPLICATION = 'Online_Banking.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-#
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -133,3 +126,12 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "Online_Banking/static"),
 )
+
+DATE_INPUT_FORMATS = ('%d/%m/%Y',)
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+#EMAIL_HOST_USER = 'adm.app.prueba'
+EMAIL_HOST_USER = 'app.prueba2113'
+EMAIL_HOST_PASSWORD = 'administrador123'

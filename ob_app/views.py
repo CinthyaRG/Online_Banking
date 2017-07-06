@@ -1,5 +1,105 @@
+from django.http import JsonResponse
 from django.shortcuts import render
+from django.template.loader import get_template
+from django.contrib.auth.models import User, Group
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.core.mail import EmailMessage
 from django.views.generic import *
+from ob_app.forms import *
+from ob_app.models import *
+import datetime
+import random
+import hashlib
+
+
+def groups():
+    nombres_grupo = ["Administrador", "Clientes"]
+
+    for group in nombres_grupo:
+        if Group.objects.filter(name=group).count() == 0:
+            Group.objects.create(name=group)
+
+
+@ensure_csrf_cookie
+def validate_user(request):
+    groups()
+    ci = request.GET.get('ci', None)
+    data = {
+        'user_exists': Users.objects.filter(ident=ci).exists()
+    }
+
+    if data['user_exists']:
+        data['error'] = "Usted ya se encuentra registrado. Si olvidó su clave " \
+                        "ingrese a Olvidé mi contraseña"
+
+    return JsonResponse(data)
+
+
+@ensure_csrf_cookie
+def validate_email(request):
+    email = request.GET.get('email', None)
+    first_name = request.GET.get('first_name', None)
+    last_name = request.GET.get('last_name', None)
+    ci = request.GET.get('ci', None)
+    username = request.GET.get('username', None)
+    data = {
+        'user_exists': Users.objects.filter(ident=ci).exists()
+    }
+
+    if not(data['user_exists']):
+        user = User(first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    username=username)
+        user.is_active = False
+        group = Group.objects.get(name="Clientes")
+        try:
+            activation_key = create_token(6)
+            while UserProfile.objects.filter(activation_key=activation_key).count() > 0:
+                activation_key = create_token(6)
+            c = {'usuario': user.get_full_name,
+                 'key': activation_key}
+            subject = 'Actio Capital - Confirmación de Email'
+            message_template = 'confirm-email.html'
+            email = user.email
+            send_email(subject, message_template, c, email)
+            data['envio'] = True
+        except:
+            data['envio'] = False
+            return JsonResponse(data)
+
+        user.save()
+        user.groups.add(group)
+        key_expires = datetime.datetime.today() + datetime.timedelta(minutes=2)
+        user_profile = UserProfile(user=user,
+                                   activation_key=activation_key,
+                                   key_expires=key_expires)
+        user_profile.save()
+        user_customer = Users(ident=ci,
+                              user=user)
+        user_customer.save()
+
+    return JsonResponse(data)
+
+
+def send_email(subject, message_template, context, email):
+    from_email = 'Actio Capital'
+    email_subject = subject
+    message = get_template(message_template).render(context)
+    msg = EmailMessage(email_subject, message, to=[email], from_email=from_email)
+    msg.content_subtype = 'html'
+    msg.send()
+    print("Se envió exitosamente el correo.")
+
+
+def create_token(num):
+    chars = list('ABCDEFGHIJKLMNOPQRSTUVWYZabcdefghijklmnopqrstuvwyz0123456789')
+    random.shuffle(chars)
+    chars = ''.join(chars)
+    sha1 = hashlib.sha1(chars.encode('utf8'))
+    token = sha1.hexdigest()
+    key = token[:num]
+    return key
 
 
 class Home(TemplateView):
@@ -24,6 +124,17 @@ class Restore_pass_success(TemplateView):
 
 class Register(TemplateView):
     template_name = 'register.html'
+
+
+# def register(request):
+#
+#     if request.method == 'POST':
+#         form = EmailForm(request.POST)
+#
+#     else:
+#         form = ""
+#     context = {'form': form, 'host': request.get_host()}
+#     return render(request, 'register.html', context)
 
 
 class Restore_pass(TemplateView):

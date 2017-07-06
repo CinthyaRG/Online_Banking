@@ -7,8 +7,9 @@
     <script src="{% static 'plugins/select2/select2.full.min.js' %}"></script>
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/script-register.js' %}"></script>
+    <script src="{% static 'js/validate.js' %}"></script>
     <script src="{% static 'plugins/passwordStrength/examples/pwstrength.js' %}"></script>
-    <script type="text/javascript" src="{% static 'plugins/Circular-Countdown/inc/TimeCircles.js' %}"></script>
+    <script src="{% static 'plugins/Circular-Countdown/inc/TimeCircles.js' %}"></script>
 {% endblock %}
 
 {% block register %}
@@ -16,9 +17,7 @@
         <h1></h1>
         <h1></h1>
     </div>
-    <form action="" method="POST" autocomplete="off">
-        {% csrf_token %}
-        <div id="title-register" class="col-md-8 col-xs-12">
+    <div id="title-register" class="col-md-8 col-xs-12">
         <div class="row">
             <div class="col-md-8 col-xs-8">
                 <span class="h3"> Registro Actio Capital </span>
@@ -45,44 +44,53 @@
                 <div class="box-body">
                     <dl class="dl-horizontal label-input">
                         <div class="row">
-                            <div class="col-md-6 col-xs-5">
+                            <div class="col-md-4 col-xs-5">
                                 <label class="pull-right">
                                     <span class="text-danger"> * </span> Número de tarjeta: </label>
                             </div>
-                            <div class="col-md-6 col-xs-5 rows">
+                            <div class="col-md-5 col-xs-5 rows num-tarj no-padding">
                                 <input id="numtarj" maxlength="18" class="input-register">
                                 <i id="help-tarj" data-toggle="tooltip"
                                    data-placement="bottom" class="fa fa-lg fa-question-circle-o"> </i>
                             </div>
+                            <div class="col-md-3 col-xs-2 margin-t-2 no-padding">
+                                <p id="error-num-tarj" class="text-danger"> </p>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-xs-5">
+                            <div class="col-md-4 col-xs-5">
                                 <label class="pull-right">
                                     <span class="text-danger"> * </span> Código PIN: </label>
                             </div>
-                            <div class="col-md-6 col-xs-5 rows">
+                            <div class="col-md-2 col-xs-2 rows">
                                 <input id="pin" maxlength="4" class="input-register">
                                 <i id="help-pin" data-toggle="tooltip"
                                    data-placement="right" class="fa fa-lg fa-question-circle-o"> </i>
                             </div>
+                            <div class="col-md-3 col-xs-2  margin-t-2 no-padding">
+                                <p id="error-pin" class="text-danger"> </p>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-xs-5">
+                            <div class="col-md-4 col-xs-5">
                                 <label class="pull-right">
                                     <span class="text-danger"> * </span> Código de validación: </label>
                             </div>
-                            <div class="col-md-6 col-xs-5 rows">
+                            <div class="col-md-2 col-xs-2 rows">
                                 <input maxlength="3" id="ccv" class="input-register">
                                 <i id="help-ccv" data-toggle="tooltip"
                                    data-placement="right" class="fa fa-lg fa-question-circle-o"> </i>
                             </div>
+                            <div class="col-md-3 col-xs-3  margin-t-2 no-padding">
+                                <p id="error-ccv" class="text-danger"> </p>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-xs-5">
+                            <div class="col-md-4 col-xs-5">
                                 <label class="pull-right">
                                     <span class="text-danger"> * </span> Fecha de vencimiento: </label>
                             </div>
-                            <div class="col-md-6 col-xs-6 rows">
+                            <div class="col-md-5 col-xs-6 rows">
                                 <span> Mes </span>
                                     <select id="month" class="select2 input-register">
                                     </select>
@@ -95,11 +103,11 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-xs-5">
+                            <div class="col-md-4 col-xs-5">
                                 <label class="pull-right">
                                     <span class="text-danger"> * </span> Documento de Identidad: </label>
                             </div>
-                            <div class="col-md-6 col-xs-5 rows">
+                            <div class="col-md-4 col-xs-4 rows no-padding">
                                 <select id="nac" class="select2 input-register">
                                     <option selected="selected">V- </option>
                                     <option>E- </option>
@@ -108,21 +116,33 @@
                                 <i id="help-ci" data-toggle="tooltip"
                                    data-placement="bottom" class="fa fa-lg fa-question-circle-o"></i>
                             </div>
+                            <div class="col-md-4 col-xs-3 margin-t-2 no-padding">
+                                <p id="error-ci" class="text-danger">  </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="error" class="col-md-11 center-block">
+                                <p id="error-general" class="text-danger margin-error"> </p>
+                            </div>
                         </div>
                     </dl>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6 col-xs-5"></div>
-                <div class="col-md-6 col-xs-4">
-                    <a id="btn-next" class="btn btn-default btn-group btn-apps"
+                <div class="col-md-6 col-xs-7">
+                    <a id="btn-back" class="btn btn-default btn-group btn-apps" type="button"
+                       href="{% url 'home' %}"> Anterior </a>
+                    <a id="btn-next1" class="btn btn-default btn-group btn-apps"
                        type="button" onclick="validation('#numtarj','#pin', '#ccv',
                        '#month', '#year', '#nac', '#ci')"> Siguiente </a>
                 </div>
             </div>
         </div>
 
-        <div id="step2" class="step">
+        <form class="email" action="" method="POST" autocomplete="off">
+            {% csrf_token %}
+            <div id="step2" class="step">
             <h4> Paso 2 de 5 </h4>
             <p> Estimado Usuario: A continuación se le muestran los datos  que el
                 banco tiene asociados a usted. En caso de estar erróneos diríjase a
@@ -136,36 +156,44 @@
                 <div class="box-body">
                     <dl class="dl-horizontal label-input">
                         <div class="row">
-                            <div class="col-md-6 col-xs-4">
+                            <div class="col-md-4 col-xs-4">
                                 <label class="pull-right">Nombres: </label>
                             </div>
-                            <div class="col-md-6 col-xs-5 rows">
-                                <p> María Gabriela </p>
+                            <div class="col-md-5 col-xs-5 rows margin-t-2">
+                                <span id="name_customer">  </span>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-xs-4">
+                            <div class="col-md-4 col-xs-4">
                                 <label class="pull-right">Apellidos: </label>
                             </div>
-                            <div class="col-md-6 col-xs-5 rows">
-                                <p> Pérez López </p>
+                            <div class="col-md-5 col-xs-5 rows margin-t-2">
+                                <span id="last-name_customer">  </span>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-xs-4">
+                            <div class="col-md-4 col-xs-4">
                                 <label class="pull-right">Documento de Identidad: </label>
                             </div>
-                            <div class="col-md-6 col-xs-5 rows">
-                                <p> V-10776133 </p>
+                            <div class="col-md-5 col-xs-5 rows margin-t-2">
+                                <span id="ci_customer">  </span>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-xs-4">
+                            <div class="col-md-4 col-xs-4">
                                 <label class="pull-right">
                                     <span class="text-danger"> * </span> Email: </label>
                             </div>
-                            <div class="col-md-6 col-xs-5 rows">
+                            <div class="col-md-4 col-xs-4 rows">
                                 <input id="email" type="email" class="input-register">
+                            </div>
+                            <div class="col-md-4 col-xs-4  margin-t-2 no-padding">
+                                <p id="error-email" class="text-danger"> </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="error_step2" class="col-md-11 center-block">
+                                <p></p>
                             </div>
                         </div>
                     </dl>
@@ -177,10 +205,11 @@
                     <a id="btn-back" class="btn btn-default btn-group btn-apps" type="button"
                        onclick="pagBack(2)"> Anterior </a>
                     <a id="btn-next" class="btn btn-default btn-group btn-apps" type="button"
-                       onclick="pagNext(2)"> Siguiente </a>
+                       onclick="validate_email()"> Siguiente </a>
                 </div>
             </div>
         </div>
+        </form>
 
         <div id="step3" class="step">
             <h4> Paso 3 de 5 </h4>
@@ -198,12 +227,15 @@
                     <dl class="dl-horizontal label-input">
                         <p> Tiene dos minutos para ingresar el código.</p>
                         <div class="row">
-                            <div class="col-md-6 col-xs-4">
+                            <div class="col-md-4 col-xs-4">
                                 <label class="pull-right">
                                     <span class="text-danger"> * </span> Código: </label>
                             </div>
-                            <div class="col-md-6 col-xs-5 rows">
+                            <div class="col-md-5 col-xs-5 rows">
                                 <input maxlength="6" class="input-register">
+                            </div>
+                            <div class="col-md-3 col-xs-2  margin-t-2 no-padding">
+                                <p id="error-cod" class="text-danger">  </p>
                             </div>
                         </div>
                         <div class="row">
@@ -256,55 +288,67 @@
                 <div class="box-body">
                     <dl class="dl-horizontal label-input">
                         <div class="row">
-                            <div class="col-md-6 col-xs-4">
+                            <div class="col-md-4 col-xs-4">
                                 <label class="pull-right">
                                     <span class="text-danger"> * </span> Pregunta 1: </label>
                             </div>
-                            <div class="col-md-6 col-xs-4 rows">
+                            <div class="col-md-5 col-xs-4 rows">
                                 <input maxlength="50" id="quest1" class="input-register"
                                        onkeyup="count_words('#span_quest1','#quest1')"
                                        onfocus="count_words('#span_quest1','#quest1')"
                                        onclick="remove_count('#span_quest1')">
                                 <span id="span_quest1" class="counter"></span>
                             </div>
+                            <div class="col-md-3 col-xs-2  margin-t-2 no-padding">
+                                <p id="error-q1" class="text-danger"> </p>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-xs-4">
+                            <div class="col-md-4 col-xs-4">
                                 <label class="pull-right">
                                     <span class="text-danger"> * </span> Respuesta 1: </label>
                             </div>
-                            <div class="col-md-6 col-xs-4 rows">
+                            <div class="col-md-5 col-xs-4 rows">
                                 <input maxlength="50" id="answ1" class="input-register"
                                        onkeyup="count_words('#span_answ1','#answ1')"
                                        onfocus="count_words('#span_answ1','#answ1')"
                                        onclick="remove_count('#span_answ1')">
                                 <span id="span_answ1" class="counter"></span>
                             </div>
+                            <div class="col-md-3 col-xs-2 margin-t-2 no-padding">
+                                <p id="error-a1" class="text-danger"> </p>
+                            </div>
                         </div>
                         <div class="row questions">
-                            <div class="col-md-6 col-xs-4">
+                            <div class="col-md-4 col-xs-4">
                                 <label class="pull-right">
                                     <span class="text-danger"> * </span> Pregunta 2: </label>
                             </div>
-                            <div class="col-md-6 col-xs-4 rows">
+                            <div class="col-md-5 col-xs-4 rows">
                                 <input maxlength="50" id="quest2" class="input-register"
                                        onkeyup="count_words('#span_quest2','#quest2')"
                                        onfocus="count_words('#span_quest2','#quest2')"
                                        onclick="remove_count('#span_quest2')">
                                 <span id="span_quest2" class="counter"></span>
                             </div>
+                            <div class="col-md-3 col-xs-2 margin-t-2 no-padding">
+                                <p id="error-q2" class="text-danger"> </p>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-xs-4">
+                            <div class="col-md-4 col-xs-4">
                                 <label class="pull-right">
                                     <span class="text-danger"> * </span> Respuesta 2: </label>
                             </div>
-                            <div class="col-md-6 col-xs-4 rows">
+                            <div class="col-md-5 col-xs-4 rows">
                                 <input maxlength="50" id="answ2" class="input-register"
                                        onkeyup="count_words('#span_answ2','#answ2')"
                                        onfocus="count_words('#span_answ2','#answ2')"
                                        onclick="remove_count('#span_answ2')">
                                 <span id="span_answ2" class="counter"></span>
+                            </div>
+                            <div class="col-md-3 col-xs-2 margin-t-2 no-padding">
+                                <p id="error-a2" class="text-danger"> </p>
                             </div>
                         </div>
                     </dl>
@@ -334,25 +378,31 @@
                 <div class="box-body">
                     <dl class="dl-horizontal label-input">
                         <div id="pwd-container" class="row">
-                            <div class="col-md-6 col-xs-4">
+                            <div class="col-md-4 col-xs-4">
                                 <label class="pull-right">
                                     <span class="text-danger"> * </span> Contraseña: </label>
                             </div>
-                            <div class="col-md-6 col-xs-6 rows">
+                            <div class="col-md-5 col-xs-6 rows">
                                 <input type="password" id="password" class="password input-register">
                                 <i id="help-pass" data-toggle="tooltip"
                                    data-placement="bottom" class="fa fa-lg fa-question-circle-o"></i>
                             </div>
+                            <div class="col-md-3 col-xs-2 margin-t-2 no-padding">
+                                <p id="error-pass" class="text-danger"> </p>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 col-xs-4">
+                            <div class="col-md-4 col-xs-4">
                                 <label class="pull-right">
                                     <span class="text-danger"> * </span> Confirme Contraseña: </label>
                             </div>
-                            <div class="col-md-6 col-xs-5 rows">
+                            <div class="col-md-5 col-xs-5 rows">
                                 <input type="password" id="confirm-pass" class="password input-register">
                                 <i id="help-confirm" data-toggle="tooltip"
                                    data-placement="bottom" class="fa fa-lg fa-question-circle-o"></i>
+                            </div>
+                            <div class="col-md-3 col-xs-2 margin-t-2 no-padding">
+                                <p id="error-conf-pass" class="text-danger"> </p>
                             </div>
                         </div>
                     </dl>
@@ -369,5 +419,5 @@
             </div>
         </div>
     </div>
-    </form>
+
 {% endblock %}
