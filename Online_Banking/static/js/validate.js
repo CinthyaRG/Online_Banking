@@ -11,6 +11,10 @@ $(document).ready(function () {
     var ci = '#ci';
     var email = '#email';
     var cod = '#cod';
+    var q1 = '#quest1';
+    var q2 = '#quest2';
+    var a1 = '#answ1';
+    var a2 = '#answ2';
     var msj_num = "Sólo se admiten números";
     var msj_email = "Ingrese un email válido";
     var msj = "Este campo es obligatorio";
@@ -184,6 +188,60 @@ $(document).ready(function () {
         $(cod).css({'border-color': '#8AB7B6'});
         $('#error-cod').empty();
         $("#error_step3").empty();
+    });
+
+    $(q1).on('focusout', function () {
+        if ( $(q1).val() !== ""){
+            $(q1).css({border: '2px solid #d2d6de'});
+            $(q1).removeClass('errors');
+            $('#error-q1').empty()
+        }
+        else {
+            $('#error-q1').text(msj);
+            $(q1).addClass('errors');
+        }
+    });
+
+    $(q1).on('focus', function () {
+        $(q1).removeClass('errors');
+        $(q1).css({'border-color': '#8AB7B6'});
+        $('#error-q1').empty();
+    });
+
+    $(a1).on('focusout', function () {
+        if ( $(a1).val() !== ""){
+            if ( $(a1).val() === $(q1).val()) {
+                $('#error-a1').text('La respuesta no puede ' +
+                    'ser igual a la pregunta.');
+                $(a1).addClass('errors');
+            }
+            else if ( ($(a1).val() === $("#name_customer").text()) || 
+                ($(a1).val() === $("#last-name_customer").text()) || 
+                ($(a1).val() === $("#ci_customer").text()) ){
+                $('#error-a1').text('La respuesta no puede ' +
+                    'contener sus datos personales.');
+                $(a1).addClass('errors');
+            }
+            else{
+                $(a1).css({border: '2px solid #d2d6de'});
+                $(a1).removeClass('errors');
+                $('#error-a1').empty();
+            }
+        }
+        else {
+            $('#error-a1').text(msj);
+            $(a1).addClass('errors');
+        }
+    });
+
+    $(a1).on('focus', function () {
+        $(a1).removeClass('errors');
+        $(a1).css({'border-color': '#8AB7B6'});
+        $('#error-a1').empty();
+        if ( $(q1).val() === ""){
+            $('#error-q1').text(msj);
+            $(q1).addClass('errors');
+        }
     });
 
 });

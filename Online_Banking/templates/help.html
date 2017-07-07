@@ -8,7 +8,7 @@
             menu();
             $.getJSON('static/js/questions.json', function (data) {
               $.each( data, function( key, val ) {
-                  $("#questions").append('<span class="h4 answer_help"><i class="fa fa-caret-right"> </i>'+
+                  $("#questions").append('<span class="h4 quest_help"><i class="fa fa-caret-right"> </i>'+
                             '<span>'+ val.pregunta +'</span></span>'+
                             '<p class="margin-l-45 text-wrapper">'+ val.respuesta +'</p>');
               });

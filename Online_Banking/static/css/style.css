@@ -87,6 +87,9 @@ div > div > input {
 #step2 > div[class="box"] {
     min-height: 240px;
 }
+#step3 > div[class="box"] {
+    min-height: 350px;
+}
 .step > div > h4 > hr {
     border-radius: 5px;
     margin-top: 3px;
@@ -112,6 +115,9 @@ div > div > input {
 .input-register:hover, .input-register:focus {
     border-color: #8AB7B6;
     box-shadow: none;
+}
+.border-red {
+    border-color: rgba(128,10,11,0.81);
 }
 .label-input {
     padding: 3px;
@@ -197,7 +203,7 @@ div[role="tooltip"] {
 }
 .counter {
     font-size: 12px;
-    margin-left: 260px;
+    margin-left: 10px;
     display: none;
     position: absolute;
     bottom: 5px;

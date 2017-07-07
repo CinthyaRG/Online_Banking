@@ -82,6 +82,7 @@ function validation(a,b,c,d,e,f,g) {
     var msj = "Este campo es obligatorio";
     var path = window.location.href.split('/');
     var url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/validate-user/";
+    var url_api = path[0]+"/"+path[1]+"/"+"localhost:8001"+"/ajax/validate_data/";
 
     $("#error").empty();
 
@@ -132,9 +133,10 @@ function validation(a,b,c,d,e,f,g) {
                     effect_error("#error");
                 }
                 else {
+                    console.log('entro en else');
                     $.ajax({
-                        url: 'http://127.0.0.1:8001/ajax/validate_data/',
-                        origin: 'http://127.0.0.1:8000',
+                        url: url_api,
+                        origin: 'localhost:8000',
                         headers: {'X-CSRFToken': getCookie('csrftoken')},
                         data: {
                             numtarj: numtarj,
@@ -161,6 +163,7 @@ function validation(a,b,c,d,e,f,g) {
                             }
                         },
                         error: function (data) {
+                            console.log(data.error);
                             alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
                         }
                     });
@@ -240,11 +243,11 @@ function validate_cod(elem) {
     var path = window.location.href.split('/');
     var url = '';
 
-
     $("#error_step3").empty();
 
     if (elem === 'resend') {
-        url = path[0]+"/"+path[1]+"/"+path[2]+"ajax/resend-email/";
+        url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/resend-email/";
+        console.log(url);
         $.ajax({
             url: url,
             headers: {'X-CSRFToken': getCookie('csrftoken')},
@@ -258,6 +261,9 @@ function validate_cod(elem) {
                 if (data.user_exists) {
                     if (data.envio) {
                         restore_count_circle();
+                        $("#error_step3").append('<p class="text-danger margin-error">'+
+                            'Se ha enviado exitosamente un nuevo código a su correo.' +'</p>');
+                        effect_error("#error_step3");
                     }
                     else {
                         $("#error_step3").append('<p class="text-danger margin-error">'+
@@ -323,34 +329,41 @@ function validate_cod(elem) {
         }
     }
 
+}
 
+function validate_questions() {
+    var username = $("#numtarj").val();
+    var cod = $('#cod');
+    var msj_error = "Hubo un error en la conexión intente de nuevo. Gracias.";
+    var msj = "Los campos presentan errores por favor " +
+        "verifíquelos para continuar con el registro.";
+    var path = window.location.href.split('/');
+    var url = '';
 
+    $("#error_step3").empty();
 
-    if ( (cod.hasClass('errors')) || (cod.val() === "") ||
-        (cod.val().length !== 6) ){
-        $("#error_step3").append('<p class="text-danger margin-error">'+
-            msj +'</p>');
-        effect_error("#error_step3");
-    }
-    else {
+    if (elem === 'resend') {
+        url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/resend-email/";
         $.ajax({
             url: url,
             headers: {'X-CSRFToken': getCookie('csrftoken')},
             data: {
-                username: username,
-                cod: cod.val()
+                username: username
             },
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                alert("EXITO cod");
+                alert("EXITO reenvio");
                 if (data.user_exists) {
-                    if (data.correct) {
-                        pagNext(3);
+                    if (data.envio) {
+                        restore_count_circle();
+                        $("#error_step3").append('<p class="text-danger margin-error">'+
+                            'Se ha enviado exitosamente un nuevo código a su correo.' +'</p>');
+                        effect_error("#error_step3");
                     }
                     else {
                         $("#error_step3").append('<p class="text-danger margin-error">'+
-                            data.error +'</p>');
+                            msj_error +'</p>');
                         effect_error("#error_step3");
                     }
                 }
@@ -367,7 +380,53 @@ function validate_cod(elem) {
             }
         });
     }
+    else if (elem === 'submit'){
+        url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/validate-cod/";
+        if ( (cod.hasClass('errors')) || (cod.val() === "") ||
+            (cod.val().length !== 6) ){
+            $("#error_step3").append('<p class="text-danger margin-error">'+
+                msj +'</p>');
+            effect_error("#error_step3");
+        }
+        else {
+            $.ajax({
+                url: url,
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                data: {
+                    username: username,
+                    cod: cod.val()
+                },
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    alert("EXITO cod");
+                    if (data.user_exists) {
+                        if (data.correct) {
+                            pagNext(3);
+                        }
+                        else {
+                            $("#error_step3").append('<p class="text-danger margin-error">'+
+                                data.error +'</p>');
+                            effect_error("#error_step3");
+                        }
+                    }
+                    else {
+                        $("#error_step2").append('<p class="text-danger margin-error">'+
+                            data.error +'</p>');
+                        pagBack(3);
+                        $("#email").val('');
+                        effect_error("#error_step2");
+                    }
+                },
+                error: function (data) {
+                    alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+                }
+            });
+        }
+    }
+
 }
+
 
 function pagNext(numPag) {
     var next = numPag +1;
@@ -467,7 +526,7 @@ function count_words(id,input){
     if (!!maxlength) {
         var texto = this_doc.val();
         if (texto.length >= maxlength) {
-            this_doc.removeClass().addClass("border-red");
+            this_doc.addClass("border-red");
             this_doc.val(text.substring(0, maxlength));
         }
     }

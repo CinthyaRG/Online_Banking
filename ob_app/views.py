@@ -102,6 +102,7 @@ def validate_cod(request):
     username = request.GET.get('username', None)
     token = request.GET.get('cod', None)
     print(username)
+    print(token)
     data = {
         'user_exists': User.objects.filter(username=username).exists()
     }
@@ -112,8 +113,8 @@ def validate_cod(request):
         try:
             user_profile = UserProfile.objects.get(user=user, activation_key=token)
         except UserProfile.DoesNotExist:
-            data['profile_exists'] = False
             data['correct'] = False
+            data['error'] = 'El código que ingresó es incorrecto.'
             return JsonResponse(data)
 
         time = datetime.datetime.today()
@@ -125,10 +126,9 @@ def validate_cod(request):
             data['correct'] = True
 
         if not(data['correct']):
-            if not(data['profile_exists']):
-                data['error'] = 'El código que ingresó es incorrecto.'
             if data['profile_expires']:
-                data['error'] = 'El código que ingresó ya expiró.'
+                data['error'] = 'El código que ingresó ya expiró. Presione Renviar Código ' \
+                                'para solicitar uno nuevo.'
     else:
         data['error'] = 'Ha ocurrido un error por favor reingrese su email.'
 

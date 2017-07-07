@@ -292,11 +292,11 @@
                 <div class="box-body">
                     <dl class="dl-horizontal label-input">
                         <div class="row">
-                            <div class="col-md-4 col-xs-4">
+                            <div class="col-md-3 col-xs-3">
                                 <label class="pull-right">
                                     <span class="text-danger"> * </span> Pregunta 1: </label>
                             </div>
-                            <div class="col-md-5 col-xs-4 rows">
+                            <div class="col-md-6 col-xs-5 rows">
                                 <input maxlength="50" id="quest1" class="input-register"
                                        onkeyup="count_words('#span_quest1','#quest1')"
                                        onfocus="count_words('#span_quest1','#quest1')"
@@ -308,11 +308,11 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4 col-xs-4">
+                            <div class="col-md-3 col-xs-3">
                                 <label class="pull-right">
                                     <span class="text-danger"> * </span> Respuesta 1: </label>
                             </div>
-                            <div class="col-md-5 col-xs-4 rows">
+                            <div class="col-md-6 col-xs-5 rows">
                                 <input maxlength="50" id="answ1" class="input-register"
                                        onkeyup="count_words('#span_answ1','#answ1')"
                                        onfocus="count_words('#span_answ1','#answ1')"
@@ -324,11 +324,11 @@
                             </div>
                         </div>
                         <div class="row questions">
-                            <div class="col-md-4 col-xs-4">
+                            <div class="col-md-3 col-xs-3">
                                 <label class="pull-right">
                                     <span class="text-danger"> * </span> Pregunta 2: </label>
                             </div>
-                            <div class="col-md-5 col-xs-4 rows">
+                            <div class="col-md-6 col-xs-5 rows">
                                 <input maxlength="50" id="quest2" class="input-register"
                                        onkeyup="count_words('#span_quest2','#quest2')"
                                        onfocus="count_words('#span_quest2','#quest2')"
@@ -340,11 +340,11 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4 col-xs-4">
+                            <div class="col-md-3 col-xs-3">
                                 <label class="pull-right">
                                     <span class="text-danger"> * </span> Respuesta 2: </label>
                             </div>
-                            <div class="col-md-5 col-xs-4 rows">
+                            <div class="col-md-6 col-xs-5 rows">
                                 <input maxlength="50" id="answ2" class="input-register"
                                        onkeyup="count_words('#span_answ2','#answ2')"
                                        onfocus="count_words('#span_answ2','#answ2')"
@@ -361,10 +361,8 @@
             <div class="row">
                 <div class="col-md-6 col-xs-5"></div>
                 <div class="col-md-6 col-xs-7">
-                    <a id="btn-back" class="btn btn-default btn-group btn-apps" type="button"
-                       onclick="pagBack(4)"> Anterior </a>
                     <a id="btn-next" class="btn btn-default btn-group btn-apps" type="button"
-                       onclick="pagNext(4)"> Siguiente </a>
+                       onclick="validate_questions()"> Siguiente </a>
                 </div>
             </div>
         </div>
