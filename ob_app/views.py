@@ -13,8 +13,6 @@ from ob_app.models import *
 import datetime
 import random
 import hashlib
-from unipath import Path
-import os.path
 
 
 def groups():
