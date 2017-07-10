@@ -154,6 +154,10 @@ function validation(a,b,c,d,e,f,g) {
                                 $("#name_customer").text(data.customer_name);
                                 $("#last-name_customer").text(data.customer_last);
                                 $("#ci_customer").text(data.customer_ident);
+                                $("#phone-home").text(data.phone_home);
+                                $("#cellphone").text(data.cellphone);
+                                $("#phone-office").text(data.phone_office);
+                                $("#birthday").text(data.birthday);
                                 pagNext(1);
                             }
                             else {
@@ -231,7 +235,6 @@ function validate_email() {
             }
         });
     }
-
 }
 
 function validate_cod(elem) {
@@ -328,105 +331,85 @@ function validate_cod(elem) {
             });
         }
     }
-
 }
 
 function validate_questions() {
-    var username = $("#numtarj").val();
-    var cod = $('#cod');
-    var msj_error = "Hubo un error en la conexión intente de nuevo. Gracias.";
+    var a1 = $("#answ1");
+    var a2 = $("#nansw2");
+    var q1 = $("#quest1");
+    var q2 = $("#quest2");
     var msj = "Los campos presentan errores por favor " +
         "verifíquelos para continuar con el registro.";
-    var path = window.location.href.split('/');
-    var url = '';
 
     $("#error_step3").empty();
 
-    if (elem === 'resend') {
-        url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/resend-email/";
+    if ( (a1.hasClass('errors')) || (a1.val() === "") || 
+        (a2.hasClass('errors')) || (a2.val() === "") || 
+        (q1.hasClass('errors')) || (q1.val() === "") || 
+        (q2.hasClass('errors')) || (q2.val() === "") ){
+        $("#error_step3").append('<p class="text-danger margin-error">'+
+            msj +'</p>');
+        effect_error("#error_step3");
+    }
+    else {
+        pagNext(3);
+    }
+}
+
+function validate_pass() {
+    var password = $("#password");
+    var confirm = $("#confirm-pass");
+    var first_name = $("#name_customer");
+    var last_name = $("#last-name_customer");
+    var ci = $("#ci_customer");
+    var username = $("#numtarj").val();
+    var msj = "Este campo es obligatorio";
+    var msj_error = "Hubo un error en la conexión intente de nuevo. Gracias.";
+    var path = window.location.href.split('/');
+    var url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/validate-pass/";
+
+    if ( (password.hasClass('errors')) || (password.val() === "")) {
+        $('#error-pass').text(msj);
+    }
+    else if ( (confirm.hasClass('errors')) || (confirm.val() === "")) {
+        $('#error-conf-pass').text(msj);
+    }
+    else {
         $.ajax({
             url: url,
             headers: {'X-CSRFToken': getCookie('csrftoken')},
             data: {
+                email: email.val(),
+                first_name: first_name.text(),
+                last_name: last_name.text(),
+                ci: ci.text(),
                 username: username
             },
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                alert("EXITO reenvio");
+                alert("EXITO");
                 if (data.user_exists) {
-                    if (data.envio) {
-                        restore_count_circle();
-                        $("#error_step3").append('<p class="text-danger margin-error">'+
-                            'Se ha enviado exitosamente un nuevo código a su correo.' +'</p>');
-                        effect_error("#error_step3");
-                    }
-                    else {
-                        $("#error_step3").append('<p class="text-danger margin-error">'+
-                            msj_error +'</p>');
-                        effect_error("#error_step3");
-                    }
+                    $("#error_step2").append('<p class="text-danger margin-error">'+
+                        msj_error +'</p>');
+                    effect_error("#error_step2");
+                }
+                if (data.envio) {
+                    pagNext(2);
                 }
                 else {
                     $("#error_step2").append('<p class="text-danger margin-error">'+
-                        data.error +'</p>');
-                    pagBack(3);
-                    $("#email").val('');
+                        msj_error +'</p>');
                     effect_error("#error_step2");
                 }
+
             },
             error: function (data) {
                 alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
             }
         });
     }
-    else if (elem === 'submit'){
-        url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/validate-cod/";
-        if ( (cod.hasClass('errors')) || (cod.val() === "") ||
-            (cod.val().length !== 6) ){
-            $("#error_step3").append('<p class="text-danger margin-error">'+
-                msj +'</p>');
-            effect_error("#error_step3");
-        }
-        else {
-            $.ajax({
-                url: url,
-                headers: {'X-CSRFToken': getCookie('csrftoken')},
-                data: {
-                    username: username,
-                    cod: cod.val()
-                },
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    alert("EXITO cod");
-                    if (data.user_exists) {
-                        if (data.correct) {
-                            pagNext(3);
-                        }
-                        else {
-                            $("#error_step3").append('<p class="text-danger margin-error">'+
-                                data.error +'</p>');
-                            effect_error("#error_step3");
-                        }
-                    }
-                    else {
-                        $("#error_step2").append('<p class="text-danger margin-error">'+
-                            data.error +'</p>');
-                        pagBack(3);
-                        $("#email").val('');
-                        effect_error("#error_step2");
-                    }
-                },
-                error: function (data) {
-                    alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
-                }
-            });
-        }
-    }
-
 }
-
 
 function pagNext(numPag) {
     var next = numPag +1;

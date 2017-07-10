@@ -171,6 +171,44 @@ def resend_email(request):
     return JsonResponse(data)
 
 
+@ensure_csrf_cookie
+def questions_customer(request):
+    username = request.GET.get('username', None)
+    token = request.GET.get('cod', None)
+    print(username)
+    print(token)
+    data = {
+        'user_exists': User.objects.filter(username=username).exists()
+    }
+
+    if data['user_exists']:
+        user = User.objects.get(username=username)
+
+        try:
+            user_profile = UserProfile.objects.get(user=user, activation_key=token)
+        except UserProfile.DoesNotExist:
+            data['correct'] = False
+            data['error'] = 'El código que ingresó es incorrecto.'
+            return JsonResponse(data)
+
+        time = datetime.datetime.today()
+
+        if user_profile.key_expires < time:
+            data['profile_expires'] = True
+            data['correct'] = False
+        else:
+            data['correct'] = True
+
+        if not(data['correct']):
+            if data['profile_expires']:
+                data['error'] = 'El código que ingresó ya expiró. Presione Renviar Código ' \
+                                'para solicitar uno nuevo.'
+    else:
+        data['error'] = 'Ha ocurrido un error por favor reingrese su email.'
+
+    return JsonResponse(data)
+
+
 def send_email(subject, message_template, context, email):
     from_email = 'Actio Capital'
     email_subject = subject

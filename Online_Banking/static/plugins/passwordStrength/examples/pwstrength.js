@@ -243,7 +243,7 @@ defaultOptions.ui.errorMessages = {
 defaultOptions.ui.verdicts = ["Débil", "Normal", "Medio", "Segura", "Muy Segura"];
 defaultOptions.ui.showVerdicts = true;
 defaultOptions.ui.showVerdictsInsideProgressBar = false;
-defaultOptions.ui.showErrors = true;
+defaultOptions.ui.showErrors = false;
 defaultOptions.ui.container = undefined;
 defaultOptions.ui.viewports = {
     progress: undefined,

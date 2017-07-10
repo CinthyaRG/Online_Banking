@@ -3,8 +3,12 @@
  */
 
 $(document).ready(function () {
-    var regexNum =  /^[0-9]+$/;
+    var regexNum =  /[0-9]+/;
+    var regexRepeat = /(.)\1{1,}/;
+    var regexMay = /[A-Z]+/;
+    var regexMin = /[a-z]+/;
     var regexEmail = /^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,3})$/;
+    var regexSpecial = /[$@!%.#_*?&]+/; 
     var numtarj = '#numtarj';
     var pin = '#pin';
     var ccv = '#ccv';
@@ -15,6 +19,16 @@ $(document).ready(function () {
     var q2 = '#quest2';
     var a1 = '#answ1';
     var a2 = '#answ2';
+    var password = '#password';
+    var confirm = '#confirm-pass';
+    var first_name = $("#name_customer").text().split(' ');
+    var last_name = $("#last-name_customer").text().split(' ');
+    var ci_cust = $("#ci_customer").text().split('-');
+    var phone_home = $("#phone-home").text().split('-');
+    var cellphone = $("#cellphone").text().split('-');
+    var phone_office = $("#phone-office").text().split('-');
+    var birthday = $("#birthday").text();
+    var birthday_split = $("#birthday").text().split('-');
     var msj_num = "Sólo se admiten números";
     var msj_email = "Ingrese un email válido";
     var msj = "Este campo es obligatorio";
@@ -215,9 +229,18 @@ $(document).ready(function () {
                     'ser igual a la pregunta.');
                 $(a1).addClass('errors');
             }
-            else if ( ($(a1).val() === $("#name_customer").text()) || 
-                ($(a1).val() === $("#last-name_customer").text()) || 
-                ($(a1).val() === $("#ci_customer").text()) ){
+            else if ( ($(a1).val() === first_name[0]) || 
+                ($(a1).val() === first_name[1]) || 
+                ($(a1).val() === last_name[0]) || 
+                ($(a1).val() === last_name[1]) ||
+                ($(a1).val() === ci_cust[1]) ||
+                ($(a1).val() === birthday) ||
+                ($(a1).val() === birthday_split[0]) ||
+                ($(a1).val() === birthday_split[1]) ||
+                ($(a1).val() === birthday_split[2]) ||
+                ($(a1).val() === cellphone[1]) ||
+                ($(a1).val() === phone_home[1]) ||
+                ($(a1).val() === phone_office[1]) ){
                 $('#error-a1').text('La respuesta no puede ' +
                     'contener sus datos personales.');
                 $(a1).addClass('errors');
@@ -242,6 +265,220 @@ $(document).ready(function () {
             $('#error-q1').text(msj);
             $(q1).addClass('errors');
         }
+    });
+
+    $(q2).on('focusout', function () {
+        if ( $(q2).val() !== ""){
+            if ( $(q2).val() === $(q1).val()) {
+                $('#error-q2').text('La pregunta 2 no puede ' +
+                    'ser igual a la pregunta 1.');
+                $(q2).addClass('errors');
+            }
+            else{
+                $(q2).css({border: '2px solid #d2d6de'});
+                $(q2).removeClass('errors');
+                $('#error-q2').empty();
+            }
+        }
+        else {
+            $('#error-q2').text(msj);
+            $(q2).addClass('errors');
+        }
+    });
+
+    $(q2).on('focus', function () {
+        $(q2).removeClass('errors');
+        $(q2).css({'border-color': '#8AB7B6'});
+        $('#error-q2').empty();
+    });
+
+    $(a2).on('focusout', function () {
+        if ( $(a2).val() !== ""){
+            if ( $(a2).val() === $(q2).val()) {
+                $('#error-a2').text('La respuesta no puede ' +
+                    'ser igual a la pregunta.');
+                $(a2).addClass('errors');
+            }
+            else if ( ($(a2).val() === first_name[0]) || 
+                ($(a2).val() === first_name[1]) || 
+                ($(a2).val() === last_name[0]) || 
+                ($(a2).val() === last_name[1]) ||
+                ($(a2).val() === ci_cust[1]) ||
+                ($(a2).val() === birthday) ||
+                ($(a2).val() === birthday_split[0]) ||
+                ($(a2).val() === birthday_split[1]) ||
+                ($(a2).val() === birthday_split[2]) ||
+                ($(a2).val() === cellphone[1]) ||
+                ($(a2).val() === phone_home[1]) ||
+                ($(a2).val() === phone_office[1]) ){
+                $('#error-a2').text('La respuesta no puede ' +
+                    'contener sus datos personales.');
+                $(a2).addClass('errors');
+            }
+            else if ( $(a2).val() === $(a1).val()) {
+                $('#error-a2').text('Las respuestas no pueden ' +
+                    'ser iguales.');
+                $(a2).addClass('errors');
+            }
+            else{
+                $(a2).css({border: '2px solid #d2d6de'});
+                $(a2).removeClass('errors');
+                $('#error-a2').empty();
+            }
+        }
+        else {
+            $('#error-a2').text(msj);
+            $(a2).addClass('errors');
+        }
+    });
+
+    $(a2).on('focus', function () {
+        $(a2).removeClass('errors');
+        $(a2).css({'border-color': '#8AB7B6'});
+        $('#error-a2').empty();
+        if ( $(q2).val() === ""){
+            $('#error-q2').text(msj);
+            $(q2).addClass('errors');
+        }
+    });
+
+    $(password).on('keydown', function () {
+        var i = 0;
+        if ( $(password).val() !== ""){
+            if ( ($(password).val().match(regexRepeat))) {
+                if (!($('#repeat-carac').hasClass('text-danger'))) {
+                    $('#repeat-carac').addClass('text-danger');
+                }
+                $('#repeat-carac').removeClass('text-success');
+            }
+            else {
+                $('#repeat-carac').removeClass('text-danger');
+                $('#repeat-carac').addClass('text-success');
+                i = i+1;
+            }
+            if ( ($(password).val() === first_name[0]) || 
+                ($(password).val() === first_name[1]) || 
+                ($(password).val() === last_name[0]) || 
+                ($(password).val() === last_name[1]) ||
+                ($(password).val() === ci_cust[1]) ||
+                ($(password).val() === birthday) ||
+                ($(password).val() === birthday_split[0]) ||
+                ($(password).val() === birthday_split[1]) ||
+                ($(password).val() === birthday_split[2]) ||
+                ($(password).val() === cellphone[1]) ||
+                ($(password).val() === phone_home[1]) ||
+                ($(password).val() === phone_office[1]) ){
+                if (!($('#pers-carac').hasClass('text-danger'))) {
+                    $('#pers-carac').addClass('text-danger');
+                }
+                $('#pers-carac').removeClass('text-success');
+            }
+            else {
+                $('#pers-carac').removeClass('text-danger');
+                $('#pers-carac').addClass('text-success');
+                i = i+1;
+                
+            }
+            if ( $(password).val().match(regexNum) ) {
+                $('#num-carac').removeClass('text-danger');
+                $('#num-carac').addClass('text-success');
+                i = i+1;
+            }
+            else {
+                if (!($('#num-carac').hasClass('text-danger'))) {
+                    $('#num-carac').addClass('text-danger');
+                }
+                $('#num-carac').removeClass('text-success');
+            }
+            if ( !($(password).val().match(regexMin)) ) {
+                if (!($('#carac').hasClass('text-danger'))) {
+                    $('#carac').addClass('text-danger');
+                }
+                $('#carac').removeClass('text-success');
+            }
+            else {
+                $('#carac').removeClass('text-danger');
+                $('#carac').addClass('text-success');
+                i = i+1;
+            }
+            if ( !($(password).val().match(regexMay)) ) {
+                if (!($('#carac').hasClass('text-danger'))) {
+                    $('#carac').addClass('text-danger');
+                }
+                $('#carac').removeClass('text-success');
+            }
+            else {
+                $('#carac').removeClass('text-danger');
+                $('#carac').addClass('text-success');
+                i = i+1;
+            }
+            if ( $(password).val().length < 8) {
+                if (!($('#min-carac').hasClass('text-danger'))) {
+                    $('#min-carac').addClass('text-danger');
+                }
+                $('#min-carac').removeClass('text-success');
+            }
+            else{
+                $('#min-carac').removeClass('text-danger');
+                $('#min-carac').addClass('text-success');
+                i = i+1;
+            }
+            if ( !($(password).val().match(regexSpecial)) ) {
+                if (!($('#spec-carac').hasClass('text-danger'))) {
+                    $('#spec-carac').addClass('text-danger');
+                }
+                $('#spec-carac').removeClass('text-success');
+            }
+            else{
+                $('#spec-carac').removeClass('text-danger');
+                $('#spec-carac').addClass('text-success');
+                i = i+1;
+            }
+            if (i === 7){
+                $(password).css({border: '2px solid #d2d6de'});
+                $(password).removeClass('errors');
+                $('#error-pass').empty();
+            }
+        }
+        else {
+            $('#error-pass').text(msj);
+            $(password).addClass('errors');
+        }
+    });
+
+    $(password).on('focus', function () {
+        $(password).removeClass('errors');
+        $(password).css({'border-color': '#8AB7B6'});
+        $('#error-pass').empty();
+    });
+
+    $(confirm).on('keydown', function () {
+        if ( $(confirm).val() !== ""){
+            if ( $(confirm).val() !== $(password).val()) {
+                $('#confirm').removeClass('text-success');
+                if ( !($('#confirm').hasClass('text-danger')) ) {
+                    $('#confirm').addClass('text-danger');
+                }
+                $(confirm).addClass('errors');
+            }
+            else{
+                $(confirm).css({border: '2px solid #d2d6de'});
+                $(confirm).removeClass('errors');
+                $('#confirm').removeClass('text-danger');
+                $('#confirm').addClass('text-success');
+                $('#error-conf-pass').empty();
+            }
+        }
+        else if ($(confirm).val() === ""){
+            $('#error-conf-pass').text(msj);
+            $(confirm).addClass('errors');
+        }
+    });
+
+    $(confirm).on('focus', function () {
+        $(confirm).removeClass('errors');
+        $(confirm).css({'border-color': '#8AB7B6'});
+        $('#error-conf-pass').empty();
     });
 
 });

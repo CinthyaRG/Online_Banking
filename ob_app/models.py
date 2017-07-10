@@ -27,6 +27,7 @@ class Users(models.Model):
     user = models.OneToOneField(User)
     ident = models.CharField(validators=[ID_VALIDATOR], max_length=10, unique=True)
     elem_security = models.ForeignKey(Elems_security, blank=True, null=True)
+    pass_expires = models.DateField(null=True, blank=True)
 
     def get_name(self):
         return self.user.first_name + " " + self.user.last_name

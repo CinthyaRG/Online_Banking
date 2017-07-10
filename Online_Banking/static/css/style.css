@@ -90,6 +90,9 @@ div > div > input {
 #step3 > div[class="box"] {
     min-height: 350px;
 }
+#step4 > div[class="box"] {
+    min-height: 320px;
+}
 .step > div > h4 > hr {
     border-radius: 5px;
     margin-top: 3px;
@@ -481,4 +484,8 @@ div[role="tooltip"] {
 .margin-error {
     margin-top: 10px;
     margin-bottom: 0;
+}
+.error-question {
+    min-height: 30px;
+    margin-left: 150px;
 }

@@ -48,6 +48,10 @@ urlpatterns = [
         resend_email,
         name='reenvio-confirmacion'),
     url(
+        r'^ajax/questions/$',
+        questions_customer,
+        name='preg-seguridad'),
+    url(
         r'^restablecer-pass',
         Restore_pass.as_view(),
         name='restablecer-pass'),
