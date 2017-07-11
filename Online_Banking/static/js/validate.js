@@ -232,7 +232,7 @@ $(document).ready(function () {
                     'ser igual a alguna respuesta.');
                 $(q1).addClass('errors');
             }
-            else if ( $(q2).val() === $(q1).val()) {
+            if ( $(q2).val() === $(q1).val()) {
                 $('#error-q1').text('La pregunta 1 no puede ' +
                     'ser igual a la pregunta 2.');
                 $(q1).addClass('errors');
@@ -368,9 +368,9 @@ $(document).ready(function () {
             var birthday = $("#birthday").text();
             var birthday_split = $("#birthday").text().split('-');
 
-            if ( $(a2).val() === $(q2).val()) {
+            if ( $(a2).val().includes($(q2).val())) {
                 $('#error-a2').text('La respuesta no puede ' +
-                    'ser igual a la pregunta.');
+                    'ser similar a la pregunta.');
                 $(a2).addClass('errors');
             }
             else if ( (first_name[0].includes(normalize($(a2).val().toLowerCase()))) || 
@@ -441,7 +441,6 @@ $(document).ready(function () {
 
     $(password).on('change', function () {
         var i = 0;
-        console.log("pass keydown");
         if ( $(password).val() !== ""){
             var first_name = normalize($("#name_customer").text().toLowerCase()).split(' ');
             var last_name = normalize($("#last-name_customer").text().toLowerCase()).split(' ');

@@ -486,3 +486,6 @@ div[role="tooltip"] {
     min-height: 30px;
     margin-left: 60px;
 }
+.error-login {
+    min-height: 30px;
+}

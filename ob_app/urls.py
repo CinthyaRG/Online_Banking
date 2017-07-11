@@ -6,17 +6,21 @@ from ob_app.views import *
 urlpatterns = [
     url(
         r'^$',
-        Home.as_view(),
+        user_login,
         name='home'),
     url(
-        r'^inicio',
+        r'^inicio/(?P<pk>\d+)/$',
         Home_Client.as_view(),
         name='inicio'),
     url(
         r'^salir',
+        Logout.as_view(),
+        name='logout_success'),
+    url(
+        r'^logout',
         django.contrib.auth.views.logout,
         {
-            'next_page': 'home'
+            'next_page': 'logout_success'
         },
         name='salir'),
     url(
@@ -61,7 +65,7 @@ urlpatterns = [
         name='register_confirm'),
     url(
         r'^newToken/(?P<pk>\d+)/$',
-        new_Token,
+        new_token,
         name='new_Token'),
     url(
         r'^restablecer-pass',

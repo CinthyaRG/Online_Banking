@@ -1,0 +1,26 @@
+{% extends "base-email.html" %}
+{% load static %}
+
+{% block script %}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div  id="center" class="center-block text-center">
+                <img src="www.idbcgroup.com/actio/img/logo.png">
+                <br>
+                <br>
+                <h2> Hola {{usuario}}! </h2>
+                <br>
+                <p>
+                    Inicio de sesión exitoso el {{fecha}} a las {{hora}}.
+                </p>
+                <br>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+

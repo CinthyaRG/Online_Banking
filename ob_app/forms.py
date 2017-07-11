@@ -4,16 +4,20 @@ from django.contrib.auth.models import User
 from django import forms
 
 
-class EmailForm(forms.ModelForm):
-
-    email = forms.CharField(
-        max_length= 60, label="email",
-        required=True, widget=forms.EmailInput(attrs={
-            'class': "input-register",
-            'placeholder': "ej: nombre@ejemplo.com"
+class LoginForm(forms.Form):
+    username = forms.CharField(
+        max_length=18, label=' Número De Tarjeta ',
+        required=True, widget=forms.TextInput(attrs={
+            'class': "form-control text-center",
+            'id': "id_username",
+            'placeholder': ""
         })
     )
 
-    class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'email']
+    password = forms.CharField(
+        label="Contraseña ", required=True, widget=forms.PasswordInput(attrs={
+            'class': "form-control text-center",
+            'type': "password",
+            'id': "id_password"
+        })
+    )

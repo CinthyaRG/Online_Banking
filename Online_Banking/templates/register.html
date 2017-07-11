@@ -63,7 +63,7 @@
                                     <span class="text-danger"> * </span> Código PIN: </label>
                             </div>
                             <div class="col-md-2 col-xs-2 rows">
-                                <input id="pin" maxlength="4" class="input-register">
+                                <input id="pin" type="password" maxlength="4" class="input-register">
                                 <i id="help-pin" data-toggle="tooltip"
                                    data-placement="right" class="fa fa-lg fa-question-circle-o"> </i>
                             </div>
@@ -77,7 +77,7 @@
                                     <span class="text-danger"> * </span> Código de validación: </label>
                             </div>
                             <div class="col-md-2 col-xs-2 rows">
-                                <input maxlength="3" id="ccv" class="input-register">
+                                <input maxlength="3" type="password" id="ccv" class="input-register">
                                 <i id="help-ccv" data-toggle="tooltip"
                                    data-placement="right" class="fa fa-lg fa-question-circle-o"> </i>
                             </div>
@@ -132,7 +132,7 @@
                 <div class="col-md-6 col-xs-5"></div>
                 <div class="col-md-6 col-xs-7">
                     <a id="btn-back" class="btn btn-default btn-group btn-apps" type="button"
-                       href="{% url 'home' %}"> Anterior </a>
+                       href="{% url 'home' %}"> Cancelar </a>
                     <a id="btn-next1" class="btn btn-default btn-group btn-apps"
                        type="button" onclick="validation('#numtarj','#pin', '#ccv',
                        '#month', '#year', '#nac', '#ci')"> Siguiente </a>
@@ -416,7 +416,9 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-2 col-xs-2"></div>
+                            <div class="col-md-1 col-xs-1">
+                                <p></p>
+                            </div>
                             <div class="col-md-10 col-xs-10 rows">
                                 <p id="min-carac" class="text-danger">
                                     La contraseña debe contener mínimo 8 caracteres

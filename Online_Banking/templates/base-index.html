@@ -2,134 +2,188 @@
 {% load static %}
 
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Actio Capital | Inicio </title>
-        <!-- Tell the browser to be responsive to screen width -->
-        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-        <!-- Bootstrap 3.3.6 -->
-        <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
-        <!-- Ionicons -->
-        <link rel="stylesheet" href="{% static 'css/ionicons.css' %}">
-        <!-- Theme style -->
-        <link rel="stylesheet" href="{% static 'css/AdminLTE.css' %}">
-        <link rel="stylesheet" href="{% static 'css/skins/skin-green.css' %} ">
-        <link rel="stylesheet" href="{% static 'css/style.css' %}">
-        <link rel="stylesheet" href="{% static 'css/font.css' %}">
-        <!-- jQuery 2.2.3 -->
-        <script src="{% static 'plugins/jQuery/jquery-2.2.3.min.js' %}"></script>
-        <!-- Bootstrap 3.3.6 -->
-        <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
-        <!-- js app -->
-        <script src="{% static 'js/app.js' %}"></script>
-        <script src="{% static 'js/settings_ajax.js' %}"></script>
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Actio Capital | Inicio </title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="{% static 'css/ionicons.css' %}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'css/AdminLTE.css' %}">
+    <link rel="stylesheet" href="{% static 'css/skins/skin-green.css' %} ">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/pnotify/pnotify.custom.min.css' %}">
+    <!-- jQuery 2.2.3 -->
+    <script src="{% static 'plugins/jQuery/jquery-2.2.3.min.js' %}"></script>
+    <!-- Bootstrap 3.3.6 -->
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'plugins/pnotify/pnotify.custom.min.js' %}"></script>
+    <!-- js app -->
+    <script src="{% static 'js/app.js' %}"></script>
+    <script src="{% static 'js/settings_ajax.js' %}"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
             <script type="text/javascript" src="{% static 'js/html5shiv.min.js' %}"></script>
             <script type="text/javascript" src="{% static 'js/respond.min.js' %}"></script>
         <![endif]-->
-        {% block script %}
-            <script src="{% static 'js/effects.js' %}"></script>
-        {% endblock %}
-    </head>
+    {% block script %}
+        <script src="{% static 'js/effects.js' %}"></script>
+        <script>
+            {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        $(function(){
+                        var stack = {"dir1": "down",
+                            "dir2": "left",
+                            "firstpos2": 10,
+                            "firstpos1": 10
+                        };
+                        new PNotify({
+                            title: '{{ message.tags|upper }}',
+                            text: '{{ error|escape }}',
+                            buttons: {
+                                closer: false,
+                                sticker: false
+                            },
+                            styling: 'bootstrap3',
+                            type: 'error',
+                            stack: stack
+                        });
+                    });
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    $(function(){
+                        var stack = {"dir1": "down",
+                            "dir2": "left",
+                            "firstpos2": 10,
+                            "firstpos1": 10
+                        };
+                        new PNotify({
+                            title: '{{ message.tags|upper }}',
+                            text: '{{ error|escape }}',
+                            buttons: {
+                                closer: false,
+                                sticker: false
+                            },
+                            styling: 'bootstrap3',
+                            type: 'error',
+                            stack: stack
+                        });
+                    });
+                {% endfor %}
+            {% endif %}
+        </script>
+    {% endblock %}
+</head>
 
-    <body class="hold-transition skin-green">
+<body class="hold-transition skin-green">
 
-        <div id="background-base" class="wrapper">
-            <!-- Main Header -->
-            <header class="main-header">
-                <!-- Logo -->
-                <a href="{% url 'home' %}" class="logo">
-                    <!-- mini logo for sidebar mini 50x50 pixels -->
-                    <span class="logo-mini"><b>A.C</b></span>
-                    <!-- logo for regular state and mobile devices -->
-                    <span class="logo-lg"><img alt="Actio Capital" src="{% static 'img/logo.png' %}"></span>
-                </a>
-                <!-- Header Navbar -->
-                <nav class="navbar navbar-static-top" role="navigation"></nav>
-            </header>
-            <!-- Content Wrapper. Contains page content -->
-            <div id="content-login" class="content-wrapper">
-                <!-- Content Header (Page header) -->
-                {% block content %}
-                    <section class="content-header">
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div id="support" class="col-md-2 col-xs-4 text-center">
-                                    <p class="text-uppercase">
-                                        <strong> soporte banca por internet </strong>
-                                     </p>
-                                    <p>
-                                        Si tiene alguna duda o desea más información comuniquese al teléfono (xxxx)xxx-xx.xx
-                                    </p>
-                                </div>
+<div id="background-base" class="wrapper">
+    <!-- Main Header -->
+    <header class="main-header">
+        <!-- Logo -->
+        <a href="{% url 'home' %}" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>A.C</b></span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><img alt="Actio Capital" src="{% static 'img/logo.png' %}"></span>
+        </a>
+        <!-- Header Navbar -->
+        <nav class="navbar navbar-static-top" role="navigation"></nav>
+    </header>
+    <!-- Content Wrapper. Contains page content -->
+    <div id="content-login" class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        {% block content %}
+            <form action="" method="POST" autocomplete="off">
+                {% csrf_token %}
+                <section class="content-header">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div id="support" class="col-md-2 col-xs-4 text-center">
+                                <p class="text-uppercase">
+                                    <strong> soporte banca por internet </strong>
+                                </p>
+                                <p>
+                                    Si tiene alguna duda o desea más información comuniquese al teléfono (xxxx)xxx-xx.xx
+                                </p>
+                            </div>
 
-                                <div class="col-md-1 col-xs-2"></div>
+                            <div class="col-md-1 col-xs-2"></div>
 
-                                <div id="user-new" class="col-md-2 col-xs-4 text-center">
-                                    <p class="text-uppercase">
-                                        <strong> usuarios nuevos </strong>
-                                     </p>
-                                    <p>
-                                        Si está ingresando por primera vez a nuestro portal
-                                    </p>
-                                        <a  class="btn btn-default btn-group btn-apps" href="{% url 'registro' %}" type="button"> Registrese </a>
-                                </div>
+                            <div id="user-new" class="col-md-2 col-xs-4 text-center">
+                                <p class="text-uppercase">
+                                    <strong> usuarios nuevos </strong>
+                                </p>
+                                <p>
+                                    Si está ingresando por primera vez a nuestro portal
+                                </p>
+                                <a  class="btn btn-default btn-group btn-apps" href="{% url 'registro' %}" type="button"> Registrese </a>
+                            </div>
 
-                                <div class="col-md-2 col-xs-12">
-                                    <p></p>
-                                    <p></p>
-                                </div>
+                            <div class="col-md-2 col-xs-12">
+                                <p></p>
+                                <p></p>
+                            </div>
 
-                                <div id="login" class="text-center col-md-3 col-xs-5">
-                                    <p class="text-uppercase">
-                                        <strong> iniciar sesión </strong>
-                                     </p>
-                                    <i class="fa fa-credit-card"> </i> <span class="text-capitalize"> número de tarjeta </span>
-                                    <br>
-                                    <input class="form-control text-center" maxlength="18">
-                                    <i class="fa fa-lock"> </i> <span class="text-capitalize"> contraseña </span>
-                                    <br>
-                                    <input type="password" class="form-control text-center">
-                                    <a  id="a-login" href="{% url 'restablecer-pass' %}"> Olvidé mi contraseña </a>
-                                    <br>
-                                    <br>
-                                    <a class="btn btn-default btn-group btn-apps" type="button" href="{% url 'inicio' %}"> Entrar </a>
-                                </div>
+                            <div id="login" class="text-center col-md-3 col-xs-5">
+                                <p class="text-uppercase">
+                                    <strong> iniciar sesión </strong>
+                                </p>
+                                <i class="fa fa-credit-card"> </i> <span class="text-capitalize"> número de tarjeta </span>
+                                <br>
+                                {{ form.username }}
+                                <i class="fa fa-lock"> </i> <span class="text-capitalize"> contraseña </span>
+                                <br>
+                                {{ form.password }}
+                                <br>
+                                <a id="a-login" href="{% url 'restablecer-pass' %}"> Olvidé mi contraseña </a>
+                                <br>
+                                <br>
+                                <button class="btn btn-default btn-group btn-apps" type="submit"
+                                        name="button"> Entrar </button>
                             </div>
                         </div>
+                    </div>
 
-                    </section>
-                    <section class="content">
-                        <div class="container-fluid">
-                            <div id="warning" class="row">
-                                <div id="info" class="col-md-5 col-xs-6 text-center">
-{#                                    <i id="icon" class="fa fa-warning fa-4x"> </i>#}
-                                    <img id="icon" src="../static/img/warning50.png">
-                                    <span>
+                </section>
+            </form>
+
+            <section class="content">
+                <div class="container-fluid">
+                    <div id="warning" class="row">
+                        <div id="info" class="col-md-5 col-xs-6 text-center">
+                            {#                                    <i id="icon" class="fa fa-warning fa-4x"> </i>#}
+                            <img id="icon" src="../static/img/warning50.png">
+                            <span>
                                         <strong> Nunca te pediremos más de dos coordenadas de seguridad. </strong>
                                     </span>
-                                </div>
-                            </div>
                         </div>
-                    </section>
-                {% endblock %}
-            </div>
-            <!-- /.content-wrapper -->
-
-            <!-- Main Footer -->
-            <footer id="footer" class="main-footer">
-                <!-- To the right -->
-                <div class="pull-right hidden-xs">
-                    LA INFORMACIÓN CONTENIDA EN ESTE PORTAL ES CONFIDENCIAL.
+                    </div>
                 </div>
-                <!-- Default to the left -->
-                <strong>Copyright &copy; 2017 <a href="#">BANCO LOS ROQUES</a>.</strong> Todos Los Derechos Reservados.
-            </footer>
+            </section>
+        {% endblock %}
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Main Footer -->
+    <footer id="footer" class="main-footer">
+        <!-- To the right -->
+        <div class="pull-right hidden-xs">
+            LA INFORMACIÓN CONTENIDA EN ESTE PORTAL ES CONFIDENCIAL.
         </div>
-    </body>
+        <!-- Default to the left -->
+        <strong>Copyright &copy; 2017 <a href="#">BANCO LOS ROQUES</a>.</strong> Todos Los Derechos Reservados.
+    </footer>
+</div>
+</body>
 </html>

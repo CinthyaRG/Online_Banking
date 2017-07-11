@@ -1,8 +1,11 @@
-from django.http import JsonResponse
-from django.shortcuts import render
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse, HttpResponseRedirect
 from django.template.loader import get_template
+from django.urls import reverse_lazy
 from django.contrib.auth.models import User, Group
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.shortcuts import render, get_object_or_404
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -21,6 +24,13 @@ def groups():
     for group in nombres_grupo:
         if Group.objects.filter(name=group).count() == 0:
             Group.objects.create(name=group)
+
+
+def get_user(user):
+    if user.is_staff:
+        return 'inicio'
+    else:
+        return 'inicio'
 
 
 @ensure_csrf_cookie
@@ -168,22 +178,22 @@ def validate_pass(request):
         user.save()
 
         elem_sec = Elems_security(question1=q1,
-                                answer1=a1,
-                                question2=q2,
-                                answer2=a2)
+                                  answer1=a1,
+                                  question2=q2,
+                                  answer2=a2)
         elem_sec.save()
 
         pass_expires = datetime.datetime.today() + datetime.timedelta(days=180)
         customer = Users(user=user,
-                    ident=ci,
-                    elem_security=elem_sec,
-                    pass_expires=pass_expires)
+                         ident=ci,
+                         elem_security=elem_sec,
+                         pass_expires=pass_expires)
         customer.save()      
 
         key_expires = datetime.datetime.today() + datetime.timedelta(days=1)
         user_profile = UserProfile.objects.get(user=user)
-        user_profile.activation_key= activation_key
-        user_profile.key_expires= key_expires
+        user_profile.activation_key = activation_key
+        user_profile.key_expires = key_expires
         user_profile.save()
 
         data['correct'] = True
@@ -241,6 +251,35 @@ def send_email(subject, message_template, context, email):
     print("Se envió exitosamente el correo.")
 
 
+def email_login_successful(user):
+    usuario = user.get_full_name()
+    formato = "%d-%m-%y %I:%m:%S %p"
+    date_time = user.last_login.strftime(formato).split(" ")
+    date = date_time[0]
+    time = date_time[1] + " " + date_time[2]
+
+    c = {'usuario': usuario,
+         'fecha': date,
+         'hora': time}
+
+    subject = 'Actio Capital - Inicio de Sesión Exitoso'
+    message_template = 'email_login.html'
+    send_email(subject, message_template, c, user.email)
+
+
+def user_block(user):
+    try:
+        user.is_active = False
+        user.save()
+        c = {'usuario': user.get_full_name}
+        subject = 'Actio Capital - Cuenta Desactivada '
+        message_template = 'account_block.html'
+        email = user.email
+        send_email(subject, message_template, c, email)
+    except:
+        pass
+
+
 def create_token(num):
     chars = list('ABCDEFGHIJKLMNOPQRSTUVWYZabcdefghijklmnopqrstuvwyz0123456789')
     random.shuffle(chars)
@@ -251,13 +290,13 @@ def create_token(num):
     return key
 
 
-def new_Token(request, pk):
+def new_token(request, pk):
     if request.user.is_authenticated():
         return HttpResponseRedirect(reverse_lazy('logout'))
 
     user = User.objects.get(pk=pk)
     UserProfile.objects.filter(user=user).delete()
-    key = create_token()
+    key = create_token(8)
     key_expires = datetime.datetime.today() + datetime.timedelta(days=1)
     new_profile = UserProfile(user=user, activation_key=key,
                               key_expires=key_expires)
@@ -270,10 +309,10 @@ def new_Token(request, pk):
         email = user.email
         send_email(subject, message_template, c, email)
     except:
-        render(request, 'register_success.html', c)
+        render(request, 'register_success.html')
     
     new_profile.save()
-    return render(request, 'register_success.html', c)
+    return render(request, 'register_success.html')
 
 
 def register_confirm(request, activation_key):
@@ -307,12 +346,83 @@ def register_confirm(request, activation_key):
     return render(request, 'acc-active.html')
 
 
+def authenticate_user(username=None):
+    try:
+        user = User.objects.get(username=username)
+        if user is not None:
+            return user
+    except User.DoesNotExist:
+        return None
+
+
+def user_login(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(reverse_lazy('salir'))
+
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            msg_error = " Recuerde: Al realizar tres intentos erróneos su cuenta será bloqueada."
+            error_username = "Tu número de tarjeta  o contraseña no son correctos." + msg_error
+            user_auth = authenticate_user(username)
+
+            if user_auth is not None:
+                users = User.objects.get(username=username)
+                user_profile = get_object_or_404(UserProfile, user=users)
+                if users.is_active and user_profile.intent < 3:
+                    user = authenticate(username=users.username,
+                                        password=password)
+                    if user:
+                        login(request, user)
+                        email_login_successful(user)
+                        user_profile.intent = 0
+                        user_profile.save()
+                        template = get_user(users)
+                        return HttpResponseRedirect(reverse_lazy(template))
+                    else:
+                        form.add_error(None, error_username)
+
+                        today = datetime.datetime.today().date()
+
+                        if user_profile.date_intent != today:
+                            user_profile.intent = 1
+                            user_profile.date_intent = today
+                        else:
+                            user_profile.intent = user_profile.intent + 1
+
+                        user_profile.save()
+                elif user_profile.intent == 3:
+                    msg = "Su cuenta ha sido bloqueada. Comuniquese con atención al cliente" \
+                          " para iniciar el proceso de desbloqueo."
+                    print(msg)
+                    form.add_error(None, msg)
+                    user_block(users)
+                else:
+                    msg = "Aún no ha activado su cuenta. Por favor revise su correo."
+                    form.add_error(None, msg)
+                    user = None
+            else:
+                form.add_error(None, error_username)
+        else:
+            context = {'form': form}
+            return render(request, 'base-index.html', context)
+    else:
+        form = LoginForm()
+
+    context = {'form': form, 'host': request.get_host()}
+    return render(request, 'base-index.html', context)
+
+
 class Home(TemplateView):
     template_name = 'base-index.html'
 
 
-class Home_Client(TemplateView):
+class Home_Client(LoginRequiredMixin, TemplateView):
     template_name = 'base.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
 
 
 class Logout(TemplateView):
