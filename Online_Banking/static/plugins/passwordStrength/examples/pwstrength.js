@@ -105,11 +105,11 @@ try {
     };
 
     validation.wordOneSpecialChar = function (options, word, score) {
-        return word.match(/.[!,@,#,$,%,\^,&,*,?,_,~]/) && score;
+        return word.match(/.[!,@,#,$,%,\^,&,*,?,.,_,~]/) && score;
     };
 
     validation.wordTwoSpecialChar = function (options, word, score) {
-        return word.match(/(.*[!,@,#,$,%,\^,&,*,?,_,~].*[!,@,#,$,%,\^,&,*,?,_,~])/) && score;
+        return word.match(/(.*[!,@,#,$,%,\^,&,*,?,.,_,~].*[!,@,#,$,%,\^,&,*,?,.,_,~])/) && score;
     };
 
     validation.wordUpperLowerCombo = function (options, word, score) {
@@ -206,7 +206,7 @@ defaultOptions.rules.activated = {
     wordNotEmail: true,
     wordLength: true,
     wordSimilarToUsername: true,
-    wordSequences: true,
+    wordSequences: false,
     wordTwoCharacterClasses: false,
     wordRepetitions: false,
     wordLowercase: true,
@@ -250,7 +250,7 @@ defaultOptions.ui.viewports = {
     verdict: undefined,
     errors: undefined
 };
-defaultOptions.ui.scores = [14, 26, 35, 45];
+defaultOptions.ui.scores = [15, 20, 25, 30];
 
 // Source: src/ui.js
 

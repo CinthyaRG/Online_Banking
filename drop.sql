@@ -1,4 +1,7 @@
 drop table ob_app_users CASCADE;
+drop table ob_app_card_coor CASCADE;     
+drop table ob_app_elems_security CASCADE;
+drop table ob_app_userprofile CASCADE;  
 drop table auth_group CASCADE;
 drop table auth_group_permissions CASCADE;
 drop table auth_permission CASCADE;      

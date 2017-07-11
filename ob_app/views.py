@@ -99,8 +99,7 @@ def validate_email(request):
 def validate_cod(request):
     username = request.GET.get('username', None)
     token = request.GET.get('cod', None)
-    print(username)
-    print(token)
+
     data = {
         'user_exists': User.objects.filter(username=username).exists()
     }
@@ -128,7 +127,68 @@ def validate_cod(request):
                 data['error'] = 'El código que ingresó ya expiró. Presione Renviar Código ' \
                                 'para solicitar uno nuevo.'
     else:
-        data['error'] = 'Ha ocurrido un error por favor reingrese su email.'
+        data['error'] = 'Ha ocurrido un error por favor reingrese sus datos.'
+
+    return JsonResponse(data)
+
+
+@ensure_csrf_cookie
+def validate_pass(request):
+    username = request.GET.get('username', None)
+    q1 = request.GET.get('question1', None)
+    q2 = request.GET.get('question2', None)
+    a1 = request.GET.get('answer1', None)
+    a2 = request.GET.get('answer2', None)
+    password = request.GET.get('password', None)
+    ci = request.GET.get('ci', None)
+
+    data = {
+        'user_exists': User.objects.filter(username=username).exists()
+    }
+
+    if data['user_exists']:
+        user = User.objects.get(username=username)
+        
+        try:
+            activation_key = create_token(8)
+            while UserProfile.objects.filter(activation_key=activation_key).count() > 0:
+                activation_key = create_token(8)
+            c = {'usuario': user.get_full_name,
+                 'key': activation_key,
+                 'host': request.META['HTTP_HOST']}
+            subject = 'Actio Capital - Activación de cuenta'
+            message_template = 'register-success-email.html'
+            email = user.email
+            send_email(subject, message_template, c, email)
+        except:
+            data['correct'] = False
+            return JsonResponse(data)
+
+        user.set_password(password)
+        user.save()
+
+        elem_sec = Elems_security(question1=q1,
+                                answer1=a1,
+                                question2=q2,
+                                answer2=a2)
+        elem_sec.save()
+
+        pass_expires = datetime.datetime.today() + datetime.timedelta(days=180)
+        customer = Users(user=user,
+                    ident=ci,
+                    elem_security=elem_sec,
+                    pass_expires=pass_expires)
+        customer.save()      
+
+        key_expires = datetime.datetime.today() + datetime.timedelta(days=1)
+        user_profile = UserProfile.objects.get(user=user)
+        user_profile.activation_key= activation_key
+        user_profile.key_expires= key_expires
+        user_profile.save()
+
+        data['correct'] = True
+    else:
+        data['error'] = 'Ha ocurrido un error por favor reingrese sus datos.'
 
     return JsonResponse(data)
 
@@ -166,45 +226,7 @@ def resend_email(request):
         user_profile.save()
 
     else:
-        data['error'] = 'Ha ocurrido un error por favor reingrese su email.'
-
-    return JsonResponse(data)
-
-
-@ensure_csrf_cookie
-def questions_customer(request):
-    username = request.GET.get('username', None)
-    token = request.GET.get('cod', None)
-    print(username)
-    print(token)
-    data = {
-        'user_exists': User.objects.filter(username=username).exists()
-    }
-
-    if data['user_exists']:
-        user = User.objects.get(username=username)
-
-        try:
-            user_profile = UserProfile.objects.get(user=user, activation_key=token)
-        except UserProfile.DoesNotExist:
-            data['correct'] = False
-            data['error'] = 'El código que ingresó es incorrecto.'
-            return JsonResponse(data)
-
-        time = datetime.datetime.today()
-
-        if user_profile.key_expires < time:
-            data['profile_expires'] = True
-            data['correct'] = False
-        else:
-            data['correct'] = True
-
-        if not(data['correct']):
-            if data['profile_expires']:
-                data['error'] = 'El código que ingresó ya expiró. Presione Renviar Código ' \
-                                'para solicitar uno nuevo.'
-    else:
-        data['error'] = 'Ha ocurrido un error por favor reingrese su email.'
+        data['error'] = 'Ha ocurrido un error por favor reingrese sus datos.'
 
     return JsonResponse(data)
 
@@ -229,6 +251,62 @@ def create_token(num):
     return key
 
 
+def new_Token(request, pk):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(reverse_lazy('logout'))
+
+    user = User.objects.get(pk=pk)
+    UserProfile.objects.filter(user=user).delete()
+    key = create_token()
+    key_expires = datetime.datetime.today() + datetime.timedelta(days=1)
+    new_profile = UserProfile(user=user, activation_key=key,
+                              key_expires=key_expires)
+    try:
+        c = {'usuario': user.get_full_name,
+             'key': key,
+             'host': request.META['HTTP_HOST']}
+        subject = 'Actio Capital - Código Activación de cuenta'
+        message_template = 'register-success-email.html'
+        email = user.email
+        send_email(subject, message_template, c, email)
+    except:
+        render(request, 'register_success.html', c)
+    
+    new_profile.save()
+    return render(request, 'register_success.html', c)
+
+
+def register_confirm(request, activation_key):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(reverse_lazy('logout'))
+
+    user_profile = get_object_or_404(UserProfile,
+                                     activation_key=activation_key)
+    user = user_profile.user
+
+    time = datetime.datetime.today()
+
+    if user_profile.key_expires < time:
+        return HttpResponseRedirect(reverse_lazy('new_Token',
+                                                 kwargs={'pk': user.pk}))
+
+    c = {'usuario': user.get_full_name,
+         'host': request.META['HTTP_HOST']}
+
+    if request.method == 'GET':
+        user.is_active = True
+        user.save()
+        try:
+            subject = 'Actio Capital - Cuenta Activada'
+            message_template = 'account-active.html'
+            email = user.email
+            send_email(subject, message_template, c, email)
+        except:
+            pass
+
+    return render(request, 'acc-active.html')
+
+
 class Home(TemplateView):
     template_name = 'base-index.html'
 
@@ -245,6 +323,10 @@ class Register_success(TemplateView):
     template_name = 'register_success.html'
 
 
+class Account_activate(TemplateView):
+    template_name = 'acc-active.html'
+
+
 class Restore_pass_success(TemplateView):
     template_name = 'restore_pass_success.html'
 
@@ -253,15 +335,8 @@ class Register(TemplateView):
     template_name = 'register.html'
 
 
-# def register(request):
-#
-#     if request.method == 'POST':
-#         form = EmailForm(request.POST)
-#
-#     else:
-#         form = ""
-#     context = {'form': form, 'host': request.get_host()}
-#     return render(request, 'register.html', context)
+class Active(TemplateView):
+    template_name = 'account-active.html'
 
 
 class Restore_pass(TemplateView):

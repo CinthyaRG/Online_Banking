@@ -229,7 +229,9 @@
                 </h4>
                 <div class="box-body">
                     <dl class="dl-horizontal label-input">
-                        <p> Tiene dos minutos para ingresar el código.</p>
+                        <p> Tiene dos minutos para ingresar el código enviado a 
+                        <strong id="email_cust">                       
+                        </strong>.</p>
                         <div class="row">
                             <div class="col-md-4 col-xs-4">
                                 <label class="pull-right">
@@ -308,7 +310,7 @@
                                        onclick="remove_count('#span_quest1')">
                                 <span id="span_quest1" class="counter"></span>
                             </div>
-                            <div class="col-md-11 col-xs-10 error-question">
+                            <div class="col-md-9 col-xs-9 error-question">
                                 <p id="error-q1" class="text-danger"> </p>
                             </div>
                         </div>
@@ -324,11 +326,11 @@
                                        onclick="remove_count('#span_answ1')">
                                 <span id="span_answ1" class="counter"></span>
                             </div>
-                            <div class="col-md-11 col-xs-10 error-question">
+                            <div class="col-md-9 col-xs-9 error-question">
                                 <p id="error-a1" class="text-danger"> </p>
                             </div>
                         </div>
-                        <div class="row questions">
+                        <div class="row">
                             <div class="col-md-3 col-xs-3">
                                 <label class="pull-right">
                                     <span class="text-danger"> * </span> Pregunta 2: </label>
@@ -340,7 +342,7 @@
                                        onclick="remove_count('#span_quest2')">
                                 <span id="span_quest2" class="counter"></span>
                             </div>
-                            <div class="col-md-11 col-xs-10 error-question">
+                            <div class="col-md-9 col-xs-9 error-question">
                                 <p id="error-q2" class="text-danger"> </p>
                             </div>
                         </div>
@@ -356,12 +358,12 @@
                                        onclick="remove_count('#span_answ2')">
                                 <span id="span_answ2" class="counter"></span>
                             </div>
-                            <div class="col-md-11 col-xs-10 error-question">
+                            <div class="col-md-9 col-xs-9 error-question">
                                 <p id="error-a2" class="text-danger"> </p>
                             </div>
                         </div>
                         <div class="row">
-                            <div id="error_step3" class="col-md-11 center-block">
+                            <div id="error_step4" class="col-md-11 center-block">
                             </div>
                         </div>
                     </dl>
@@ -370,8 +372,8 @@
             <div class="row">
                 <div class="col-md-9 col-xs-8"></div>
                 <div class="col-md-3 col-xs-4">
-                    <a id="btn-next" class="btn btn-default btn-group btn-apps" type="button"
-                       onclick="validate_questions()"> Siguiente </a>
+                    <a id="btn-next" class="btn btn-default btn-group btn-apps" 
+                    type="button" onclick="validate_questions()"> Siguiente </a>
                 </div>
             </div>
         </div>
@@ -416,30 +418,34 @@
                         <div class="row">
                             <div class="col-md-2 col-xs-2"></div>
                             <div class="col-md-10 col-xs-10 rows">
-                                <span id="min-carac" class="text-danger">
+                                <p id="min-carac" class="text-danger">
                                     La contraseña debe contener mínimo 8 caracteres
-                                </span>
-                                <span id="carac" class="text-danger">
+                                </p>
+                                <p id="carac" class="text-danger">
                                     La contraseña debe contener al menos un caracter
                                     en mayúscula y un caracter en minúscula
-                                </span>
-                                <span id="repeat-carac" class="text-danger">
+                                </p>
+                                <p id="repeat-carac" class="text-danger">
                                     La contraseña no debe tener caracteres repetidos
-                                </span>
-                                <span id="num-carac" class="text-danger">
+                                </p>
+                                <p id="num-carac" class="text-danger">
                                     La contraseña debe contener al menos un caracter numérico
-                                </span>
-                                <span id="spec-carac" class="text-danger">
+                                </p>
+                                <p id="spec-carac" class="text-danger">
                                     La contraseña debe contener al menos un caracter especial como los siguientes: $@!.#_*
-                                </span>
-                                <span id="pers-carac" class="text-danger">
+                                </p>
+                                <p id="pers-carac" class="text-danger">
                                     La contraseña no debe contener sus datos 
                                     personales (núm de teléfono, fecha de nacimiento,
                                     cédula, nombre o apellido)
-                                </span>
-                                <span id="confirm" class="text-danger">
+                                </p>
+                                <p id="confirm" class="text-danger">
                                     La confirmación de la contraseña debe ser igual a la contraseña
-                                </span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="error_step5" class="col-md-11 center-block">
                             </div>
                         </div>
                     </dl>
@@ -451,7 +457,7 @@
                     <a id="btn-back" class="btn btn-default btn-group btn-apps"
                        type="button" onclick="pagBack(5)"> Anterior </a>
                     <a id="btn-next" class="btn btn-default btn-group btn-apps"
-                       type="button" href="{% url 'registro-exitoso' %}"> Confirmar Registro </a>
+                       type="button" onclick="validate_pass()"> Confirmar Registro </a>
                 </div>
             </div>
         </div>

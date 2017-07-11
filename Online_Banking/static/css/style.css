@@ -177,9 +177,6 @@ div[role="tooltip"] {
 #quest1, #quest2, #answ1, #answ2, #quest {
     width: 250px;
 }
-.questions {
-    margin-top: 25px;
-}
 #help-pass {
     position: relative;
     bottom: 29px;
@@ -487,5 +484,5 @@ div[role="tooltip"] {
 }
 .error-question {
     min-height: 30px;
-    margin-left: 150px;
+    margin-left: 60px;
 }

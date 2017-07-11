@@ -24,6 +24,10 @@ urlpatterns = [
         Register_success.as_view(),
         name='registro-exitoso'),
     url(
+        r'^cuenta-activada/',
+        Account_activate.as_view(),
+        name='cuenta-activada'),
+    url(
         r'^nueva-pass-exitosa',
         Restore_pass_success.as_view(),
         name='nueva-pass-exitosa'),
@@ -44,13 +48,21 @@ urlpatterns = [
         validate_cod,
         name='validar-cod'),
     url(
+        r'^ajax/validate-pass/$',
+        validate_pass,
+        name='validar-pass'),
+    url(
         r'^ajax/resend-email/$',
         resend_email,
         name='reenvio-confirmacion'),
     url(
-        r'^ajax/questions/$',
-        questions_customer,
-        name='preg-seguridad'),
+        r'^activate/(?P<activation_key>\w+)/$',
+        register_confirm,
+        name='register_confirm'),
+    url(
+        r'^newToken/(?P<pk>\d+)/$',
+        new_Token,
+        name='new_Token'),
     url(
         r'^restablecer-pass',
         Restore_pass.as_view(),

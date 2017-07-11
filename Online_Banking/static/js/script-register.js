@@ -221,6 +221,8 @@ function validate_email() {
                     effect_error("#error_step2");
                 }
                 if (data.envio) {
+                    $("#cod").val('');
+                    $("#email_cust").text(email.val());
                     pagNext(2);
                 }
                 else {
@@ -250,7 +252,6 @@ function validate_cod(elem) {
 
     if (elem === 'resend') {
         url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/resend-email/";
-        console.log(url);
         $.ajax({
             url: url,
             headers: {'X-CSRFToken': getCookie('csrftoken')},
@@ -264,7 +265,7 @@ function validate_cod(elem) {
                 if (data.user_exists) {
                     if (data.envio) {
                         restore_count_circle();
-                        $("#error_step3").append('<p class="text-danger margin-error">'+
+                        $("#error_step3").append('<p class="text-success margin-error">'+
                             'Se ha enviado exitosamente un nuevo código a su correo.' +'</p>');
                         effect_error("#error_step3");
                     }
@@ -275,11 +276,10 @@ function validate_cod(elem) {
                     }
                 }
                 else {
-                    $("#error_step2").append('<p class="text-danger margin-error">'+
+                    $("#error").append('<p class="text-danger margin-error">'+
                         data.error +'</p>');
-                    pagBack(3);
-                    $("#email").val('');
-                    effect_error("#error_step2");
+                    pagBack(2);
+                    effect_error("#error");
                 }
             },
             error: function (data) {
@@ -318,11 +318,10 @@ function validate_cod(elem) {
                         }
                     }
                     else {
-                        $("#error_step2").append('<p class="text-danger margin-error">'+
+                        $("#error").append('<p class="text-danger margin-error">'+
                             data.error +'</p>');
-                        pagBack(3);
-                        $("#email").val('');
-                        effect_error("#error_step2");
+                        pagBack(2);
+                        effect_error("#error");
                     }
                 },
                 error: function (data) {
@@ -335,35 +334,37 @@ function validate_cod(elem) {
 
 function validate_questions() {
     var a1 = $("#answ1");
-    var a2 = $("#nansw2");
+    var a2 = $("#answ2");
     var q1 = $("#quest1");
     var q2 = $("#quest2");
     var msj = "Los campos presentan errores por favor " +
         "verifíquelos para continuar con el registro.";
 
-    $("#error_step3").empty();
+    $("#error_step4").empty();
 
     if ( (a1.hasClass('errors')) || (a1.val() === "") || 
         (a2.hasClass('errors')) || (a2.val() === "") || 
         (q1.hasClass('errors')) || (q1.val() === "") || 
         (q2.hasClass('errors')) || (q2.val() === "") ){
-        $("#error_step3").append('<p class="text-danger margin-error">'+
+        $("#error_step4").append('<p class="text-danger margin-error">'+
             msj +'</p>');
-        effect_error("#error_step3");
+        effect_error("#error_step4");
     }
     else {
-        pagNext(3);
+        pagNext(4);
     }
 }
 
 function validate_pass() {
     var password = $("#password");
     var confirm = $("#confirm-pass");
-    var first_name = $("#name_customer");
-    var last_name = $("#last-name_customer");
-    var ci = $("#ci_customer");
+    var a1 = $("#answ1").val();
+    var a2 = $("#answ2").val();
+    var q1 = $("#quest1").val();
+    var q2 = $("#quest2").val();
     var username = $("#numtarj").val();
-    var msj = "Este campo es obligatorio";
+    var ci_cust = $("#ci_customer").text()
+    var msj = "Este campo presenta errores";
     var msj_error = "Hubo un error en la conexión intente de nuevo. Gracias.";
     var path = window.location.href.split('/');
     var url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/validate-pass/";
@@ -374,33 +375,42 @@ function validate_pass() {
     else if ( (confirm.hasClass('errors')) || (confirm.val() === "")) {
         $('#error-conf-pass').text(msj);
     }
+    else if ( (confirm.val() !== password.val())) {
+        $('#confirm').addClass('text-danger');
+    }
     else {
         $.ajax({
             url: url,
             headers: {'X-CSRFToken': getCookie('csrftoken')},
             data: {
-                email: email.val(),
-                first_name: first_name.text(),
-                last_name: last_name.text(),
-                ci: ci.text(),
+                question1: q1,
+                question2: q2,
+                answer1: a1,
+                answer2: a2,
+                password: password.val(),
+                ci: ci_cust,
                 username: username
             },
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                alert("EXITO");
+                alert("EXITO ultimo paso");
+                alert(data.correct);
                 if (data.user_exists) {
-                    $("#error_step2").append('<p class="text-danger margin-error">'+
+                    if (data.correct) {
+                        location.href= path[0]+"/"+path[1]+"/"+path[2]+"/registro-exitoso";
+                    }
+                    else {
+                       $("#error_step5").append('<p class="text-danger margin-error">'+
                         msj_error +'</p>');
-                    effect_error("#error_step2");
-                }
-                if (data.envio) {
-                    pagNext(2);
+                        effect_error("#error_step5"); 
+                    }
                 }
                 else {
-                    $("#error_step2").append('<p class="text-danger margin-error">'+
-                        msj_error +'</p>');
-                    effect_error("#error_step2");
+                    $("#error").append('<p class="text-danger margin-error">'+
+                        data.error +'</p>');
+                    effect_error("#error");
+                    pagBack(2)
                 }
 
             },
