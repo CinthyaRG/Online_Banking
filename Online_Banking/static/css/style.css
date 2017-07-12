@@ -93,6 +93,12 @@ div > div > input {
 #step4 > div[class="box"] {
     min-height: 365px;
 }
+#box1 {
+    min-height: 255px !important;
+}
+#box2 {
+    min-height: 223px !important;
+}
 .step > div > h4 > hr {
     border-radius: 5px;
     margin-top: 3px;

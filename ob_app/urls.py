@@ -60,6 +60,10 @@ urlpatterns = [
         resend_email,
         name='reenvio-confirmacion'),
     url(
+        r'^ajax/validate-questions/$',
+        validate_quest,
+        name='validar-preguntas'),
+    url(
         r'^activate/(?P<activation_key>\w+)/$',
         register_confirm,
         name='register_confirm'),

@@ -45,6 +45,19 @@ def validate_user(request):
         data['error'] = "Usted ya se encuentra registrado. Si olvidó su clave " \
                         "ingrese a Olvidé mi contraseña"
 
+        user = Users.objects.get(ident=ci)
+        try:
+            quest1 = user.elem_security.question1
+            quest2 = user.elem_security.question2
+        except:
+            return JsonResponse(data)
+
+        num = random.randint(1, 2)
+        if num == 1:
+            data['quest'] = quest1
+        else:
+            data['quest'] = quest2
+
     return JsonResponse(data)
 
 
@@ -55,7 +68,7 @@ def validate_email(request):
     last_name = request.GET.get('last_name', None)
     ci = request.GET.get('ci', None)
     username = request.GET.get('username', None)
-    print(username)
+
     data = {
         'user_exists': Users.objects.filter(ident=ci).exists()
     }
@@ -234,6 +247,29 @@ def resend_email(request):
         user_profile.activation_key = activation_key
         user_profile.key_expires = key_expires
         user_profile.save()
+
+    else:
+        data['error'] = 'Ha ocurrido un error por favor reingrese sus datos.'
+
+    return JsonResponse(data)
+
+
+@ensure_csrf_cookie
+def validate_quest(request):
+    question = request.GET.get('question', None)
+    answer = request.GET.get('answer', None)
+    username = request.GET.get('username', None)
+
+    data = {
+        'user_exists': User.objects.filter(username=username).exists()
+    }
+
+    if data['user_exists']:
+        user = User.objects.get(username=username)
+        customer = Users.objects.get(user=user)
+
+        # if customer.elem_security.question1 == question :
+        #     if customer.elem_security.
 
     else:
         data['error'] = 'Ha ocurrido un error por favor reingrese sus datos.'

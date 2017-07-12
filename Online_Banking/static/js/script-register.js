@@ -164,6 +164,143 @@ function validation(a,b,c,d,e,f,g) {
                                 $("#error").append('<p class="text-danger margin-error">'+
                                     data.error +'</p>');
                                 effect_error("#error");
+                                if (!(data.product)){
+                                    $(a).addClass('errors');
+                                }
+                                if (!(data.pin)){
+                                    $(b).addClass('errors');
+                                }
+                                if (!(data.ccv)){
+                                    $(c).addClass('errors');
+                                }
+                                if (!(data.month)){
+                                    $(d).addClass('errors');
+                                }
+                                if (!(data.year)){
+                                    $(e).addClass('errors');
+                                }
+                                if (!(data.ci)){
+                                    $(g).addClass('errors');
+                                }
+                            }
+                        },
+                        error: function (data) {
+                            alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+                        }
+                    });
+                }
+            },
+            error: function (data) {
+                alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+            }
+        });
+
+    }
+}
+
+function validation_forgot(a,b,c,d,e,f) {
+    var numtarj = $(a).val();
+    var ccv = $(b).val();
+    var month = $(c).val();
+    var year = $(d).val();
+    var ci = $(e).val()+$(f).val();
+    var msj = "Este campo es obligatorio";
+    var path = window.location.href.split('/');
+    var url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/validate-user/";
+    var url_api = path[0]+"/"+path[1]+"/"+"localhost:8001"+"/ajax/validate_data_forgot/";
+
+    $("#error").empty();
+
+    if ( ($(a).hasClass('errors')) || ($(b).hasClass('errors')) || ($(f).hasClass('errors')) ){
+        $("#error").append('<p class="text-danger margin-error">'+
+            'Los campos presentan errores por favor ' +
+            'verifíquelos para continuar con el registro.' +'</p>');
+        effect_error("#error");
+
+    }
+
+    else if ( (numtarj === "") || (ccv === "") || ($(f).val() === "")) {
+        if (numtarj === ""){
+            $(a).css({border: '2px solid rgba(128,10,11,0.81)'});
+            $("#error-num-tarj").text(msj);
+        }
+        if (ccv === ""){
+            $(b).css({border: '2px solid rgba(128,10,11,0.81)'});
+            $("#error-ccv").text(msj);
+        }
+        if ($(f).val() === "") {
+            $(f).css({border: '2px solid rgba(128,10,11,0.81)'});
+            $("#error-ci").text(msj);
+        }
+        $("#error-general").text("Los campos presentan errores por favor " +
+            "verifíquelos para continuar con el registro.");
+    }
+    else {
+        $.ajax({
+            url: url,
+            origin: 'http://127.0.0.1:8000',
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            data: {
+                ci: ci
+            },
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                alert("EXITO");
+                if (!(data.user_exists)) {
+                    $("#error").append('<p class="text-danger margin-error">'+
+                        'Usted no se encuentra registrado. Por favor regístrese ' +
+                        'para disfrutar de nuestros servicios.' +'</p>');
+                    effect_error("#error");
+                }
+                else {
+                    console.log('entro en else');
+                    $('#quest-sec').text(data.quest);
+                    $.ajax({
+                        url: url_api,
+                        origin: 'localhost:8000',
+                        headers: {'X-CSRFToken': getCookie('csrftoken')},
+                        data: {
+                            numtarj: numtarj,
+                            ccv: ccv,
+                            month: month,
+                            year: year,
+                            ci: ci
+                        },
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            alert("EXITO ajax api");
+                            if (data.correct) {
+                                $("#name_customer").text(data.customer_name);
+                                $("#last-name_customer").text(data.customer_last);
+                                $("#ci_customer").text(data.customer_ident);
+                                $("#phone-home").text(data.phone_home);
+                                $("#cellphone").text(data.cellphone);
+                                $("#phone-office").text(data.phone_office);
+                                $("#birthday").text(data.birthday);
+                                pagNext(1);
+                            }
+                            else {
+                                $("#error").append('<p class="text-danger margin-error">'+
+                                    data.error +'</p>');
+                                effect_error("#error");
+
+                                if (!(data.product)){
+                                    $(a).addClass('errors');
+                                }
+                                if (!(data.ccv)){
+                                    $(b).addClass('errors');
+                                }
+                                if (!(data.month)){
+                                    $(c).addClass('errors');
+                                }
+                                if (!(data.year)){
+                                    $(d).addClass('errors');
+                                }
+                                if (!(data.ci)){
+                                    $(f).addClass('errors');
+                                }
                             }
                         },
                         error: function (data) {
@@ -215,9 +352,10 @@ function validate_email() {
             success: function (data) {
                 alert("EXITO");
                 if (data.user_exists) {
-                    $("#error_step2").append('<p class="text-danger margin-error">'+
-                        msj_error +'</p>');
-                    effect_error("#error_step2");
+                    $("#error").append('<p class="text-danger margin-error">'+
+                        'Lo sentimos, ha ocurrido un error. Ingrese sus datos nuevamente.' +'</p>');
+                    effect_error("#error");
+                    pagBack(2);
                 }
                 if (data.envio) {
                     $("#cod").val('');
@@ -228,6 +366,7 @@ function validate_email() {
                     $("#error_step2").append('<p class="text-danger margin-error">'+
                         msj_error +'</p>');
                     effect_error("#error_step2");
+                    $(email).addClass('errors');
                 }
 
             },
@@ -318,6 +457,7 @@ function validate_cod(elem) {
                             $("#error_step3").append('<p class="text-danger margin-error">'+
                                 data.error +'</p>');
                             effect_error("#error_step3");
+                            $(cod).addClass('errors');
                         }
                     }
                     else {
@@ -361,6 +501,61 @@ function validate_questions() {
     }
     else {
         pagNext(4);
+    }
+}
+
+function validate_ques() {
+    var a1 = $("#answer");
+    var quest = $('#quest-sec').text();
+    var username = $("#numtarj").val();
+    var msj = "Los campos presentan errores por favor " +
+        "verifíquelos para continuar con el registro.";
+    var path = window.location.href.split('/');
+    var url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/validate-questions/";
+
+    $("#error_step2").empty();
+
+    if ( (a1.hasClass('errors')) || (a1.val() === "") ||
+        (a1.val() === quest) ) {
+        $("#error_step2").append('<p class="text-danger margin-error">'+
+            msj +'</p>');
+        effect_error("#error_step2");
+    }
+    else {
+        $.ajax({
+            url: url,
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            data: {
+                question: quest,
+                answer: a1.val(),
+                username: username
+            },
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                if (data.user_exists) {
+                    if (data.correct) {
+                        pagNext(2);
+                    }
+                    else {
+                       $("#error_step2").append('<p class="text-danger margin-error">'+
+                        msj_error +'</p>');
+                        effect_error("#error_step2");
+                        $(a1).addClass('errors');
+                    }
+                }
+                else {
+                    $("#error").append('<p class="text-danger margin-error">'+
+                        data.error +'</p>');
+                    effect_error("#error");
+                    pagBack(2)
+                }
+
+            },
+            error: function (data) {
+                alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+            }
+        });
     }
 }
 

@@ -4,17 +4,18 @@
 
 $(document).ready(function () {
     var regexNum =  /[0-9]+/;
-    var regexRepeat = /(.)\1{1,}/;
+    var regexRepeat = /(.)\1{2,}/;
     var regexMay = /[A-Z]+/;
     var regexMin = /[a-z]+/;
     var regexEmail = /^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,3})$/;
-    var regexSpecial = /[$@!%.#_*?&]+/; 
+    var regexSpecial = /[$@!%.#_*?&]+/;
     var numtarj = '#numtarj';
     var pin = '#pin';
     var ccv = '#ccv';
     var ci = '#ci';
     var email = '#email';
     var cod = '#cod';
+    var answer = '#answer';
     var q1 = '#quest1';
     var q2 = '#quest2';
     var a1 = '#answ1';
@@ -32,7 +33,14 @@ $(document).ready(function () {
     var msj_num = "Sólo se admiten números";
     var msj_email = "Ingrese un email válido";
     var msj = "Este campo es obligatorio";
-    
+
+    $('#month').on('focus', function () {
+        $('#month').removeClass('errors');
+    });
+
+    $('#year').on('focus', function () {
+        $('#year').removeClass('errors');
+    });
 
     $(numtarj).on('focusout', function () {
         if ( $(numtarj).val() !== ""){
@@ -205,13 +213,39 @@ $(document).ready(function () {
         $("#error_step3").empty();
     });
 
-    $(q1).on('focusout', function () {
+    $(answer).keyup( function () {
+        if ( $(answer).val() !== ""){
+            if ( $(answer).val() === $('#quest-sec').text() ) {
+                $('#error-answer').text('La respuesta no puede ' +
+                    'ser igual a la pregunta.');
+                $(answer).addClass('errors');
+            }
+            else if ( data_customer($(answer).val()) ) {
+                $('#error-answer').text('La respuesta no puede ' +
+                    'contener ninguno de sus datos personales.');
+                $(answer).addClass('errors');
+            }
+            else{
+                $(answer).css({border: '2px solid #d2d6de'});
+                $(answer).removeClass('errors');
+                $('#error-answer').empty();
+            }
+        }
+        else {
+            $('#error-answer').text(msj);
+            $(answer).addClass('errors');
+        }
+    });
+
+    $(answer).on('focus', function () {
+        $(answer).removeClass('errors');
+        $(answer).css({'border-color': '#8AB7B6'});
+        $('#error-answer').empty();
+    });
+
+    $(q1).keyup( function () {
         if ( $(q1).val() !== ""){
-            console.log("quest1");
-            console.log($(q2).val());
-            console.log($(q1).val());
-            console.log($(q2).val() == $(q1).val());
-            if ( $(q2).val() == $(q1).val()) {
+            if ( $(q2).val() === $(q1).val()) {
                 $('#error-q1').text('La pregunta 1 no puede ' +
                     'ser igual a la pregunta 2.');
                 $(q1).addClass('errors');
@@ -234,12 +268,8 @@ $(document).ready(function () {
         $('#error-q1').empty();
     });
 
-    $(a1).on('focusout', function () {
+    $(a1).keyup( function () {
         if ( $(a1).val() !== ""){
-            console.log("answ1");
-            console.log($(a1).val());
-            console.log($(q1).val());
-            console.log($(a1).val() == $(q1).val());
             if ( $(a1).val() === $(q1).val()) {
                 $('#error-a1').text('La respuesta no puede ' +
                     'ser igual a la pregunta.');
@@ -272,12 +302,8 @@ $(document).ready(function () {
         }
     });
 
-    $(q2).on('focusout', function () {
+    $(q2).keyup( function () {
         if ( $(q2).val() !== ""){
-            console.log("quest2");
-            console.log($(q2).val());
-            console.log($(q1).val());
-            console.log($(q2).val() == $(q1).val());
             if ( $(q2).val() === $(q1).val()) {
                 console.log('entro puto muestra el error');
                 $('#error-q2').text('La pregunta 2 no puede ' +
@@ -307,14 +333,8 @@ $(document).ready(function () {
         $('#error-q2').empty();
     });
 
-    $(a2).on('focusout', function () {
-        if ( $(a2).val() !== ""){  
-            console.log("answ2"); 
-            console.log($(a2).val());
-            console.log($(a1).val());
-            console.log($(a2).val() == $(a1).val());
-            console.log($(q2).val());
-            console.log($(a2).val() == $(q2).val());           
+    $(a2).keyup( function () {
+        if ( $(a2).val() !== ""){
             if ( $(a2).val() === $(q2).val() ) {
                 $('#error-a2').text('La respuesta no puede ' +
                     'ser igual a la pregunta.');
@@ -357,16 +377,20 @@ $(document).ready(function () {
         }
     });
 
-    $(password).on('change', function () {
+    $(password).keyup( function () {
         var i = 0;
         if ( $(password).val() !== ""){
-
             if ( ($(password).val().match(regexRepeat))) {
-                if (!($('#repeat-carac').hasClass('text-danger'))) {
+                if ($(password).val() === ""){
                     $('#repeat-carac').addClass('text-danger');
                 }
-                $('#repeat-carac').removeClass('text-success');
-                $(password).addClass('errors');
+                else {
+                    if (!($('#repeat-carac').hasClass('text-danger'))) {
+                        $('#repeat-carac').addClass('text-danger');
+                    }
+                    $('#repeat-carac').removeClass('text-success');
+                    $(password).addClass('errors');
+                }
             }
             else {
                 $('#repeat-carac').removeClass('text-danger');
@@ -384,7 +408,7 @@ $(document).ready(function () {
                 $('#pers-carac').removeClass('text-danger');
                 $('#pers-carac').addClass('text-success');
                 i = i+1;
-                
+
             }
             if ( $(password).val().match(regexNum) ) {
                 $('#num-carac').removeClass('text-danger');
@@ -465,7 +489,7 @@ $(document).ready(function () {
         $('#error-pass').empty();
     });
 
-    $(confirm).on('change', function () {
+    $(confirm).keyup( function () {
         if ( $(confirm).val() !== ""){
             if ( $(confirm).val() !== $(password).val()) {
                 $('#confirm').removeClass('text-success');
@@ -499,26 +523,26 @@ $(document).ready(function () {
 
 function data_customer(valor) {
     var normalize = (function() {
-                    var from = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÇç", 
-                    to   = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuucc",
-                    mapping = {};
+        var from = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÇç",
+            to   = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuucc",
+            mapping = {};
 
-                    for(var i = 0, j = from.length; i < j; i++ )
-                        mapping[ from.charAt( i ) ] = to.charAt( i );
+        for(var i = 0, j = from.length; i < j; i++ )
+            mapping[ from.charAt( i ) ] = to.charAt( i );
 
-                        return function( str ) {
-                            var ret = [];
-                            for( var i = 0, j = str.length; i < j; i++ ) {
-                                var c = str.charAt( i );
-                                if( mapping.hasOwnProperty( str.charAt( i ) ) )
-                                    ret.push( mapping[ c ] );
-                                else
-                                    ret.push( c );
-                            }      
-                            return ret.join( '' );
-                        }
+        return function( str ) {
+            var ret = [];
+            for( var i = 0, j = str.length; i < j; i++ ) {
+                var c = str.charAt( i );
+                if( mapping.hasOwnProperty( str.charAt( i ) ) )
+                    ret.push( mapping[ c ] );
+                else
+                    ret.push( c );
+            }
+            return ret.join( '' );
+        }
 
-                    })();
+    })();
     var first_name = normalize($("#name_customer").text().toLowerCase()).split(' ');
     var last_name = normalize($("#last-name_customer").text().toLowerCase()).split(' ');
     var ci_cust = $("#ci_customer").text().split('-');
@@ -530,38 +554,38 @@ function data_customer(valor) {
 
     console.log("data_customer");
     console.log(valor);
-    
 
-    if ( (first_name[0].includes(normalize(valor.toLowerCase()))) || 
-    (normalize(valor.toLowerCase()).includes(first_name[0])) || 
-    (first_name[1].includes(normalize(valor.toLowerCase()))) || 
-    (normalize(valor.toLowerCase()).includes(first_name[1])) ||
-    (last_name[0].includes(normalize(valor.toLowerCase()))) || 
-    (normalize(valor.toLowerCase()).includes(last_name[0])) || 
-    (last_name[1].includes(normalize(valor.toLowerCase()))) || 
-    (normalize(valor.toLowerCase()).includes(last_name[1])) ||
-    (ci_cust[1].includes(valor)) || 
-    (valor.includes(ci_cust[1])) ||
-    (birthday.includes(valor)) || 
-    (valor.includes(birthday)) ||
-    (valor.includes(birthday_split[0])) ||
-    (birthday_split[0].includes(valor)) ||
-    (valor.includes(birthday_split[1])) ||
-    (birthday_split[1].includes(valor)) ||
-    (valor.includes(birthday_split[2])) ||
-    (birthday_split[2].includes(valor)) ||
-    (valor.includes(cellphone[0])) ||
-    (cellphone[0].includes(valor)) ||
-    (valor.includes(cellphone[1])) ||
-    (cellphone[1].includes(valor)) ||
-    (valor.includes(phone_home[0])) ||
-    (phone_home[0].includes(valor)) ||
-    (valor.includes(phone_home[1])) ||
-    (phone_home[1].includes(valor)) ||
-    (valor.includes(phone_office[0])) ||
-    (phone_office[0].includes(valor)) ||
-    (valor.includes(phone_office[1])) ||
-    (phone_office[1].includes(valor)) ) {
+
+    if ( (first_name[0].includes(normalize(valor.toLowerCase()))) ||
+        (normalize(valor.toLowerCase()).includes(first_name[0])) ||
+        (first_name[1].includes(normalize(valor.toLowerCase()))) ||
+        (normalize(valor.toLowerCase()).includes(first_name[1])) ||
+        (last_name[0].includes(normalize(valor.toLowerCase()))) ||
+        (normalize(valor.toLowerCase()).includes(last_name[0])) ||
+        (last_name[1].includes(normalize(valor.toLowerCase()))) ||
+        (normalize(valor.toLowerCase()).includes(last_name[1])) ||
+        (ci_cust[1].includes(valor)) ||
+        (valor.includes(ci_cust[1])) ||
+        (birthday.includes(valor)) ||
+        (valor.includes(birthday)) ||
+        (valor.includes(birthday_split[0])) ||
+        (birthday_split[0].includes(valor)) ||
+        (valor.includes(birthday_split[1])) ||
+        (birthday_split[1].includes(valor)) ||
+        (valor.includes(birthday_split[2])) ||
+        (birthday_split[2].includes(valor)) ||
+        (valor.includes(cellphone[0])) ||
+        (cellphone[0].includes(valor)) ||
+        (valor.includes(cellphone[1])) ||
+        (cellphone[1].includes(valor)) ||
+        (valor.includes(phone_home[0])) ||
+        (phone_home[0].includes(valor)) ||
+        (valor.includes(phone_home[1])) ||
+        (phone_home[1].includes(valor)) ||
+        (valor.includes(phone_office[0])) ||
+        (phone_office[0].includes(valor)) ||
+        (valor.includes(phone_office[1])) ||
+        (phone_office[1].includes(valor)) ) {
         return true;
     }
     else {
