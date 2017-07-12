@@ -167,7 +167,6 @@ function validation(a,b,c,d,e,f,g) {
                             }
                         },
                         error: function (data) {
-                            console.log(data.error);
                             alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
                         }
                     });
@@ -310,6 +309,10 @@ function validate_cod(elem) {
                     if (data.user_exists) {
                         if (data.correct) {
                             pagNext(3);
+                            $("#quest1").val('');
+                            $("#answ1").val('');
+                            $("#quest2").val('');
+                            $("#answ2").val('');
                         }
                         else {
                             $("#error_step3").append('<p class="text-danger margin-error">'+
@@ -342,10 +345,16 @@ function validate_questions() {
 
     $("#error_step4").empty();
 
-    if ( (a1.hasClass('errors')) || (a1.val() === "") || 
-        (a2.hasClass('errors')) || (a2.val() === "") || 
-        (q1.hasClass('errors')) || (q1.val() === "") || 
-        (q2.hasClass('errors')) || (q2.val() === "") ){
+    if ( (a1.hasClass('errors')) || (a1.val() == "") || 
+        (a2.hasClass('errors')) || (a2.val() == "") || 
+        (q1.hasClass('errors')) || (q1.val() == "") || 
+        (q2.hasClass('errors')) || (q2.val() == "") ||
+        (a1.val() == a2.val()) ||
+        (a1.val() == q2.val()) ||
+        (a1.val() == q1.val()) ||
+        (a2.val() == q2.val()) ||
+        (a2.val() == q1.val()) ||
+        (q1.val() == q2.val()) ){
         $("#error_step4").append('<p class="text-danger margin-error">'+
             msj +'</p>');
         effect_error("#error_step4");
@@ -369,10 +378,12 @@ function validate_pass() {
     var path = window.location.href.split('/');
     var url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/validate-pass/";
 
-    if ( (password.hasClass('errors')) || (password.val() === "")) {
+    $("#error_step5").empty();
+
+    if ( (password.hasClass('errors')) || (password.val() == "")) {
         $('#error-pass').text(msj);
     }
-    else if ( (confirm.hasClass('errors')) || (confirm.val() === "")) {
+    else if ( (confirm.hasClass('errors')) || (confirm.val() == "")) {
         $('#error-conf-pass').text(msj);
     }
     else if ( (confirm.val() !== password.val())) {

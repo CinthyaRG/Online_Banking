@@ -91,7 +91,7 @@ div > div > input {
     min-height: 350px;
 }
 #step4 > div[class="box"] {
-    min-height: 320px;
+    min-height: 365px;
 }
 .step > div > h4 > hr {
     border-radius: 5px;
@@ -138,7 +138,7 @@ div > dl > div > div > label {
     padding-top: 2px;
 }
 #pin {
-    max-width: 46px;
+    max-width: 50px;
 }
 #ccv , #amount_cheq{
     max-width: 40px;

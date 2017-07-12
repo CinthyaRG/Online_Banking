@@ -32,27 +32,7 @@ $(document).ready(function () {
     var msj_num = "Sólo se admiten números";
     var msj_email = "Ingrese un email válido";
     var msj = "Este campo es obligatorio";
-    var normalize = (function() {
-      var from = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÇç", 
-          to   = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuucc",
-          mapping = {};
-     
-      for(var i = 0, j = from.length; i < j; i++ )
-          mapping[ from.charAt( i ) ] = to.charAt( i );
-     
-      return function( str ) {
-          var ret = [];
-          for( var i = 0, j = str.length; i < j; i++ ) {
-              var c = str.charAt( i );
-              if( mapping.hasOwnProperty( str.charAt( i ) ) )
-                  ret.push( mapping[ c ] );
-              else
-                  ret.push( c );
-          }      
-          return ret.join( '' );
-      }
-      
-    })();
+    
 
     $(numtarj).on('focusout', function () {
         if ( $(numtarj).val() !== ""){
@@ -227,12 +207,11 @@ $(document).ready(function () {
 
     $(q1).on('focusout', function () {
         if ( $(q1).val() !== ""){
-            if ( $(q1).val() === $(a2).val()) {
-                $('#error-q1').text('La pregunta 1 no puede ' +
-                    'ser igual a alguna respuesta.');
-                $(q1).addClass('errors');
-            }
-            if ( $(q2).val() === $(q1).val()) {
+            console.log("quest1");
+            console.log($(q2).val());
+            console.log($(q1).val());
+            console.log($(q2).val() == $(q1).val());
+            if ( $(q2).val() == $(q1).val()) {
                 $('#error-q1').text('La pregunta 1 no puede ' +
                     'ser igual a la pregunta 2.');
                 $(q1).addClass('errors');
@@ -257,50 +236,16 @@ $(document).ready(function () {
 
     $(a1).on('focusout', function () {
         if ( $(a1).val() !== ""){
-            var first_name = normalize($("#name_customer").text().toLowerCase()).split(' ');
-            var last_name = normalize($("#last-name_customer").text().toLowerCase()).split(' ');
-            var ci_cust = $("#ci_customer").text().split('-');
-            var phone_home = $("#phone-home").text().split('-');
-            var cellphone = $("#cellphone").text().split('-');
-            var phone_office = $("#phone-office").text().split('-');
-            var birthday = $("#birthday").text();
-            var birthday_split = $("#birthday").text().split('-');
-            
+            console.log("answ1");
+            console.log($(a1).val());
+            console.log($(q1).val());
+            console.log($(a1).val() == $(q1).val());
             if ( $(a1).val() === $(q1).val()) {
                 $('#error-a1').text('La respuesta no puede ' +
                     'ser igual a la pregunta.');
                 $(a1).addClass('errors');
             }
-            else if ( (first_name[0].includes(normalize($(a1).val().toLowerCase()))) || 
-                (normalize($(a1).val().toLowerCase()).includes(first_name[0])) || 
-                (first_name[1].includes(normalize($(a1).val().toLowerCase()))) || 
-                (normalize($(a1).val().toLowerCase()).includes(first_name[1])) ||
-                (last_name[0].includes(normalize($(a1).val().toLowerCase()))) || 
-                (normalize($(a1).val().toLowerCase()).includes(last_name[0])) || 
-                (last_name[1].includes(normalize($(a1).val().toLowerCase()))) || 
-                (normalize($(a1).val().toLowerCase()).includes(last_name[1])) ||
-                (ci_cust[1].includes($(a1).val())) || 
-                ($(a1).val().includes(ci_cust[1])) ||
-                (birthday.includes($(a1).val())) || 
-                ($(a1).val().includes(birthday)) ||
-                ($(a1).val().includes(birthday_split[0])) ||
-                (birthday_split[0].includes($(a1).val())) ||
-                ($(a1).val().includes(birthday_split[1])) ||
-                (birthday_split[1].includes($(a1).val())) ||
-                ($(a1).val().includes(birthday_split[2])) ||
-                (birthday_split[2].includes($(a1).val())) ||
-                ($(a1).val().includes(cellphone[0])) ||
-                (cellphone[0].includes($(a1).val())) ||
-                ($(a1).val().includes(cellphone[1])) ||
-                (cellphone[1].includes($(a1).val())) ||
-                ($(a1).val().includes(phone_home[0])) ||
-                (phone_home[0].includes($(a1).val())) ||
-                ($(a1).val().includes(phone_home[1])) ||
-                (phone_home[1].includes($(a1).val())) ||
-                ($(a1).val().includes(phone_office[0])) ||
-                (phone_office[0].includes($(a1).val())) ||
-                ($(a1).val().includes(phone_office[1])) ||
-                (phone_office[1].includes($(a1).val())) ) {
+            else if ( data_customer($(a1).val()) ) {
                 $('#error-a1').text('La respuesta no puede ' +
                     'contener ninguno de sus datos personales.');
                 $(a1).addClass('errors');
@@ -329,12 +274,17 @@ $(document).ready(function () {
 
     $(q2).on('focusout', function () {
         if ( $(q2).val() !== ""){
+            console.log("quest2");
+            console.log($(q2).val());
+            console.log($(q1).val());
+            console.log($(q2).val() == $(q1).val());
             if ( $(q2).val() === $(q1).val()) {
+                console.log('entro puto muestra el error');
                 $('#error-q2').text('La pregunta 2 no puede ' +
                     'ser igual a la pregunta 1.');
                 $(q2).addClass('errors');
             }
-            if ( $(q2).val() === $(a1).val()) {
+            else if ( $(q2).val() === $(a1).val()) {
                 $('#error-q2').text('La pregunta 2 no puede ' +
                     'ser igual a alguna respuesta.');
                 $(q2).addClass('errors');
@@ -358,51 +308,19 @@ $(document).ready(function () {
     });
 
     $(a2).on('focusout', function () {
-        if ( $(a2).val() !== ""){
-            var first_name = normalize($("#name_customer").text().toLowerCase()).split(' ');
-            var last_name = normalize($("#last-name_customer").text().toLowerCase()).split(' ');
-            var ci_cust = $("#ci_customer").text().split('-');
-            var phone_home = $("#phone-home").text().split('-');
-            var cellphone = $("#cellphone").text().split('-');
-            var phone_office = $("#phone-office").text().split('-');
-            var birthday = $("#birthday").text();
-            var birthday_split = $("#birthday").text().split('-');
-
-            if ( $(a2).val().includes($(q2).val())) {
+        if ( $(a2).val() !== ""){  
+            console.log("answ2"); 
+            console.log($(a2).val());
+            console.log($(a1).val());
+            console.log($(a2).val() == $(a1).val());
+            console.log($(q2).val());
+            console.log($(a2).val() == $(q2).val());           
+            if ( $(a2).val() === $(q2).val() ) {
                 $('#error-a2').text('La respuesta no puede ' +
-                    'ser similar a la pregunta.');
+                    'ser igual a la pregunta.');
                 $(a2).addClass('errors');
             }
-            else if ( (first_name[0].includes(normalize($(a2).val().toLowerCase()))) || 
-                (normalize($(a2).val().toLowerCase()).includes(first_name[0])) || 
-                (first_name[1].includes(normalize($(a2).val().toLowerCase()))) || 
-                (normalize($(a2).val().toLowerCase()).includes(first_name[1])) ||
-                (last_name[0].includes(normalize($(a2).val().toLowerCase()))) || 
-                (normalize($(a2).val().toLowerCase()).includes(last_name[0])) || 
-                (last_name[1].includes(normalize($(a2).val().toLowerCase()))) || 
-                (normalize($(a2).val().toLowerCase()).includes(last_name[1])) ||
-                (ci_cust[1].includes($(a2).val())) || 
-                ($(a2).val().includes(ci_cust[1])) ||
-                (birthday.includes($(a2).val())) || 
-                ($(a2).val().includes(birthday)) ||
-                ($(a2).val().includes(birthday_split[0])) ||
-                (birthday_split[0].includes($(a2).val())) ||
-                ($(a2).val().includes(birthday_split[1])) ||
-                (birthday_split[1].includes($(a2).val())) ||
-                ($(a2).val().includes(birthday_split[2])) ||
-                (birthday_split[2].includes($(a2).val())) ||
-                ($(a2).val().includes(cellphone[0])) ||
-                (cellphone[0].includes($(a2).val())) ||
-                ($(a2).val().includes(cellphone[1])) ||
-                (cellphone[1].includes($(a2).val())) ||
-                ($(a2).val().includes(phone_home[0])) ||
-                (phone_home[0].includes($(a2).val())) ||
-                ($(a2).val().includes(phone_home[1])) ||
-                (phone_home[1].includes($(a2).val())) ||
-                ($(a2).val().includes(phone_office[0])) ||
-                (phone_office[0].includes($(a2).val())) ||
-                ($(a2).val().includes(phone_office[1])) ||
-                (phone_office[1].includes($(a2).val())) ) {
+            else if ( data_customer($(a2).val()) ) {
                 $('#error-a2').text('La respuesta no puede ' +
                     'contener sus datos personales.');
                 $(a2).addClass('errors');
@@ -413,9 +331,9 @@ $(document).ready(function () {
                 $(a2).addClass('errors');
             }
             else if ( $(q1).val() === $(a2).val()) {
-                $('#error-q1').text('La pregunta 1 no puede ' +
-                    'ser igual a alguna respuesta.');
-                $(q1).addClass('errors');
+                $('#error-a2').text('La pregunta no puede ' +
+                    'ser igual a la pregunta 1.');
+                $(a2).addClass('errors');
             }
             else{
                 $(a2).css({border: '2px solid #d2d6de'});
@@ -442,14 +360,6 @@ $(document).ready(function () {
     $(password).on('change', function () {
         var i = 0;
         if ( $(password).val() !== ""){
-            var first_name = normalize($("#name_customer").text().toLowerCase()).split(' ');
-            var last_name = normalize($("#last-name_customer").text().toLowerCase()).split(' ');
-            var ci_cust = $("#ci_customer").text().split('-');
-            var phone_home = $("#phone-home").text().split('-');
-            var cellphone = $("#cellphone").text().split('-');
-            var phone_office = $("#phone-office").text().split('-');
-            var birthday = $("#birthday").text();
-            var birthday_split = $("#birthday").text().split('-');
 
             if ( ($(password).val().match(regexRepeat))) {
                 if (!($('#repeat-carac').hasClass('text-danger'))) {
@@ -463,36 +373,7 @@ $(document).ready(function () {
                 $('#repeat-carac').addClass('text-success');
                 i = i+1;
             }
-            if ( (first_name[0].includes(normalize($(a2).val().toLowerCase()))) || 
-                (normalize($(a2).val().toLowerCase()).includes(first_name[0])) || 
-                (first_name[1].includes(normalize($(a2).val().toLowerCase()))) || 
-                (normalize($(a2).val().toLowerCase()).includes(first_name[1])) ||
-                (last_name[0].includes(normalize($(a2).val().toLowerCase()))) || 
-                (normalize($(a2).val().toLowerCase()).includes(last_name[0])) || 
-                (last_name[1].includes(normalize($(a2).val().toLowerCase()))) || 
-                (normalize($(a2).val().toLowerCase()).includes(last_name[1])) ||
-                (ci_cust[1].includes($(a2).val())) || 
-                ($(a2).val().includes(ci_cust[1])) ||
-                (birthday.includes($(a2).val())) || 
-                ($(a2).val().includes(birthday)) ||
-                ($(a2).val().includes(birthday_split[0])) ||
-                (birthday_split[0].includes($(a2).val())) ||
-                ($(a2).val().includes(birthday_split[1])) ||
-                (birthday_split[1].includes($(a2).val())) ||
-                ($(a2).val().includes(birthday_split[2])) ||
-                (birthday_split[2].includes($(a2).val())) ||
-                ($(a2).val().includes(cellphone[0])) ||
-                (cellphone[0].includes($(a2).val())) ||
-                ($(a2).val().includes(cellphone[1])) ||
-                (cellphone[1].includes($(a2).val())) ||
-                ($(a2).val().includes(phone_home[0])) ||
-                (phone_home[0].includes($(a2).val())) ||
-                ($(a2).val().includes(phone_home[1])) ||
-                (phone_home[1].includes($(a2).val())) ||
-                ($(a2).val().includes(phone_office[0])) ||
-                (phone_office[0].includes($(a2).val())) ||
-                ($(a2).val().includes(phone_office[1])) ||
-                (phone_office[1].includes($(a2).val())) ) {
+            if ( data_customer($(password).val()) ) {
                 if (!($('#pers-carac').hasClass('text-danger'))) {
                     $('#pers-carac').addClass('text-danger');
                 }
@@ -614,3 +495,76 @@ $(document).ready(function () {
     });
 
 });
+
+
+function data_customer(valor) {
+    var normalize = (function() {
+                    var from = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÇç", 
+                    to   = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuucc",
+                    mapping = {};
+
+                    for(var i = 0, j = from.length; i < j; i++ )
+                        mapping[ from.charAt( i ) ] = to.charAt( i );
+
+                        return function( str ) {
+                            var ret = [];
+                            for( var i = 0, j = str.length; i < j; i++ ) {
+                                var c = str.charAt( i );
+                                if( mapping.hasOwnProperty( str.charAt( i ) ) )
+                                    ret.push( mapping[ c ] );
+                                else
+                                    ret.push( c );
+                            }      
+                            return ret.join( '' );
+                        }
+
+                    })();
+    var first_name = normalize($("#name_customer").text().toLowerCase()).split(' ');
+    var last_name = normalize($("#last-name_customer").text().toLowerCase()).split(' ');
+    var ci_cust = $("#ci_customer").text().split('-');
+    var phone_home = $("#phone-home").text().split('-');
+    var cellphone = $("#cellphone").text().split('-');
+    var phone_office = $("#phone-office").text().split('-');
+    var birthday = $("#birthday").text();
+    var birthday_split = $("#birthday").text().split('-');
+
+    console.log("data_customer");
+    console.log(valor);
+    
+
+    if ( (first_name[0].includes(normalize(valor.toLowerCase()))) || 
+    (normalize(valor.toLowerCase()).includes(first_name[0])) || 
+    (first_name[1].includes(normalize(valor.toLowerCase()))) || 
+    (normalize(valor.toLowerCase()).includes(first_name[1])) ||
+    (last_name[0].includes(normalize(valor.toLowerCase()))) || 
+    (normalize(valor.toLowerCase()).includes(last_name[0])) || 
+    (last_name[1].includes(normalize(valor.toLowerCase()))) || 
+    (normalize(valor.toLowerCase()).includes(last_name[1])) ||
+    (ci_cust[1].includes(valor)) || 
+    (valor.includes(ci_cust[1])) ||
+    (birthday.includes(valor)) || 
+    (valor.includes(birthday)) ||
+    (valor.includes(birthday_split[0])) ||
+    (birthday_split[0].includes(valor)) ||
+    (valor.includes(birthday_split[1])) ||
+    (birthday_split[1].includes(valor)) ||
+    (valor.includes(birthday_split[2])) ||
+    (birthday_split[2].includes(valor)) ||
+    (valor.includes(cellphone[0])) ||
+    (cellphone[0].includes(valor)) ||
+    (valor.includes(cellphone[1])) ||
+    (cellphone[1].includes(valor)) ||
+    (valor.includes(phone_home[0])) ||
+    (phone_home[0].includes(valor)) ||
+    (valor.includes(phone_home[1])) ||
+    (phone_home[1].includes(valor)) ||
+    (valor.includes(phone_office[0])) ||
+    (phone_office[0].includes(valor)) ||
+    (valor.includes(phone_office[1])) ||
+    (phone_office[1].includes(valor)) ) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}

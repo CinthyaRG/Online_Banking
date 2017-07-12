@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ob_app.apps.OnlineBankingAppConfig',
+    'bootstrap3',
 ]
 
 MIDDLEWARE = [

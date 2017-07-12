@@ -59,7 +59,7 @@
             </a>
             <!-- Navbar Right Menu -->
             <div class="navbar-custom-menu">
-                <p> Última conexión: 23/04/2017 08:23 am </p>
+                <p> Última conexión: {{customer.get_last_login}} </p>
             </div>
         </nav>
     </header>
@@ -71,7 +71,7 @@
             <!-- Sidebar user panel (optional) -->
             <div class="user-panel">
                 <div class="info">
-                    <p> María Pérez </p>
+                    <p>{{customer.get_name}}</p>
                     <hr>
                 </div>
             </div>
@@ -80,7 +80,7 @@
             <ul class="sidebar-menu">
                 <!-- Optionally, you can add icons to the links -->
                 <li class="active menu">
-                    <a id="pos_con" href="{% url 'inicio' %}"> <i class="fa  fa-line-chart"> </i>
+                    <a id="pos_con" href="{% url 'inicio' user.pk %}"> <i class="fa  fa-line-chart"> </i>
                         <span> Posición Consolidada </span>
                     </a>
                 </li>

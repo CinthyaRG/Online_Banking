@@ -9,7 +9,7 @@ urlpatterns = [
         user_login,
         name='home'),
     url(
-        r'^inicio/(?P<pk>\d+)/$',
+        r'^inicio/(?P<pk>\w+)$',
         Home_Client.as_view(),
         name='inicio'),
     url(
@@ -72,15 +72,15 @@ urlpatterns = [
         Restore_pass.as_view(),
         name='restablecer-pass'),
     url(
-        r'^consultar-cuenta/(?P<pk>\d+)/',
+        r'^consultar-cuenta/(?P<pk>\w+)/',
         Account.as_view(),
         name='consultar-cuenta'),
     url(
-        r'^consultar-tdc/(?P<pk>\d+)/',
+        r'^consultar-tdc/(?P<pk>\w+)/',
         Tdc.as_view(),
         name='consultar-tdc'),
     url(
-        r'^consultar-prestamo/(?P<pk>\d+)/',
+        r'^consultar-prestamo/(?P<pk>\w+)/',
         Loans.as_view(),
         name='consultar-prestamo'),
     url(
@@ -96,7 +96,7 @@ urlpatterns = [
         Transfer_others_bank.as_view(),
         name='transf-otros-bancos'),
     url(
-        r'^datos-transferencia/(?P<pk>\d+)/',
+        r'^datos-transferencia/(?P<pk>\w+)/',
         DataTransfer.as_view(),
         name='datos-transferencia'),
     url(
@@ -108,7 +108,7 @@ urlpatterns = [
         Payments.as_view(),
         name='pagos'),
     url(
-        r'^datos-pago/(?P<pk>\d+)/',
+        r'^datos-pago/(?P<pk>\w+)/',
         DataPayment.as_view(),
         name='datos-pago'),
     url(

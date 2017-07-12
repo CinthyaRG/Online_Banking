@@ -28,9 +28,9 @@ def groups():
 
 def get_user(user):
     if user.is_staff:
-        return 'inicio'
+        return "{% url 'inicio' user.pk %}"
     else:
-        return 'inicio'
+        return "{% url 'inicio' user.pk %}"
 
 
 @ensure_csrf_cookie
@@ -364,6 +364,18 @@ def user_login(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
+            if username == "" or password == "":
+                msg = ""
+                if username == "":
+                    msg = msg + "  Introduzca su número de tarjeta. "
+                    
+                if password == "":
+                    msg = msg + " Introduzca su contraseña. "
+
+                form.add_error(None, msg)  
+                context = {'form': form}                    
+                return render(request, 'base-index.html', context)
+
             msg_error = " Recuerde: Al realizar tres intentos erróneos su cuenta será bloqueada."
             error_username = "Tu número de tarjeta  o contraseña no son correctos." + msg_error
             user_auth = authenticate_user(username)
@@ -375,12 +387,19 @@ def user_login(request):
                     user = authenticate(username=users.username,
                                         password=password)
                     if user:
+                        last_login = users.last_login
                         login(request, user)
                         email_login_successful(user)
                         user_profile.intent = 0
                         user_profile.save()
-                        template = get_user(users)
-                        return HttpResponseRedirect(reverse_lazy(template))
+                        customer = Users.objects.get(user=users)
+                        customer.last_login = last_login
+                        customer.save()
+                        print(customer.get_name())
+                        print(customer.get_last_login())
+                        print(user.pk)
+                        return HttpResponseRedirect(reverse_lazy('inicio', 
+                            kwargs={'pk': customer.pk}))
                     else:
                         form.add_error(None, error_username)
 

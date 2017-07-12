@@ -28,9 +28,20 @@ class Users(models.Model):
     ident = models.CharField(validators=[ID_VALIDATOR], max_length=10, unique=True)
     elem_security = models.ForeignKey(Elems_security, blank=True, null=True)
     pass_expires = models.DateField(null=True, blank=True)
+    last_login = models.DateTimeField(null=True, blank=True)
 
     def get_name(self):
-        return self.user.first_name + " " + self.user.last_name
+        first_name = self.user.first_name.split(' ')
+        last_name = self.user.last_name.split(' ')
+        return first_name[0] + " " + last_name[0]
+
+    def get_last_login(self):
+        formato = "%d/%m/%y %I:%m:%S %p"
+        
+        date_time = self.last_login.strftime(formato).split(" ")
+        date = date_time[0]
+        time = date_time[1] + " " + date_time[2]
+        return date + " " + time
 
     def __str__(self):
         return str(self.ident) + " " + self.user.first_name + " " + self.user.last_name
