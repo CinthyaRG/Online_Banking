@@ -42,15 +42,36 @@ def validate_user(request):
     }
 
     if data['user_exists']:
+        
         data['error'] = "Usted ya se encuentra registrado. Si olvidó su clave " \
                         "ingrese a Olvidé mi contraseña"
 
-        user = Users.objects.get(ident=ci)
-        try:
-            quest1 = user.elem_security.question1
-            quest2 = user.elem_security.question2
-        except:
-            return JsonResponse(data)
+    return JsonResponse(data)
+
+
+@ensure_csrf_cookie
+def validate_user_forgot(request):
+    groups()
+    ci = request.GET.get('ci', None)
+    data = {
+        'user_exists': Users.objects.filter(ident=ci).exists()
+    }
+
+    if data['user_exists']:
+
+        customer = Users.objects.get(ident=ci)
+        user = User.objects.get(id=customer.user)
+
+        data['activate'] = user.is_active
+
+        if not(data['activate']):
+            data['error'] = "Su cuenta no esta activa, ingrese a su correo " \
+                        "y siga los pasos para activarla para así poder reestablecer " \
+                        "su contraseña"
+
+        
+        quest1 = customer.elem_security.question1
+        quest2 = customer.elem_security.question2
 
         num = random.randint(1, 2)
         if num == 1:
@@ -435,7 +456,7 @@ def user_login(request):
                         print(customer.get_last_login())
                         print(user.pk)
                         return HttpResponseRedirect(reverse_lazy('inicio', 
-                            kwargs={'pk': customer.pk}))
+                            kwargs={'pk': users.pk}))
                     else:
                         form.add_error(None, error_username)
 
@@ -478,6 +499,15 @@ class Home_Client(LoginRequiredMixin, TemplateView):
     template_name = 'base.html'
     login_url = 'home'
     redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Home_Client, self).get_context_data(**kwargs)
+
+        customer = Users.objects.get(user=self.kwargs['pk'])
+        
+        context['customer'] = customer
+        return context
 
 
 class Logout(TemplateView):

@@ -33,7 +33,10 @@ class Users(models.Model):
     def get_name(self):
         first_name = self.user.first_name.split(' ')
         last_name = self.user.last_name.split(' ')
-        return first_name[0] + " " + last_name[0]
+        name = first_name[0] + " " + first_name[1][0] + ". "
+        name = name + last_name[0] + " " + last_name[1][0] + "."
+        
+        return name
 
     def get_last_login(self):
         formato = "%d/%m/%y %I:%m:%S %p"
