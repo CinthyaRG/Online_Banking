@@ -206,7 +206,7 @@ function validation_forgot(a,b,c,d,e,f) {
     var ci = $(e).val()+$(f).val();
     var msj = "Este campo es obligatorio";
     var path = window.location.href.split('/');
-    var url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/validate-user/";
+    var url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/validate-user-forget/";
     var url_api = path[0]+"/"+path[1]+"/"+"localhost:8001"+"/ajax/validate_data_forgot/";
 
     $("#error").empty();
@@ -254,9 +254,14 @@ function validation_forgot(a,b,c,d,e,f) {
                     effect_error("#error");
                 }
                 else {
-                    console.log('entro en else');
-                    $('#quest-sec').text(data.quest);
-                    $.ajax({
+                    if (!(data.active)) {
+                        $("#error").append('<p class="text-danger margin-error">'+
+                            data.error +'</p>');
+                        effect_error("#error");
+                    }
+                    else {
+                        $('#quest-sec').text(data.quest);
+                        $.ajax({
                         url: url_api,
                         origin: 'localhost:8000',
                         headers: {'X-CSRFToken': getCookie('csrftoken')},
@@ -280,6 +285,7 @@ function validation_forgot(a,b,c,d,e,f) {
                                 $("#phone-office").text(data.phone_office);
                                 $("#birthday").text(data.birthday);
                                 pagNext(1);
+                                $('#answer').val('');
                             }
                             else {
                                 $("#error").append('<p class="text-danger margin-error">'+
@@ -307,6 +313,7 @@ function validation_forgot(a,b,c,d,e,f) {
                             alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
                         }
                     });
+                    }
                 }
             },
             error: function (data) {
@@ -510,6 +517,7 @@ function validate_ques() {
     var username = $("#numtarj").val();
     var msj = "Los campos presentan errores por favor " +
         "verifíquelos para continuar con el registro.";
+    var msj_error = "La respuesta es incorrecta.";
     var path = window.location.href.split('/');
     var url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/validate-questions/";
 
@@ -520,6 +528,9 @@ function validate_ques() {
         $("#error_step2").append('<p class="text-danger margin-error">'+
             msj +'</p>');
         effect_error("#error_step2");
+        $(a1).addClass('errors');
+        $('#error-answer').text("Este campo es obligatorio");
+
     }
     else {
         $.ajax({
@@ -541,7 +552,7 @@ function validate_ques() {
                        $("#error_step2").append('<p class="text-danger margin-error">'+
                         msj_error +'</p>');
                         effect_error("#error_step2");
-                        $(a1).addClass('errors');
+                        a1.addClass('errors');
                     }
                 }
                 else {
@@ -567,7 +578,7 @@ function validate_pass() {
     var q1 = $("#quest1").val();
     var q2 = $("#quest2").val();
     var username = $("#numtarj").val();
-    var ci_cust = $("#ci_customer").text()
+    var ci_cust = $("#ci_customer").text();
     var msj = "Este campo presenta errores";
     var msj_error = "Hubo un error en la conexión intente de nuevo. Gracias.";
     var path = window.location.href.split('/');
@@ -575,10 +586,10 @@ function validate_pass() {
 
     $("#error_step5").empty();
 
-    if ( (password.hasClass('errors')) || (password.val() == "")) {
+    if ( (password.hasClass('errors')) || (password.val() === "")) {
         $('#error-pass').text(msj);
     }
-    else if ( (confirm.hasClass('errors')) || (confirm.val() == "")) {
+    else if ( (confirm.hasClass('errors')) || (confirm.val() === "")) {
         $('#error-conf-pass').text(msj);
     }
     else if ( (confirm.val() !== password.val())) {
@@ -610,6 +621,64 @@ function validate_pass() {
                        $("#error_step5").append('<p class="text-danger margin-error">'+
                         msj_error +'</p>');
                         effect_error("#error_step5"); 
+                    }
+                }
+                else {
+                    $("#error").append('<p class="text-danger margin-error">'+
+                        data.error +'</p>');
+                    effect_error("#error");
+                    pagBack(2)
+                }
+
+            },
+            error: function (data) {
+                alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+            }
+        });
+    }
+}
+
+function validate_pass_forgot() {
+    var password = $("#password");
+    var confirm = $("#confirm-pass");
+    var username = $("#numtarj").val();
+    var msj = "Este campo presenta errores";
+    var msj_error = "Hubo un error en la conexión intente de nuevo. Gracias.";
+    var path = window.location.href.split('/');
+    var url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/validate-pass-forgot/";
+
+    $("#error_step5").empty();
+
+    if ( (password.hasClass('errors')) || (password.val() === "")) {
+        $('#error-pass').text(msj);
+    }
+    else if ( (confirm.hasClass('errors')) || (confirm.val() === "")) {
+        $('#error-conf-pass').text(msj);
+    }
+    else if ( (confirm.val() !== password.val())) {
+        $('#confirm').addClass('text-danger');
+    }
+    else {
+        $.ajax({
+            url: url,
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            data: {
+                password: password.val(),
+                username: username
+            },
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                alert("EXITO ultimo paso");
+                alert(data.correct);
+                if (data.user_exists) {
+                    if (data.correct) {
+                        location.href= path[0]+"/"+path[1]+"/"+path[2]+"/nueva-pass-exitosa";
+                    }
+                    else {
+                       $("#error_step5").append('<p class="text-danger margin-error">'+
+                        msj_error +'</p>');
+                        effect_error("#error_step5");
                     }
                 }
                 else {

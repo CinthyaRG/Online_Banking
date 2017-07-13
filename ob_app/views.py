@@ -42,7 +42,6 @@ def validate_user(request):
     }
 
     if data['user_exists']:
-        
         data['error'] = "Usted ya se encuentra registrado. Si olvidó su clave " \
                         "ingrese a Olvidé mi contraseña"
 
@@ -60,24 +59,24 @@ def validate_user_forgot(request):
     if data['user_exists']:
 
         customer = Users.objects.get(ident=ci)
-        user = User.objects.get(id=customer.user)
+        user = User.objects.get(id=customer.user.id)
 
-        data['activate'] = user.is_active
+        data['active'] = user.is_active
 
-        if not(data['activate']):
+        if not (data['active']):
             data['error'] = "Su cuenta no esta activa, ingrese a su correo " \
-                        "y siga los pasos para activarla para así poder reestablecer " \
-                        "su contraseña"
-
-        
-        quest1 = customer.elem_security.question1
-        quest2 = customer.elem_security.question2
-
-        num = random.randint(1, 2)
-        if num == 1:
-            data['quest'] = quest1
+                            "y siga los pasos para activarla para así poder reestablecer " \
+                            "su contraseña"
+            return JsonResponse(data)
         else:
-            data['quest'] = quest2
+            quest1 = customer.elem_security.question1
+            quest2 = customer.elem_security.question2
+
+            num = random.randint(1, 2)
+            if num == 1:
+                data['quest'] = quest1
+            else:
+                data['quest'] = quest2
 
     return JsonResponse(data)
 
@@ -166,7 +165,7 @@ def validate_cod(request):
         else:
             data['correct'] = True
 
-        if not(data['correct']):
+        if not (data['correct']):
             if data['profile_expires']:
                 data['error'] = 'El código que ingresó ya expiró. Presione Renviar Código ' \
                                 'para solicitar uno nuevo.'
@@ -192,7 +191,7 @@ def validate_pass(request):
 
     if data['user_exists']:
         user = User.objects.get(username=username)
-        
+
         try:
             activation_key = create_token(8)
             while UserProfile.objects.filter(activation_key=activation_key).count() > 0:
@@ -222,13 +221,58 @@ def validate_pass(request):
                          ident=ci,
                          elem_security=elem_sec,
                          pass_expires=pass_expires)
-        customer.save()      
+        customer.save()
 
         key_expires = datetime.datetime.today() + datetime.timedelta(days=1)
         user_profile = UserProfile.objects.get(user=user)
         user_profile.activation_key = activation_key
         user_profile.key_expires = key_expires
         user_profile.save()
+
+        data['correct'] = True
+    else:
+        data['error'] = 'Ha ocurrido un error por favor reingrese sus datos.'
+
+    return JsonResponse(data)
+
+
+@ensure_csrf_cookie
+def validate_pass_forgot(request):
+    username = request.GET.get('username', None)
+    password = request.GET.get('password', None)
+
+    data = {
+        'user_exists': User.objects.filter(username=username).exists()
+    }
+
+    if data['user_exists']:
+        user = User.objects.get(username=username)
+
+        try:
+            formato = "%d/%m/%y %I:%m:%S %p"
+            date_time = user.last_login.strftime(formato).split(" ")
+            date = date_time[0]
+            time = date_time[1] + " " + date_time[2]
+
+            c = {'usuario': user.get_full_name,
+                 'fecha': date,
+                 'hora': time
+                 }
+            subject = 'Actio Capital - Cambio de Contraseña Exitoso'
+            message_template = 'forgot-pass-email.html'
+            email = user.email
+            send_email(subject, message_template, c, email)
+        except:
+            data['correct'] = False
+            return JsonResponse(data)
+
+        user.set_password(password)
+        user.save()
+
+        pass_expires = datetime.datetime.today() + datetime.timedelta(days=180)
+        customer = Users.objects.get(user=user)
+        customer.pass_expires = pass_expires
+        customer.save()
 
         data['correct'] = True
     else:
@@ -289,9 +333,12 @@ def validate_quest(request):
         user = User.objects.get(username=username)
         customer = Users.objects.get(user=user)
 
-        # if customer.elem_security.question1 == question :
-        #     if customer.elem_security.
-
+        if (customer.elem_security.question1 == question) and (customer.elem_security.answer1 == answer):
+            data['correct'] = True
+        elif (customer.elem_security.question2 == question) and (customer.elem_security.answer2 == answer):
+            data['correct'] = True
+        else:
+            data['correct'] = False
     else:
         data['error'] = 'Ha ocurrido un error por favor reingrese sus datos.'
 
@@ -310,7 +357,7 @@ def send_email(subject, message_template, context, email):
 
 def email_login_successful(user):
     usuario = user.get_full_name()
-    formato = "%d-%m-%y %I:%m:%S %p"
+    formato = "%d/%m/%y %I:%m:%S %p"
     date_time = user.last_login.strftime(formato).split(" ")
     date = date_time[0]
     time = date_time[1] + " " + date_time[2]
@@ -367,7 +414,7 @@ def new_token(request, pk):
         send_email(subject, message_template, c, email)
     except:
         render(request, 'register_success.html')
-    
+
     new_profile.save()
     return render(request, 'register_success.html')
 
@@ -425,12 +472,12 @@ def user_login(request):
                 msg = ""
                 if username == "":
                     msg = msg + "  Introduzca su número de tarjeta. "
-                    
+
                 if password == "":
                     msg = msg + " Introduzca su contraseña. "
 
-                form.add_error(None, msg)  
-                context = {'form': form}                    
+                form.add_error(None, msg)
+                context = {'form': form}
                 return render(request, 'base-index.html', context)
 
             msg_error = " Recuerde: Al realizar tres intentos erróneos su cuenta será bloqueada."
@@ -455,8 +502,8 @@ def user_login(request):
                         print(customer.get_name())
                         print(customer.get_last_login())
                         print(user.pk)
-                        return HttpResponseRedirect(reverse_lazy('inicio', 
-                            kwargs={'pk': users.pk}))
+                        return HttpResponseRedirect(reverse_lazy('inicio',
+                                                                 kwargs={'pk': users.pk}))
                     else:
                         form.add_error(None, error_username)
 
@@ -505,7 +552,7 @@ class Home_Client(LoginRequiredMixin, TemplateView):
             Home_Client, self).get_context_data(**kwargs)
 
         customer = Users.objects.get(user=self.kwargs['pk'])
-        
+
         context['customer'] = customer
         return context
 

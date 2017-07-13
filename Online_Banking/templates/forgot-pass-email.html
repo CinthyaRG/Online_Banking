@@ -1,0 +1,27 @@
+{% extends "base-email.html" %}
+{% load static %}
+
+{% block script %}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div  id="center" class="center-block text-center">
+                <img src="www.idbcgroup.com/actio/img/logo.png">
+                <br>
+                <br>
+                <h2> Cambio de Contraseña </h2>
+                <br>
+                <p>Hola <b>{{usuario}}</b>
+                <br>
+                <p> Ha cambiado exitosamente su contraseña el {{fecha}} a las {{hora}}.
+                </p>
+                <br>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+

@@ -44,6 +44,10 @@ urlpatterns = [
         validate_user,
         name='validar-user'),
     url(
+        r'^ajax/validate-user-forget/$',
+        validate_user_forgot,
+        name='validar-user'),
+    url(
         r'^ajax/validate-email/$',
         validate_email,
         name='validar-email'),
@@ -55,6 +59,10 @@ urlpatterns = [
         r'^ajax/validate-pass/$',
         validate_pass,
         name='validar-pass'),
+    url(
+        r'^ajax/validate-pass-forgot/$',
+        validate_pass_forgot,
+        name='validate-pass-forgot'),
     url(
         r'^ajax/resend-email/$',
         resend_email,

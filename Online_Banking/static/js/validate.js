@@ -215,21 +215,9 @@ $(document).ready(function () {
 
     $(answer).keyup( function () {
         if ( $(answer).val() !== ""){
-            if ( $(answer).val() === $('#quest-sec').text() ) {
-                $('#error-answer').text('La respuesta no puede ' +
-                    'ser igual a la pregunta.');
-                $(answer).addClass('errors');
-            }
-            else if ( data_customer($(answer).val()) ) {
-                $('#error-answer').text('La respuesta no puede ' +
-                    'contener ninguno de sus datos personales.');
-                $(answer).addClass('errors');
-            }
-            else{
-                $(answer).css({border: '2px solid #d2d6de'});
-                $(answer).removeClass('errors');
-                $('#error-answer').empty();
-            }
+            $(answer).css({border: '2px solid #d2d6de'});
+            $(answer).removeClass('errors');
+            $('#error-answer').empty();
         }
         else {
             $('#error-answer').text(msj);
@@ -381,16 +369,11 @@ $(document).ready(function () {
         var i = 0;
         if ( $(password).val() !== ""){
             if ( ($(password).val().match(regexRepeat))) {
-                if ($(password).val() === ""){
+                if (!($('#repeat-carac').hasClass('text-danger'))) {
                     $('#repeat-carac').addClass('text-danger');
                 }
-                else {
-                    if (!($('#repeat-carac').hasClass('text-danger'))) {
-                        $('#repeat-carac').addClass('text-danger');
-                    }
-                    $('#repeat-carac').removeClass('text-success');
-                    $(password).addClass('errors');
-                }
+                $('#repeat-carac').removeClass('text-success');
+                $(password).addClass('errors');
             }
             else {
                 $('#repeat-carac').removeClass('text-danger');
@@ -480,6 +463,15 @@ $(document).ready(function () {
         else {
             $('#error-pass').text(msj);
             $(password).addClass('errors');
+
+            if (!($('#num-carac').hasClass('text-danger'))) {
+                $('#num-carac').addClass('text-danger');
+            }
+            $('#num-carac').removeClass('text-success');
+            if (!($('#repeat-carac').hasClass('text-danger'))) {
+                $('#repeat-carac').addClass('text-danger');
+            }
+            $('#repeat-carac').removeClass('text-success');
         }
     });
 
