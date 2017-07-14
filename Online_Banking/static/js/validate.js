@@ -293,7 +293,6 @@ $(document).ready(function () {
     $(q2).keyup( function () {
         if ( $(q2).val() !== ""){
             if ( $(q2).val() === $(q1).val()) {
-                console.log('entro puto muestra el error');
                 $('#error-q2').text('La pregunta 2 no puede ' +
                     'ser igual a la pregunta 1.');
                 $(q2).addClass('errors');
@@ -453,7 +452,6 @@ $(document).ready(function () {
                 $('#spec-carac').addClass('text-success');
                 i = i+1;
             }
-            console.log(i);
             if (i === 7){
                 $(password).css({border: '2px solid #d2d6de'});
                 $(password).removeClass('errors');
@@ -461,7 +459,7 @@ $(document).ready(function () {
             }
         }
         else {
-            $('#error-pass').text(msj);
+            $('#error-pass').text("Este campo tiene errores");
             $(password).addClass('errors');
 
             if (!($('#num-carac').hasClass('text-danger'))) {
@@ -472,13 +470,17 @@ $(document).ready(function () {
                 $('#repeat-carac').addClass('text-danger');
             }
             $('#repeat-carac').removeClass('text-success');
+            if (!($('#min-carac').hasClass('text-danger'))) {
+                    $('#min-carac').addClass('text-danger');
+                }
+            $('#min-carac').removeClass('text-success');
         }
     });
 
     $(password).on('focus', function () {
         $(password).removeClass('errors');
         $(password).css({'border-color': '#8AB7B6'});
-        $('#error-pass').empty();
+        $('#error-pass').text('');
     });
 
     $(confirm).keyup( function () {
@@ -544,9 +546,41 @@ function data_customer(valor) {
     var birthday = $("#birthday").text();
     var birthday_split = $("#birthday").text().split('-');
 
-    console.log("data_customer");
-    console.log(valor);
+    console.log(first_name);
+    console.log(last_name);
+    console.log(ci_cust);
+    console.log(phone_home);
+    console.log(cellphone);
+    console.log(phone_office);
+    console.log(birthday);
+    console.log(birthday_split);
 
+    console.log(first_name[0].includes(normalize(valor.toLowerCase())));
+    console.log(normalize(valor.toLowerCase()).includes(first_name[0]));
+    console.log(first_name[1].includes(normalize(valor.toLowerCase())));
+    console.log(normalize(valor.toLowerCase()).includes(first_name[1]));
+    console.log(last_name[0].includes(normalize(valor.toLowerCase())));
+    console.log(normalize(valor.toLowerCase()).includes(last_name[0]));
+    console.log(ci_cust[1].includes(valor));
+    console.log(valor.includes(ci_cust[1]));
+    console.log(valor.includes(birthday_split[0]));
+    console.log(birthday_split[0].includes(valor));
+    console.log(birthday_split[1].includes(valor));
+    console.log(valor.includes(birthday_split[2]));
+    console.log(birthday_split[2].includes(valor));
+    console.log(valor.includes(cellphone[0]));
+    console.log(cellphone[0].includes(valor));
+    console.log(valor.includes(cellphone[1]));
+    console.log(cellphone[1].includes(valor));
+    console.log(valor.includes(phone_home[0]));
+    console.log(phone_home[0].includes(valor));
+    console.log(valor.includes(phone_home[1]));
+    console.log(phone_home[1].includes(valor));
+    console.log(valor.includes(phone_office[0]));
+    console.log(phone_office[0].includes(valor));
+    console.log(valor.includes(phone_office[1]));
+    console.log(phone_office[1].includes(valor));
+    
 
     if ( (first_name[0].includes(normalize(valor.toLowerCase()))) ||
         (normalize(valor.toLowerCase()).includes(first_name[0])) ||

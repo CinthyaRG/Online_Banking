@@ -249,8 +249,8 @@ def validate_pass_forgot(request):
         user = User.objects.get(username=username)
 
         try:
-            formato = "%d/%m/%y %I:%m:%S %p"
-            date_time = user.last_login.strftime(formato).split(" ")
+            formato = "%d/%m/%y %I:%M:%S %p"
+            date_time = datetime.datetime.today().strftime(formato).split(" ")
             date = date_time[0]
             time = date_time[1] + " " + date_time[2]
 
@@ -258,6 +258,7 @@ def validate_pass_forgot(request):
                  'fecha': date,
                  'hora': time
                  }
+
             subject = 'Actio Capital - Cambio de Contraseña Exitoso'
             message_template = 'forgot-pass-email.html'
             email = user.email
@@ -284,7 +285,6 @@ def validate_pass_forgot(request):
 @ensure_csrf_cookie
 def resend_email(request):
     username = request.GET.get('username', None)
-    print(username)
     data = {
         'user_exists': User.objects.filter(username=username).exists()
     }
@@ -357,7 +357,7 @@ def send_email(subject, message_template, context, email):
 
 def email_login_successful(user):
     usuario = user.get_full_name()
-    formato = "%d/%m/%y %I:%m:%S %p"
+    formato = "%d/%m/%y %I:%M:%S %p"
     date_time = user.last_login.strftime(formato).split(" ")
     date = date_time[0]
     time = date_time[1] + " " + date_time[2]
@@ -499,11 +499,8 @@ def user_login(request):
                         customer = Users.objects.get(user=users)
                         customer.last_login = last_login
                         customer.save()
-                        print(customer.get_name())
-                        print(customer.get_last_login())
-                        print(user.pk)
                         return HttpResponseRedirect(reverse_lazy('inicio',
-                                                                 kwargs={'pk': users.pk}))
+                                                                 kwargs={'pk': customer.pk}))
                     else:
                         form.add_error(None, error_username)
 
@@ -519,7 +516,6 @@ def user_login(request):
                 elif user_profile.intent == 3:
                     msg = "Su cuenta ha sido bloqueada. Comuniquese con atención al cliente" \
                           " para iniciar el proceso de desbloqueo."
-                    print(msg)
                     form.add_error(None, msg)
                     user_block(users)
                 else:
@@ -551,7 +547,7 @@ class Home_Client(LoginRequiredMixin, TemplateView):
         context = super(
             Home_Client, self).get_context_data(**kwargs)
 
-        customer = Users.objects.get(user=self.kwargs['pk'])
+        customer = Users.objects.get(id=self.kwargs['pk'])
 
         context['customer'] = customer
         return context

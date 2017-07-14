@@ -20,13 +20,13 @@ class Elems_security(models.Model):
     answer1 = models.CharField(max_length=50)
     question2 = models.CharField(max_length=50)
     answer2 = models.CharField(max_length=50)
-    card_coor = models.ForeignKey(Card_coor, blank=True, null=True)
+    card_coor = models.OneToOneField(Card_coor, blank=True, null=True)
 
 
 class Users(models.Model):
     user = models.OneToOneField(User)
     ident = models.CharField(validators=[ID_VALIDATOR], max_length=10, unique=True)
-    elem_security = models.ForeignKey(Elems_security, blank=True, null=True)
+    elem_security = models.OneToOneField(Elems_security, blank=True, null=True)
     pass_expires = models.DateField(null=True, blank=True)
     last_login = models.DateTimeField(null=True, blank=True)
 
@@ -39,8 +39,7 @@ class Users(models.Model):
         return name
 
     def get_last_login(self):
-        formato = "%d/%m/%y %I:%m:%S %p"
-        
+        formato = "%d/%m/%y %I:%M:%S %p"
         date_time = self.last_login.strftime(formato).split(" ")
         date = date_time[0]
         time = date_time[1] + " " + date_time[2]
