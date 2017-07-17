@@ -1,11 +1,12 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse, HttpResponseRedirect
+from django.template import RequestContext
 from django.template.loader import get_template
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User, Group
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, render_to_response
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -33,12 +34,20 @@ def get_user(user):
         return "{% url 'inicio' user.pk %}"
 
 
+def permission_denied(request):
+    response = render(request, '403.html')
+
+    response.status_code = 403
+
+    return response
+
+
 @ensure_csrf_cookie
 def validate_user(request):
     groups()
     ci = request.GET.get('ci', None)
     data = {
-        'user_exists': Users.objects.filter(ident=ci).exists()
+        'user_exists': Customer.objects.filter(ident=ci).exists()
     }
 
     if data['user_exists']:
@@ -53,12 +62,12 @@ def validate_user_forgot(request):
     groups()
     ci = request.GET.get('ci', None)
     data = {
-        'user_exists': Users.objects.filter(ident=ci).exists()
+        'user_exists': Customer.objects.filter(ident=ci).exists()
     }
 
     if data['user_exists']:
 
-        customer = Users.objects.get(ident=ci)
+        customer = Customer.objects.get(ident=ci)
         user = User.objects.get(id=customer.user.id)
 
         data['active'] = user.is_active
@@ -69,8 +78,8 @@ def validate_user_forgot(request):
                             "su contraseña"
             return JsonResponse(data)
         else:
-            quest1 = customer.elem_security.question1
-            quest2 = customer.elem_security.question2
+            quest1 = customer.elemSecurity.question1
+            quest2 = customer.elemSecurity.question2
 
             num = random.randint(1, 2)
             if num == 1:
@@ -90,7 +99,7 @@ def validate_email(request):
     username = request.GET.get('username', None)
 
     data = {
-        'user_exists': Users.objects.filter(ident=ci).exists()
+        'user_exists': Customer.objects.filter(ident=ci).exists()
     }
 
     if not (data['user_exists']):
@@ -106,7 +115,7 @@ def validate_email(request):
         group = Group.objects.get(name="Clientes")
         try:
             activation_key = create_token(6)
-            while UserProfile.objects.filter(activation_key=activation_key).count() > 0:
+            while UserProfile.objects.filter(activationKey=activation_key).count() > 0:
                 activation_key = create_token(6)
             # mypath = os.getcwd()
             # path = Path('/Online_Banking/static/img/logo.png')
@@ -131,8 +140,8 @@ def validate_email(request):
         user.groups.add(group)
         key_expires = datetime.datetime.today() + datetime.timedelta(minutes=2)
         user_profile = UserProfile(user=user,
-                                   activation_key=activation_key,
-                                   key_expires=key_expires)
+                                   activationKey=activation_key,
+                                   keyExpires=key_expires)
         user_profile.save()
 
     return JsonResponse(data)
@@ -151,7 +160,7 @@ def validate_cod(request):
         user = User.objects.get(username=username)
 
         try:
-            user_profile = UserProfile.objects.get(user=user, activation_key=token)
+            user_profile = UserProfile.objects.get(user=user, activationKey=token)
         except UserProfile.DoesNotExist:
             data['correct'] = False
             data['error'] = 'El código que ingresó es incorrecto.'
@@ -159,7 +168,7 @@ def validate_cod(request):
 
         time = datetime.datetime.today()
 
-        if user_profile.key_expires < time:
+        if user_profile.keyExpires < time:
             data['profile_expires'] = True
             data['correct'] = False
         else:
@@ -194,7 +203,7 @@ def validate_pass(request):
 
         try:
             activation_key = create_token(8)
-            while UserProfile.objects.filter(activation_key=activation_key).count() > 0:
+            while UserProfile.objects.filter(activationKey=activation_key).count() > 0:
                 activation_key = create_token(8)
             c = {'usuario': user.get_full_name,
                  'key': activation_key,
@@ -210,23 +219,23 @@ def validate_pass(request):
         user.set_password(password)
         user.save()
 
-        elem_sec = Elems_security(question1=q1,
-                                  answer1=a1,
-                                  question2=q2,
-                                  answer2=a2)
+        elem_sec = ElemSecurity(question1=q1,
+                                answer1=a1,
+                                question2=q2,
+                                answer2=a2)
         elem_sec.save()
 
         pass_expires = datetime.datetime.today() + datetime.timedelta(days=180)
-        customer = Users(user=user,
-                         ident=ci,
-                         elem_security=elem_sec,
-                         pass_expires=pass_expires)
+        customer = Customer(user=user,
+                            ident=ci,
+                            elemSecurity=elem_sec,
+                            passExpires=pass_expires)
         customer.save()
 
         key_expires = datetime.datetime.today() + datetime.timedelta(days=1)
         user_profile = UserProfile.objects.get(user=user)
-        user_profile.activation_key = activation_key
-        user_profile.key_expires = key_expires
+        user_profile.activationKey = activation_key
+        user_profile.keyExpires = key_expires
         user_profile.save()
 
         data['correct'] = True
@@ -271,7 +280,7 @@ def validate_pass_forgot(request):
         user.save()
 
         pass_expires = datetime.datetime.today() + datetime.timedelta(days=180)
-        customer = Users.objects.get(user=user)
+        customer = Customer.objects.get(user=user)
         customer.pass_expires = pass_expires
         customer.save()
 
@@ -294,7 +303,7 @@ def resend_email(request):
 
         try:
             activation_key = create_token(6)
-            while UserProfile.objects.filter(activation_key=activation_key).count() > 0:
+            while UserProfile.objects.filter(activationKey=activation_key).count() > 0:
                 activation_key = create_token(6)
             c = {'usuario': user.get_full_name,
                  'key': activation_key}
@@ -309,8 +318,8 @@ def resend_email(request):
 
         key_expires = datetime.datetime.today() + datetime.timedelta(minutes=2)
         user_profile = UserProfile.objects.get(user=user)
-        user_profile.activation_key = activation_key
-        user_profile.key_expires = key_expires
+        user_profile.activationKey = activation_key
+        user_profile.keyExpires = key_expires
         user_profile.save()
 
     else:
@@ -331,11 +340,11 @@ def validate_quest(request):
 
     if data['user_exists']:
         user = User.objects.get(username=username)
-        customer = Users.objects.get(user=user)
+        customer = Customer.objects.get(user=user)
 
-        if (customer.elem_security.question1 == question) and (customer.elem_security.answer1 == answer):
+        if (customer.elemSecurity.question1 == question) and (customer.elemSecurity.answer1 == answer):
             data['correct'] = True
-        elif (customer.elem_security.question2 == question) and (customer.elem_security.answer2 == answer):
+        elif (customer.elemSecurity.question2 == question) and (customer.elemSecurity.answer2 == answer):
             data['correct'] = True
         else:
             data['correct'] = False
@@ -402,8 +411,8 @@ def new_token(request, pk):
     UserProfile.objects.filter(user=user).delete()
     key = create_token(8)
     key_expires = datetime.datetime.today() + datetime.timedelta(days=1)
-    new_profile = UserProfile(user=user, activation_key=key,
-                              key_expires=key_expires)
+    new_profile = UserProfile(user=user, activationKey=key,
+                              keyExpires=key_expires)
     try:
         c = {'usuario': user.get_full_name,
              'key': key,
@@ -424,12 +433,12 @@ def register_confirm(request, activation_key):
         return HttpResponseRedirect(reverse_lazy('logout'))
 
     user_profile = get_object_or_404(UserProfile,
-                                     activation_key=activation_key)
+                                     activationKey=activation_key)
     user = user_profile.user
 
     time = datetime.datetime.today()
 
-    if user_profile.key_expires < time:
+    if user_profile.keyExpires < time:
         return HttpResponseRedirect(reverse_lazy('new_Token',
                                                  kwargs={'pk': user.pk}))
 
@@ -496,8 +505,9 @@ def user_login(request):
                         email_login_successful(user)
                         user_profile.intent = 0
                         user_profile.save()
-                        customer = Users.objects.get(user=users)
+                        customer = Customer.objects.get(user=users)
                         customer.last_login = last_login
+                        print(customer.last_login)
                         customer.save()
                         return HttpResponseRedirect(reverse_lazy('inicio',
                                                                  kwargs={'pk': customer.pk}))
@@ -506,14 +516,14 @@ def user_login(request):
 
                         today = datetime.datetime.today().date()
 
-                        if user_profile.date_intent != today:
+                        if user_profile.dateIntent != today:
                             user_profile.intent = 1
-                            user_profile.date_intent = today
+                            user_profile.dateIntent = today
                         else:
                             user_profile.intent = user_profile.intent + 1
 
                         user_profile.save()
-                elif user_profile.intent == 3:
+                if user_profile.intent == 3:
                     msg = "Su cuenta ha sido bloqueada. Comuniquese con atención al cliente" \
                           " para iniciar el proceso de desbloqueo."
                     form.add_error(None, msg)
@@ -547,7 +557,7 @@ class Home_Client(LoginRequiredMixin, TemplateView):
         context = super(
             Home_Client, self).get_context_data(**kwargs)
 
-        customer = Users.objects.get(id=self.kwargs['pk'])
+        customer = Customer.objects.get(id=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -675,3 +685,6 @@ class Profile(TemplateView):
 
 class Help(TemplateView):
     template_name = 'help.html'
+
+
+

@@ -452,6 +452,20 @@ $(document).ready(function () {
                 $('#spec-carac').addClass('text-success');
                 i = i+1;
             }
+            if ( $(confirm).val() !== $(password).val()) {
+                $('#confirm').removeClass('text-success');
+                if ( !($('#confirm').hasClass('text-danger')) ) {
+                    $('#confirm').addClass('text-danger');
+                }
+                $(confirm).addClass('errors');
+            }
+            else{
+                $(confirm).css({border: '2px solid #d2d6de'});
+                $(confirm).removeClass('errors');
+                $('#confirm').removeClass('text-danger');
+                $('#confirm').addClass('text-success');
+                $('#error-conf-pass').empty();
+            }
             if (i === 7){
                 $(password).css({border: '2px solid #d2d6de'});
                 $(password).removeClass('errors');
@@ -466,14 +480,36 @@ $(document).ready(function () {
                 $('#num-carac').addClass('text-danger');
             }
             $('#num-carac').removeClass('text-success');
+
             if (!($('#repeat-carac').hasClass('text-danger'))) {
                 $('#repeat-carac').addClass('text-danger');
             }
             $('#repeat-carac').removeClass('text-success');
+
             if (!($('#min-carac').hasClass('text-danger'))) {
                     $('#min-carac').addClass('text-danger');
                 }
             $('#min-carac').removeClass('text-success');
+
+            if (!($('#spec-carac').hasClass('text-danger'))) {
+                    $('#spec-carac').addClass('text-danger');
+                }
+            $('#spec-carac').removeClass('text-success');
+
+            if (!($('#carac').hasClass('text-danger'))) {
+                    $('#carac').addClass('text-danger');
+                }
+            $('#carac').removeClass('text-success');
+
+            if (!($('#pers-carac').hasClass('text-danger'))) {
+                    $('#pers-carac').addClass('text-danger');
+                }
+            $('#pers-carac').removeClass('text-success');
+
+            if (!($('#confirm').hasClass('text-danger'))) {
+                    $('#confirm').addClass('text-danger');
+                }
+            $('#confirm').removeClass('text-success');
         }
     });
 
@@ -503,6 +539,11 @@ $(document).ready(function () {
         else if ($(confirm).val() === ""){
             $('#error-conf-pass').text(msj);
             $(confirm).addClass('errors');
+
+            if (!($('#confirm').hasClass('text-danger'))) {
+                    $('#confirm').addClass('text-danger');
+                }
+            $('#confirm').removeClass('text-success');
         }
     });
 
@@ -545,76 +586,36 @@ function data_customer(valor) {
     var phone_office = $("#phone-office").text().split('-');
     var birthday = $("#birthday").text();
     var birthday_split = $("#birthday").text().split('-');
-
-    console.log(first_name);
-    console.log(last_name);
-    console.log(ci_cust);
-    console.log(phone_home);
-    console.log(cellphone);
-    console.log(phone_office);
-    console.log(birthday);
-    console.log(birthday_split);
-
-    console.log(first_name[0].includes(normalize(valor.toLowerCase())));
-    console.log(normalize(valor.toLowerCase()).includes(first_name[0]));
-    console.log(first_name[1].includes(normalize(valor.toLowerCase())));
-    console.log(normalize(valor.toLowerCase()).includes(first_name[1]));
-    console.log(last_name[0].includes(normalize(valor.toLowerCase())));
-    console.log(normalize(valor.toLowerCase()).includes(last_name[0]));
-    console.log(ci_cust[1].includes(valor));
-    console.log(valor.includes(ci_cust[1]));
-    console.log(valor.includes(birthday_split[0]));
-    console.log(birthday_split[0].includes(valor));
-    console.log(birthday_split[1].includes(valor));
-    console.log(valor.includes(birthday_split[2]));
-    console.log(birthday_split[2].includes(valor));
-    console.log(valor.includes(cellphone[0]));
-    console.log(cellphone[0].includes(valor));
-    console.log(valor.includes(cellphone[1]));
-    console.log(cellphone[1].includes(valor));
-    console.log(valor.includes(phone_home[0]));
-    console.log(phone_home[0].includes(valor));
-    console.log(valor.includes(phone_home[1]));
-    console.log(phone_home[1].includes(valor));
-    console.log(valor.includes(phone_office[0]));
-    console.log(phone_office[0].includes(valor));
-    console.log(valor.includes(phone_office[1]));
-    console.log(phone_office[1].includes(valor));
     
 
-    if ( (first_name[0].includes(normalize(valor.toLowerCase()))) ||
-        (normalize(valor.toLowerCase()).includes(first_name[0])) ||
-        (first_name[1].includes(normalize(valor.toLowerCase()))) ||
-        (normalize(valor.toLowerCase()).includes(first_name[1])) ||
-        (last_name[0].includes(normalize(valor.toLowerCase()))) ||
-        (normalize(valor.toLowerCase()).includes(last_name[0])) ||
-        (last_name[1].includes(normalize(valor.toLowerCase()))) ||
-        (normalize(valor.toLowerCase()).includes(last_name[1])) ||
-        (ci_cust[1].includes(valor)) ||
-        (valor.includes(ci_cust[1])) ||
-        (birthday.includes(valor)) ||
-        (valor.includes(birthday)) ||
-        (valor.includes(birthday_split[0])) ||
-        (birthday_split[0].includes(valor)) ||
-        (valor.includes(birthday_split[1])) ||
-        (birthday_split[1].includes(valor)) ||
-        (valor.includes(birthday_split[2])) ||
-        (birthday_split[2].includes(valor)) ||
-        (valor.includes(cellphone[0])) ||
-        (cellphone[0].includes(valor)) ||
-        (valor.includes(cellphone[1])) ||
-        (cellphone[1].includes(valor)) ||
-        (valor.includes(phone_home[0])) ||
-        (phone_home[0].includes(valor)) ||
-        (valor.includes(phone_home[1])) ||
-        (phone_home[1].includes(valor)) ||
-        (valor.includes(phone_office[0])) ||
-        (phone_office[0].includes(valor)) ||
-        (valor.includes(phone_office[1])) ||
-        (phone_office[1].includes(valor)) ) {
-        return true;
-    }
-    else {
-        return false;
-    }
+    return !!((first_name[0].includes(normalize(valor.toLowerCase()))) ||
+    (normalize(valor.toLowerCase()).includes(first_name[0])) ||
+    (first_name[1].includes(normalize(valor.toLowerCase()))) ||
+    (normalize(valor.toLowerCase()).includes(first_name[1])) ||
+    (last_name[0].includes(normalize(valor.toLowerCase()))) ||
+    (normalize(valor.toLowerCase()).includes(last_name[0])) ||
+    (last_name[1].includes(normalize(valor.toLowerCase()))) ||
+    (normalize(valor.toLowerCase()).includes(last_name[1])) ||
+    (ci_cust[1].includes(valor)) ||
+    (valor.includes(ci_cust[1])) ||
+    (birthday.includes(valor)) ||
+    (valor.includes(birthday)) ||
+    (valor.includes(birthday_split[0])) ||
+    (birthday_split[0].includes(valor)) ||
+    (valor.includes(birthday_split[1])) ||
+    (birthday_split[1].includes(valor)) ||
+    (valor.includes(birthday_split[2])) ||
+    (birthday_split[2].includes(valor)) ||
+    (valor.includes(cellphone[0])) ||
+    (cellphone[0].includes(valor)) ||
+    (valor.includes(cellphone[1])) ||
+    (cellphone[1].includes(valor)) ||
+    (valor.includes(phone_home[0])) ||
+    (phone_home[0].includes(valor)) ||
+    (valor.includes(phone_home[1])) ||
+    (phone_home[1].includes(valor)) ||
+    (valor.includes(phone_office[0])) ||
+    (phone_office[0].includes(valor)) ||
+    (valor.includes(phone_office[1])) ||
+    (phone_office[1].includes(valor)));
 }

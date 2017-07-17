@@ -373,7 +373,6 @@ function validate_email() {
                     $("#error_step2").append('<p class="text-danger margin-error">'+
                         msj_error +'</p>');
                     effect_error("#error_step2");
-                    $(email).addClass('errors');
                 }
 
             },

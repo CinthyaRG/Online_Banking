@@ -7,28 +7,32 @@ ID_VALIDATOR = RegexValidator(
     regex=r'^[VE]{1}-\d{6,8}$',
     message="Formato de cédula inválido.",
 )
+IDEN_VALIDATOR = RegexValidator(
+    regex=r'^[VEJ]{1}-\d{6,9}$',
+    message="Formato de cédula inválido.",
+)
 
 
-class Card_coor(models.Model):
+class CardCoor(models.Model):
     serial = models.CharField(max_length=30, unique=True)
     coor = models.CharField(max_length=120)
     status = models.BooleanField(default=False)
 
 
-class Elems_security(models.Model):
+class ElemSecurity(models.Model):
     question1 = models.CharField(max_length=50)
     answer1 = models.CharField(max_length=50)
     question2 = models.CharField(max_length=50)
     answer2 = models.CharField(max_length=50)
-    card_coor = models.OneToOneField(Card_coor, blank=True, null=True)
+    cardCoor = models.OneToOneField(CardCoor, blank=True, null=True)
 
 
-class Users(models.Model):
+class Customer(models.Model):
     user = models.OneToOneField(User)
     ident = models.CharField(validators=[ID_VALIDATOR], max_length=10, unique=True)
-    elem_security = models.OneToOneField(Elems_security, blank=True, null=True)
-    pass_expires = models.DateField(null=True, blank=True)
-    last_login = models.DateTimeField(null=True, blank=True)
+    elemSecurity = models.OneToOneField(ElemSecurity, blank=True, null=True)
+    passExpires = models.DateField(null=True, blank=True)
+    lastLogin = models.DateTimeField(null=True, blank=True)
 
     def get_name(self):
         first_name = self.user.first_name.split(' ')
@@ -40,7 +44,11 @@ class Users(models.Model):
 
     def get_last_login(self):
         formato = "%d/%m/%y %I:%M:%S %p"
-        date_time = self.last_login.strftime(formato).split(" ")
+        print()
+        if self.lastLogin == '':
+            return ''
+
+        date_time = self.lastLogin.strftime(formato).split(" ")
         date = date_time[0]
         time = date_time[1] + " " + date_time[2]
         return date + " " + time
@@ -51,7 +59,25 @@ class Users(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
-    activation_key = models.CharField(max_length=40, blank=True)
-    key_expires = models.DateTimeField()
+    activationKey = models.CharField(max_length=40, blank=True)
+    keyExpires = models.DateTimeField()
     intent = models.IntegerField(default=0)
-    date_intent = models.DateField(null=True, blank=True)
+    dateIntent = models.DateField(null=True, blank=True)
+
+
+class Affiliates(models.Model):
+    bank = models.CharField(max_length=128)
+    numAccount = models.CharField(max_length=20, blank=False)
+    name = models.CharField(max_length=64)
+    ident = models.CharField(validators=[IDEN_VALIDATOR], max_length=11, unique=True)
+    email = models.EmailField()
+    alias = models.CharField(max_length=40)
+    customer = models.ForeignKey(Customer)
+
+
+class Service(models.Model):
+    ident = models.CharField(validators=[IDEN_VALIDATOR], max_length=11, unique=True, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    numCard = models.CharField(max_length=16, blank=True, null=True)
+    identService = models.CharField(max_length=32)
+    customer = models.ForeignKey(Customer)
