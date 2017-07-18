@@ -34,14 +34,6 @@ def get_user(user):
         return "{% url 'inicio' user.pk %}"
 
 
-def permission_denied(request):
-    response = render(request, '403.html')
-
-    response.status_code = 403
-
-    return response
-
-
 @ensure_csrf_cookie
 def validate_user(request):
     groups()
@@ -507,7 +499,6 @@ def user_login(request):
                         user_profile.save()
                         customer = Customer.objects.get(user=users)
                         customer.last_login = last_login
-                        print(customer.last_login)
                         customer.save()
                         return HttpResponseRedirect(reverse_lazy('inicio',
                                                                  kwargs={'pk': customer.pk}))
@@ -521,13 +512,16 @@ def user_login(request):
                             user_profile.dateIntent = today
                         else:
                             user_profile.intent = user_profile.intent + 1
-
+                            if user_profile.intent == 3:
+                                msg = "Su cuenta ha sido bloqueada. Comuniquese con atención al cliente" \
+                                      " para iniciar el proceso de desbloqueo."
+                                form.add_error(None, msg)
+                                user_block(users)
                         user_profile.save()
-                if user_profile.intent == 3:
-                    msg = "Su cuenta ha sido bloqueada. Comuniquese con atención al cliente" \
+                elif user_profile.intent == 3:
+                    msg = "Su cuenta se encuentra bloqueada. Comuniquese con atención al cliente" \
                           " para iniciar el proceso de desbloqueo."
                     form.add_error(None, msg)
-                    user_block(users)
                 else:
                     msg = "Aún no ha activado su cuenta. Por favor revise su correo."
                     form.add_error(None, msg)

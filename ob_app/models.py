@@ -39,13 +39,13 @@ class Customer(models.Model):
         last_name = self.user.last_name.split(' ')
         name = first_name[0] + " " + first_name[1][0] + ". "
         name = name + last_name[0] + " " + last_name[1][0] + "."
-        
+
         return name
 
     def get_last_login(self):
         formato = "%d/%m/%y %I:%M:%S %p"
-        print()
-        if self.lastLogin == '':
+        print(self.lastLogin == '')
+        if self.lastLogin == None:
             return ''
 
         date_time = self.lastLogin.strftime(formato).split(" ")
@@ -65,7 +65,7 @@ class UserProfile(models.Model):
     dateIntent = models.DateField(null=True, blank=True)
 
 
-class Affiliates(models.Model):
+class Affiliate(models.Model):
     bank = models.CharField(max_length=128)
     numAccount = models.CharField(max_length=20, blank=False)
     name = models.CharField(max_length=64)
@@ -80,4 +80,5 @@ class Service(models.Model):
     email = models.EmailField(blank=True, null=True)
     numCard = models.CharField(max_length=16, blank=True, null=True)
     identService = models.CharField(max_length=32)
+    alias = models.CharField(max_length=40)
     customer = models.ForeignKey(Customer)
