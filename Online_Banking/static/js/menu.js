@@ -12,8 +12,8 @@ function move(url) {
 function menu() {
     var animationSpeed = $.AdminLTE.options.animationSpeed;
     var path = window.location.pathname.split('/');
-    var act_pat = path[1];
-    var key = path[2];
+    var act_pat = path[2];
+    var key = path[3];
     var nivel = 0;
 
     if (act_pat === "consultar-cuenta") {

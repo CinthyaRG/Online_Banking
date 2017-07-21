@@ -29,6 +29,7 @@ class ElemSecurity(models.Model):
 
 class Customer(models.Model):
     user = models.OneToOneField(User)
+    ref = models.CharField(max_length=15)
     ident = models.CharField(validators=[ID_VALIDATOR], max_length=10, unique=True)
     elemSecurity = models.OneToOneField(ElemSecurity, blank=True, null=True)
     passExpires = models.DateField(null=True, blank=True)
@@ -44,7 +45,7 @@ class Customer(models.Model):
 
     def get_last_login(self):
         formato = "%d/%m/%y %I:%M:%S %p"
-        print(self.lastLogin == None)
+        print(self.lastLogin is None)
         if self.lastLogin is None:
             return ''
 

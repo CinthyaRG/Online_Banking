@@ -1,6 +1,6 @@
 drop table ob_app_customer CASCADE;
 drop table ob_app_cardcoor CASCADE;
-drop table ob_app_affiliates CASCADE;
+drop table ob_app_affiliate CASCADE;
 drop table ob_app_service CASCADE;
 drop table ob_app_elemsecurity CASCADE;
 drop table ob_app_userprofile CASCADE;  

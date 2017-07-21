@@ -88,43 +88,43 @@ urlpatterns = [
         Restore_pass.as_view(),
         name='restablecer-pass'),
     url(
-        r'^consultar-cuenta/(?P<acc_id>\w+)/(?P<pk>\w+)/',
+        r'^(?P<pk>\w+)/consultar-cuenta/(?P<acc_id>\w+)/',
         Account.as_view(),
         name='consultar-cuenta'),
     url(
-        r'^consultar-tdc/(?P<tdc_id>\w+)/(?P<pk>\w+)/',
+        r'^(?P<pk>\w+)/consultar-tdc/(?P<tdc_id>\w+)/',
         Tdc.as_view(),
         name='consultar-tdc'),
     url(
-        r'^consultar-prestamo/(?P<pk>\w+)/',
+        r'^(?P<pk>\w+)/consultar-prestamo/(?P<id>\w+)/',
         Loans.as_view(),
         name='consultar-prestamo'),
     url(
-        r'^transf-mis-cuentas/(?P<pk>\w+)$',
+        r'^(?P<pk>\w+)/transf-mis-cuentas/(?P<id>\w+)/$',
         Transfer_my_acc.as_view(),
         name='transf-mis-cuentas'),
     url(
-        r'^transf-mi-banco/(?P<pk>\w+)$',
+        r'^(?P<pk>\w+)/transf-mi-banco/$',
         Transfer_my_bank.as_view(),
         name='transf-mi-banco'),
     url(
-        r'^transf-otros-bancos/(?P<pk>\w+)$',
+        r'^(?P<pk>\w+)/transf-otros-bancos/$',
         Transfer_others_bank.as_view(),
         name='transf-otros-bancos'),
     url(
-        r'^datos-transferencia/(?P<pk>\w+)/',
+        r'^(?P<pk>\w+)/datos-transferencia/(?P<transfer>\w+)/',
         DataTransfer.as_view(),
         name='datos-transferencia'),
     url(
-        r'^transferencia-exitosa',
+        r'^(?P<pk>\w+)/transferencia-exitosa',
         Success.as_view(),
         name='transferencia-exitosa'),
     url(
-        r'^pagos',
+        r'^(?P<pk>\w+)/pagos',
         Payments.as_view(),
         name='pagos'),
     url(
-        r'^datos-pago/(?P<pk>\w+)/',
+        r'^(?P<pk>\w+)/datos-pago/(?P<payment>\w+)/',
         DataPayment.as_view(),
         name='datos-pago'),
     url(
@@ -140,23 +140,23 @@ urlpatterns = [
         Register_Services.as_view(),
         name='registro-servicios'),
     url(
-        r'^solicitudes$',
+        r'^(?P<pk>\w+)/solicitudes$',
         Request.as_view(),
         name='solicitudes'),
     url(
-        r'^solicitudes/Tarjeta-Coordenadas$',
+        r'^(?P<pk>\w+)/solicitudes/Tarjeta-Coordenadas$',
         Request_Coord.as_view(),
         name='solicitud-tarjeta-coordenadas'),
     url(
-        r'^solicitudes/Chequeras$',
+        r'^(?P<pk>\w+)/solicitudes/Chequeras$',
         Request_Checkbook.as_view(),
         name='solicitud-chequeras'),
     url(
-        r'^solicitudes/Cita$',
+        r'^(?P<pk>\w+)/solicitudes/Cita$',
         Request_Appointment.as_view(),
         name='solicitud-citas'),
     url(
-        r'^solicitudes/Referencias$',
+        r'^(?P<pk>\w+)/solicitudes/Referencias$',
         Request_References.as_view(),
         name='solicitud-referencias'),
     url(
@@ -172,15 +172,15 @@ urlpatterns = [
         Request_References_Success.as_view(),
         name='solicitud-referencias-exitosa'),
     url(
-        r'^gestion-productos/(?P<pk>\w+)$',
+        r'^(?P<pk>\w+)/gestion-productos$',
         Management.as_view(),
         name='gestion-productos'),
     url(
-        r'^perfil-seguridad/(?P<pk>\w+)$',
+        r'^(?P<pk>\w+)/perfil-seguridad$',
         Profile.as_view(),
         name='perfil-seguridad'),
     url(
-        r'^ayuda/(?P<pk>\w+)$',
+        r'^(?P<pk>\w+)/ayuda$',
         Help.as_view(),
         name='ayuda'),
 ]

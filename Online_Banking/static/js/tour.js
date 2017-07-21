@@ -29,9 +29,7 @@ function tour() {
                 content: "Aquí podrá observar la última vez que inicio sesión \
                 en la aplicación. Al ser su primera vez no muestra ninguna.",
                 target: document.querySelector(".navbar-custom-menu p"),
-                placement: "bottom",
-                xOffset: -90,
-                arrowOffset: 220
+                placement: "left"
             },
             {
                 title: "Gráfico",
@@ -139,7 +137,7 @@ function tourStart() {
         success: function (data) {
             alert("EXITO first-login");
             if (data.user_exists) {
-                if (data.first_login) {
+                if (data.login) {
                     tour();
                 }
             }
@@ -148,6 +146,7 @@ function tourStart() {
             }
         },
         error: function (data) {
+            alert(data.user_exists);
             alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
         }
     });

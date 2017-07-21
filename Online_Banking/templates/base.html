@@ -39,7 +39,13 @@
         </script>
         <script type="text/javascript" src="{% static 'js/charts.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/tour.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/data.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/menu.js' %}"></script>
+        <script>
+            $(document).ready(function (){
+                data({{customer.user.username}});
+            });
+        </script>
     {% endblock %}
 </head>
 
@@ -83,7 +89,7 @@
             <ul class="sidebar-menu">
                 <!-- Optionally, you can add icons to the links -->
                 <li class="active menu">
-                    <a id="pos_con" href="{% url 'inicio' user.pk %}"> <i class="fa  fa-line-chart"> </i>
+                    <a id="pos_con" href="{% url 'inicio' customer.ref %}"> <i class="fa  fa-line-chart"> </i>
                         <span> Posición Consolidada </span>
                     </a>
                 </li>
@@ -94,10 +100,10 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a id="acc-aho" href="{% url 'consultar-cuenta' 1 user.pk %}"> Cuenta Ahorro </a></li>
-                        <li><a id="acc-corr" href="{% url 'consultar-cuenta' 2 user.pk %}"> Cuenta Corriente </a></li>
-                        <li><a id="tdc" href="{% url 'consultar-tdc' user.pk 1 %}"> Tarjeta de Crédito </a></li>
-                        <li><a id="prest" href="{% url 'consultar-prestamo' 1 %}"> Préstamos </a></li>
+                        <li><a id="acc-aho" href="{% url 'consultar-cuenta' pk=customer.ref  acc_id=1 %}"> Cuenta Ahorro </a></li>
+                        <li><a id="acc-corr" href="{% url 'consultar-cuenta' pk=customer.ref  acc_id=2 %}"> Cuenta Corriente </a></li>
+                        <li><a id="tdc" href="{% url 'consultar-tdc' pk=customer.ref  tdc_id=1 %}"> Tarjeta de Crédito </a></li>
+                        <li><a id="prest" href="{% url 'consultar-prestamo' customer.ref 1 %}"> Préstamos </a></li>
                     </ul>
                 </li>
                 <li id="transfers" class="treeview">
@@ -107,7 +113,7 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a id="my-acc" href="{% url 'transf-mis-cuentas' user.pk %}"> Mis Cuentas </a></li>
+                        <li><a id="my-acc" href="{% url 'transf-mis-cuentas' pk=customer.ref id=1 %}"> Mis Cuentas </a></li>
                         <li id="transfers-others" class="treeview">
                             <a id="transf-other"> <i class="fa fa-users"> </i> <span> Terceros </span>
                                 <span class="pull-right-container">
@@ -115,24 +121,24 @@
                                 </span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a id="my-bank" href="{% url 'transf-mi-banco' user.pk %}">
+                                <li><a id="my-bank" href="{% url 'transf-mi-banco' customer.ref %}">
                                     Mismo Banco </a></li>
-                                <li><a id="other-bank" href="{% url 'transf-otros-bancos' user.pk %}">
+                                <li><a id="other-bank" href="{% url 'transf-otros-bancos' customer.ref %}">
                                     Otros Bancos  </a></li>
                             </ul>
                         </li>
                     </ul>
                 </li>
-                <li id="payments" class="menu"><a href="{% url 'pagos' %}"> <i class="fa fa-money"> </i>
+                <li id="payments" class="menu"><a href="{% url 'pagos' pk=customer.ref %}"> <i class="fa fa-money"> </i>
                     <span> Pagos </span></a></li>
-                <li id="request" class="menu"><a href="{% url 'solicitudes' %}"> <i class="fa fa-list"></i>
+                <li id="request" class="menu"><a href="{% url 'solicitudes' customer.ref %}"> <i class="fa fa-list"></i>
                     <span> Solicitudes En Línea </span></a></li>
-                <li id="management" class="menu"><a href="{% url 'gestion-productos' user.pk %}"> <i class="fa fa-check-square-o"></i>
+                <li id="management" class="menu"><a href="{% url 'gestion-productos' customer.ref %}"> <i class="fa fa-check-square-o"></i>
                     <span> Gestión De Productos </span></a>
                 </li>
-                <li id="profile" class="menu"><a href="{%  url 'perfil-seguridad' user.pk %}"> <i class="fa fa-user-secret"> </i>
+                <li id="profile" class="menu"><a href="{%  url 'perfil-seguridad' customer.ref %}"> <i class="fa fa-user-secret"> </i>
                     <span> Perfil De Seguridad </span></a></li>
-                <li id="help" class="menu"><a href="{%  url 'ayuda' user.pk %}"> <i class="fa  fa-question"> </i>
+                <li id="help" class="menu"><a href="{%  url 'ayuda' customer.ref %}"> <i class="fa  fa-question"> </i>
                     <span> Ayuda En Línea </span></a></li>
                 <li id="logout" class="menu"><a href="{% url 'salir' %}"> <i class="fa fa-power-off"> </i>
                     <span> Salir </span></a></li>
@@ -164,25 +170,16 @@
                             <!-- /.box-header -->
                             <div class="box-body no-padding">
                                 <table class="table table-bordered table-condensed text-center">
-                                    <tbody><tr class="bg-gray bg-gray-active">
+                                    <thead><tr class="bg-gray bg-gray-active">
                                         <th>Tipos de Cuenta</th>
                                         <th>Números de Cuenta</th>
                                         <th>Estado</th>
                                         <th>Saldo Disponible</th>
                                     </tr>
-                                    <tr class="cursor" onclick="move('consultar-cuenta/1/')">
-                                        <td>Ahorros</td>
-                                        <td class="link">017600**********2222</td>
-                                        <td>Activa</td>
-                                        <td class="text-bold">Bs. 172.096,77</td>
-                                    </tr>
-                                    <tr class="cursor" onclick="move('consultar-cuenta/2/')">
-                                        <td>Corriente</td>
-                                        <td class="link">017602**********1234</td>
-                                        <td>Activa</td>
-                                        <td class="text-bold">Bs. 36.289,24</td>
-                                    </tr>
-                                    </tbody></table>
+                                        <tbody id="table-assets">
+                                        </tbody>
+                                    </thead>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -216,7 +213,7 @@
                                         <th>Monto Pendiente</th>
                                         <th>Pague antes de</th>
                                     </tr>
-                                    <tr class="cursor" onclick="location.href= '{% url 'consultar-prestamo' 1 %}'">
+                                    <tr class="cursor" onclick="location.href= '{% url 'consultar-prestamo' customer.ref 1 %}'">
                                         <td class="link">17897001</td>
                                         <td>Ahorro *****2222</td>
                                         <td class="text-bold">Bs. 56.520,00</td>

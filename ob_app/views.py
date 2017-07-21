@@ -53,15 +53,17 @@ def validate_user(request):
 def first_login(request):
     customer = request.GET.get('customer', None)
     data = {
-        'user_exists': User.objects.filter(pk=customer).exists(),
-        'first_login': False
+        'user_exists': Customer.objects.filter(ref=customer).exists()
     }
 
     if data['user_exists']:
-        customer = Customer.objects.get(user=customer)
-        print(customer)
+        customer = Customer.objects.get(ref=customer)
         if customer.lastLogin is None:
-            data[first_login] = True
+            data['login'] = True
+        else:
+            data['login'] = False
+
+        print(data)
 
     return JsonResponse(data)
 
@@ -517,11 +519,11 @@ def user_login(request):
                         customer = Customer.objects.get(user=users)
                         print(customer)
                         customer.lastLogin = last_login
-                        
+                        customer.ref = str(datetime.datetime.today().microsecond)[:5] + str(customer.id)
                         print(customer.lastLogin)
                         customer.save()
                         return HttpResponseRedirect(reverse_lazy('inicio',
-                                                                 kwargs={'pk': user.pk}))
+                                                                 kwargs={'pk': customer.ref}))
                     else:
                         form.add_error(None, error_username)
 
@@ -571,7 +573,7 @@ class Home_Client(LoginRequiredMixin, TemplateView):
         context = super(
             Home_Client, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -614,7 +616,7 @@ class Account(LoginRequiredMixin, TemplateView):
         context = super(
             Account, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -629,7 +631,7 @@ class Tdc(LoginRequiredMixin, TemplateView):
         context = super(
             Tdc, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -644,7 +646,7 @@ class Loans(LoginRequiredMixin, TemplateView):
         context = super(
             Loans, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -659,7 +661,7 @@ class Transfer_my_acc(LoginRequiredMixin, TemplateView):
         context = super(
             Transfer_my_acc, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -674,7 +676,7 @@ class Transfer_my_bank(LoginRequiredMixin, TemplateView):
         context = super(
             Transfer_my_bank, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -689,7 +691,7 @@ class Transfer_others_bank(LoginRequiredMixin, TemplateView):
         context = super(
             Transfer_others_bank, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -704,7 +706,7 @@ class DataTransfer(LoginRequiredMixin, TemplateView):
         context = super(
             DataTransfer, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -719,7 +721,7 @@ class Success(LoginRequiredMixin, TemplateView):
         context = super(
             Success, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -734,7 +736,7 @@ class Payments(LoginRequiredMixin, TemplateView):
         context = super(
             Payments, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -749,7 +751,7 @@ class DataPayment(LoginRequiredMixin, TemplateView):
         context = super(
             DataPayment, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -764,7 +766,7 @@ class Success_Payments(LoginRequiredMixin, TemplateView):
         context = super(
             Success_Payments, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -779,7 +781,7 @@ class Register_Affiliate(LoginRequiredMixin, TemplateView):
         context = super(
             Register_Affiliate, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -794,7 +796,7 @@ class Register_Services(LoginRequiredMixin, TemplateView):
         context = super(
             Register_Services, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -809,7 +811,7 @@ class Request(LoginRequiredMixin, TemplateView):
         context = super(
             Request, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -824,7 +826,7 @@ class Request_Coord(LoginRequiredMixin, TemplateView):
         context = super(
             Request_Coord, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -839,7 +841,7 @@ class Request_Checkbook(LoginRequiredMixin, TemplateView):
         context = super(
             Request_Checkbook, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -854,7 +856,7 @@ class Request_Appointment(LoginRequiredMixin, TemplateView):
         context = super(
             Request_Appointment, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -869,7 +871,7 @@ class Request_References(LoginRequiredMixin, TemplateView):
         context = super(
             Request_References, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -884,7 +886,7 @@ class Request_References_Success(LoginRequiredMixin, TemplateView):
         context = super(
             Request_References_Success, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -899,7 +901,7 @@ class Request_Appointment_Success(LoginRequiredMixin, TemplateView):
         context = super(
             Request_Appointment_Success, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -914,7 +916,7 @@ class Request_Checkbook_Success(LoginRequiredMixin, TemplateView):
         context = super(
             Request_Checkbook_Success, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -929,7 +931,7 @@ class Management(LoginRequiredMixin, TemplateView):
         context = super(
             Management, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -944,7 +946,7 @@ class Profile(LoginRequiredMixin, TemplateView):
         context = super(
             Profile, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -959,7 +961,7 @@ class Help(LoginRequiredMixin, TemplateView):
         context = super(
             Help, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(user=self.kwargs['pk'])
+        customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
         return context

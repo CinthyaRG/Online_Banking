@@ -6,7 +6,7 @@
     <script>
         $(document).ready(function (){
             menu();
-            $.getJSON('static/js/questions.json', function (data) {
+            $.getJSON('../static/js/questions.json', function (data) {
               $.each( data, function( key, val ) {
                   $("#questions").append('<span class="h4 quest_help"><i class="fa fa-caret-right"> </i>'+
                             '<span>'+ val.pregunta +'</span></span>'+
