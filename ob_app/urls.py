@@ -72,6 +72,10 @@ urlpatterns = [
         validate_quest,
         name='validar-preguntas'),
     url(
+        r'^ajax/first-login/$',
+        first_login,
+        name='primer-login'),
+    url(
         r'^activate/(?P<activation_key>\w+)/$',
         register_confirm,
         name='register_confirm'),
@@ -84,11 +88,11 @@ urlpatterns = [
         Restore_pass.as_view(),
         name='restablecer-pass'),
     url(
-        r'^consultar-cuenta/(?P<pk>\w+)/',
+        r'^consultar-cuenta/(?P<acc_id>\w+)/(?P<pk>\w+)/',
         Account.as_view(),
         name='consultar-cuenta'),
     url(
-        r'^consultar-tdc/(?P<pk>\w+)/',
+        r'^consultar-tdc/(?P<tdc_id>\w+)/(?P<pk>\w+)/',
         Tdc.as_view(),
         name='consultar-tdc'),
     url(
@@ -96,15 +100,15 @@ urlpatterns = [
         Loans.as_view(),
         name='consultar-prestamo'),
     url(
-        r'^transf-mis-cuentas',
+        r'^transf-mis-cuentas/(?P<pk>\w+)$',
         Transfer_my_acc.as_view(),
         name='transf-mis-cuentas'),
     url(
-        r'^transf-mi-banco',
+        r'^transf-mi-banco/(?P<pk>\w+)$',
         Transfer_my_bank.as_view(),
         name='transf-mi-banco'),
     url(
-        r'^transf-otros-bancos',
+        r'^transf-otros-bancos/(?P<pk>\w+)$',
         Transfer_others_bank.as_view(),
         name='transf-otros-bancos'),
     url(
@@ -156,27 +160,27 @@ urlpatterns = [
         Request_References.as_view(),
         name='solicitud-referencias'),
     url(
-        r'^solicitudes/Cita/exitosa',
+        r'^solicitudes/Cita/exitosa$',
         Request_Appointment_Success.as_view(),
         name='solicitud-citas-exitosa'),
     url(
-        r'^solicitudes/Chequeras/exitosa',
+        r'^solicitudes/Chequeras/exitosa$',
         Request_Checkbook_Success.as_view(),
         name='solicitud-chequeras-exitosa'),
     url(
-        r'^solicitudes/Referencias/exitosa',
+        r'^solicitudes/Referencias/exitosa$',
         Request_References_Success.as_view(),
         name='solicitud-referencias-exitosa'),
     url(
-        r'^gestion-productos',
+        r'^gestion-productos/(?P<pk>\w+)$',
         Management.as_view(),
         name='gestion-productos'),
     url(
-        r'^perfil-seguridad',
+        r'^perfil-seguridad/(?P<pk>\w+)$',
         Profile.as_view(),
         name='perfil-seguridad'),
     url(
-        r'^ayuda',
+        r'^ayuda/(?P<pk>\w+)$',
         Help.as_view(),
         name='ayuda'),
 ]

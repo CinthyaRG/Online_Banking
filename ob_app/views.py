@@ -50,6 +50,23 @@ def validate_user(request):
 
 
 @ensure_csrf_cookie
+def first_login(request):
+    customer = request.GET.get('customer', None)
+    data = {
+        'user_exists': User.objects.filter(pk=customer).exists(),
+        'first_login': False
+    }
+
+    if data['user_exists']:
+        customer = Customer.objects.get(user=customer)
+        print(customer)
+        if customer.lastLogin is None:
+            data[first_login] = True
+
+    return JsonResponse(data)
+
+
+@ensure_csrf_cookie
 def validate_user_forgot(request):
     groups()
     ci = request.GET.get('ci', None)
@@ -498,10 +515,13 @@ def user_login(request):
                         user_profile.intent = 0
                         user_profile.save()
                         customer = Customer.objects.get(user=users)
-                        customer.last_login = last_login
+                        print(customer)
+                        customer.lastLogin = last_login
+                        
+                        print(customer.lastLogin)
                         customer.save()
                         return HttpResponseRedirect(reverse_lazy('inicio',
-                                                                 kwargs={'pk': customer.pk}))
+                                                                 kwargs={'pk': user.pk}))
                     else:
                         form.add_error(None, error_username)
 
@@ -551,7 +571,7 @@ class Home_Client(LoginRequiredMixin, TemplateView):
         context = super(
             Home_Client, self).get_context_data(**kwargs)
 
-        customer = Customer.objects.get(id=self.kwargs['pk'])
+        customer = Customer.objects.get(user=self.kwargs['pk'])
 
         context['customer'] = customer
         return context
@@ -585,100 +605,364 @@ class Restore_pass(TemplateView):
     template_name = 'forgot_password.html'
 
 
-class Account(TemplateView):
+class Account(LoginRequiredMixin, TemplateView):
     template_name = 'accounts.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Account, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
-class Tdc(TemplateView):
+class Tdc(LoginRequiredMixin, TemplateView):
     template_name = 'tdc.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Tdc, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
-class Loans(TemplateView):
+class Loans(LoginRequiredMixin, TemplateView):
     template_name = 'loans.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Loans, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
-class Transfer_my_acc(TemplateView):
+class Transfer_my_acc(LoginRequiredMixin, TemplateView):
     template_name = 'trans_my_acc.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Transfer_my_acc, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
-class Transfer_my_bank(TemplateView):
+class Transfer_my_bank(LoginRequiredMixin, TemplateView):
     template_name = 'trans_my_bank.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Transfer_my_bank, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
-class Transfer_others_bank(TemplateView):
+class Transfer_others_bank(LoginRequiredMixin, TemplateView):
     template_name = 'trans_other_bank.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Transfer_others_bank, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
-class DataTransfer(TemplateView):
+class DataTransfer(LoginRequiredMixin, TemplateView):
     template_name = 'transfer-data.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            DataTransfer, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
-class Success(TemplateView):
+class Success(LoginRequiredMixin, TemplateView):
     template_name = 'transfer-success.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Success, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
-class Payments(TemplateView):
+class Payments(LoginRequiredMixin, TemplateView):
     template_name = 'payments.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Payments, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
-class DataPayment(TemplateView):
+class DataPayment(LoginRequiredMixin, TemplateView):
     template_name = 'payment-data.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            DataPayment, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
-class Success_Payments(TemplateView):
+class Success_Payments(LoginRequiredMixin, TemplateView):
     template_name = 'payments-success.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Success_Payments, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
-class Register_Affiliate(TemplateView):
+class Register_Affiliate(LoginRequiredMixin, TemplateView):
     template_name = 'register-affiliate.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Register_Affiliate, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
-class Register_Services(TemplateView):
+class Register_Services(LoginRequiredMixin, TemplateView):
     template_name = 'register-services.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Register_Services, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
-class Request(TemplateView):
+class Request(LoginRequiredMixin, TemplateView):
     template_name = 'request.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Request, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
-class Request_Coord(TemplateView):
+class Request_Coord(LoginRequiredMixin, TemplateView):
     template_name = 'req-tar-coor.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Request_Coord, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
-class Request_Checkbook(TemplateView):
+class Request_Checkbook(LoginRequiredMixin, TemplateView):
     template_name = 'req-checkb.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Request_Checkbook, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
-class Request_Appointment(TemplateView):
+class Request_Appointment(LoginRequiredMixin, TemplateView):
     template_name = 'req-appointment.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Request_Appointment, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
-class Request_References(TemplateView):
+class Request_References(LoginRequiredMixin, TemplateView):
     template_name = 'req-reference.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Request_References, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
-class Request_References_Success(TemplateView):
+class Request_References_Success(LoginRequiredMixin, TemplateView):
     template_name = 'req-reference_success.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Request_References_Success, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
-class Request_Appointment_Success(TemplateView):
+class Request_Appointment_Success(LoginRequiredMixin, TemplateView):
     template_name = 'req-appointment_success.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Request_Appointment_Success, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
-class Request_Checkbook_Success(TemplateView):
+class Request_Checkbook_Success(LoginRequiredMixin, TemplateView):
     template_name = 'req-checkb_success.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Request_Checkbook_Success, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
-class Management(TemplateView):
+class Management(LoginRequiredMixin, TemplateView):
     template_name = 'management-products.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Management, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
-class Profile(TemplateView):
+class Profile(LoginRequiredMixin, TemplateView):
     template_name = 'profile-security.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Profile, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
-class Help(TemplateView):
+class Help(LoginRequiredMixin, TemplateView):
     template_name = 'help.html'
+    login_url = 'home'
+    redirect_field_name = 'redirect_to'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Help, self).get_context_data(**kwargs)
+
+        customer = Customer.objects.get(user=self.kwargs['pk'])
+
+        context['customer'] = customer
+        return context
 
 
 

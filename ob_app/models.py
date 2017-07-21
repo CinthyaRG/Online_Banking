@@ -44,8 +44,8 @@ class Customer(models.Model):
 
     def get_last_login(self):
         formato = "%d/%m/%y %I:%M:%S %p"
-        print(self.lastLogin == '')
-        if self.lastLogin == None:
+        print(self.lastLogin == None)
+        if self.lastLogin is None:
             return ''
 
         date_time = self.lastLogin.strftime(formato).split(" ")

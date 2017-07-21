@@ -33,9 +33,12 @@
         <script type="text/javascript" src="{% static 'js/respond.min.js' %}"></script>
     <![endif]-->
     {% block script %}
+        <link rel="stylesheet" href="{% static 'plugins/hopscotch/css/hopscotch.css' %}">
+        <script src="{% static 'plugins/hopscotch/js/hopscotch.js' %}"></script>
         <script type="text/javascript" src="http://www.gstatic.com/charts/loader.js">
         </script>
         <script type="text/javascript" src="{% static 'js/charts.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/tour.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/menu.js' %}"></script>
     {% endblock %}
 </head>
@@ -91,9 +94,9 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a id="acc-aho" href="{% url 'consultar-cuenta' 1 %}"> Cuenta Ahorro </a></li>
-                        <li><a id="acc-corr" href="{% url 'consultar-cuenta' 2 %}"> Cuenta Corriente </a></li>
-                        <li><a id="tdc" href="{% url 'consultar-tdc' 1 %}"> Tarjeta de Crédito </a></li>
+                        <li><a id="acc-aho" href="{% url 'consultar-cuenta' 1 user.pk %}"> Cuenta Ahorro </a></li>
+                        <li><a id="acc-corr" href="{% url 'consultar-cuenta' 2 user.pk %}"> Cuenta Corriente </a></li>
+                        <li><a id="tdc" href="{% url 'consultar-tdc' user.pk 1 %}"> Tarjeta de Crédito </a></li>
                         <li><a id="prest" href="{% url 'consultar-prestamo' 1 %}"> Préstamos </a></li>
                     </ul>
                 </li>
@@ -104,7 +107,7 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a id="my-acc" href="{% url 'transf-mis-cuentas' %}"> Mis Cuentas </a></li>
+                        <li><a id="my-acc" href="{% url 'transf-mis-cuentas' user.pk %}"> Mis Cuentas </a></li>
                         <li id="transfers-others" class="treeview">
                             <a id="transf-other"> <i class="fa fa-users"> </i> <span> Terceros </span>
                                 <span class="pull-right-container">
@@ -112,9 +115,9 @@
                                 </span>
                             </a>
                             <ul class="treeview-menu">
-                                <li><a id="my-bank" href="{% url 'transf-mi-banco' %}">
+                                <li><a id="my-bank" href="{% url 'transf-mi-banco' user.pk %}">
                                     Mismo Banco </a></li>
-                                <li><a id="other-bank" href="{% url 'transf-otros-bancos' %}">
+                                <li><a id="other-bank" href="{% url 'transf-otros-bancos' user.pk %}">
                                     Otros Bancos  </a></li>
                             </ul>
                         </li>
@@ -124,14 +127,14 @@
                     <span> Pagos </span></a></li>
                 <li id="request" class="menu"><a href="{% url 'solicitudes' %}"> <i class="fa fa-list"></i>
                     <span> Solicitudes En Línea </span></a></li>
-                <li id="management" class="menu"><a href="{% url 'gestion-productos' %}"> <i class="fa fa-check-square-o"></i>
+                <li id="management" class="menu"><a href="{% url 'gestion-productos' user.pk %}"> <i class="fa fa-check-square-o"></i>
                     <span> Gestión De Productos </span></a>
                 </li>
-                <li id="profile" class="menu"><a href="{%  url 'perfil-seguridad' %}"> <i class="fa fa-user-secret"> </i>
+                <li id="profile" class="menu"><a href="{%  url 'perfil-seguridad' user.pk %}"> <i class="fa fa-user-secret"> </i>
                     <span> Perfil De Seguridad </span></a></li>
-                <li id="help" class="menu"><a href="{%  url 'ayuda' %}"> <i class="fa  fa-question"> </i>
+                <li id="help" class="menu"><a href="{%  url 'ayuda' user.pk %}"> <i class="fa  fa-question"> </i>
                     <span> Ayuda En Línea </span></a></li>
-                <li class="menu"><a href="{% url 'salir' %}"> <i class="fa fa-power-off"> </i>
+                <li id="logout" class="menu"><a href="{% url 'salir' %}"> <i class="fa fa-power-off"> </i>
                     <span> Salir </span></a></li>
             </ul>
             <!-- /.sidebar-menu -->
@@ -156,7 +159,7 @@
                     <div class="col-md-10">
                         <div class="box box-success">
                             <div class="box-header">
-                                <h3 class="box-title margin">Activos</h3>
+                                <h3 id="assets" class="box-title margin">Activos</h3>
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body no-padding">
@@ -189,7 +192,7 @@
                     <div class="col-md-10">
                         <div class="box box-success">
                             <div class="box-header">
-                                <h3 class="box-title margin">Pasivos</h3>
+                                <h3 id="liabilities" class="box-title margin">Pasivos</h3>
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body no-padding">
