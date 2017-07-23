@@ -45,8 +45,9 @@ function drop_years(){
 function selectMonth(){
     var year = $('#year').val();
     var today = new Date().toJSON().slice(0,10);
+    var year_t = today.slice(2,4);
     var month;
-    if (year === "17") {
+    if (year === year_t) {
         month = parseInt(today.slice(5,7));
     }
     else {
@@ -216,7 +217,6 @@ function validation_forgot(a,b,c,d,e,f) {
             'Los campos presentan errores por favor ' +
             'verifíquelos para continuar con el registro.' +'</p>');
         effect_error("#error");
-
     }
 
     else if ( (numtarj === "") || (ccv === "") || ($(f).val() === "")) {
@@ -254,13 +254,21 @@ function validation_forgot(a,b,c,d,e,f) {
                     effect_error("#error");
                 }
                 else {
-                    if (!(data.active)) {
+                    if (data.block) {
+                        alert("block");
+                        $("#error").append('<p class="text-danger margin-error">'+
+                            data.error +'</p>');
+                        effect_error("#error");
+                    }
+                    else if (!(data.active)) {
+                        alert("active");
                         $("#error").append('<p class="text-danger margin-error">'+
                             data.error +'</p>');
                         effect_error("#error");
                     }
                     else {
                         $('#quest-sec').text(data.quest);
+                        $("#data").text(data.p);
                         $.ajax({
                         url: url_api,
                         origin: 'localhost:8000',
@@ -578,6 +586,12 @@ function validate_pass() {
     var q2 = $("#quest2").val();
     var username = $("#numtarj").val();
     var ci_cust = $("#ci_customer").text();
+    var min = $("#min-carac");
+    var carac = $("#carac");
+    var repeat = $("#repeat-carac");
+    var num = $("#num-carac");
+    var spec = $("#spec-carac");
+    var pers = $("#pers-carac");
     var msj = "Este campo presenta errores";
     var msj_error = "Hubo un error en la conexión intente de nuevo. Gracias.";
     var path = window.location.href.split('/');
@@ -593,6 +607,12 @@ function validate_pass() {
     }
     else if ( (confirm.val() !== password.val())) {
         $('#confirm').addClass('text-danger');
+    }
+    else if ( (old.hasClass('text-danger')) || (min.hasClass('text-danger')) ||
+        (carac.hasClass('text-danger')) || (repeat.hasClass('text-danger')) || 
+        (num.hasClass('text-danger')) || (spec.hasClass('text-danger')) || 
+        (pers.hasClass('text-danger')) ) {
+        $('#error-pass').text(msj);
     }
     else {
         $.ajax({
@@ -641,6 +661,13 @@ function validate_pass_forgot() {
     var password = $("#password");
     var confirm = $("#confirm-pass");
     var username = $("#numtarj").val();
+    var old = $("#old");
+    var min = $("#min-carac");
+    var carac = $("#carac");
+    var repeat = $("#repeat-carac");
+    var num = $("#num-carac");
+    var spec = $("#spec-carac");
+    var pers = $("#pers-carac");
     var msj = "Este campo presenta errores";
     var msj_error = "Hubo un error en la conexión intente de nuevo. Gracias.";
     var path = window.location.href.split('/');
@@ -656,6 +683,12 @@ function validate_pass_forgot() {
     }
     else if ( (confirm.val() !== password.val())) {
         $('#confirm').addClass('text-danger');
+    }
+    else if ( (old.hasClass('text-danger')) || (min.hasClass('text-danger')) ||
+        (carac.hasClass('text-danger')) || (repeat.hasClass('text-danger')) || 
+        (num.hasClass('text-danger')) || (spec.hasClass('text-danger')) || 
+        (pers.hasClass('text-danger')) ) {
+        $('#error-pass').text(msj);
     }
     else {
         $.ajax({
@@ -699,14 +732,15 @@ function pagNext(numPag) {
     var next = numPag +1;
     var step = '#step';
     var number = '#number';
+    var path = window.location.href.split('/');
     $(step+numPag).css({display: "none"});
     $(step+next).css({display: "block"});
     $(number+next).addClass("activate");
     $(number+numPag).removeClass("activate");
-    if (next === 3) {
+    if ( (next === 3) && (path[3] === "registro")) {
         count_circle();
     }
-    if (next===4) {
+    if (( next===4) && (path[3] === "registro")) {
         $(".clock").TimeCircles().destroy();
     }
 }
@@ -715,14 +749,15 @@ function pagBack(numPag) {
     var back = numPag -1;
     var step = '#step';
     var number = '#number';
+    var path = window.location.href.split('/');
     $(step+numPag).css({display: "none"});
     $(step+back).css({display: "block"});
     $(number+back).addClass("activate");
     $(number+numPag).removeClass("activate");
-    if (back === 3) {
+    if ( (back === 3) && (path[3] === "registro")) {
         count_circle();
     }
-    if (back===2) {
+    if ( (back===2) && (path[3] === "registro")) {
         $(".clock").TimeCircles().destroy();
     }
 }

@@ -80,10 +80,16 @@ def validate_user_forgot(request):
 
         customer = Customer.objects.get(ident=ci)
         user = User.objects.get(id=customer.user.id)
+        userprofile = UserProfile.objects.get(user=user)
 
         data['active'] = user.is_active
+        data['block'] = userprofile.intent == 3
 
-        if not (data['active']):
+        if data['block']:
+            data['error'] =  "Su cuenta se encuentra bloqueada. Comuniquese con " \
+                            "atención al cliente para iniciar el proceso de desbloqueo."
+            return JsonResponse(data)
+        elif not (data['active']):
             data['error'] = "Su cuenta no esta activa, ingrese a su correo " \
                             "y siga los pasos para activarla para así poder reestablecer " \
                             "su contraseña"
@@ -292,12 +298,26 @@ def validate_pass_forgot(request):
 
         pass_expires = datetime.datetime.today() + datetime.timedelta(days=180)
         customer = Customer.objects.get(user=user)
-        customer.pass_expires = pass_expires
+        customer.passExpires = pass_expires
         customer.save()
 
         data['correct'] = True
     else:
         data['error'] = 'Ha ocurrido un error por favor reingrese sus datos.'
+
+    return JsonResponse(data)
+
+
+@ensure_csrf_cookie
+def old_pass(request):
+    username = request.GET.get('username', None)
+    password = request.GET.get('pass', None)
+
+    user = User.objects.get(username=username)
+
+    data = {
+        'correct': user.check_password(password)
+    }
 
     return JsonResponse(data)
 
@@ -507,16 +527,25 @@ def user_login(request):
             if user_auth is not None:
                 users = User.objects.get(username=username)
                 user_profile = get_object_or_404(UserProfile, user=users)
+                customer = Customer.objects.get(user=users)
+                today = datetime.datetime.today().date()
                 if users.is_active and user_profile.intent < 3:
                     user = authenticate(username=users.username,
                                         password=password)
                     if user:
+                        if customer.passExpires <= today:
+                            print("expirooooo")
+                            msg = "Su contraseña ha expirado por favor ingrese sus datos para cambiar su contraseña."
+                            form.add_error(None, msg)
+
+                            context = {'form': form}
+                            return render(request, 'forgot_password.html', context)
+                        
                         last_login = users.last_login
                         login(request, user)
                         email_login_successful(user)
                         user_profile.intent = 0
                         user_profile.save()
-                        customer = Customer.objects.get(user=users)
                         print(customer)
                         customer.lastLogin = last_login
                         customer.ref = str(datetime.datetime.today().microsecond)[:5] + str(customer.id)
@@ -526,8 +555,6 @@ def user_login(request):
                                                                  kwargs={'pk': customer.ref}))
                     else:
                         form.add_error(None, error_username)
-
-                        today = datetime.datetime.today().date()
 
                         if user_profile.dateIntent != today:
                             user_profile.intent = 1

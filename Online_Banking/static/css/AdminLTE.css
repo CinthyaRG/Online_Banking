@@ -1313,7 +1313,7 @@ a.sidebar-toggle {
     color: #f39c12;
 }
 .form-group.has-error label {
-    color: #dd4b39;
+    color: #a94442;
 }
 .form-group.has-error .form-control,
 .form-group.has-error .input-group-addon {
@@ -2597,7 +2597,7 @@ a.sidebar-toggle {
     border-top-color: #00c0ef;
 }
 .nav-tabs-custom.tab-danger > .nav-tabs > li.active {
-    border-top-color: #dd4b39;
+    border-top-color: #a94442;
 }
 .nav-tabs-custom.tab-warning > .nav-tabs > li.active {
     border-top-color: #f39c12;

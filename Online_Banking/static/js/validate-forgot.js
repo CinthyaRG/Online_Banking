@@ -1,5 +1,5 @@
 /**
- * Created by CinthyaCarolina on 5/7/2017.
+ * Created by CinthyaCarolina on 13/7/2017.
  */
 
 $(document).ready(function () {
@@ -7,18 +7,13 @@ $(document).ready(function () {
     var regexRepeat = /(.)\1{2,}/;
     var regexMay = /[A-Z]+/;
     var regexMin = /[a-z]+/;
-    var regexEmail = /^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,3})$/;
     var regexSpecial = /[$!%.#_*?&]+/;
     var numtarj = '#numtarj';
-    var pin = '#pin';
     var ccv = '#ccv';
     var ci = '#ci';
     var email = '#email';
     var cod = '#cod';
-    var q1 = '#quest1';
-    var q2 = '#quest2';
-    var a1 = '#answ1';
-    var a2 = '#answ2';
+    var answer = '#answer';
     var password = '#password';
     var confirm = '#confirm-pass';
     var first_name = $("#name_customer").text().split(' ');
@@ -30,7 +25,6 @@ $(document).ready(function () {
     var birthday = $("#birthday").text();
     var birthday_split = $("#birthday").text().split('-');
     var msj_num = "Sólo se admiten números";
-    var msj_email = "Ingrese un email válido";
     var msj = "Este campo es obligatorio";
 
     $('#month').on('focus', function () {
@@ -67,36 +61,6 @@ $(document).ready(function () {
         $(numtarj).removeClass('errors');
         $(numtarj).css({'border-color': '#8AB7B6'});
         $('#error-num-tarj').empty();
-        $("#error-general").empty();
-        $("#error").empty();
-    });
-
-    $(pin).on('focusout', function () {
-        if ( $(pin).val() !== ""){
-            if ( !($(pin).val().match(regexNum))) {
-                $('#error-pin').text(msj_num);
-                $(pin).addClass('errors');
-            }
-            else if ($(pin).val().length < 4){
-                $('#error-pin').text("Debe contener 4 dígitos");
-                $(pin).addClass('errors');
-            }
-            else{
-                $(pin).css({border: '2px solid #d2d6de'});
-                $(pin).removeClass('errors');
-                $('#error-pin').empty();
-            }
-        }
-        else if ($(pin).val() === ""){
-            $('#error-pin').text(msj);
-            $(pin).addClass('errors');
-        }
-    });
-
-    $(pin).on('focus', function () {
-        $(pin).removeClass('errors');
-        $(pin).css({'border-color': '#8AB7B6'});
-        $('#error-pin').empty();
         $("#error-general").empty();
         $("#error").empty();
     });
@@ -161,192 +125,57 @@ $(document).ready(function () {
         $("#error").empty();
     });
 
-    $(email).on('focusout', function () {
-        if ( $(email).val() !== ""){
-            if ( !($(email).val().match(regexEmail))) {
-                $('#error-email').text(msj_email);
-                $(email).addClass('errors');
-            }
-            else{
-                $(email).css({border: '2px solid #d2d6de'});
-                $(email).removeClass('errors');
-                $('#error-email').empty();
-            }
-        }
-        else if ($(email).val() === ""){
-            $('#error-email').text(msj);
-            $(email).addClass('errors');
-        }
-    });
-
-    $(email).on('focus', function () {
-        $(email).removeClass('errors');
-        $(email).css({'border-color': '#8AB7B6'});
-        $('#error-email').empty();
-        $("#error_step2").empty();
-    });
-
-    $(cod).on('focusout', function () {
-        if ( $(cod).val() !== ""){
-            if ( $(cod).val().length !== 6) {
-                $('#error-cod').text('El código debe contener ' +
-                    '6 dígitos');
-                $(cod).addClass('errors');
-            }
-            else{
-                $(cod).css({border: '2px solid #d2d6de'});
-                $(cod).removeClass('errors');
-                $('#error-cod').empty();
-            }
-        }
-        else if ($(cod).val() === ""){
-            $('#error-cod').text(msj);
-            $(cod).addClass('errors');
-        }
-    });
-
-    $(cod).on('focus', function () {
-        $(cod).removeClass('errors');
-        $(cod).css({'border-color': '#8AB7B6'});
-        $('#error-cod').empty();
-        $("#error_step3").empty();
-    });
-
-    $(q1).keyup( function () {
-        if ( $(q1).val() !== ""){
-            if ( $(q2).val() === $(q1).val()) {
-                $('#error-q1').text('La pregunta 1 no puede ' +
-                    'ser igual a la pregunta 2.');
-                $(q1).addClass('errors');
-            }
-            else{
-                $(q1).css({border: '2px solid #d2d6de'});
-                $(q1).removeClass('errors');
-                $('#error-q1').empty();
-            }
+    $(answer).keyup( function () {
+        if ( $(answer).val() !== ""){
+            $(answer).css({border: '2px solid #d2d6de'});
+            $(answer).removeClass('errors');
+            $('#error-answer').empty();
         }
         else {
-            $('#error-q1').text(msj);
-            $(q1).addClass('errors');
+            $('#error-answer').text(msj);
+            $(answer).addClass('errors');
         }
     });
 
-    $(q1).on('focus', function () {
-        $(q1).removeClass('errors');
-        $(q1).css({'border-color': '#8AB7B6'});
-        $('#error-q1').empty();
-    });
-
-    $(a1).keyup( function () {
-        if ( $(a1).val() !== ""){
-            if ( $(a1).val() === $(q1).val()) {
-                $('#error-a1').text('La respuesta no puede ' +
-                    'ser igual a la pregunta.');
-                $(a1).addClass('errors');
-            }
-            else if ( data_customer($(a1).val()) ) {
-                $('#error-a1').text('La respuesta no puede ' +
-                    'contener ninguno de sus datos personales.');
-                $(a1).addClass('errors');
-            }
-            else{
-                $(a1).css({border: '2px solid #d2d6de'});
-                $(a1).removeClass('errors');
-                $('#error-a1').empty();
-            }
-        }
-        else {
-            $('#error-a1').text(msj);
-            $(a1).addClass('errors');
-        }
-    });
-
-    $(a1).on('focus', function () {
-        $(a1).removeClass('errors');
-        $(a1).css({'border-color': '#8AB7B6'});
-        $('#error-a1').empty();
-        if ( $(q1).val() === ""){
-            $('#error-q1').text(msj);
-            $(q1).addClass('errors');
-        }
-    });
-
-    $(q2).keyup( function () {
-        if ( $(q2).val() !== ""){
-            if ( $(q2).val() === $(q1).val()) {
-                $('#error-q2').text('La pregunta 2 no puede ' +
-                    'ser igual a la pregunta 1.');
-                $(q2).addClass('errors');
-            }
-            else if ( $(q2).val() === $(a1).val()) {
-                $('#error-q2').text('La pregunta 2 no puede ' +
-                    'ser igual a alguna respuesta.');
-                $(q2).addClass('errors');
-            }
-            else{
-                $(q2).css({border: '2px solid #d2d6de'});
-                $(q2).removeClass('errors');
-                $('#error-q2').empty();
-            }
-        }
-        else {
-            $('#error-q2').text(msj);
-            $(q2).addClass('errors');
-        }
-    });
-
-    $(q2).on('focus', function () {
-        $(q2).removeClass('errors');
-        $(q2).css({'border-color': '#8AB7B6'});
-        $('#error-q2').empty();
-    });
-
-    $(a2).keyup( function () {
-        if ( $(a2).val() !== ""){
-            if ( $(a2).val() === $(q2).val() ) {
-                $('#error-a2').text('La respuesta no puede ' +
-                    'ser igual a la pregunta.');
-                $(a2).addClass('errors');
-            }
-            else if ( data_customer($(a2).val()) ) {
-                $('#error-a2').text('La respuesta no puede ' +
-                    'contener sus datos personales.');
-                $(a2).addClass('errors');
-            }
-            else if ( $(a2).val() === $(a1).val()) {
-                $('#error-a2').text('Las respuestas no pueden ' +
-                    'ser iguales.');
-                $(a2).addClass('errors');
-            }
-            else if ( $(q1).val() === $(a2).val()) {
-                $('#error-a2').text('La pregunta no puede ' +
-                    'ser igual a la pregunta 1.');
-                $(a2).addClass('errors');
-            }
-            else{
-                $(a2).css({border: '2px solid #d2d6de'});
-                $(a2).removeClass('errors');
-                $('#error-a2').empty();
-            }
-        }
-        else {
-            $('#error-a2').text(msj);
-            $(a2).addClass('errors');
-        }
-    });
-
-    $(a2).on('focus', function () {
-        $(a2).removeClass('errors');
-        $(a2).css({'border-color': '#8AB7B6'});
-        $('#error-a2').empty();
-        if ( $(q2).val() === ""){
-            $('#error-q2').text(msj);
-            $(q2).addClass('errors');
-        }
+    $(answer).on('focus', function () {
+        $(answer).removeClass('errors');
+        $(answer).css({'border-color': '#8AB7B6'});
+        $('#error-answer').empty();
     });
 
     $(password).keyup( function () {
         if ( $(password).val() !== ""){
+            var path = window.location.href.split('/');
+            var url_api = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/validate_passw/";
+            $.ajax({
+                url: url_api,
+                origin: 'localhost:8000',
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                data: {
+                    username: $(numtarj).val(),
+                    pass: $(password).val()
+                },
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.correct) {
+                       if (!($('#old').hasClass('text-danger'))) {
+                            $('#old').addClass('text-danger');
+                        }
+                        $('#old').removeClass('text-success');
+                        $(password).addClass('errors'); 
+                    }
+                    else {
+                        $('#old').removeClass('text-danger');
+                        $('#old').addClass('text-success');
+                           
+                    }
+                },
+                error: function (data) {
+                    alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+                }
+            })
+
             if ( ($(password).val().match(regexRepeat))) {
                 if (!($('#repeat-carac').hasClass('text-danger'))) {
                     $('#repeat-carac').addClass('text-danger');
@@ -370,7 +199,6 @@ $(document).ready(function () {
                 $('#pers-carac').removeClass('text-danger');
                 $('#pers-carac').addClass('text-success');
                   
-
             }
             if ( $(password).val().match(regexNum) ) {
                 $('#num-carac').removeClass('text-danger');
@@ -446,9 +274,10 @@ $(document).ready(function () {
                 $('#confirm').addClass('text-success');
                 $('#error-conf-pass').empty();
             }
-            if ( ($('#repeat-carac').hasClass('text-danger')) || ($('#spec-carac').hasClass('text-danger')) ||
+            if ( ($('#old').hasClass('text-danger')) || ($('#spec-carac').hasClass('text-danger')) ||
             ($('#min-carac').hasClass('text-danger')) || ($('#carac').hasClass('text-danger')) ||
-            ($('#pers-carac').hasClass('text-danger')) || ($('#num-carac').hasClass('text-danger')) ) {
+            ($('#pers-carac').hasClass('text-danger')) || ($('#num-carac').hasClass('text-danger')) || 
+            ($('#repeat-carac').hasClass('text-danger')) ) {
                 $(password).css({border: '2px solid #d2d6de'});
                 $(password).removeClass('errors');
                 $('#error-pass').empty();
@@ -457,6 +286,11 @@ $(document).ready(function () {
         else {
             $('#error-pass').text("Este campo tiene errores");
             $(password).addClass('errors');
+
+            if (!($('#old').hasClass('text-danger'))) {
+                $('#old').addClass('text-danger');
+            }
+            $('#old').removeClass('text-success');
 
             if (!($('#num-carac').hasClass('text-danger'))) {
                 $('#num-carac').addClass('text-danger');

@@ -64,6 +64,10 @@ urlpatterns = [
         validate_pass_forgot,
         name='validate-pass-forgot'),
     url(
+        r'^ajax/validate_passw/$',
+        old_pass,
+        name='validate-pass-forgot'),
+    url(
         r'^ajax/resend-email/$',
         resend_email,
         name='reenvio-confirmacion'),
