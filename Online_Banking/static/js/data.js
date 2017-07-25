@@ -18,20 +18,27 @@ function tables_data(a,b) {
         type: 'GET',
         dataType: 'json',
         success: function (data) {
+            var url = window.location.href.split('/');
+            alert(url[3]);
             if (data.product) {
-                tables(k,data.account,data.tdc,data.loan);
+                if (url[3]==='inicio') {
+                    tables(k,data.account,data.tdc,data.loan);
+                }
+                else if (url[4]==='consultar-cuenta') {
+                    alert("aqui");
+                }
             }
         },
         error: function (data) {
             alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+            move('logout');
         }
     });
     
-};
+}
 
 
 function tables(k,account,tdc, loan) {
-
     $.each(account,function (i,val) {
         var acc;
         if (val[0] === "Cuenta Ahorro") {
@@ -44,22 +51,24 @@ function tables(k,account,tdc, loan) {
             '<td>' +val[0]+ '</td>' +
             '<td><span class="link">' +val[1]+ '</span></td>' + 
             '<td>' +val[2]+ '</td>' +
-            '<td class="text-bold">' + 'Bs.' +val[3]+ '</td>' +
+            '<td class="text-bold">' + 'Bs.' +val[3][0]+ '</td>' +
             '</tr>')
     });
 
-    if ( (loan == '') && (tdc == '')) {
+    if ( (loan.length === 0) && (tdc.length === 0)) {
         $('#table-liabilities').empty();
     }
     else {
 
-        if (tdc == '') {
+        if (tdc.length === 0) {
             $('#thread-tdc').empty();
+            $('#tdc').removeAttr('href');
+            $('#tdc').addClass('disabled');
         }
         else {
             $.each(tdc,function (i,val) {
-                var date = val[3].split('-')
-                $("#table-tdc").append('<tr class="cursor" onclick="move(' +"'" + k +"'/consultar-tdc/"+ (i+1) +"')"+'">' +
+                var date = val[3].split('-');
+                $("#table-tdc").append('<tr class="cursor" onclick="move(' +"'" + k +"/consultar-tdc/"+ (i+1) +"')"+'">' +
                     '<td>' +val[0]+ '</td>' +
                     '<td><span class="link">' +val[1]+ '</span></td>' +
                     '<td class="text-bold">' + 'Bs.' +val[2]+ '</td>' +
@@ -68,13 +77,15 @@ function tables(k,account,tdc, loan) {
             }); 
         }
 
-        if (loan == '') {
+        if (loan.length === 0) {
             $('#thread-loan').empty();
+            $('#prest').removeAttr('href');
+            $('#prest').addClass('disabled');
         }
         else {
             $.each(loan,function (i,val) {
-                var date = val[3].split('-')
-                $("#table-loan").append('<tr class="cursor" onclick="move(' +"'" + k +"'/consultar-prestamo/"+ (i+1) +"')"+'">' +
+                var date = val[3].split('-');
+                $("#table-loan").append('<tr class="cursor" onclick="move(' +"'" + k +"/consultar-prestamo/"+ (i+1) +"')"+'">' +
                     '<td>' +val[0]+ '</td>' +
                     '<td><span class="link">' +val[1]+ '</span></td>' +
                     '<td class="text-bold">' + 'Bs.' +val[2]+ '</td>' +
@@ -83,9 +94,4 @@ function tables(k,account,tdc, loan) {
             });  
         }
     }
-
-
-
-    
-    
-};
+}

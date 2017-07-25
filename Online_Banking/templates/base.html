@@ -26,6 +26,15 @@
     <!-- js app -->
     <script src="{% static 'js/app.js' %}"></script>
     <script src="{% static 'js/settings_ajax.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/data.js' %}"></script>
+    <script>
+        $(document).ready(function (){
+            alert("data");
+            var a = String({{num}}) + String({{num2}});
+            var b = String({{customer.ref}});
+            tables_data(a,b);
+        });
+    </script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -39,15 +48,9 @@
         </script>
         <script type="text/javascript" src="{% static 'js/charts.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/tour.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/data.js' %}"></script>
+
         <script type="text/javascript" src="{% static 'js/menu.js' %}"></script>
-        <script>
-            $(document).ready(function (){
-                var a = String({{num}}) + String({{num2}});
-                var b = String({{customer.ref}});
-                tables_data(a,b);
-            });
-        </script>
+
     {% endblock %}
 </head>
 
@@ -173,14 +176,14 @@
                             <div class="box-body no-padding">
                                 <table class="table table-bordered table-condensed text-center">
                                     <thead>
-                                        <tr class="bg-gray bg-gray-active">
-                                            <th>Tipo de Cuenta</th>
-                                            <th>Número de Cuenta</th>
-                                            <th>Estado</th>
-                                            <th>Saldo Disponible</th>
-                                        </tr>
-                                        <tbody id="table-assets">
-                                        </tbody>
+                                    <tr class="bg-gray bg-gray-active">
+                                        <th>Tipo de Cuenta</th>
+                                        <th>Número de Cuenta</th>
+                                        <th>Estado</th>
+                                        <th>Saldo Disponible</th>
+                                    </tr>
+                                    <tbody id="table-assets">
+                                    </tbody>
                                     </thead>
                                 </table>
                             </div>
@@ -198,24 +201,24 @@
                             <div class="box-body no-padding">
                                 <table class="table table-bordered table-condensed text-center">
                                     <thead id="thread-tdc">
-                                        <tr class="bg-gray bg-gray-active">
-                                            <th>Tipo de Tarjeta</th>
-                                            <th>Número de Tarjeta</th>
-                                            <th>Saldo Actual</th>
-                                            <th>Pague antes de</th>
-                                        </tr>
-                                        <tbody id="table-tdc">
-                                        </tbody>
+                                    <tr class="bg-gray bg-gray-active">
+                                        <th>Tipo de Tarjeta</th>
+                                        <th>Número de Tarjeta</th>
+                                        <th>Saldo Actual</th>
+                                        <th>Pague antes de</th>
+                                    </tr>
+                                    <tbody id="table-tdc">
+                                    </tbody>
                                     </thead>
                                     <thead id="thread-loan">
-                                        <tr class="bg-gray bg-gray-active">
-                                            <th>Número de Préstamo</th>
-                                            <th>Producto Asociado</th>
-                                            <th>Monto Pendiente</th>
-                                            <th>Pague antes de</th>
-                                        </tr>
-                                        <tbody id="table-loan">
-                                        </tbody>
+                                    <tr class="bg-gray bg-gray-active">
+                                        <th>Número de Préstamo</th>
+                                        <th>Producto Asociado</th>
+                                        <th>Monto Pendiente</th>
+                                        <th>Pague antes de</th>
+                                    </tr>
+                                    <tbody id="table-loan">
+                                    </tbody>
                                     </thead>
                                 </table>
                             </div>

@@ -51,7 +51,7 @@ $(document).ready(function (){
 function drop_account(){
     var account = ['Ahorro ****2222', 'Corriente ****1234'];
     var path = window.location.pathname.split('/');
-    var key = path[2];
+    var key = path[3];
 
     $.each(account,function (i,val) {
         if (key === '1' && val.includes("Ahorro")) {

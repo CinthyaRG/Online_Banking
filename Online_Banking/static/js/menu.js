@@ -83,7 +83,7 @@ function menu() {
 
 function change_drop(id) {
     var path = window.location.href.split('/');
-    var url = path[0]+'/'+path[1]+'/'+path[2]+'/'+path[3];
+    var url = path[0]+'/'+path[1]+'/'+path[2]+'/'+path[3]+'/'+path[4];
     var valor = parseInt($(id).val());
     location.href= url+'/'+valor;
 }
