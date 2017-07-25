@@ -43,7 +43,9 @@
         <script type="text/javascript" src="{% static 'js/menu.js' %}"></script>
         <script>
             $(document).ready(function (){
-                data({{customer.user.username}});
+                var a = String({{num}}) + String({{num2}});
+                var b = String({{customer.ref}});
+                tables_data(a,b);
             });
         </script>
     {% endblock %}
@@ -170,12 +172,13 @@
                             <!-- /.box-header -->
                             <div class="box-body no-padding">
                                 <table class="table table-bordered table-condensed text-center">
-                                    <thead><tr class="bg-gray bg-gray-active">
-                                        <th>Tipos de Cuenta</th>
-                                        <th>Números de Cuenta</th>
-                                        <th>Estado</th>
-                                        <th>Saldo Disponible</th>
-                                    </tr>
+                                    <thead>
+                                        <tr class="bg-gray bg-gray-active">
+                                            <th>Tipo de Cuenta</th>
+                                            <th>Número de Cuenta</th>
+                                            <th>Estado</th>
+                                            <th>Saldo Disponible</th>
+                                        </tr>
                                         <tbody id="table-assets">
                                         </tbody>
                                     </thead>
@@ -186,7 +189,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-1"></div>
-                    <div class="col-md-10">
+                    <div id="table-liabilities" class="col-md-10">
                         <div class="box box-success">
                             <div class="box-header">
                                 <h3 id="liabilities" class="box-title margin">Pasivos</h3>
@@ -194,32 +197,26 @@
                             <!-- /.box-header -->
                             <div class="box-body no-padding">
                                 <table class="table table-bordered table-condensed text-center">
-                                    <tbody><tr class="bg-gray bg-gray-active">
-                                        <th>Tipos de Tarjeta</th>
-                                        <th>Números de Tarjeta</th>
-                                        <th>Saldo Actual</th>
-                                        <th>Pague antes de</th>
-                                    </tr>
-                                    <tr class="cursor" onclick="move('consultar-tdc/1')">
-                                        <td>Visa</td>
-                                        <td class="link">4541********1730</td>
-                                        <td class="text-bold">Bs.17.089,40</td>
-                                        <td>29/06/2017</td>
-                                    </tr>
-                                    </tbody>
-                                    <tbody><tr class="bg-gray bg-gray-active">
-                                        <th>Número de Préstamo</th>
-                                        <th>Producto Asociado</th>
-                                        <th>Monto Pendiente</th>
-                                        <th>Pague antes de</th>
-                                    </tr>
-                                    <tr class="cursor" onclick="location.href= '{% url 'consultar-prestamo' customer.ref 1 %}'">
-                                        <td class="link">17897001</td>
-                                        <td>Ahorro *****2222</td>
-                                        <td class="text-bold">Bs. 56.520,00</td>
-                                        <td>24/06/2017</td>
-                                    </tr>
-                                    </tbody>
+                                    <thead id="thread-tdc">
+                                        <tr class="bg-gray bg-gray-active">
+                                            <th>Tipo de Tarjeta</th>
+                                            <th>Número de Tarjeta</th>
+                                            <th>Saldo Actual</th>
+                                            <th>Pague antes de</th>
+                                        </tr>
+                                        <tbody id="table-tdc">
+                                        </tbody>
+                                    </thead>
+                                    <thead id="thread-loan">
+                                        <tr class="bg-gray bg-gray-active">
+                                            <th>Número de Préstamo</th>
+                                            <th>Producto Asociado</th>
+                                            <th>Monto Pendiente</th>
+                                            <th>Pague antes de</th>
+                                        </tr>
+                                        <tbody id="table-loan">
+                                        </tbody>
+                                    </thead>
                                 </table>
                             </div>
                         </div>

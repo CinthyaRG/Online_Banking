@@ -546,10 +546,8 @@ def user_login(request):
                         email_login_successful(user)
                         user_profile.intent = 0
                         user_profile.save()
-                        print(customer)
                         customer.lastLogin = last_login
                         customer.ref = str(datetime.datetime.today().microsecond)[:5] + str(customer.id)
-                        print(customer.lastLogin)
                         customer.save()
                         return HttpResponseRedirect(reverse_lazy('inicio',
                                                                  kwargs={'pk': customer.ref}))
@@ -601,8 +599,13 @@ class Home_Client(LoginRequiredMixin, TemplateView):
             Home_Client, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
+        print("username")
+        print(customer.user.username)
 
         context['customer'] = customer
+        context['num'] = customer.user.username[:10]
+        context['num2'] = customer.user.username[10:]
+        
         return context
 
 

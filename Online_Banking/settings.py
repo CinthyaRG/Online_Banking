@@ -138,3 +138,5 @@ EMAIL_PORT = 587
 #EMAIL_HOST_PASSWORD = 'administrador123'
 EMAIL_HOST_USER = 'actio.capital'
 EMAIL_HOST_PASSWORD = 'administrador1234'
+
+
