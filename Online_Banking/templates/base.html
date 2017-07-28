@@ -29,7 +29,6 @@
     <script type="text/javascript" src="{% static 'js/data.js' %}"></script>
     <script>
         $(document).ready(function (){
-            alert("data");
             var a = String({{num}}) + String({{num2}});
             var b = String({{customer.ref}});
             tables_data(a,b);
@@ -105,8 +104,8 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a id="acc-aho" href="{% url 'consultar-cuenta' pk=customer.ref  acc_id=1 %}"> Cuenta Ahorro </a></li>
-                        <li><a id="acc-corr" href="{% url 'consultar-cuenta' pk=customer.ref  acc_id=2 %}"> Cuenta Corriente </a></li>
+                        <li><a id="acc-aho" class="disabled" href="{% url 'consultar-cuenta' pk=customer.ref  acc_id=1 %}"> Cuenta Ahorro </a></li>
+                        <li><a id="acc-corr" class="disabled" href="{% url 'consultar-cuenta' pk=customer.ref  acc_id=2 %}"> Cuenta Corriente </a></li>
                         <li><a id="tdc" href="{% url 'consultar-tdc' pk=customer.ref  tdc_id=1 %}"> Tarjeta de Crédito </a></li>
                         <li><a id="prest" href="{% url 'consultar-prestamo' customer.ref 1 %}"> Préstamos </a></li>
                     </ul>

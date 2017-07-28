@@ -3,37 +3,88 @@
  */
 
 $(document).ready(function (){
-    drop_account();
-    movement_table();
     drop_trans();
 
-    jQuery.extend( jQuery.fn.dataTableExt.oSort, {
-        "date-uk-pre": function ( a ) {
-            var ukDatea = a.split('/');
-            return (ukDatea[2] + ukDatea[1] + ukDatea[0]) * 1;
-        },
+    $('#myModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var detail = button.data('details');
+        var date = button.data('date');
+        var ref = button.data('ref');
+        var type = button.data('type');
+        var amount = button.data('amount');
+        var modal = $(this);
 
-        "date-uk-asc": function ( a, b ) {
-            return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-        },
+        modal.find('.modal-body #detail').text(detail.replace(/_/g, ' '));
+        modal.find('.modal-body #date').text(date);
+        modal.find('.modal-body #ref').text(ref);
+        modal.find('.modal-body #type').text(type);
+        modal.find('.modal-body #amount').text(amount);
+    });
 
-        "date-uk-desc": function ( a, b ) {
-            return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+});
+
+
+
+function drop_account(account){
+    var path = window.location.pathname.split('/');
+    var key = path[3];
+    $("#account").empty();
+
+    $.each(account,function (i,val) {
+        if (key === '1' && val[0].includes("Ahorro")) {
+            $("#account").append('<option value="'+(i+1)+'" selected="selected"> '+val[0].substring(6)+'  '+val[1].substring(12)+'</option>');
+            $("#agency").text(val[4]);
+            $("#status").text(val[2]);
+            $('#available').text( 'Bs.' +val[3][0]);
+            $('#deferrer').text( 'Bs.' +val[3][1]);
+            $('#lock').text( 'Bs.' +val[3][2]);
         }
+        else if (key === '2' && val[0].includes("Corriente")) {
+            $("#account").append('<option value="'+(i+1)+'" selected="selected"> '+val[0].substring(6)+'  '+val[1].substring(12)+'</option>');
+            $("#agency").text(val[4]);
+            $("#status").text(val[2]);
+            $('#available').text( 'Bs.' +val[3][0]);
+            $('#deferrer').text( 'Bs.' +val[3][1]);
+            $('#lock').text( 'Bs.' +val[3][2]);
+        }
+        else {
+            $("#account").append('<option value="'+(i+1)+'"> '+val[0].substring(6)+'  '+val[1].substring(12)+'</option>');
+        }
+    })
+}
+
+function movement_table(movements) {
+    var path = window.location.pathname.split('/');
+    var key = path[3];
+
+    if (key === '1') {
+        j = 0;
+    }
+    else {
+        j = 1;
+    }
+
+    var mov = movements[j];
+    $.each(mov, function (i, val) {
+        var d = val[0].split('-');
+        var date = d[2][0]+d[2][1] + '/' + d[1] + '/' + d[0];
+        var details = String(val[5].replace(/\s/g,'_'));
+        var amount = 'Bs.'+ val[3].substring(1);
+        $("#mov-table").append('<tr class="open_modal" data-toggle="modal" ' +
+            'data-target="#myModal" data-date=' + date + ' data-amount=' +
+            amount + ' data-type=' + val[2] +
+            ' data-ref=' + val[1] + ' data-details=' + details + '><td>' + date + '</td>' +
+            '<td> <span class="link"> ' + val[1] + '</span></td>' +
+            '<td>' + val[2] + '</td>' +
+            '<td>' + val[3][0] + amount + '</td>' +
+            '<td class="text-bold">' + 'Bs. ' + val[4] + '</td>' +
+            '</tr>')
     });
 
     var table = $('#example2').DataTable({
         "paging": true,
         "lengthChange": false,
-        "ordering": true,
-        "order": [ 0, 'desc' ],
-        "aoColumns": [
-            { "sType": "date-uk" },
-            null,
-            null,
-            null,
-            null
-        ],
+        "ordering": false,
         "info": true,
         "autoWidth": false,
         "pageLength":5,
@@ -46,41 +97,9 @@ $(document).ready(function (){
             });
         }
     });
-});
 
-function drop_account(){
-    var account = ['Ahorro ****2222', 'Corriente ****1234'];
-    var path = window.location.pathname.split('/');
-    var key = path[3];
-
-    $.each(account,function (i,val) {
-        if (key === '1' && val.includes("Ahorro")) {
-            $("#account").append('<option value="'+(i+1)+'" selected="selected"> '+val+'</option>');
-        }
-        else if (key === '2' && val.includes("Corriente")) {
-            $("#account").append('<option value="'+(i+1)+'" selected="selected"> '+val+'</option>');
-        }
-        else {
-           $("#account").append('<option value="'+(i+1)+'"> '+val+'</option>');
-        }
-    })
-}
-
-function movement_table() {
-    var date = ['21/04/2017','18/04/2017','17/04/2017','17/04/2017','14/04/2017','13/04/2017'];
-    var ref = ['1123456','1113456','1109456','1108756','1106556','1102156'];
-    var trans = ['Depósito','Retiro','Pago','Transferencia','POS','POS'];
-    var amount = ['+2.000,00','-700,00','-21.000,00','-13.000,00','-1.760,67','-14.743,90'];
-    var balance = ['172.096,77','170.796,77','191.796,77','204.796,77','206.556,67','221.299,64'];
-
-    $.each(date,function (i,val) {
-        $("#mov-table").append('<tr data-toggle="modal" data-target="#myModal"><td>' +val+ '</td>' +
-            '<td> <span class="link"> ' +ref[i]+ '</span></td>' +
-            '<td>' +trans[i]+ '</td>' +
-            '<td>' +amount[i]+ '</td>' +
-            '<td class="text-bold">' +balance[i]+ '</td>' +
-            '</tr>')
-    })
+    $("#example2_paginate").addClass("pull-right");
+    $("#example2_paginate").css({height: '60px'});
 }
 
 function drop_trans(){
@@ -88,7 +107,7 @@ function drop_trans(){
     $("#trans").append('<option value="'+'0'+'" selected="selected"> '+"Seleccione"+'</option>');
 
     $.each(type_trans,function (i,val) {
-           $("#trans").append('<option value="'+val+'"> '+val+'</option>');
+        $("#trans").append('<option value="'+val+'"> '+val+'</option>');
     })
 }
 

@@ -63,8 +63,6 @@ def first_login(request):
         else:
             data['login'] = False
 
-        print(data)
-
     return JsonResponse(data)
 
 
@@ -543,7 +541,7 @@ def user_login(request):
                         
                         last_login = users.last_login
                         login(request, user)
-                        email_login_successful(user)
+                        # email_login_successful(user)
                         user_profile.intent = 0
                         user_profile.save()
                         customer.lastLogin = last_login

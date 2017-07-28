@@ -82,7 +82,7 @@ function movement_table_tdc() {
 
 
 function drop_trans_tdc(){
-    var type_trans = ['Pago', 'POS'];
+    var type_trans = ['Pagos', 'POS'];
     $("#trans").append('<option value="'+'0'+'"" selected="selected"> '+"Seleccione"+'</option>');
 
     $.each(type_trans,function (i,val) {

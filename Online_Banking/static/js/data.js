@@ -25,13 +25,14 @@ function tables_data(a,b) {
                     tables(k,data.account,data.tdc,data.loan);
                 }
                 else if (url[4]==='consultar-cuenta') {
-                    alert("aqui");
+                    drop_account(data.account);
+                    movement_table(data.mov);
                 }
             }
         },
         error: function (data) {
             alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
-            move('logout');
+            // move('logout');
         }
     });
     
@@ -41,12 +42,25 @@ function tables_data(a,b) {
 function tables(k,account,tdc, loan) {
     $.each(account,function (i,val) {
         var acc;
+
         if (val[0] === "Cuenta Ahorro") {
             acc = '1';
+            $('#acc-aho').removeClass('disabled');
         }
         else {
             acc = '2';
+            $('#acc-corr').removeClass('disabled');
         }
+
+        if (account.length === 1) {
+            if (val[0] === "Cuenta Ahorro") {
+                 $('#acc-corr').removeAttr('href');
+            }
+            else {
+                $('#acc-aho').removeAttr('href');
+            }
+        }
+
         $("#table-assets").append('<tr class="cursor" onclick="move(' +"'" + k +"/consultar-cuenta/"+ acc +"')"+'">' +
             '<td>' +val[0]+ '</td>' +
             '<td><span class="link">' +val[1]+ '</span></td>' + 
