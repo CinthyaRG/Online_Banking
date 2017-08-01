@@ -21,6 +21,42 @@ $(document).ready(function (){
         modal.find('.modal-body #amount').text(amount);
     });
 
+    $('#btn-con').click(function () {
+        if (($('#datepicker').val() !== '') || ($('#datepicker2').val() !== '')) {
+            var path = window.location.href.split('/');
+            var url_api = path[0]+"/"+path[1]+"/"+"localhost:8001"+"/ajax/data-customer/";
+
+            $.ajax({
+                url: url_api,
+                origin: 'localhost:8000',
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                data: {
+                    num: num
+                },
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    var url = window.location.href.split('/');
+                    alert(url[3]);
+                    if (data.product) {
+                        menu_attr(data.account,data.tdc,data.loan);
+                        if (url[3]==='inicio') {
+                            tables(k,data.account,data.tdc,data.loan);
+                        }
+                        else if (url[4]==='consultar-cuenta') {
+                            drop_account(data.account);
+                            movement_table(data.mov);
+                        }
+                    }
+                },
+                error: function (data) {
+                    alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+                    // move('logout');
+                }
+            });
+        }
+    })
+
 });
 
 
@@ -92,7 +128,9 @@ function movement_table(movements) {
         initComplete: function () {
             $('#btn-con').click(function () {
                 if ($('#trans').val() !== 0) {
-                    table.search($('#trans').val()).draw();
+                    if (($('#datepicker').val() === '') && ($('#datepicker2').val() === '')) {
+                        table.search($('#trans').val()).draw();
+                    }
                 }
             });
         }
@@ -104,11 +142,15 @@ function movement_table(movements) {
 
 function drop_trans(){
     var type_trans = ['Depósito', 'Retiro', 'POS', 'Transferencia','Pagos'];
-    $("#trans").append('<option value="'+'0'+'" selected="selected"> '+"Seleccione"+'</option>');
+    $("#trans").append('<option value="'+'0'+'" selected="selected"> '+"Todas"+'</option>');
 
     $.each(type_trans,function (i,val) {
         $("#trans").append('<option value="'+val+'"> '+val+'</option>');
     })
+}
+
+function movement() {
+
 }
 
 

@@ -21,6 +21,7 @@ function tables_data(a,b) {
             var url = window.location.href.split('/');
             alert(url[3]);
             if (data.product) {
+                menu_attr(data.account,data.tdc,data.loan);
                 if (url[3]==='inicio') {
                     tables(k,data.account,data.tdc,data.loan);
                 }
@@ -35,7 +36,37 @@ function tables_data(a,b) {
             // move('logout');
         }
     });
-    
+
+}
+
+function menu_attr(account, tdc, loan) {
+    $.each(account,function (i,val) {
+        if (val[0] === "Cuenta Ahorro") {
+            $('#acc-aho').removeClass('disabled');
+        }
+        else {
+            $('#acc-corr').removeClass('disabled');
+        }
+
+        if (account.length === 1) {
+            if (val[0] === "Cuenta Ahorro") {
+                $('#acc-corr').removeAttr('href');
+            }
+            else {
+                $('#acc-aho').removeAttr('href');
+            }
+        }
+    });
+
+    if (tdc.length === 0) {
+        $('#tdc').removeAttr('href');
+        $('#tdc').addClass('disabled');
+    }
+
+    if (loan.length === 0) {
+        $('#prest').removeAttr('href');
+        $('#prest').addClass('disabled');
+    }
 }
 
 
@@ -45,25 +76,14 @@ function tables(k,account,tdc, loan) {
 
         if (val[0] === "Cuenta Ahorro") {
             acc = '1';
-            $('#acc-aho').removeClass('disabled');
         }
         else {
             acc = '2';
-            $('#acc-corr').removeClass('disabled');
-        }
-
-        if (account.length === 1) {
-            if (val[0] === "Cuenta Ahorro") {
-                 $('#acc-corr').removeAttr('href');
-            }
-            else {
-                $('#acc-aho').removeAttr('href');
-            }
         }
 
         $("#table-assets").append('<tr class="cursor" onclick="move(' +"'" + k +"/consultar-cuenta/"+ acc +"')"+'">' +
             '<td>' +val[0]+ '</td>' +
-            '<td><span class="link">' +val[1]+ '</span></td>' + 
+            '<td><span class="link">' +val[1]+ '</span></td>' +
             '<td>' +val[2]+ '</td>' +
             '<td class="text-bold">' + 'Bs.' +val[3][0]+ '</td>' +
             '</tr>')
@@ -73,11 +93,8 @@ function tables(k,account,tdc, loan) {
         $('#table-liabilities').empty();
     }
     else {
-
         if (tdc.length === 0) {
             $('#thread-tdc').empty();
-            $('#tdc').removeAttr('href');
-            $('#tdc').addClass('disabled');
         }
         else {
             $.each(tdc,function (i,val) {
@@ -88,13 +105,11 @@ function tables(k,account,tdc, loan) {
                     '<td class="text-bold">' + 'Bs.' +val[2]+ '</td>' +
                     '<td>' + date[2] + '/' + date[1] + '/' + date[0] + '</td>' +
                     '</tr>')
-            }); 
+            });
         }
 
         if (loan.length === 0) {
             $('#thread-loan').empty();
-            $('#prest').removeAttr('href');
-            $('#prest').addClass('disabled');
         }
         else {
             $.each(loan,function (i,val) {
@@ -105,7 +120,7 @@ function tables(k,account,tdc, loan) {
                     '<td class="text-bold">' + 'Bs.' +val[2]+ '</td>' +
                     '<td>' + date[2] + '/' + date[1] + '/' + date[0] + '</td>' +
                     '</tr>')
-            });  
+            });
         }
     }
 }
