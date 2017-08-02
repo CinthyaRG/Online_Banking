@@ -21,58 +21,31 @@ $(document).ready(function (){
         modal.find('.modal-body #amount').text(amount);
     });
 
-    // $.fn.DataTable.ext.search.push(
-    //     function(settings, data, dataIndex) {
-    //         var startDate = $('#datepicker').val();
-    //         var endDate = $('#datepicker2').val();
-    //         var date = parseFloat(data[0]) || 0;
-
-    //         if ((startDate === '') && (endDate === '') ||
-    //             (startDate <= date && (endDate ))) {
-    //             return false;
-    //         }
-
-    //     }
-    // );
-
-    $('#btn-con').click(function () {
-        if (($('#datepicker').val() !== '') || ($('#datepicker2').val() !== '')) {
-            var path = window.location.href.split('/');
-            var url_api = path[0]+"/"+path[1]+"/"+"localhost:8001"+"/ajax/data-movements/";
-
-            $.ajax({
-                url: url_api,
-                origin: 'localhost:8000',
-                headers: {'X-CSRFToken': getCookie('csrftoken')},
-                data: {
-                    num: num
-                },
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    var url = window.location.href.split('/');
-                    alert(url[3]);
-                    if (data.product) {
-                        menu_attr(data.account,data.tdc,data.loan);
-                        if (url[3]==='inicio') {
-                            tables(k,data.account,data.tdc,data.loan);
-                        }
-                        else if (url[4]==='consultar-cuenta') {
-                            drop_account(data.account);
-                            movement_table(data.mov);
-                        }
-                    }
-                },
-                error: function (data) {
-                    alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
-                    // move('logout');
+    var table = $('#example2').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "destroy": true,
+        "ordering": false,
+        "info": true,
+        "autoWidth": false,
+        "pageLength":5,
+        dom:'lr<"table-filter-container">tip',
+        initComplete: function () {
+            $('#btn-con').click(function () {
+                if ($('#trans').val() !== 0) {
+                    /*if (($('#datepicker').val() === '') && ($('#datepicker2').val() === '')) {
+                        table.search($('#trans').val()).draw();
+                    }*/
+                    table.search($('#trans').val()).draw();
                 }
             });
         }
-    })
+    });
+
+    $("#example2_paginate").addClass("pull-right");
+    $("#example2_paginate").css({height: '60px'});
 
 });
-
 
 
 function drop_account(account){
@@ -104,8 +77,10 @@ function drop_account(account){
 }
 
 function movement_table(movements) {
+    alert(movements);
     var path = window.location.pathname.split('/');
     var key = path[3];
+    var j;
 
     if (key === '1') {
         j = 0;
@@ -113,6 +88,8 @@ function movement_table(movements) {
     else {
         j = 1;
     }
+
+    $("#mov-table").empty();
 
     var mov = movements[j];
     $.each(mov, function (i, val) {
@@ -131,27 +108,7 @@ function movement_table(movements) {
             '</tr>')
     });
 
-    var table = $('#example2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "ordering": false,
-        "info": true,
-        "autoWidth": false,
-        "pageLength":5,
-        dom:'lr<"table-filter-container">tip',
-        initComplete: function () {
-            $('#btn-con').click(function () {
-                if ($('#trans').val() !== 0) {
-                    if (($('#datepicker').val() === '') && ($('#datepicker2').val() === '')) {
-                        table.search($('#trans').val()).draw();
-                    }
-                }
-            });
-        }
-    });
 
-    $("#example2_paginate").addClass("pull-right");
-    $("#example2_paginate").css({height: '60px'});
 }
 
 function drop_trans(){
@@ -163,9 +120,6 @@ function drop_trans(){
     })
 }
 
-function movement() {
-
-}
 
 
 

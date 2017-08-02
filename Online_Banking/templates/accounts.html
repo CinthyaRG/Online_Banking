@@ -15,6 +15,7 @@
     <script src="{% static 'js/menu.js' %}"></script>
     <script>
         $(document).ready(function (){
+            var a = String({{num}}) + String({{num2}});
             menu();
             $('#account').change(function () {
                 change_drop('#account');
@@ -38,6 +39,49 @@
                 todayHighlight: true,
                 weekStart: 1
             });
+
+            $('#btn-con').click(function () {
+                var s = $('#datepicker').val();
+                var e = $('#datepicker2').val();
+
+                if ((s !== '') || (e !== '')) {
+                    var path = window.location.href.split('/');
+                    var url_api = path[0]+"/"+path[1]+"/"+"localhost:8001"+"/ajax/data-customer/";
+                    var today = new Date();
+                    var start = s;
+                    var end = e;
+                    if (s === '') {
+                        start = 1 + '/' + (today.getMonth()+1) + '/' + today.getFullYear();
+                    }
+                    if (e === ''){
+                        end = today.getDate() + '/' + (today.getMonth()+1) + '/' + today.getFullYear();
+                    }
+
+                    $.ajax({
+                        url: url_api,
+                        origin: 'localhost:8000',
+                        headers: {'X-CSRFToken': getCookie('csrftoken')},
+                        data: {
+                            num: a,
+                            start: start,
+                            end: end
+                        },
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.product) {
+                                alert(data.mov);
+                                $("#example2").dataTable().fnDestroy();
+                                movement_table(data.mov);
+                            }
+                        },
+                        error: function (data) {
+                            alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+                            // move('logout');
+                        }
+                    });
+                }
+            })
         });
     </script>
 {% endblock %}
@@ -98,10 +142,10 @@
                 <div class="form-group">
                     <label>Desde:</label>
                     <div class="input-group date">
-                      <div class="input-group-addon">
-                        <span class="fa fa-calendar"></span>
-                      </div>
-                      <input class="form-control pull-right cursor" id="datepicker">
+                        <div class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </div>
+                        <input class="form-control pull-right cursor" id="datepicker">
                     </div>
                 </div>
             </div>
@@ -109,10 +153,10 @@
                 <div class="form-group">
                     <label>Hasta:</label>
                     <div class="input-group date">
-                      <div class="input-group-addon">
-                        <span class="fa fa-calendar"></span>
-                      </div>
-                      <input class="form-control pull-right cursor" id="datepicker2">
+                        <div class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </div>
+                        <input class="form-control pull-right cursor" id="datepicker2">
                     </div>
                 </div>
             </div>
@@ -139,7 +183,7 @@
             <div class="col-md-10">
                 <div class="box box-success">
                     <div class="box-header">
-                      <h3 class="box-title margin">Movimientos</h3>
+                        <h3 class="box-title margin">Movimientos</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body without-padding">
@@ -166,8 +210,8 @@
                             </tfoot>
                         </table>
                     </div>
-                <!-- /.box-body -->
-              </div>
+                    <!-- /.box-body -->
+                </div>
             </div>
         </div>
     </section>
