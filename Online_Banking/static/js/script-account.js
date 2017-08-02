@@ -21,10 +21,24 @@ $(document).ready(function (){
         modal.find('.modal-body #amount').text(amount);
     });
 
+    // $.fn.DataTable.ext.search.push(
+    //     function(settings, data, dataIndex) {
+    //         var startDate = $('#datepicker').val();
+    //         var endDate = $('#datepicker2').val();
+    //         var date = parseFloat(data[0]) || 0;
+
+    //         if ((startDate === '') && (endDate === '') ||
+    //             (startDate <= date && (endDate ))) {
+    //             return false;
+    //         }
+
+    //     }
+    // );
+
     $('#btn-con').click(function () {
         if (($('#datepicker').val() !== '') || ($('#datepicker2').val() !== '')) {
             var path = window.location.href.split('/');
-            var url_api = path[0]+"/"+path[1]+"/"+"localhost:8001"+"/ajax/data-customer/";
+            var url_api = path[0]+"/"+path[1]+"/"+"localhost:8001"+"/ajax/data-movements/";
 
             $.ajax({
                 url: url_api,

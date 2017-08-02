@@ -19,7 +19,6 @@ function tables_data(a,b) {
         dataType: 'json',
         success: function (data) {
             var url = window.location.href.split('/');
-            alert(url[3]);
             if (data.product) {
                 menu_attr(data.account,data.tdc,data.loan);
                 if (url[3]==='inicio') {
