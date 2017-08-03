@@ -43,6 +43,7 @@
             $('#btn-con').click(function () {
                 var s = $('#datepicker').val();
                 var e = $('#datepicker2').val();
+                var select = $('#trans').val();
 
                 if ((s !== '') || (e !== '')) {
                     var path = window.location.href.split('/');
@@ -53,7 +54,7 @@
                     if (s === '') {
                         start = 1 + '/' + (today.getMonth()+1) + '/' + today.getFullYear();
                     }
-                    if (e === ''){
+                    if (e === '') {
                         end = today.getDate() + '/' + (today.getMonth()+1) + '/' + today.getFullYear();
                     }
 
@@ -64,7 +65,8 @@
                         data: {
                             num: a,
                             start: start,
-                            end: end
+                            end: end,
+                            select: select
                         },
                         type: 'GET',
                         dataType: 'json',
@@ -72,7 +74,7 @@
                             if (data.product) {
                                 $('#example2').DataTable().destroy();
                                 $("#mov-table").empty();
-                                movement_table(data.mov);
+                                movement_table(data.mov-acc);
                             }
                         },
                         error: function (data) {

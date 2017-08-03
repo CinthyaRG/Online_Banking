@@ -3,25 +3,8 @@
  */
 
 $(document).ready(function (){
-    drop_tdc();
     movement_table_tdc();
     drop_trans_tdc();
-
-    jQuery.extend( jQuery.fn.dataTableExt.oSort, {
-        "date-uk-pre": function ( a ) {
-            var ukDatea = a.split('/');
-            return (ukDatea[2] + ukDatea[1] + ukDatea[0]) * 1;
-        },
-
-        "date-uk-asc": function ( a, b ) {
-            return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-        },
-
-        "date-uk-desc": function ( a, b ) {
-            return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-        }
-    });
-
 
     var table = $('#example').DataTable({
         "paging": true,
@@ -47,20 +30,53 @@ $(document).ready(function (){
     });
 });
 
-function drop_tdc(){
-    var tdc = ['VISA ****1730'];
+function drop_tdc(tdc){
     var path = window.location.pathname.split('/');
-    var key = path[2];
+    var key = path[3];
+    alert(key);
+    $("#tdc_drop").empty();
+
+    $.each(tdc,function (i,val) {
+        if (key === '1' && val[0].includes("VISA")) {
+            $("#tdc_drop").append('<option value="'+(i+1)+'" selected> '+val[0]+'  '+val[1].substring(12)+'</option>');
+            $("#agency").text(val[4]);
+            $("#status").text(val[2]);
+            $('#available').text( 'Bs.' +val[3][0]);
+            $('#deferrer').text( 'Bs.' +val[3][1]);
+            $('#lock').text( 'Bs.' +val[3][2]);
+        }
+        else if (key === '2' && val[0].includes("MASTERCARD")) {
+            $("#tdc_drop").append('<option value="'+(i+1)+'" selected> '+val[0]+'  '+val[1].substring(12)+'</option>');
+            $("#agency").text(val[4]);
+            $("#status").text(val[2]);
+            $('#available').text( 'Bs.' +val[3][0]);
+            $('#deferrer').text( 'Bs.' +val[3][1]);
+            $('#lock').text( 'Bs.' +val[3][2]);
+        }
+        else if (key === '3' && val[0].includes("AMERICAN")) {
+            $("#tdc_drop").append('<option value="'+(i+1)+'" selected> '+val[0]+'  '+val[1].substring(12)+'</option>');
+            $("#agency").text(val[4]);
+            $("#status").text(val[2]);
+            $('#available').text( 'Bs.' +val[3][0]);
+            $('#deferrer').text( 'Bs.' +val[3][1]);
+            $('#lock').text( 'Bs.' +val[3][2]);
+        }
+        else {
+            $("#tdc_drop").append('<option value="'+(i+1)+'"> '+val[0]+'  '+val[1].substring(12)+'</option>');
+        }
+    })
+
+
 
     $.each(tdc,function (i,val) {
         if (key === '1' && val.includes("VISA")) {
-            $("#tdc_drop").append('<option value="'+(i+1)+'" selected="selected"> '+val+'</option>');
+            $("#tdc_drop").append('<option value="'+(i+1)+'" selected> '+val+'</option>');
         }
         else if (key === '2' && val.includes("MASTERCARD")) {
-            $("#tdc_drop").append('<option value="'+(i+1)+'" selected="selected"> '+val+'</option>');
+            $("#tdc_drop").append('<option value="'+(i+1)+'" selected> '+val+'</option>');
         }
         else if (key === '3' && val.includes("AMERICAN")) {
-            $("#tdc_drop").append('<option value="'+(i+1)+'" selected="selected"> '+val+'</option>');
+            $("#tdc_drop").append('<option value="'+(i+1)+'" selected> '+val+'</option>');
         }
         else {
            $("#tdc_drop").append('<option value="'+(i+1)+'"> '+val+'</option>');
@@ -80,7 +96,6 @@ function movement_table_tdc() {
     })
 }
 
-
 function drop_trans_tdc(){
     var type_trans = ['Pagos', 'POS'];
     $("#trans").append('<option value="'+'0'+'"" selected="selected"> '+"Seleccione"+'</option>');
@@ -88,6 +103,31 @@ function drop_trans_tdc(){
     $.each(type_trans,function (i,val) {
            $("#trans").append('<option value="'+val+'"> '+val+'</option>');
     })
+}
+
+function DatatablesExec() {
+    var table = $('#example').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "destroy": true,
+        "ordering": false,
+        "info": true,
+        "autoWidth": false,
+        "pageLength":5,
+        dom:'lr<"table-filter-container">tip',
+        initComplete: function () {
+            $('#btn-con').click(function () {
+                if ($('#trans').val() !== 0) {
+                    if ($('#datepicker').val() === '' && $($('#datepicker2').val() === '')) {
+                        table.search($('#trans').val()).draw();
+                    }
+                }
+            });
+        }
+    });
+
+    $("#example_paginate").addClass("pull-right");
+    $("#example_paginate").css({height: '60px'});
 }
 
 

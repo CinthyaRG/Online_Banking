@@ -5,7 +5,6 @@
 $(document).ready(function (){
     drop_trans();
 
-    DatatablesExec();
 
     $('#myModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
@@ -35,7 +34,7 @@ function drop_account(account){
 
     $.each(account,function (i,val) {
         if (key === '1' && val[0].includes("Ahorro")) {
-            $("#account").append('<option value="'+(i+1)+'" selected="selected"> '+val[0].substring(6)+'  '+val[1].substring(12)+'</option>');
+            $("#account").append('<option value="'+(i+1)+'" selected> '+val[0].substring(6)+'  '+val[1].substring(12)+'</option>');
             $("#agency").text(val[4]);
             $("#status").text(val[2]);
             $('#available').text( 'Bs.' +val[3][0]);
@@ -43,7 +42,7 @@ function drop_account(account){
             $('#lock').text( 'Bs.' +val[3][2]);
         }
         else if (key === '2' && val[0].includes("Corriente")) {
-            $("#account").append('<option value="'+(i+1)+'" selected="selected"> '+val[0].substring(6)+'  '+val[1].substring(12)+'</option>');
+            $("#account").append('<option value="'+(i+1)+'" selected> '+val[0].substring(6)+'  '+val[1].substring(12)+'</option>');
             $("#agency").text(val[4]);
             $("#status").text(val[2]);
             $('#available').text( 'Bs.' +val[3][0]);
@@ -74,7 +73,6 @@ function movement_table(movements) {
 
     var mov = movements[j];
     $.each(mov, function (i, val) {
-        alert(val);
         var d = val[0].split('-');
         var date = d[2][0]+d[2][1] + '/' + d[1] + '/' + d[0];
         var details = String(val[5].replace(/\s/g,'_'));
@@ -90,11 +88,12 @@ function movement_table(movements) {
             '</tr>')
     });
 
+    DatatablesExec();
 }
 
 function drop_trans(){
     var type_trans = ['Depósito', 'Retiro', 'POS', 'Transferencia','Pagos'];
-    $("#trans").append('<option value="'+'0'+'" selected="selected"> '+"Todas"+'</option>');
+    $("#trans").append('<option value="'+'0'+'" selected> '+"Todas"+'</option>');
 
     $.each(type_trans,function (i,val) {
         $("#trans").append('<option value="'+val+'"> '+val+'</option>');
@@ -102,7 +101,7 @@ function drop_trans(){
 }
 
 function DatatablesExec() {
-    $('#example2').DataTable({
+    var table = $('#example2').DataTable({
         "paging": true,
         "lengthChange": false,
         "destroy": true,
@@ -114,7 +113,7 @@ function DatatablesExec() {
         initComplete: function () {
             $('#btn-con').click(function () {
                 if ($('#trans').val() !== 0) {
-                    if ($('#datepicker').val() !== '' && $($('#datepicker2').val() !== '')) {
+                    if ($('#datepicker').val() === '' && $($('#datepicker2').val() === '')) {
                         table.search($('#trans').val()).draw();
                     }
                 }

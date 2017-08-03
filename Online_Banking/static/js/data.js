@@ -27,7 +27,11 @@ function tables_data(a,b) {
                 }
                 else if (url[4]==='consultar-cuenta') {
                     drop_account(data.account);
-                    movement_table(data.mov);
+                    movement_table(data.mov-acc);
+                }
+                else if (url[4]==='consultar-tdc') {
+                    drop_tdc(data.tdc);
+
                 }
             }
         },
