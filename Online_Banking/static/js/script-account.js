@@ -21,29 +21,7 @@ $(document).ready(function (){
         modal.find('.modal-body #amount').text(amount);
     });
 
-    var table = $('#example2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "destroy": true,
-        "ordering": false,
-        "info": true,
-        "autoWidth": false,
-        "pageLength":5,
-        dom:'lr<"table-filter-container">tip',
-        initComplete: function () {
-            $('#btn-con').click(function () {
-                if ($('#trans').val() !== 0) {
-                    /*if (($('#datepicker').val() === '') && ($('#datepicker2').val() === '')) {
-                        table.search($('#trans').val()).draw();
-                    }*/
-                    table.search($('#trans').val()).draw();
-                }
-            });
-        }
-    });
-
-    $("#example2_paginate").addClass("pull-right");
-    $("#example2_paginate").css({height: '60px'});
+    
 
 });
 
@@ -77,7 +55,6 @@ function drop_account(account){
 }
 
 function movement_table(movements) {
-    alert(movements);
     var path = window.location.pathname.split('/');
     var key = path[3];
     var j;
@@ -89,15 +66,18 @@ function movement_table(movements) {
         j = 1;
     }
 
+    
+    $('#example2').DataTable().destroy();
     $("#mov-table").empty();
-
+    
     var mov = movements[j];
     $.each(mov, function (i, val) {
+        alert(val);
         var d = val[0].split('-');
         var date = d[2][0]+d[2][1] + '/' + d[1] + '/' + d[0];
         var details = String(val[5].replace(/\s/g,'_'));
         var amount = 'Bs.'+ val[3].substring(1);
-        $("#mov-table").append('<tr class="open_modal" data-toggle="modal" ' +
+            $("#mov-table").append('<tr class="open_modal" data-toggle="modal" ' +
             'data-target="#myModal" data-date=' + date + ' data-amount=' +
             amount + ' data-type=' + val[2] +
             ' data-ref=' + val[1] + ' data-details=' + details + '><td>' + date + '</td>' +
@@ -107,6 +87,26 @@ function movement_table(movements) {
             '<td class="text-bold">' + 'Bs. ' + val[4] + '</td>' +
             '</tr>')
     });
+
+    var table = $('#example2').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "ordering": false,
+        "info": true,
+        "autoWidth": false,
+        "pageLength":5,
+        dom:'lr<"table-filter-container">tip',
+        initComplete: function () {
+            $('#btn-con').click(function () {
+                if ($('#trans').val() !== 0) {
+                    table.search($('#trans').val()).draw();
+                }
+            });
+        }
+    });
+
+    $("#example2_paginate").addClass("pull-right");
+    $("#example2_paginate").css({height: '60px'});
 
 
 }

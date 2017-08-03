@@ -11173,7 +11173,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfoEmpty": "Mostrando 0 to 0 of 0 resultados",
+			"sInfoEmpty": "Mostrando 0 a 0 de 0 resultados",
 	
 	
 			/**

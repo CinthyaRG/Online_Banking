@@ -13,7 +13,8 @@ function tables_data(a,b) {
         origin: 'localhost:8000',
         headers: {'X-CSRFToken': getCookie('csrftoken')},
         data: {
-            num: num
+            num: num,
+            option: path[3]
         },
         type: 'GET',
         dataType: 'json',

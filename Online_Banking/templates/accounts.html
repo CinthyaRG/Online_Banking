@@ -70,8 +70,6 @@
                         dataType: 'json',
                         success: function (data) {
                             if (data.product) {
-                                alert(data.mov);
-                                $("#example2").dataTable().fnDestroy();
                                 movement_table(data.mov);
                             }
                         },
