@@ -7,6 +7,7 @@ function tables_data(a,b) {
     var k = b;
     var path = window.location.href.split('/');
     var url_api = path[0]+"/"+path[1]+"/"+"localhost:8001"+"/ajax/data-customer/";
+    alert("dataaa");
 
     $.ajax({
         url: url_api,
@@ -20,6 +21,7 @@ function tables_data(a,b) {
         dataType: 'json',
         success: function (data) {
             var url = window.location.href.split('/');
+            alert(url[4]);
             if (data.product) {
                 menu_attr(data.account,data.tdc,data.loan);
                 if (url[3]==='inicio') {
@@ -27,7 +29,8 @@ function tables_data(a,b) {
                 }
                 else if (url[4]==='consultar-cuenta') {
                     drop_account(data.account);
-                    movement_table(data.mov-acc);
+                    alert(data.mov_acc);
+                    movement_table(data.mov_acc);
                 }
                 else if (url[4]==='consultar-tdc') {
                     drop_tdc(data.tdc);
