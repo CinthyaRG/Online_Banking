@@ -127,7 +127,6 @@ function validation(a,b,c,d,e,f,g) {
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                alert("EXITO");
                 if (data.user_exists) {
                     $("#error").append('<p class="text-danger margin-error">'+
                         data.error +'</p>');
@@ -150,7 +149,6 @@ function validation(a,b,c,d,e,f,g) {
                         type: 'GET',
                         dataType: 'json',
                         success: function (data) {
-                            alert("EXITO ajax api");
                             if (data.correct) {
                                 $("#name_customer").text(data.customer_name);
                                 $("#last-name_customer").text(data.customer_last);
@@ -246,7 +244,6 @@ function validation_forgot(a,b,c,d,e,f) {
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                alert("EXITO");
                 if (!(data.user_exists)) {
                     $("#error").append('<p class="text-danger margin-error">'+
                         'Usted no se encuentra registrado. Por favor regístrese ' +
@@ -255,13 +252,11 @@ function validation_forgot(a,b,c,d,e,f) {
                 }
                 else {
                     if (data.block) {
-                        alert("block");
                         $("#error").append('<p class="text-danger margin-error">'+
                             data.error +'</p>');
                         effect_error("#error");
                     }
                     else if (!(data.active)) {
-                        alert("active");
                         $("#error").append('<p class="text-danger margin-error">'+
                             data.error +'</p>');
                         effect_error("#error");
@@ -283,7 +278,6 @@ function validation_forgot(a,b,c,d,e,f) {
                         type: 'GET',
                         dataType: 'json',
                         success: function (data) {
-                            alert("EXITO ajax api");
                             if (data.correct) {
                                 $("#name_customer").text(data.customer_name);
                                 $("#last-name_customer").text(data.customer_last);
@@ -365,7 +359,6 @@ function validate_email() {
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                alert("EXITO");
                 if (data.user_exists) {
                     $("#error").append('<p class="text-danger margin-error">'+
                         'Lo sentimos, ha ocurrido un error. Ingrese sus datos nuevamente.' +'</p>');
@@ -413,7 +406,6 @@ function validate_cod(elem) {
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                alert("EXITO reenvio");
                 if (data.user_exists) {
                     if (data.envio) {
                         restore_count_circle();
@@ -458,7 +450,6 @@ function validate_cod(elem) {
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    alert("EXITO cod");
                     if (data.user_exists) {
                         if (data.correct) {
                             pagNext(3);
@@ -630,8 +621,6 @@ function validate_pass() {
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                alert("EXITO ultimo paso");
-                alert(data.correct);
                 if (data.user_exists) {
                     if (data.correct) {
                         location.href= path[0]+"/"+path[1]+"/"+path[2]+"/registro-exitoso";
@@ -701,8 +690,6 @@ function validate_pass_forgot() {
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                alert("EXITO ultimo paso");
-                alert(data.correct);
                 if (data.user_exists) {
                     if (data.correct) {
                         location.href= path[0]+"/"+path[1]+"/"+path[2]+"/nueva-pass-exitosa";

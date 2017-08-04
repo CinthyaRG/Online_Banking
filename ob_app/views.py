@@ -664,6 +664,8 @@ class Tdc(LoginRequiredMixin, TemplateView):
         customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
+        context['num'] = customer.user.username[:10]
+        context['num2'] = customer.user.username[10:]
         return context
 
 

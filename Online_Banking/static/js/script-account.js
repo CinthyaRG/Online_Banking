@@ -5,7 +5,6 @@
 $(document).ready(function (){
     drop_trans();
 
-
     $('#myModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
         var detail = button.data('details');
@@ -22,8 +21,6 @@ $(document).ready(function (){
         modal.find('.modal-body #amount').text(amount);
     });
 
-
-
 });
 
 
@@ -37,17 +34,17 @@ function drop_account(account){
             $("#account").append('<option value="'+(i+1)+'" selected> '+val[0].substring(6)+'  '+val[1].substring(12)+'</option>');
             $("#agency").text(val[4]);
             $("#status").text(val[2]);
-            $('#available').text( 'Bs.' +val[3][0]);
-            $('#deferrer').text( 'Bs.' +val[3][1]);
-            $('#lock').text( 'Bs.' +val[3][2]);
+            $('#available').text( 'Bs. ' +val[3][0]);
+            $('#deferrer').text( 'Bs. ' +val[3][1]);
+            $('#lock').text( 'Bs. ' +val[3][2]);
         }
         else if (key === '2' && val[0].includes("Corriente")) {
             $("#account").append('<option value="'+(i+1)+'" selected> '+val[0].substring(6)+'  '+val[1].substring(12)+'</option>');
             $("#agency").text(val[4]);
             $("#status").text(val[2]);
-            $('#available').text( 'Bs.' +val[3][0]);
-            $('#deferrer').text( 'Bs.' +val[3][1]);
-            $('#lock').text( 'Bs.' +val[3][2]);
+            $('#available').text( 'Bs. ' +val[3][0]);
+            $('#deferrer').text( 'Bs. ' +val[3][1]);
+            $('#lock').text( 'Bs. ' +val[3][2]);
         }
         else {
             $("#account").append('<option value="'+(i+1)+'"> '+val[0].substring(6)+'  '+val[1].substring(12)+'</option>');
@@ -76,7 +73,7 @@ function movement_table(movements) {
         var d = val[0].split('-');
         var date = d[2][0]+d[2][1] + '/' + d[1] + '/' + d[0];
         var details = String(val[5].replace(/\s/g,'_'));
-        var amount = 'Bs.'+ val[3].substring(1);
+        var amount = 'Bs. '+ val[3].substring(1);
         $("#mov-table").append('<tr class="open_modal" data-toggle="modal" ' +
             'data-target="#myModal" data-date=' + date + ' data-amount=' +
             amount + ' data-type=' + val[2] +

@@ -242,7 +242,7 @@ div[role="tooltip"] {
 }
 #account, #account1, #account2 {
     height: 25px;
-    margin-top: 19px;
+    margin-top: 20px;
     width: 160px;
 }
 .info-account {
@@ -301,9 +301,9 @@ div[role="tooltip"] {
     margin-top: 40px;
 }
 #tdc_drop {
-    width: 240px;
     bottom: 3px;
     position: relative;
+    height: 25px;
 }
 .table-filter-container {
     position: relative;

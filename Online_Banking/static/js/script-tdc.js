@@ -33,55 +33,51 @@ $(document).ready(function (){
 function drop_tdc(tdc){
     var path = window.location.pathname.split('/');
     var key = path[3];
-    alert(key);
     $("#tdc_drop").empty();
 
     $.each(tdc,function (i,val) {
+        var d = val[3].split('-');
+        var last_date = d[2][0]+d[2][1] + '/' + d[1] + '/' + d[0];
+        d = val[8].split('-');
+        var date = d[2][0]+d[2][1] + '/' + d[1] + '/' + d[0];
         if (key === '1' && val[0].includes("VISA")) {
-            $("#tdc_drop").append('<option value="'+(i+1)+'" selected> '+val[0]+'  '+val[1].substring(12)+'</option>');
-            $("#agency").text(val[4]);
+            $("#tdc_drop").append('<option value="'+(i+1)+'" selected> '+val[0]+'  '+val[1].substring(8)+'</option>');
             $("#status").text(val[2]);
-            $('#available').text( 'Bs.' +val[3][0]);
-            $('#deferrer').text( 'Bs.' +val[3][1]);
-            $('#lock').text( 'Bs.' +val[3][2]);
+            $("#last-date-payment").text(last_date);
+            $('#amount-payment').text( 'Bs. ' +val[4]);
+            $('#balance').text( 'Bs. ' +val[5]);
+            $('#available').text( 'Bs. ' +val[6]);
+            $('#min-payment').text( 'Bs. ' +val[7]);
+            $('#date-payment').text(date);
+            $('#limit').text( 'Bs. ' +val[9]);
         }
         else if (key === '2' && val[0].includes("MASTERCARD")) {
-            $("#tdc_drop").append('<option value="'+(i+1)+'" selected> '+val[0]+'  '+val[1].substring(12)+'</option>');
-            $("#agency").text(val[4]);
+            $("#tdc_drop").append('<option value="'+(i+1)+'" selected> '+val[0]+'  '+val[1].substring(8)+'</option>');
             $("#status").text(val[2]);
-            $('#available').text( 'Bs.' +val[3][0]);
-            $('#deferrer').text( 'Bs.' +val[3][1]);
-            $('#lock').text( 'Bs.' +val[3][2]);
+            $("#last-date-payment").text(last_date);
+            $('#amount-payment').text( 'Bs. ' +val[4]);
+            $('#balance').text( 'Bs. ' +val[5]);
+            $('#available').text( 'Bs. ' +val[6]);
+            $('#min-payment').text( 'Bs. ' +val[7]);
+            $('#date-payment').text(date);
+            $('#limit').text( 'Bs. ' +val[9]);
         }
         else if (key === '3' && val[0].includes("AMERICAN")) {
-            $("#tdc_drop").append('<option value="'+(i+1)+'" selected> '+val[0]+'  '+val[1].substring(12)+'</option>');
-            $("#agency").text(val[4]);
+            $("#tdc_drop").append('<option value="'+(i+1)+'" selected> '+val[0]+'  '+val[1].substring(8)+'</option>');
             $("#status").text(val[2]);
-            $('#available').text( 'Bs.' +val[3][0]);
-            $('#deferrer').text( 'Bs.' +val[3][1]);
-            $('#lock').text( 'Bs.' +val[3][2]);
+            $("#last-date-payment").text(last_date);
+            $('#amount-payment').text( 'Bs. ' +val[4]);
+            $('#balance').text( 'Bs. ' +val[5]);
+            $('#available').text( 'Bs. ' +val[6]);
+            $('#min-payment').text( 'Bs. ' +val[7]);
+            $('#date-payment').text(date);
+            $('#limit').text( 'Bs. ' +val[9]);
         }
         else {
-            $("#tdc_drop").append('<option value="'+(i+1)+'"> '+val[0]+'  '+val[1].substring(12)+'</option>');
+            $("#tdc_drop").append('<option value="'+(i+1)+'"> '+val[0]+'  '+val[1].substring(8)+'</option>');
         }
     })
 
-
-
-    $.each(tdc,function (i,val) {
-        if (key === '1' && val.includes("VISA")) {
-            $("#tdc_drop").append('<option value="'+(i+1)+'" selected> '+val+'</option>');
-        }
-        else if (key === '2' && val.includes("MASTERCARD")) {
-            $("#tdc_drop").append('<option value="'+(i+1)+'" selected> '+val+'</option>');
-        }
-        else if (key === '3' && val.includes("AMERICAN")) {
-            $("#tdc_drop").append('<option value="'+(i+1)+'" selected> '+val+'</option>');
-        }
-        else {
-           $("#tdc_drop").append('<option value="'+(i+1)+'"> '+val+'</option>');
-        }
-    })
 }
 
 function movement_table_tdc() {

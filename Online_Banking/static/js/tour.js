@@ -135,7 +135,6 @@ function tourStart() {
         type: 'GET',
         dataType: 'json',
         success: function (data) {
-            alert("EXITO first-login");
             if (data.user_exists) {
                 if (data.login) {
                     tour();
@@ -146,7 +145,6 @@ function tourStart() {
             }
         },
         error: function (data) {
-            alert(data.user_exists);
             alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
         }
     });
