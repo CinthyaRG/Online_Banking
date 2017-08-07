@@ -3,16 +3,12 @@
  */
 
 $(document).ready(function (){
-    drop_account_trans();
     menu();
     transf_table();
     transf_other_table();
 
-    $("#table-payments_filter").addClass("pull-right");
-
     if ($("#account1").val() !== '0') {
         $("#balance-acc").css({display:'inline'});
-        drop_change($("#account1").val());
     }
 
     $("#account1").change(function () {
@@ -22,62 +18,69 @@ $(document).ready(function (){
         else {
             $("#balance-acc").css({display: 'none'});
         }
-        drop_change($("#account1").val());
+        change_drop('#account1');
     });
 
-    var table = $('#table-transf').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching":true,
-        "ordering": true,
-        "order": [ 0, 'asc' ],
-        "info": true,
-        "autoWidth": false,
-        "pageLength":5
+    $("#amount-transf").click(function () {
+        $("#amount-transf").removeClass('errors');
     });
+
 });
 
 
-function drop_account_trans(){
-    var account = ['Ahorro ****2222', 'Corriente ****1234'];
-    var url = document.referrer.split('/');
-    var key = '0';
-    if (url[3] === 'consultar-cuenta') {
-        key = url[4];
-    }
+function drop_account_trans(account){
+    var path = window.location.pathname.split('/');
+    var key = path[3];
 
-    if (key === '0') {
-        $("#account1").append('<option value="'+'0'+'" selected="selected"> '+"Seleccione"+'</option>');
+    $("#account1").empty();
+
+    $.each(account,function (i,val) {
+        if (key === '0' && i === 0) {
+            $("#account1").append('<option value="'+'0'+'" selected> '+"Seleccione"+'</option>');
+        }
+        if (key === '1' && val[0].includes("Ahorro")) {
+            $("#account1").append('<option value="'+(i+1)+'" selected> '+val[0].substring(6)+'  '+val[1].substring(12)+'</option>');
+            $("#account1").append('<option value="'+'0'+'"> '+"Seleccione"+'</option>');
+            $('#balance-acc').append('<span class="text-bold"> Bs. '+ val[3][0] +'</span>');
+        }
+        else if (key === '2' && val[0].includes("Corriente")) {
+            $("#account1").append('<option value="'+(i+1)+'" selected> '+val[0].substring(6)+'  '+val[1].substring(12)+'</option>');
+            $("#account1").append('<option value="'+'0'+'"> '+"Seleccione"+'</option>');
+            $('#balance-acc').append('<span class="text-bold"> Bs. '+ val[3][0] +'</span>');
+        }
+        else {
+            $("#account1").append('<option value="'+(i+1)+'"> '+val[0].substring(6)+'  '+val[1].substring(12)+'</option>');
+        }
+    });
+
+    drop_change($("#account1").val());
+
+}
+
+function drop_change() {
+    $("#account2").empty();
+
+    var account = [];
+    var l = $('#account1').children().length;
+    var path = window.location.pathname.split('/');
+    var key = path[3];
+
+    for (var i=0; i<l; i++) {
+        account.push($('#account1').children()[i].text);
     }
 
     $.each(account,function (i,val) {
         if (key === '1' && val.includes("Ahorro")) {
-            $("#account1").append('<option value="'+(i+1)+'" selected="selected"> '+val+'</option>');
+            $("#account2").append('<option value="'+(i+1)+'" disabled> '+val+'</option>');
         }
         else if (key === '2' && val.includes("Corriente")) {
-            $("#account1").append('<option value="'+(i+1)+'" selected="selected"> '+val+'</option>');
+            $("#account2").append('<option value="'+(i+1)+'" disabled> '+val+'</option>');
+        }
+        else if (val.includes("Seleccione")) {
+            $("#account2").append('<option value="'+'0'+'" selected> '+val+'</option>');
         }
         else {
-           $("#account1").append('<option value="'+(i+1)+'"> '+val+'</option>');
-        }
-    })
-}
-
-
-function drop_change(key) {
-        $("#account2").empty();
-        $("#account2").append('<option value="'+'0'+'" selected="selected"> '+"Seleccione"+'</option>');
-        var account = ['Ahorro ****2222', 'Corriente ****1234'];
-
-        $.each(account,function (i,val) {
-        if (key === '1' && val.includes("Ahorro")) {
-            $("#account2").append('<option value="'+(i+1)+'" disabled="disabled"> '+val+'</option>');
-        }
-        else if (key === '2' && val.includes("Corriente")) {
-            $("#account2").append('<option value="'+(i+1)+'" disabled="disabled"> '+val+'</option>');
-        }
-        else {
-           $("#account2").append('<option value="'+(i+1)+'"> '+val+'</option>');
+            $("#account2").append('<option value="'+(i+1)+'"> '+val+'</option>');
         }
     })
 }
@@ -123,6 +126,70 @@ function transf_other_table() {
             '<i class="fa fa-close color-delete"></i></a></td>' +
             '</tr>')
     })
+}
+
+function send_transfer(a,b,c) {
+    var msg = '';
+    var available = $('#balance-acc').text;
+    if ($(b).val() === '0') {
+        $(b).addClass('errors');
+        msg = 'Seleccione una cuenta a acreditar';
+    }
+    else if ($(a).val() === '0') {
+        $(a).addClass('errors');
+        msg = 'Seleccione una cuenta a acreditar';
+    }
+    else if ($(c).val() === ''){
+        $(c).addClass('errors');
+        msg = 'El monto de la transferencia no puede estar vacío.';
+
+    }
+    else if (!($.isNumeric($(c).val()))) {
+        $(c).addClass('errors');
+        msg = 'El monto de la transferencia debe ser un número válido. ' +
+            'Por ejemplo: 23989.99, donde con el punto se indican los decimales.';
+    }
+    else if ($(c).val() > available) {
+        $(c).addClass('errors');
+        msg = 'El monto de la transferencia no puede ser mayor su monto disponible.';
+    }
+
+    if (msg !== ''){
+
+        $(function(){
+            var stack = {"dir1": "down",
+                "dir2": "left",
+                "firstpos2": 10,
+                "firstpos1": 10
+            };
+            new PNotify({
+                text: msg,
+                buttons: {
+                    closer: false,
+                    sticker: false
+                },
+                styling: 'bootstrap3',
+                type: 'error',
+                stack: stack
+            });
+        });
+    }
+}
+
+
+function DatatablesExec() {
+    var table = $('#table-transf').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching":true,
+        "ordering": true,
+        "order": [ 0, 'asc' ],
+        "info": true,
+        "autoWidth": false,
+        "pageLength":5
+    });
+
+    $("#table-payments_filter").addClass("pull-right");
 }
 
 

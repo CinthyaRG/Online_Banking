@@ -2263,6 +2263,7 @@ a.sidebar-toggle {
 .btn-default:active,
 .btn-default.hover {
     background-color: #e7e7e7;
+    color: #45ac89 !important;
 }
 .btn-primary {
     background-color: #3c8dbc;

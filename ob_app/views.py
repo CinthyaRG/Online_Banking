@@ -647,6 +647,7 @@ class Account(LoginRequiredMixin, TemplateView):
         context['customer'] = customer
         context['num'] = customer.user.username[:10]
         context['num2'] = customer.user.username[10:]
+        context['acc_id'] = self.kwargs['acc_id']
         return context
 
 
@@ -679,6 +680,8 @@ class Loans(LoginRequiredMixin, TemplateView):
         customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
+        context['num'] = customer.user.username[:10]
+        context['num2'] = customer.user.username[10:]
         return context
 
 
@@ -692,9 +695,14 @@ class Transfer_my_acc(LoginRequiredMixin, TemplateView):
             Transfer_my_acc, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
+        context['num'] = customer.user.username[:10]
+        context['num2'] = customer.user.username[10:]
 
         context['customer'] = customer
         return context
+
+    def post(self, request, *args, **kwargs):
+        print(request)
 
 
 class Transfer_my_bank(LoginRequiredMixin, TemplateView):

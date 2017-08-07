@@ -47,7 +47,6 @@
         </script>
         <script type="text/javascript" src="{% static 'js/charts.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/tour.js' %}"></script>
-
         <script type="text/javascript" src="{% static 'js/menu.js' %}"></script>
 
     {% endblock %}
@@ -117,7 +116,7 @@
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a id="my-acc" href="{% url 'transf-mis-cuentas' pk=customer.ref id=1 %}"> Mis Cuentas </a></li>
+                        <li><a id="my-acc" href="{% url 'transf-mis-cuentas' pk=customer.ref id=0 %}"> Mis Cuentas </a></li>
                         <li id="transfers-others" class="treeview">
                             <a id="transf-other"> <i class="fa fa-users"> </i> <span> Terceros </span>
                                 <span class="pull-right-container">

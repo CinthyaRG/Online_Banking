@@ -3,6 +3,7 @@
  */
 
 function tables_data(a,b) {
+    alert('data');
     var num = a;
     var k = b;
     var path = window.location.href.split('/');
@@ -43,6 +44,9 @@ function tables_data(a,b) {
                 else if (url[4]==='consultar-prestamo') {
                     drop_loan(data.loan);
                 }
+                else if (url[4]==='transf-mis-cuentas') {
+                    drop_account_trans(data.account);
+                }
             }
         },
         error: function (data) {
@@ -69,6 +73,8 @@ function menu_attr(account, tdc, loan) {
             else {
                 $('#acc-aho').removeAttr('href');
             }
+            $('#my-acc').removeAttr('href');
+            $('#my-acc').addClass('disabled');
         }
     });
 

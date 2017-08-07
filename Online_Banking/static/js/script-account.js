@@ -29,6 +29,11 @@ function drop_account(account){
     var key = path[3];
     $("#account").empty();
 
+    if (account.length < 2){
+        $('#transf-my-acc').removeAttr('href');
+        $('#transf-my-acc').addClass('disabled');
+    }
+
     $.each(account,function (i,val) {
         if (key === '1' && val[0].includes("Ahorro")) {
             $("#account").append('<option value="'+(i+1)+'" selected> '+val[0].substring(6)+'  '+val[1].substring(12)+'</option>');

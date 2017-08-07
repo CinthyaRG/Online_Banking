@@ -2,8 +2,16 @@
 {% load static %}
 
 {% block script %}
+    <link rel="stylesheet" href="{% static 'plugins/pnotify/pnotify.custom.min.css' %}">
     <script type="text/javascript" src="{% static 'js/script-transfers.js' %}"></script>
     <script src="{% static 'js/menu.js' %}"></script>
+    <script src="{% static 'plugins/pnotify/pnotify.custom.min.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            alert('aqui');
+
+        })
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -13,36 +21,36 @@
         </div>
         <div class="row">
             <div class="col-md-2"></div>
-            <div class="col-md-7">
-                <div class="box">
+            <div class="col-md-8">
+                <div class="box box-success">
                     <div class="box-body no-padding">
                         <div class="box-body">
-                                <dl id="title-account" class="dl-horizontal">
-                                    <dt class="h4">Cuenta a debitar: </dt>
-                                    <dd>
-                                        <select id="account1" class="select2 input-register drop-transf">
-                                        </select>
-                                        <span id="balance-acc"> Saldo Disponible:
-                                            <span class="text-bold">Bs. 172.096,77</span>
-                                        </span>
-                                    </dd>
-                                    <dt class="h4">Cuenta a acreditar: </dt>
-                                    <dd>
-                                        <select id="account2" class="select2 input-register drop-transf">
-                                        </select>
-                                    </dd>
-                                    <dt class="h4">Monto: </dt>
-                                    <dd>
-                                        <span>Bs. </span><input id="amount-transf" maxlength="10" class="input-register">
-                                    </dd>
-                                </dl>
-                              </div>
-                            </div>
+                            <dl id="title-account" class="dl-horizontal">
+                                <dt class="h4">Cuenta a debitar: </dt>
+                                <dd>
+                                    <select id="account1" class="select2 input-register drop-transf">
+                                    </select>
+                                    <span id="balance-acc"> Saldo Disponible: </span>
+                                </dd>
+                                <dt class="h4">Cuenta a acreditar: </dt>
+                                <dd>
+                                    <select id="account2" class="select2 input-register drop-transf">
+                                    </select>
+                                </dd>
+                                <dt class="h4">Monto: </dt>
+                                <dd>
+                                    <span>Bs. </span>
+                                    <input id="amount-transf" maxlength="10" class="input-register">
+                                    <span class="margin-l-8"> Ej. 25378.44 </span>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-5 col-xs-6"></div>
+            <div class="col-md-6 col-xs-6"></div>
             <div class="col-md-2 col-xs-3">
                 <a id="btn-trans" class="btn btn-default btn-group btn-apps pull-right" type="button"
                    onclick="window.history.back()">
@@ -50,11 +58,10 @@
             </div>
             <div class="col-md-2 col-xs-3">
                 <a id="btn-trans" class="btn btn-default btn-group btn-apps pull-right" type="button"
-                   onclick="window.history.back()">
+                   onclick="send_transfer('#account1', '#account2', '#amount-transf')">
                     Transferir </a>
             </div>
         </div>
-
     </section>
 
 {% endblock %}

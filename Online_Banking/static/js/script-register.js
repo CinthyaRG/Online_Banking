@@ -599,7 +599,7 @@ function validate_pass() {
     else if ( (confirm.val() !== password.val())) {
         $('#confirm').addClass('text-danger');
     }
-    else if ( (old.hasClass('text-danger')) || (min.hasClass('text-danger')) ||
+    else if ( (min.hasClass('text-danger')) ||
         (carac.hasClass('text-danger')) || (repeat.hasClass('text-danger')) || 
         (num.hasClass('text-danger')) || (spec.hasClass('text-danger')) || 
         (pers.hasClass('text-danger')) ) {
