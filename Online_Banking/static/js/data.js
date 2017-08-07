@@ -38,8 +38,10 @@ function tables_data(a,b) {
                 }
                 else if (url[4]==='consultar-tdc') {
                     drop_tdc(data.tdc);
-                    movement_table(data.mov_tdc);
-
+                    movement_table_tdc(data.mov_tdc);
+                }
+                else if (url[4]==='consultar-prestamo') {
+                    drop_loan(data.loan);
                 }
             }
         },

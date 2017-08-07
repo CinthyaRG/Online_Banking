@@ -597,8 +597,6 @@ class Home_Client(LoginRequiredMixin, TemplateView):
             Home_Client, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
-        print("username")
-        print(customer.user.username)
 
         context['customer'] = customer
         context['num'] = customer.user.username[:10]

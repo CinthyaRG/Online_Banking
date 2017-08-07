@@ -3,31 +3,7 @@
  */
 
 $(document).ready(function (){
-    movement_table_tdc();
     drop_trans_tdc();
-
-    var table = $('#example').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "ordering": true,
-        "order": [ 0, 'desc' ],
-        "aoColumns": [
-            { "sType": "date-uk" },
-            null,
-            null
-        ],
-        "info": true,
-        "autoWidth": false,
-        "pageLength":5,
-        dom:'lr<"table-filter-container">tip',
-        initComplete: function () {
-            $('#btn-con').click(function () {
-                if ($('#trans').val() !== 0) {
-                    table.search($('#trans').val()).draw();
-                }
-            });
-        }
-    });
 });
 
 function drop_tdc(tdc){
@@ -80,21 +56,41 @@ function drop_tdc(tdc){
 
 }
 
-function movement_table_tdc() {
-    var date = ['12/06/2017','08/06/2017','04/06/2017','29/05/2017','27/05/2017','22/05/2017'];
-    var details = ['POS','POS','POS','POS','Pago','POS'];
-    var amount = ['-12.484,00','-796,00','-5.741,94','-8.000,00','+10.000,00','-19.713,90'];
-    $.each(date,function (i,val) {
-        $("#mov-table-tdc").append('<tr><td>' +val+ '</td>' +
-            '<td>' +details[i]+ '</td>' +
-            '<td class="text-bold">' +amount[i]+ '</td>' +
+function movement_table_tdc(movements) {
+    var path = window.location.pathname.split('/');
+    var key = path[3];
+    var j;
+
+    if (key === '1') {
+        j = 0;
+    }
+    else if (key === '2') {
+        j = 1;
+    }
+    else {
+        j = 2;
+    }
+
+    $('#example').DataTable().destroy();
+    $("#mov-table-tdc").empty();
+
+    var mov = movements[j];
+    $.each(mov, function (i, val) {
+        var d = val[0].split('-');
+        var date = d[2][0]+d[2][1] + '/' + d[1] + '/' + d[0];
+        $("#mov-table-tdc").append('<tr><td>' + date + '</td>' +
+            '<td> ' + val[1] + '</td>' +
+            '<td class="text-bold">' + 'Bs. ' + val[2] + '</td>' +
             '</tr>')
-    })
+    });
+
+    DatatablesExec();
+
 }
 
 function drop_trans_tdc(){
     var type_trans = ['Pagos', 'POS'];
-    $("#trans").append('<option value="'+'0'+'"" selected="selected"> '+"Seleccione"+'</option>');
+    $("#trans").append('<option value="'+'0'+'"" selected="selected"> '+"Todas"+'</option>');
 
     $.each(type_trans,function (i,val) {
            $("#trans").append('<option value="'+val+'"> '+val+'</option>');

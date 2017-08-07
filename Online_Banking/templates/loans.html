@@ -24,10 +24,10 @@
     <section class="content-header">
         <dl id="title-loan" class="dl-horizontal">
             <dt class="h3">Préstamo </dt>
-            <dd><select id="loan_drop" class="select2 drop-trans input-register"></select>
+            <dd><select id="loan_drop" class="select2 input-register"></select>
             </dd>
             <dt class="h4 without-margin margin-l-13">Producto asociado: </dt>
-            <dd class="info-account">Ahorro ****2222</dd>
+            <dd id="product" class="info-account"></dd>
         </dl>
         <div class="row">
             <div class="col-md-9 col-xs-9"></div>
@@ -50,10 +50,10 @@
                                 <th>Monto Pagado</th>
                             </tr>
                             <tr>
-                                <td>36</td>
-                                <td class="text-bold">Bs. 200.000,00</td>
-                                <td class="text-bold">Bs. 56.520,00 </td>
-                                <td>Bs. 144.480,00 </td>
+                                <td id="numInstallments"></td>
+                                <td id="startingAmount" class="text-bold"></td>
+                                <td id="overdue_amount" class="text-bold"></td>
+                                <td id="paid_amount"></td>
                             </tr>
                             </tbody>
                             <tbody><tr class="bg-gray">
@@ -63,10 +63,10 @@
                                 <th>Cuotas Vencidas</th>
                             </tr>
                             <tr>
-                                <td>10/12/2016</td>
-                                <td>10/12/2019</td>
-                                <td>28</td>
-                                <td>0</td>
+                                <td id="date"></td>
+                                <td id="date_expires"></td>
+                                <td id="paidInstallments"></td>
+                                <td id="overdueInstallments"></td>
                             </tr>
                             </tbody>
                         </table>

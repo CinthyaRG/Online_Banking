@@ -4,6 +4,7 @@
 {% block script %}
     <!-- bootstrap datepicker -->
     <link rel="stylesheet" href="{% static 'plugins/datepicker/datepicker3.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/pnotify/pnotify.custom.min.css' %}">
     <script type="text/javascript" src="{% static 'js/script-account.js' %}"></script>
     <!-- DataTables -->
     <script src="{% static 'plugins/datatables/jquery.dataTables.js' %}"></script>
@@ -13,6 +14,8 @@
     <script src="{% static 'plugins/datepicker/locales/bootstrap-datepicker.es.js' %}"></script>
     <script src="{% static 'js/moment.min.js' %}"></script>
     <script src="{% static 'js/menu.js' %}"></script>
+    <script src="{% static 'js/validate_date.js' %}"></script>
+    <script src="{% static 'plugins/pnotify/pnotify.custom.min.js' %}"></script>
     <script>
         $(document).ready(function (){
             var a = String({{num}}) + String({{num2}});
@@ -20,6 +23,11 @@
             $('#account').change(function () {
                 change_drop('#account');
             });
+
+            $('#datepicker2').click(function () {
+                    $('#datepicker2').removeClass('errors');
+                }
+            );
 
             $('#datepicker').datepicker({
                 autoclose: true,
@@ -45,7 +53,7 @@
                 var e = $('#datepicker2').val();
                 var select = $('#trans').val();
 
-                if ((s !== '') || (e !== '')) {
+                if (((s !== '') || (e !== '')) && (validate_date(s,e))) {
                     var path = window.location.href.split('/');
                     var url_api = path[0]+"/"+path[1]+"/"+"localhost:8001"+"/ajax/data-customer/";
                     var today = new Date();
@@ -66,7 +74,8 @@
                             num: a,
                             start: start,
                             end: end,
-                            select: select
+                            select: select,
+                            option: path[4]
                         },
                         type: 'GET',
                         dataType: 'json',
@@ -81,6 +90,27 @@
                             alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
                             // move('logout');
                         }
+                    });
+                }
+                else if (!(validate_date(s,e))) {
+                    $('#datepicker2').addClass('errors');
+                    $(function(){
+                        var stack = {"dir1": "down",
+                            "dir2": "left",
+                            "firstpos2": 10,
+                            "firstpos1": 10
+                        };
+                        new PNotify({
+                            text: 'La fecha final para la consulta de movimientos no puede ser ' +
+                            'mayor a la fecha de inicio.',
+                            buttons: {
+                                closer: false,
+                                sticker: false
+                            },
+                            styling: 'bootstrap3',
+                            type: 'error',
+                            stack: stack
+                        });
                     });
                 }
             })
