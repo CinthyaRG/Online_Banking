@@ -8,12 +8,12 @@ $(document).ready(function (){
     transf_other_table();
 
     if ($("#account1").val() !== '0') {
-        $("#balance-acc").css({display:'inline'});
+        $("#balance-acc").css({display:'inline-block'});
     }
 
     $("#account1").change(function () {
         if ($("#account1").val() !== '0') {
-            $("#balance-acc").css({display: 'inline'});
+            $("#balance-acc").css({display: 'inline-block'});
         }
         else {
             $("#balance-acc").css({display: 'none'});
@@ -23,6 +23,14 @@ $(document).ready(function (){
 
     $("#amount-transf").click(function () {
         $("#amount-transf").removeClass('errors');
+    });
+
+    $("#account1").click(function () {
+        $("#account1").removeClass('errors');
+    });
+
+    $("#account2").click(function () {
+        $("#account2").removeClass('errors');
     });
 
 });
@@ -41,12 +49,12 @@ function drop_account_trans(account){
         if (key === '1' && val[0].includes("Ahorro")) {
             $("#account1").append('<option value="'+(i+1)+'" selected> '+val[0].substring(6)+'  '+val[1].substring(12)+'</option>');
             $("#account1").append('<option value="'+'0'+'"> '+"Seleccione"+'</option>');
-            $('#balance-acc').append('<span class="text-bold"> Bs. '+ val[3][0] +'</span>');
+            $('#balance-acc').append('<span class="text-bold">'+ val[3][0] +'</span>');
         }
         else if (key === '2' && val[0].includes("Corriente")) {
             $("#account1").append('<option value="'+(i+1)+'" selected> '+val[0].substring(6)+'  '+val[1].substring(12)+'</option>');
             $("#account1").append('<option value="'+'0'+'"> '+"Seleccione"+'</option>');
-            $('#balance-acc').append('<span class="text-bold"> Bs. '+ val[3][0] +'</span>');
+            $('#balance-acc').append('<span class="text-bold">'+ val[3][0] +'</span>');
         }
         else {
             $("#account1").append('<option value="'+(i+1)+'"> '+val[0].substring(6)+'  '+val[1].substring(12)+'</option>');
@@ -128,12 +136,12 @@ function transf_other_table() {
     })
 }
 
-function send_transfer(a,b,c) {
+function send_transfer(a,b,c,d) {
     var msg = '';
-    var available = $('#balance-acc').text;
+    var available = parseFloat($("#balance-acc").find('span').text().replace('.','').replace(',','.'));
     if ($(b).val() === '0') {
         $(b).addClass('errors');
-        msg = 'Seleccione una cuenta a acreditar';
+        msg = 'Seleccione una cuenta a debitar';
     }
     else if ($(a).val() === '0') {
         $(a).addClass('errors');
@@ -142,25 +150,22 @@ function send_transfer(a,b,c) {
     else if ($(c).val() === ''){
         $(c).addClass('errors');
         msg = 'El monto de la transferencia no puede estar vacío.';
-
     }
     else if (!($.isNumeric($(c).val()))) {
         $(c).addClass('errors');
         msg = 'El monto de la transferencia debe ser un número válido. ' +
             'Por ejemplo: 23989.99, donde con el punto se indican los decimales.';
     }
-    else if ($(c).val() > available) {
+    else if (parseFloat($(c).val()) > available) {
         $(c).addClass('errors');
         msg = 'El monto de la transferencia no puede ser mayor su monto disponible.';
     }
-
     if (msg !== ''){
-
         $(function(){
             var stack = {"dir1": "down",
                 "dir2": "left",
                 "firstpos2": 10,
-                "firstpos1": 10
+                "firstpos1": 100
             };
             new PNotify({
                 text: msg,
@@ -169,10 +174,35 @@ function send_transfer(a,b,c) {
                     sticker: false
                 },
                 styling: 'bootstrap3',
-                type: 'error',
+                type: 'success',
                 stack: stack
             });
         });
+    }
+    else {
+        var path = window.location.href.split('/');
+        var url_api = path[0] + "/" + path[1] + "/" + "localhost:8001" + "/ajax/send-transfer/";
+        $.ajax({
+            url: url_api,
+            origin: 'localhost:8000',
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            data: {
+                acc_source: $(a).val(),
+                acc_dest: $(b).val(),
+                amount: $(c).val(),
+                num: d
+            },
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                if (data.sucess) {
+
+                }
+            },
+            error: function (data) {
+                alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+            }
+        })
     }
 }
 

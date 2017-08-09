@@ -2433,7 +2433,7 @@ a.sidebar-toggle {
     text-decoration: underline;
 }
 .alert-success {
-    border-color: #008d4c;
+    border-color: #d6e9c6;
 }
 .alert-danger,
 .alert-error {
@@ -4463,7 +4463,7 @@ table.text-center th {
 .alert-success,
 .label-success,
 .modal-success .modal-body {
-    background-color: #00a65a !important;
+    background-color: #3c9d7d !important;
 }
 .bg-navy {
     background-color: #001f3f !important;

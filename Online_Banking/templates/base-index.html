@@ -28,6 +28,7 @@
     <!-- js app -->
     <script src="{% static 'js/app.js' %}"></script>
     <script src="{% static 'js/settings_ajax.js' %}"></script>
+    <script src="{% static 'js/notification.js' %}"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -40,45 +41,11 @@
             {% if form.errors %}
                 {% for field in form %}
                     {% for error in field.errors %}
-                        $(function(){
-                        var stack = {"dir1": "down",
-                            "dir2": "left",
-                            "firstpos2": 10,
-                            "firstpos1": 10
-                        };
-                        new PNotify({
-                            title: '{{ message.tags|upper }}',
-                            text: '{{ error|escape }}',
-                            buttons: {
-                                closer: false,
-                                sticker: false
-                            },
-                            styling: 'bootstrap3',
-                            type: 'error',
-                            stack: stack
-                        });
-                    });
+                        notification_error({{ error|escape }});
                     {% endfor %}
                 {% endfor %}
                 {% for error in form.non_field_errors %}
-                    $(function(){
-                        var stack = {"dir1": "down",
-                            "dir2": "left",
-                            "firstpos2": 10,
-                            "firstpos1": 10
-                        };
-                        new PNotify({
-                            title: '{{ message.tags|upper }}',
-                            text: '{{ error|escape }}',
-                            buttons: {
-                                closer: false,
-                                sticker: false
-                            },
-                            styling: 'bootstrap3',
-                            type: 'error',
-                            stack: stack
-                        });
-                    });
+                    notification_error({{ error|escape }});
                 {% endfor %}
             {% endif %}
         </script>

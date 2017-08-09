@@ -8,8 +8,6 @@
     <script src="{% static 'plugins/pnotify/pnotify.custom.min.js' %}"></script>
     <script>
         $(document).ready(function () {
-            alert('aqui');
-
         })
     </script>
 {% endblock %}
@@ -30,7 +28,7 @@
                                 <dd>
                                     <select id="account1" class="select2 input-register drop-transf">
                                     </select>
-                                    <span id="balance-acc"> Saldo Disponible: </span>
+                                    <span id="balance-acc"> Saldo Disponible: <b>Bs. </b></span>
                                 </dd>
                                 <dt class="h4">Cuenta a acreditar: </dt>
                                 <dd>
@@ -50,15 +48,15 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6 col-xs-6"></div>
-            <div class="col-md-2 col-xs-3">
+            <div class="col-md-6 col-xs-4"></div>
+            <div class="col-md-2 col-xs-4">
                 <a id="btn-trans" class="btn btn-default btn-group btn-apps pull-right" type="button"
                    onclick="window.history.back()">
                     Cancelar </a>
             </div>
-            <div class="col-md-2 col-xs-3">
+            <div class="col-md-2 col-xs-4">
                 <a id="btn-trans" class="btn btn-default btn-group btn-apps pull-right" type="button"
-                   onclick="send_transfer('#account1', '#account2', '#amount-transf')">
+                   onclick="send_transfer('#account1', '#account2', '#amount-transf', String({{num}}) + String({{num2}}))">
                     Transferir </a>
             </div>
         </div>
