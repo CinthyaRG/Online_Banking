@@ -498,3 +498,9 @@ div[role="tooltip"] {
 .error-login {
     min-height: 30px;
 }
+.w-120 {
+    width: 120px !important;
+}
+.w-180 {
+    width: 180px !important;
+}

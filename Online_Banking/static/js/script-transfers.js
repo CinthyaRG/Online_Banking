@@ -41,6 +41,7 @@ function drop_account_trans(account){
     var key = path[3];
 
     $("#account1").empty();
+    $("#amount-transf").empty();
 
     $.each(account,function (i,val) {
         if (key === '0' && i === 0) {
@@ -138,13 +139,13 @@ function transf_other_table() {
 
 function send_transfer(a,b,c,d) {
     var msg = '';
-    var available = parseFloat($("#balance-acc").find('span').text().replace('.','').replace(',','.'));
-    if ($(b).val() === '0') {
-        $(b).addClass('errors');
+    var available = parseFloat($("#balance-acc").find('span').text().replace(/\./g, '').replace(',','.'));
+    if ($(a).val() === '0') {
+        $(a).addClass('errors');
         msg = 'Seleccione una cuenta a debitar';
     }
-    else if ($(a).val() === '0') {
-        $(a).addClass('errors');
+    else if ($(b).val() === '0') {
+        $(b).addClass('errors');
         msg = 'Seleccione una cuenta a acreditar';
     }
     else if ($(c).val() === ''){
@@ -157,27 +158,13 @@ function send_transfer(a,b,c,d) {
             'Por ejemplo: 23989.99, donde con el punto se indican los decimales.';
     }
     else if (parseFloat($(c).val()) > available) {
+        alert(available);
+        alert(parseFloat($(c).val()));
         $(c).addClass('errors');
         msg = 'El monto de la transferencia no puede ser mayor su monto disponible.';
     }
     if (msg !== ''){
-        $(function(){
-            var stack = {"dir1": "down",
-                "dir2": "left",
-                "firstpos2": 10,
-                "firstpos1": 100
-            };
-            new PNotify({
-                text: msg,
-                buttons: {
-                    closer: false,
-                    sticker: false
-                },
-                styling: 'bootstrap3',
-                type: 'success',
-                stack: stack
-            });
-        });
+        notification_error(msg);
     }
     else {
         var path = window.location.href.split('/');
@@ -187,16 +174,26 @@ function send_transfer(a,b,c,d) {
             origin: 'localhost:8000',
             headers: {'X-CSRFToken': getCookie('csrftoken')},
             data: {
-                acc_source: $(a).val(),
-                acc_dest: $(b).val(),
+                acc_source: document.getElementById('account1').options[document.getElementById('account1').selectedIndex].text,
+                acc_dest: document.getElementById('account2').options[document.getElementById('account2').selectedIndex].text,
                 amount: $(c).val(),
-                num: d
+                num: d,
+                type: path[4]
             },
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                if (data.sucess) {
-
+                if (!data.success) {
+                    notification_error(data.msg);
+                    setTimeout(function(){
+                        location.href = path[0] + "/" + path[1] + "/" + path[2] + "/" + path[3] + "/" + path[4] + "/0/";
+                    }, 3000);
+                }
+                else{
+                    notification_success(data.msg);
+                    setTimeout(function(){
+                        location.href = path[0] + "/" + path[1] + "/" + path[2] + "/" + path[3] + "/consultar-cuenta/" + path[5] + "/";
+                    }, 3000);
                 }
             },
             error: function (data) {

@@ -11,7 +11,7 @@ $(document).ready(function (){
         var date = button.data('date');
         var ref = button.data('ref');
         var type = button.data('type');
-        var amount = button.data('amount');
+        var amount = 'Bs. '+ button.data('amount');
         var modal = $(this);
 
         modal.find('.modal-body #detail').text(detail.replace(/_/g, ' '));
@@ -81,7 +81,7 @@ function movement_table(movements) {
         var amount = 'Bs. '+ val[3].substring(1);
         $("#mov-table").append('<tr class="open_modal" data-toggle="modal" ' +
             'data-target="#myModal" data-date=' + date + ' data-amount=' +
-            amount + ' data-type=' + val[2] +
+            String(val[3].substring(1)) + ' data-type=' + val[2] +
             ' data-ref=' + val[1] + ' data-details=' + details + '><td>' + date + '</td>' +
             '<td> <span class="link"> ' + val[1] + '</span></td>' +
             '<td>' + val[2] + '</td>' +
@@ -109,7 +109,7 @@ function DatatablesExec() {
         "destroy": true,
         "ordering": false,
         "info": true,
-        "autoWidth": false,
+        "autoWidth": true,
         "pageLength":5,
         dom:'lr<"table-filter-container">tip',
         initComplete: function () {

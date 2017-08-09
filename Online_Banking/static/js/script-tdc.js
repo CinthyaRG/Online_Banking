@@ -104,7 +104,7 @@ function DatatablesExec() {
         "destroy": true,
         "ordering": false,
         "info": true,
-        "autoWidth": false,
+        "autoWidth": true,
         "pageLength":5,
         dom:'lr<"table-filter-container">tip',
         initComplete: function () {
