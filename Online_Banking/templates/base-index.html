@@ -29,6 +29,7 @@
     <script src="{% static 'js/app.js' %}"></script>
     <script src="{% static 'js/settings_ajax.js' %}"></script>
     <script src="{% static 'js/notification.js' %}"></script>
+    {% include 'session_security/all.html' %}
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -164,8 +165,8 @@
                             {#                                    <i id="icon" class="fa fa-warning fa-4x"> </i>#}
                             <img id="icon" src="../static/img/warning50.png">
                             <span>
-                                        <strong> Nunca te pediremos más de dos coordenadas de seguridad. </strong>
-                                    </span>
+                                <strong> Nunca te pediremos más de dos coordenadas de seguridad. </strong>
+                            </span>
                         </div>
                     </div>
                 </div>

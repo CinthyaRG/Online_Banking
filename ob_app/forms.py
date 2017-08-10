@@ -21,3 +21,32 @@ class LoginForm(forms.Form):
             'id': "id_password"
         })
     )
+
+
+class ElementForm(forms.Form):
+    answer = forms.CharField(
+        max_length=50, label=' Respuesta: ',
+        required=False, widget=forms.PasswordInput(attrs={
+            'class': "input-register",
+            'id': "resp_seg",
+            'placeholder': ""
+        })
+    )
+
+    first_coor = forms.CharField(
+        max_length=3, label=' Primera Coordenada: ',
+        required=False, widget=forms.PasswordInput(attrs={
+            'class': "input-register",
+            'id': "input_frs_coor",
+            'placeholder': ""
+        })
+    )
+
+    second_coor = forms.CharField(
+        max_length=3, label=' Segunda Coordenada: ',
+        required=False, widget=forms.PasswordInput(attrs={
+            'class': "input-register",
+            'id': "input_snd_coor",
+            'placeholder': ""
+        })
+    )

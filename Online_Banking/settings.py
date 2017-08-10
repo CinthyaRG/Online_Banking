@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ob_app.apps.OnlineBankingAppConfig',
     'bootstrap3',
+    'session_security',
 ]
 
 MIDDLEWARE = [
@@ -47,6 +48,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'session_security.middleware.SessionSecurityMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -139,4 +141,7 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'actio.capital'
 EMAIL_HOST_PASSWORD = 'administrador1234'
 
+SESSION_SECURITY_EXPIRE_AFTER = 160
+SESSION_SECURITY_WARN_AFTER = 140
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 

@@ -108,11 +108,11 @@ urlpatterns = [
         Transfer_my_acc.as_view(),
         name='transf-mis-cuentas'),
     url(
-        r'^(?P<pk>\w+)/transf-mi-banco/$',
+        r'^(?P<pk>\w+)/transf-mi-banco/(?P<id>\w+)/$',
         Transfer_my_bank.as_view(),
         name='transf-mi-banco'),
     url(
-        r'^(?P<pk>\w+)/transf-otros-bancos/$',
+        r'^(?P<pk>\w+)/transf-otros-bancos/(?P<id>\w+)/$',
         Transfer_others_bank.as_view(),
         name='transf-otros-bancos'),
     url(

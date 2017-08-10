@@ -20,6 +20,11 @@ function move_back_security() {
 }
 
 function move_security(id_body,id_sec) {
+    move_security('#body_tranf_my_bank','#sec_tranf_my_bank');
     $(id_sec).css({display:'none'});
     $(id_body).css({display:'block'});
+}
+
+function elem_Security(a,b,c) {
+
 }

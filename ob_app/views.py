@@ -590,7 +590,7 @@ class Home(TemplateView):
 class Home_Client(LoginRequiredMixin, TemplateView):
     template_name = 'base.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -636,13 +636,20 @@ class Restore_pass(TemplateView):
 class Account(LoginRequiredMixin, TemplateView):
     template_name = 'accounts.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
             Account, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
+        elems = ElemSecurity.objects.get(pk=customer.elemSecurity_id)
+
+        try:
+            card_coor = CardCoor.objects.get(pk=elems.cardCoor_id)
+            context['card_coor'] = 'true'
+        except CardCoor.DoesNotExist:
+            context['card_coor'] = 'false'
 
         context['customer'] = customer
         context['num'] = customer.user.username[:10]
@@ -654,7 +661,7 @@ class Account(LoginRequiredMixin, TemplateView):
 class Tdc(LoginRequiredMixin, TemplateView):
     template_name = 'tdc.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -671,7 +678,7 @@ class Tdc(LoginRequiredMixin, TemplateView):
 class Loans(LoginRequiredMixin, TemplateView):
     template_name = 'loans.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -688,7 +695,7 @@ class Loans(LoginRequiredMixin, TemplateView):
 class Transfer_my_acc(LoginRequiredMixin, TemplateView):
     template_name = 'trans_my_acc.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -701,35 +708,63 @@ class Transfer_my_acc(LoginRequiredMixin, TemplateView):
         context['customer'] = customer
         return context
 
-    def post(self, request, *args, **kwargs):
-        print(request)
-
 
 class Transfer_my_bank(LoginRequiredMixin, TemplateView):
     template_name = 'trans_my_bank.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
             Transfer_my_bank, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
+        elems = ElemSecurity.objects.get(pk=customer.elemSecurity_id)
+
+        try:
+            card_coor = CardCoor.objects.get(pk=elems.cardCoor_id)
+            if elems.sessionExpires < datetime.datetime.today():
+                context['session'] = 'true'
+            else:
+                quest1 = customer.elemSecurity.question1
+                quest2 = customer.elemSecurity.question2
+                num = random.randint(1, 2)
+                if num == 1:
+                    context['question'] = quest1
+                else:
+                    context['question'] = quest2
+
+                a = list('ABCDE')
+                random.shuffle(a)
+
+            context['card_coor'] = 'true'
+        except CardCoor.DoesNotExist:
+            context['card_coor'] = 'false'
+            context['session'] = 'false'
 
         context['customer'] = customer
+        context['num'] = customer.user.username[:10]
+        context['num2'] = customer.user.username[10:]
+
         return context
 
 
 class Transfer_others_bank(LoginRequiredMixin, TemplateView):
     template_name = 'trans_other_bank.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
             Transfer_others_bank, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
+        elems = ElemSecurity.objects.get(pk=customer.elemSecurity_id)
+
+        try:
+            card_coor = CardCoor.objects.get(pk=elems.cardCoor_id)
+        except CardCoor.DoesNotExist:
+            context['card_coor'] = False
 
         context['customer'] = customer
         return context
@@ -738,7 +773,7 @@ class Transfer_others_bank(LoginRequiredMixin, TemplateView):
 class DataTransfer(LoginRequiredMixin, TemplateView):
     template_name = 'transfer-data.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -753,7 +788,7 @@ class DataTransfer(LoginRequiredMixin, TemplateView):
 class Success(LoginRequiredMixin, TemplateView):
     template_name = 'transfer-success.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -768,7 +803,7 @@ class Success(LoginRequiredMixin, TemplateView):
 class Payments(LoginRequiredMixin, TemplateView):
     template_name = 'payments.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -783,7 +818,7 @@ class Payments(LoginRequiredMixin, TemplateView):
 class DataPayment(LoginRequiredMixin, TemplateView):
     template_name = 'payment-data.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -798,7 +833,7 @@ class DataPayment(LoginRequiredMixin, TemplateView):
 class Success_Payments(LoginRequiredMixin, TemplateView):
     template_name = 'payments-success.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -813,7 +848,7 @@ class Success_Payments(LoginRequiredMixin, TemplateView):
 class Register_Affiliate(LoginRequiredMixin, TemplateView):
     template_name = 'register-affiliate.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -828,7 +863,7 @@ class Register_Affiliate(LoginRequiredMixin, TemplateView):
 class Register_Services(LoginRequiredMixin, TemplateView):
     template_name = 'register-services.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -843,7 +878,7 @@ class Register_Services(LoginRequiredMixin, TemplateView):
 class Request(LoginRequiredMixin, TemplateView):
     template_name = 'request.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -858,7 +893,7 @@ class Request(LoginRequiredMixin, TemplateView):
 class Request_Coord(LoginRequiredMixin, TemplateView):
     template_name = 'req-tar-coor.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -873,7 +908,7 @@ class Request_Coord(LoginRequiredMixin, TemplateView):
 class Request_Checkbook(LoginRequiredMixin, TemplateView):
     template_name = 'req-checkb.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -888,7 +923,7 @@ class Request_Checkbook(LoginRequiredMixin, TemplateView):
 class Request_Appointment(LoginRequiredMixin, TemplateView):
     template_name = 'req-appointment.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -903,7 +938,7 @@ class Request_Appointment(LoginRequiredMixin, TemplateView):
 class Request_References(LoginRequiredMixin, TemplateView):
     template_name = 'req-reference.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -918,7 +953,7 @@ class Request_References(LoginRequiredMixin, TemplateView):
 class Request_References_Success(LoginRequiredMixin, TemplateView):
     template_name = 'req-reference_success.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -933,7 +968,7 @@ class Request_References_Success(LoginRequiredMixin, TemplateView):
 class Request_Appointment_Success(LoginRequiredMixin, TemplateView):
     template_name = 'req-appointment_success.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -948,7 +983,7 @@ class Request_Appointment_Success(LoginRequiredMixin, TemplateView):
 class Request_Checkbook_Success(LoginRequiredMixin, TemplateView):
     template_name = 'req-checkb_success.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -963,7 +998,7 @@ class Request_Checkbook_Success(LoginRequiredMixin, TemplateView):
 class Management(LoginRequiredMixin, TemplateView):
     template_name = 'management-products.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -978,7 +1013,7 @@ class Management(LoginRequiredMixin, TemplateView):
 class Profile(LoginRequiredMixin, TemplateView):
     template_name = 'profile-security.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(
@@ -993,7 +1028,7 @@ class Profile(LoginRequiredMixin, TemplateView):
 class Help(LoginRequiredMixin, TemplateView):
     template_name = 'help.html'
     login_url = 'home'
-    redirect_field_name = 'redirect_to'
+    redirect_field_name = 'logout'
 
     def get_context_data(self, **kwargs):
         context = super(

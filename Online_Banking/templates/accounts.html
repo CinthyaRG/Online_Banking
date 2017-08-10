@@ -19,6 +19,8 @@
     <script>
         $(document).ready(function (){
             var a = String({{num}}) + String({{num2}});
+            var card = String({{card_coor}}) === 'True';
+
             menu();
             $('#account').change(function () {
                 change_drop('#account');
@@ -46,6 +48,28 @@
                 clearBtn: true,
                 todayHighlight: true,
                 weekStart: 1
+            });
+
+            $('#trans_bank').click(function () {
+                if (card) {
+                    move('transf-mi-banco');
+                }
+                else {
+                    var msg = 'Para realizar transferencias a otros usuarios debe poseer una tarjeta de coordenadas. ' +
+                        'Ingrese a "Solicitudes en Línea" y proceda a generarla.';
+                    notification_error(msg);
+                }
+            });
+
+            $('#trans_other').click(function () {
+                if (card) {
+                    move('transf-mi-banco');
+                }
+                else {
+                    var msg = 'Para realizar transferencias a otros usuarios debe poseer una tarjeta de coordenadas. ' +
+                        'Ingrese a "Solicitudes en Línea" y proceda a generarla.';
+                    notification_error(msg);
+                }
             });
 
             $('#btn-con').click(function () {
@@ -120,11 +144,9 @@
                 <a id="transf-my-acc" class="btn btn-default btn-group btn-apps" type="button"
                    href="{% url 'transf-mis-cuentas' pk=customer.ref id=acc_id %}">
                     Transferencias a Mis Cuentas </a>
-                <a class="btn btn-default btn-group btn-apps" type="button"
-                   onclick="move('transf-mi-banco')">
+                <a id="trans_bank" class="btn btn-default btn-group btn-apps" type="button">
                     Transferencias Mismo Banco </a>
-                <a class="btn btn-default btn-group btn-apps" type="button"
-                   onclick="move('transf-otros-bancos')">
+                <a id="trans_other" class="btn btn-default btn-group btn-apps" type="button">
                     Transferencias Otros Bancos </a>
             </div>
         </div>

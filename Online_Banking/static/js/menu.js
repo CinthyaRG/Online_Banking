@@ -58,6 +58,9 @@ function menu() {
     else if (act_pat === "ayuda") {
         var _this = $('#help');
     }
+    else if (act_pat === "elementos-seguridad") {
+        $('li').removeClass("active");
+    }
     else {
         $('#other-bank').addClass("activate-menu");
         nivel= 1;

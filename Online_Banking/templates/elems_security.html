@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block script %}
+    <script src="{% static 'js/script-elem_sec.js' %}"></script>
+    <script src="{% static 'js/menu.js' %}"></script>
+    <link type="text/css" href="{% static 'plugins/keypad-package/css/jquery.keypad.css'%}"
+          rel="stylesheet">
+    <script type="text/javascript" src="{% static 'plugins/keypad-package/js/jquery.plugin.js'%}">
+    </script>
+    <script type="text/javascript" src="{% static 'plugins/keypad-package/js/jquery.keypad.js'%}">
+    </script>
+    <script>
+        $(document).ready(function (){
+            menu();
+            $("#input_frs_coor").keypad();
+            $("#input_snd_coor").keypad();
+            $("#input_frs_coor").keypad({prompt: 'Enter here'});
+            $.keypad.setDefaults({prompt: ''});
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <form action="" method="POST" autocomplete="off">
+        {% csrf_token %}
+        <section class="content-header">
+            <div class="row" id="title-transf-bank">
+                <h3> Elementos de Seguridad </h3>
+            </div>
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-7">
+                    <div class="box box-success">
+                        <div class="box-body">
+                            <dl class="dl-horizontal label-input no-margin no-pad-bottom">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-5">
+                                        <label class="pull-right">
+                                            Pregunta de Seguridad: </label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-5 rows no-margin">
+                                        <p> Nombre de mi primera mascota </p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-5">
+                                        <label class="pull-right">
+                                            <span class="text-danger"> * </span> Respuesta: </label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-5 rows">
+                                        {{ form.answer }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-5">
+                                        <label class="pull-right">
+                                            <span class="text-danger"> * </span> Coordenadas: </label>
+                                    </div>
+                                    <div class="col-md-5 col-xs-5 rows">
+                                        <span id="first_coor"> A5
+                                            {{ form.first_coor }}
+                                        </span>
+                                        <span id="second_coor"> D2
+                                            {{ form.second_coor }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5 col-xs-5"></div>
+                <div class="col-md-4">
+                    <a id="btn-back" class="btn btn-default btn-group btn-apps"
+                       type="button" onclick="window.history.back()"> Cancelar
+                    </a>
+                    <button id="btn-next" class="btn btn-default btn-group btn-apps pull-right" type="submit">
+                        Siguiente
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </form>
+
+{% endblock %}

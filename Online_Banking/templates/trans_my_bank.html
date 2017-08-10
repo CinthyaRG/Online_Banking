@@ -16,7 +16,16 @@
     </script>
     <script>
         $(document).ready(function (){
-            $('#body_tranf_my_bank').css({display: 'none'});
+            var session = String({{session}}) === 'True';
+
+
+            if (session) {
+                $('#sec_tranf_my_bank').css({display: 'none'});
+            }
+            else {
+                $('#body_tranf_my_bank').css({display: 'none'});
+            }
+
             $("#table-transf_paginate").addClass("pull-right");
             $("#table-transf_paginate").css({height: '60px'});
             $("#table-transf_filter").addClass("pull-right");
@@ -45,7 +54,7 @@
                                         Pregunta de Seguridad: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows no-margin">
-                                    <p> Nombre de mi primera mascota </p>
+                                    <p id="question"></p>
                                 </div>
                             </div>
                             <div class="row">
@@ -64,11 +73,11 @@
                                         <span class="text-danger"> * </span> Coordenadas: </label>
                                 </div>
                                 <div class="col-md-5 col-xs-5 rows">
-                                    <span id="first_coor"> A5
+                                    <span> <span id="first_coor"></span>
                                     <input id="input_frs_coor" maxlength="3" type="password"
                                            class="input-register">
                                     </span>
-                                    <span id="second_coor"> D2
+                                    <span> <span id="second_coor"></span>
                                     <input id="input_snd_coor" maxlength="3" type="password"
                                            class="input-register">
                                     </span>
@@ -83,7 +92,7 @@
             <div class="col-md-5 col-xs-5"></div>
             <div class="col-md-4">
                 <a id="btn-back" class="btn btn-default btn-group btn-apps"
-                   type="button" onclick="move_back_security()"> Cancelar
+                   type="button" onclick="window.history.back()"> Cancelar
                 </a>
                 <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
                    type="button" onclick="move_security('#body_tranf_my_bank','#sec_tranf_my_bank')">
@@ -138,8 +147,8 @@
                             </tfoot>
                         </table>
                     </div>
-                <!-- /.box-body -->
-              </div>
+                    <!-- /.box-body -->
+                </div>
             </div>
         </div>
     </section>
@@ -167,11 +176,11 @@
                         <div class="col-md-3 col-xs-2"></div>
                         <div class="col-md-3 col-xs-4">
                             <button type="button" class="btn btn-default btn-apps"
-                                data-dismiss="modal">Cancelar</button>
+                                    data-dismiss="modal">Cancelar</button>
                         </div>
                         <div class="col-md-3 col-xs-3">
                             <button type="button" class="btn btn-default btn-apps"
-                                data-dismiss="modal">Aceptar</button>
+                                    data-dismiss="modal">Aceptar</button>
                         </div>
                     </div>
                 </div>
