@@ -180,7 +180,7 @@ div[role="tooltip"] {
     bottom: 40px;
     left: 45px;
 }
-#quest1, #quest2, #answ1, #answ2, #quest {
+#quest1, #quest2, #answ1, #answ2, #quest, #email_user {
     width: 250px;
 }
 #help-pass {

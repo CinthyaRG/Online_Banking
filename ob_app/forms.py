@@ -23,30 +23,76 @@ class LoginForm(forms.Form):
     )
 
 
-class ElementForm(forms.Form):
-    answer = forms.CharField(
-        max_length=50, label=' Respuesta: ',
-        required=False, widget=forms.PasswordInput(attrs={
+class ProfileForm(forms.Form):
+    email = forms.EmailField(
+        label=' Email: ',
+        required=False, widget=forms.TextInput(attrs={
             'class': "input-register",
-            'id': "resp_seg",
+            'id': "email_user",
             'placeholder': ""
         })
     )
 
-    first_coor = forms.CharField(
-        max_length=3, label=' Primera Coordenada: ',
-        required=False, widget=forms.PasswordInput(attrs={
+    first_quest = forms.CharField(
+        max_length=50, label=' Pregunta 1: ',
+        required=False, widget=forms.TextInput(attrs={
             'class': "input-register",
-            'id': "input_frs_coor",
-            'placeholder': ""
+            'id': "quest1",
+            'placeholder': "",
+            'onkeyup': "count_words('#span_quest1','#quest1')",
+            'onfocus': "count_words('#span_quest1','#quest1')",
+            'onclick': "remove_count('#span_quest1')"
         })
     )
 
-    second_coor = forms.CharField(
-        max_length=3, label=' Segunda Coordenada: ',
-        required=False, widget=forms.PasswordInput(attrs={
+    first_answ = forms.CharField(
+        max_length=50, label=' Respuesta 1: ',
+        required=False, widget=forms.TextInput(attrs={
             'class': "input-register",
-            'id': "input_snd_coor",
-            'placeholder': ""
+            'id': "answ1",
+            'placeholder': "",
+            'onkeyup': "count_words('#span_answ1','#answ1')",
+            'onfocus': "count_words('#span_answ1','#answ1')",
+            'onclick': "remove_count('#span_answ1')"
+        })
+    )
+
+    second_quest = forms.CharField(
+        max_length=50, label=' Pregunta 2: ',
+        required=False, widget=forms.TextInput(attrs={
+            'class': "input-register",
+            'id': "quest2",
+            'placeholder': "",
+            'onkeyup': "count_words('#span_quest2','#quest2')",
+            'onfocus': "count_words('#span_quest2','#quest2')",
+            'onclick': "remove_count('#span_quest2')"
+        })
+    )
+
+    second_answ = forms.CharField(
+        max_length=50, label=' Respuesta 2: ',
+        required=False, widget=forms.TextInput(attrs={
+            'class': "input-register",
+            'id': "answ2",
+            'placeholder': "",
+            'onkeyup': "count_words('#span_answ2','#answ2')",
+            'onfocus': "count_words('#span_answ2','#answ2')",
+            'onclick': "remove_count('#span_answ2')"
+        })
+    )
+
+    password = forms.CharField(
+        label="Contraseña: ", required=False, widget=forms.PasswordInput(attrs={
+            'class': "password input-register",
+            'type': "password",
+            'id': "password"
+        })
+    )
+
+    confirm_pass = forms.CharField(
+        label="Contraseña: ", required=False, widget=forms.PasswordInput(attrs={
+            'class': "password input-register",
+            'type': "password",
+            'id': "confirm-pass"
         })
     )

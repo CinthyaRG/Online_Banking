@@ -3,17 +3,20 @@
 
 {% block script %}
     <!-- DataTables -->
+    <link type="text/css" href="{% static 'plugins/keypad-package/css/jquery.keypad.css'%}"
+          rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'plugins/pnotify/pnotify.custom.min.css' %}">
     <script src="{% static 'plugins/datatables/jquery.dataTables.js' %}"></script>
     <script src="{% static 'plugins/datatables/dataTables.bootstrap.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/script-transfers.js' %}"></script>
     <script src="{% static 'js/menu.js' %}"></script>
     <script src="{% static 'js/script-elem_sec.js' %}"></script>
-    <link type="text/css" href="{% static 'plugins/keypad-package/css/jquery.keypad.css'%}"
-          rel="stylesheet">
     <script type="text/javascript" src="{% static 'plugins/keypad-package/js/jquery.plugin.js'%}">
     </script>
     <script type="text/javascript" src="{% static 'plugins/keypad-package/js/jquery.keypad.js'%}">
     </script>
+    <script src="{% static 'plugins/pnotify/pnotify.custom.min.js' %}"></script>
+
     <script>
         $(document).ready(function (){
             var session = String({{session}}) === 'True';
@@ -94,7 +97,8 @@
                    type="button" onclick="window.history.back()"> Cancelar
                 </a>
                 <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
-                   type="button" onclick="move_security('#body_tranf_my_bank','#sec_tranf_my_bank')">
+                   type="button" onclick="elem_Security('#resp_seg','#input_frs_coor','#input_snd_coor',
+                   '#body_tranf_my_bank','#sec_tranf_my_bank')">
                     Siguiente
                 </a>
             </div>
@@ -109,7 +113,7 @@
             <div class="col-md-3 col-xs-4"></div>
             <div class="col-md-8 col-xs-8">
                 <a class="btn btn-default btn-group btn-apps pull-right" type="button"
-                   href="{% url 'registro-afiliados'%}"> Agregar Afiliado </a>
+                   href="{% url 'registro-afiliados' customer.ref %}"> Agregar Afiliado </a>
             </div>
         </div>
         <div class="row">

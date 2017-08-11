@@ -60,6 +60,10 @@ urlpatterns = [
         validate_pass,
         name='validar-pass'),
     url(
+        r'^ajax/validate-elems-seguridad/$',
+        validate_elems,
+        name='validar-elems'),
+    url(
         r'^ajax/validate-pass-forgot/$',
         validate_pass_forgot,
         name='validate-pass-forgot'),
@@ -136,7 +140,7 @@ urlpatterns = [
         Success_Payments.as_view(),
         name='pago-exitoso'),
     url(
-        r'^registro-afiliados',
+        r'^(?P<pk>\w+)/registro-afiliados',
         Register_Affiliate.as_view(),
         name='registro-afiliados'),
     url(

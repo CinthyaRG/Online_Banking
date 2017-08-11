@@ -25,7 +25,6 @@ class ElemSecurity(models.Model):
     question2 = models.CharField(max_length=50)
     answer2 = models.CharField(max_length=50)
     cardCoor = models.OneToOneField(CardCoor, blank=True, null=True)
-    session = models.BooleanField(default=False)
     sessionExpires = models.DateTimeField(null=True, blank=True)
 
 

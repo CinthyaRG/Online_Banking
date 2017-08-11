@@ -1,21 +1,40 @@
 {% extends "base.html" %}
 {% load static %}
+{% load bootstrap3 %}
+
+{% bootstrap_messages %}
 
 {% block script %}
+    <link rel="stylesheet" href="{% static 'plugins/pnotify/pnotify.custom.min.css' %}">
+    <link type="text/css" href="{% static 'plugins/keypad-package/css/jquery.keypad.css'%}"
+          rel="stylesheet">
     <script src="{% static 'js/menu.js' %}"></script>
     <script src="{% static 'js/script-profile.js' %}"></script>
     <script src="{% static 'js/script-register.js' %}"></script>
     <script src="{% static 'js/script-elem_sec.js' %}"></script>
+    <script src="{% static 'js/validate-profile.js' %}"></script>
     <script src="{% static 'plugins/passwordStrength/examples/pwstrength.js' %}"></script>
-    <link type="text/css" href="{% static 'plugins/keypad-package/css/jquery.keypad.css'%}"
-          rel="stylesheet">
+    <script src="{% static 'plugins/pnotify/pnotify.custom.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'plugins/keypad-package/js/jquery.plugin.js'%}">
     </script>
     <script type="text/javascript" src="{% static 'plugins/keypad-package/js/jquery.keypad.js'%}">
     </script>
     <script>
         $(document).ready(function (){
-            $('#body_profile').css({display: 'none'});
+
+            {#            var session = String({{session}}) === 'True';#}
+            var session = String('True') === 'True';
+
+            if (session) {
+                $('#sec_profile').css({display: 'none'});
+            }
+            else {
+                $('#body_profile').css({display: 'none'});
+            }
+
+            change_input('{{user.email}}','{{customer.elemSecurity.question1}}','{{customer.elemSecurity.answer1}}',
+                '{{customer.elemSecurity.question2}}','{{customer.elemSecurity.answer2}}');
+
             $("#input_frs_coor").keypad();
             $("#input_snd_coor").keypad();
             $("#input_frs_coor").keypad({prompt: 'Enter here'});
@@ -41,7 +60,7 @@
                                         Pregunta de Seguridad: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows no-margin">
-                                    <p> Nombre de mi primera mascota </p>
+                                    <p id="question">{{question}}</p>
                                 </div>
                             </div>
                             <div class="row">
@@ -60,11 +79,11 @@
                                         <span class="text-danger"> * </span> Coordenadas: </label>
                                 </div>
                                 <div class="col-md-5 col-xs-5 rows">
-                                    <span id="first_coor"> A5
+                                    <span> <span id="first_coor">{{first_coor}}</span>
                                     <input id="input_frs_coor" maxlength="3" type="password"
                                            class="input-register">
                                     </span>
-                                    <span id="second_coor"> D2
+                                    <span> <span id="second_coor">{{second_coor}}</span>
                                     <input id="input_snd_coor" maxlength="3" type="password"
                                            class="input-register">
                                     </span>
@@ -79,10 +98,11 @@
             <div class="col-md-5 col-xs-5"></div>
             <div class="col-md-4">
                 <a id="btn-back" class="btn btn-default btn-group btn-apps"
-                   type="button" onclick="move_back_security()"> Cancelar
+                   type="button" onclick="window.history.back()"> Cancelar
                 </a>
                 <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
-                   type="button" onclick="move_security('#body_profile','#sec_profile')">
+                   type="button" onclick="elem_Security('#resp_seg','#input_frs_coor','#input_snd_coor',
+                   '#body_profile','#sec_profile')">
                     Siguiente
                 </a>
             </div>
@@ -90,123 +110,162 @@
     </section>
 
     <section id="body_profile" class="content-header">
-        <div class="row" id="title-transf-bank">
-            <h3> Perfil de Seguridad </h3>
-        </div>
-        <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-7">
-                <div class="box box-success">
-                    <div class="box-body">
-                        <dl class="dl-horizontal label-input no-margin no-pad-bottom">
-                            <div class="row">
-                                <div class="col-md-6 col-xs-6">
-                                    <label class="pull-right">
-                                        Usuario: </label>
+        <form action="" method="POST" autocomplete="off">
+            {% csrf_token %}
+            <div class="hidden">
+                {% bootstrap_form_errors form %}
+            </div>
+            <div class="row" id="title-transf-bank">
+                <h3> Perfil de Seguridad </h3>
+            </div>
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-7">
+                    <div class="box box-success">
+                        <div class="box-body">
+                            <dl class="dl-horizontal label-input no-margin no-pad-bottom">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <label class="pull-right">
+                                            Usuario: </label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-5 rows no-margin">
+                                        <p>{{ user.get_full_name }}</p>
+                                    </div>
                                 </div>
-                                <div class="col-md-6 col-xs-5 rows no-margin">
-                                    <p> María  Pérez </p>
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <label class="pull-right">
+                                            Documento de Identidad: </label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-5 rows no-margin">
+                                        <p> {{ customer.ident }} </p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-xs-6">
-                                    <label class="pull-right">
-                                        Documento de Identidad: </label>
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <label class="pull-right"> Email: </label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-5 rows">
+                                        <input id="email_user" class="input-register">
+                                    </div>
                                 </div>
-                                <div class="col-md-6 col-xs-5 rows no-margin">
-                                    <p> V-10776133 </p>
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <label class="pull-right"> Pregunta 1: </label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-5 rows">
+                                        <input maxlength="50" id="quest1" class="input-register"
+                                               onkeyup="count_words('#span_quest1','#quest1')"
+                                               onfocus="count_words('#span_quest1','#quest1')"
+                                               onclick="remove_count('#span_quest1')">
+                                        <span id="span_quest1" class="counter"></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-xs-6">
-                                    <label class="pull-right"> Email: </label>
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <label class="pull-right"> Respuesta 1: </label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-5 rows">
+                                        <input maxlength="50" id="answ1" class="input-register"
+                                               onkeyup="count_words('#span_answ1','#answ1')"
+                                               onfocus="count_words('#span_answ1','#answ1')"
+                                               onclick="remove_count('#span_answ1')">
+                                        <span id="span_answ1" class="counter"></span>
+                                    </div>
                                 </div>
-                                <div class="col-md-6 col-xs-5 rows">
-                                    <input id="email_user" type="email" class="input-register">
+                                <div class="row ">
+                                    <div class="col-md-6 col-xs-6">
+                                        <label class="pull-right"> Pregunta 2: </label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-5 rows">
+                                        <input maxlength="50" id="quest2" class="input-register"
+                                               onkeyup="count_words('#span_quest2','#quest2')"
+                                               onfocus="count_words('#span_quest2','#quest2')"
+                                               onclick="remove_count('#span_quest2')">
+                                        <span id="span_quest2" class="counter"></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-xs-6">
-                                    <label class="pull-right"> Pregunta 1: </label>
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <label class="pull-right"> Respuesta 2: </label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-5 rows">
+                                        <input maxlength="50" id="answ2" class="input-register"
+                                               onkeyup="count_words('#span_answ2','#answ2')"
+                                               onclick="remove_count('#span_answ2')"
+                                               onfocus="count_words('#span_answ2','#answ2')">
+                                        <span id="span_answ2" class="counter"></span>
+                                    </div>
                                 </div>
-                                <div class="col-md-6 col-xs-5 rows">
-                                    <input maxlength="50" id="quest1" class="input-register"
-                                           onkeyup="count_words('#span_quest1','#quest1')"
-                                           onfocus="count_words('#span_quest1','#quest1')"
-                                           onclick="remove_count('#span_quest1')">
-                                    <span id="span_quest1" class="counter"></span>
-                                </div>
-                            </div>
-                            <div class="row">
-                            <div class="col-md-6 col-xs-6">
-                                <label class="pull-right"> Respuesta 1: </label>
-                            </div>
-                            <div class="col-md-6 col-xs-5 rows">
-                                <input maxlength="50" id="answ1" class="input-register"
-                                       onkeyup="count_words('#span_answ1','#answ1')"
-                                       onfocus="count_words('#span_answ1','#answ1')"
-                                       onclick="remove_count('#span_answ1')">
-                                <span id="span_answ1" class="counter"></span>
-                            </div>
-                        </div>
-                            <div class="row ">
-                                <div class="col-md-6 col-xs-6">
-                                    <label class="pull-right"> Pregunta 2: </label>
-                                </div>
-                                <div class="col-md-6 col-xs-5 rows">
-                                    <input maxlength="50" id="quest2" class="input-register"
-                                           onkeyup="count_words('#span_quest2','#quest2')"
-                                           onfocus="count_words('#span_quest2','#quest2')"
-                                           onclick="remove_count('#span_quest2')">
-                                    <span id="span_quest2" class="counter"></span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-xs-6">
-                                    <label class="pull-right"> Respuesta 2: </label>
-                                </div>
-                                <div class="col-md-6 col-xs-5 rows">
-                                    <input maxlength="50" id="answ2" class="input-register"
-                                           onkeyup="count_words('#span_answ2','#answ2')"
-                                           onclick="remove_count('#span_answ2')"
-                                           onfocus="count_words('#span_answ2','#answ2')">
-                                    <span id="span_answ2" class="counter"></span>
-                                </div>
-                            </div>
-                            <div id="pwd-container" class="row">
-                                <div class="col-md-6 col-xs-6">
-                                    <label class="pull-right"> Contraseña: </label>
-                                </div>
-                                <div class="col-md-6 col-xs-5 rows">
-                                    <input type="password" id="password" class="password input-register">
-                                    <span id= "show-hide-passwd" action="hide"
-                                        class = "fa fa-eye-slash">
+                                <div id="pwd-container" class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <label class="pull-right"> Contraseña: </label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-5 rows">
+                                        <input type="password" id="password" class="password input-register">
+                                        <span id= "show-hide-passwd" action="hide"
+                                              class = "fa fa-eye-slash">
                                     </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-xs-6">
-                                    <label class="pull-right"> Confirme Contraseña: </label>
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <label class="pull-right"> Confirme Contraseña: </label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-5 rows">
+                                        <input type="password" id="confirm-pass"
+                                               class="password input-register">
+                                    </div>
                                 </div>
-                                <div class="col-md-6 col-xs-5 rows">
-                                    <input type="password" id="confirm-pass"
-                                           class="password input-register">
+                                <div class="row">
+                                    <div class="col-md-1 col-xs-1">
+                                    </div>
+                                    <div class="col-md-10 col-xs-10 rows margin-t-25">
+                                        <p id="old" class="text-danger">
+                                            La nueva contraseña no debe ser igual a la anterior
+                                        </p>
+                                        <p id="min-carac" class="text-danger">
+                                            La contraseña debe contener mínimo 8 caracteres
+                                        </p>
+                                        <p id="carac" class="text-danger">
+                                            La contraseña debe contener al menos un caracter
+                                            en mayúscula y un caracter en minúscula
+                                        </p>
+                                        <p id="repeat-carac" class="text-danger">
+                                            La contraseña no debe tener caracteres repetidos
+                                        </p>
+                                        <p id="num-carac" class="text-danger">
+                                            La contraseña debe contener al menos un caracter numérico
+                                        </p>
+                                        <p id="spec-carac" class="text-danger">
+                                            La contraseña debe contener al menos un caracter especial como los siguientes: $!.#_*
+                                        </p>
+                                        <p id="pers-carac" class="text-danger">
+                                            La contraseña no debe contener sus datos
+                                            personales (núm de teléfono, fecha de nacimiento,
+                                            cédula, nombre o apellido)
+                                        </p>
+                                        <p id="confirm" class="text-danger">
+                                            La confirmación de la contraseña debe ser igual a la contraseña
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                        </dl>
+                            </dl>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-5 col-xs-5"></div>
-            <div class="col-md-4">
-                <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
-                   type="button" href="#">
-                    Guardar
-                </a>
+            <div class="row">
+                <div class="col-md-5 col-xs-5"></div>
+                <div class="col-md-4">
+                    <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
+                       type="button" onclick="">
+                        Guardar
+                    </a>
+                </div>
             </div>
-        </div>
+        </form>
     </section>
 
 {% endblock %}

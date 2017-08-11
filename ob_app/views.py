@@ -85,7 +85,7 @@ def validate_user_forgot(request):
 
         if data['block']:
             data['error'] =  "Su cuenta se encuentra bloqueada. Comuniquese con " \
-                            "atención al cliente para iniciar el proceso de desbloqueo."
+                             "atención al cliente para iniciar el proceso de desbloqueo."
             return JsonResponse(data)
         elif not (data['active']):
             data['error'] = "Su cuenta no esta activa, ingrese a su correo " \
@@ -311,6 +311,10 @@ def old_pass(request):
     username = request.GET.get('username', None)
     password = request.GET.get('pass', None)
 
+    if username == '0':
+        user = request.user.id
+        username = User.objects.get(pk=user).username
+
     user = User.objects.get(username=username)
 
     data = {
@@ -379,6 +383,36 @@ def validate_quest(request):
             data['correct'] = False
     else:
         data['error'] = 'Ha ocurrido un error por favor reingrese sus datos.'
+
+    return JsonResponse(data)
+
+
+@ensure_csrf_cookie
+def validate_elems(request):
+    print(request.user.id)
+    quest = request.GET.get('question', None)
+    answ = request.GET.get('answer', None)
+    f_coord_value = request.GET.get('f_coord', None)
+    s_coord_value = request.GET.get('s_coord', None)
+    f_coord = request.GET.get('f_coord', None)
+    s_coord = request.GET.get('s_coord', None)
+    data = {
+        'user_exists': Customer.objects.filter(user=request.user.id).exists(),
+        'question': False
+    }
+
+    if data['user_exists']:
+        customer = Customer.objects.get(user=request.user.id)
+
+        if (customer.elemSecurity.question1 == quest) and (customer.elemSecurity.answer1 == answ):
+            data['question'] = True
+        elif (customer.elemSecurity.question2 == quest) and (customer.elemSecurity.answer2 == answ):
+            data['question'] = True
+
+    #     Falta hacer que vea si la coordenada es igual a la que introdujo y si lo es guardar que session es true
+
+    else:
+        data['error'] = 'Ha ocurrido un error por favor inicie sesión nuevamente.'
 
     return JsonResponse(data)
 
@@ -532,13 +566,12 @@ def user_login(request):
                                         password=password)
                     if user:
                         if customer.passExpires <= today:
-                            print("expirooooo")
                             msg = "Su contraseña ha expirado por favor ingrese sus datos para cambiar su contraseña."
                             form.add_error(None, msg)
 
                             context = {'form': form}
                             return render(request, 'forgot_password.html', context)
-                        
+
                         last_login = users.last_login
                         login(request, user)
                         # email_login_successful(user)
@@ -601,7 +634,7 @@ class Home_Client(LoginRequiredMixin, TemplateView):
         context['customer'] = customer
         context['num'] = customer.user.username[:10]
         context['num2'] = customer.user.username[10:]
-        
+
         return context
 
 
@@ -767,8 +800,28 @@ class Transfer_others_bank(LoginRequiredMixin, TemplateView):
 
         try:
             card_coor = CardCoor.objects.get(pk=elems.cardCoor_id)
+            if elems.sessionExpires < datetime.datetime.today():
+                context['session'] = 'true'
+            else:
+                quest1 = customer.elemSecurity.question1
+                quest2 = customer.elemSecurity.question2
+                num = random.randint(1, 2)
+                if num == 1:
+                    context['question'] = quest1
+                else:
+                    context['question'] = quest2
+
+                a = list('ABCDEF')
+                random.shuffle(a)
+                b = list('12345')
+                random.shuffle(b)
+                context['first_coor'] = a[0] + b[0]
+                context['second_coor'] = a[1] + b[1]
+
+            context['card_coor'] = 'true'
         except CardCoor.DoesNotExist:
-            context['card_coor'] = False
+            context['card_coor'] = 'false'
+            context['session'] = 'false'
 
         context['customer'] = customer
         return context
@@ -861,6 +914,7 @@ class Register_Affiliate(LoginRequiredMixin, TemplateView):
         customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
+
         return context
 
 
@@ -1024,9 +1078,69 @@ class Profile(LoginRequiredMixin, TemplateView):
             Profile, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
+        elems = ElemSecurity.objects.get(pk=customer.elemSecurity_id)
+
+        try:
+            card_coor = CardCoor.objects.get(pk=elems.cardCoor_id)
+            if elems.sessionExpires < datetime.datetime.today():
+                context['session'] = 'true'
+            else:
+                quest1 = customer.elemSecurity.question1
+                quest2 = customer.elemSecurity.question2
+                num = random.randint(1, 2)
+                if num == 1:
+                    context['question'] = quest1
+                else:
+                    context['question'] = quest2
+
+                a = list('ABCDEF')
+                random.shuffle(a)
+                b = list('12345')
+                random.shuffle(b)
+                context['first_coor'] = a[0] + b[0]
+                context['second_coor'] = a[1] + b[1]
+
+            context['card_coor'] = 'true'
+        except CardCoor.DoesNotExist:
+            context['card_coor'] = 'false'
+            context['session'] = 'false'
 
         context['customer'] = customer
         return context
+
+    # def post(self, request, *args, **kwargs):
+    #     """
+    #     Handles POST requests, instantiating a form instance with the passed
+    #     POST variables and then checked for validity.
+    #     """
+    #     form = ProfileForm(request.POST)
+    #     customer = Customer.objects.get(ref=self.kwargs['pk'])
+    #
+    #     if form.is_valid():
+    #         email = form.cleaned_data['email']
+    #         f_quest = form.cleaned_data['first_quest']
+    #
+    #         if email == "" or f_quest == "":
+    #             msg = ""
+    #             if username == "":
+    #                 msg = msg + "  Introduzca su número de tarjeta. "
+    #
+    #             if password == "":
+    #                 msg = msg + " Introduzca su contraseña. "
+    #
+    #             form.add_error(None, msg)
+    #
+    #             context = {'form': form,
+    #                        'pk': self.kwargs['pk'],
+    #                        'customer': customer}
+    #             return render(request, 'profile-security.html', context)
+    #
+    #     else:
+    #         print('else')
+    #         context = {'form': form,
+    #                    'pk': self.kwargs['pk'],
+    #                    'customer': customer}
+    #         return render(request, 'profile-security.html', context)
 
 
 class Help(LoginRequiredMixin, TemplateView):
