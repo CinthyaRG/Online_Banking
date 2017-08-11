@@ -734,8 +734,12 @@ class Transfer_my_bank(LoginRequiredMixin, TemplateView):
                 else:
                     context['question'] = quest2
 
-                a = list('ABCDE')
+                a = list('ABCDEF')
                 random.shuffle(a)
+                b = list('12345')
+                random.shuffle(b)
+                context['first_coor'] = a[0]+b[0]
+                context['second_coor'] = a[1]+b[1]
 
             context['card_coor'] = 'true'
         except CardCoor.DoesNotExist:

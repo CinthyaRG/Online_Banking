@@ -18,7 +18,6 @@
         $(document).ready(function (){
             var session = String({{session}}) === 'True';
 
-
             if (session) {
                 $('#sec_tranf_my_bank').css({display: 'none'});
             }
@@ -54,7 +53,7 @@
                                         Pregunta de Seguridad: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows no-margin">
-                                    <p id="question"></p>
+                                    <p id="question">{{question}}</p>
                                 </div>
                             </div>
                             <div class="row">
@@ -73,11 +72,11 @@
                                         <span class="text-danger"> * </span> Coordenadas: </label>
                                 </div>
                                 <div class="col-md-5 col-xs-5 rows">
-                                    <span> <span id="first_coor"></span>
+                                    <span> <span id="first_coor">{{first_coor}}</span>
                                     <input id="input_frs_coor" maxlength="3" type="password"
                                            class="input-register">
                                     </span>
-                                    <span> <span id="second_coor"></span>
+                                    <span> <span id="second_coor">{{second_coor}}</span>
                                     <input id="input_snd_coor" maxlength="3" type="password"
                                            class="input-register">
                                     </span>
