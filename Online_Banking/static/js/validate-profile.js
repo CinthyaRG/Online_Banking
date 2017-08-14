@@ -8,27 +8,134 @@ $(document).ready(function () {
     var regexMay = /[A-Z]+/;
     var regexMin = /[a-z]+/;
     var regexSpecial = /[$!%.#_*?&]+/;
-    var regexEmail = /^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,3})$/;
-    var answer = '#answer';
+    var regexEmail = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,3})$/i;
+    var q1 = '#quest1';
+    var q2 = '#quest2';
+    var a1 = '#answ1';
+    var a2 = '#answ2';
     var password = '#password';
     var confirm = '#confirm-pass';
-    var msj_num = "Sólo se admiten números";
+    var email = '#email_user';
     var msj = "Este campo es obligatorio";
 
-    $(answer).keyup( function () {
-        if ( $(answer).val() !== ""){
-            $(answer).css({border: '2px solid #d2d6de'});
-            $(answer).removeClass('errors');
+    $(email).keyup( function () {
+        if ( $(email).val().match(regexEmail)){
+            $(email).css({border: '2px solid #d2d6de'});
+            $(email).removeClass('errors');
         }
         else {
-            $('#error-answer').text(msj);
-            $(answer).addClass('errors');
+            if (!($(email).hasClass('errors'))) {
+                $(email).addClass('errors');
+            }
+            notification_error('Introduzca un email correcto.')
         }
     });
 
-    $(answer).on('focus', function () {
-        $(answer).removeClass('errors');
-        $(answer).css({'border-color': '#8AB7B6'});
+    $(email).on('focus', function () {
+        $(email).removeClass('errors');
+        $(email).css({'border-color': '#8AB7B6'});
+    });
+
+    $(q1).keyup( function () {
+        if ( $(q1).val() !== ""){
+            if ( $(q2).val() === $(q1).val()) {
+                notification_error('La pregunta 1 no puede ' +
+                    'ser igual a la pregunta 2.');
+                $(q1).addClass('errors');
+            }
+            else{
+                $(q1).css({border: '2px solid #d2d6de'});
+                $(q1).removeClass('errors');
+            }
+        }
+    });
+
+    $(q1).on('focus', function () {
+        $(q1).removeClass('errors');
+        $(q1).css({'border-color': '#8AB7B6'});
+        $('#error-q1').empty();
+    });
+
+    $(a1).keyup( function () {
+        if ( $(a1).val() !== ""){
+            if ( $(a1).val() === $(q1).val()) {
+                notification_error('La respuesta no puede ' +
+                    'ser igual a la pregunta.');
+                $(a1).addClass('errors');
+            }
+            else if ( data_customer($(a1).val()) ) {
+                notification_error('La respuesta no puede ' +
+                    'contener ninguno de sus datos personales.');
+                $(a1).addClass('errors');
+            }
+            else{
+                $(a1).css({border: '2px solid #d2d6de'});
+                $(a1).removeClass('errors');
+            }
+        }
+    });
+
+    $(a1).on('focus', function () {
+        $(a1).removeClass('errors');
+        $(a1).css({'border-color': '#8AB7B6'});
+    });
+
+    $(q2).keyup( function () {
+        if ( $(q2).val() !== ""){
+            if ( $(q2).val() === $(q1).val()) {
+                notification_error('La pregunta 2 no puede ' +
+                    'ser igual a la pregunta 1.');
+                $(q2).addClass('errors');
+            }
+            else if ( $(q2).val() === $(a1).val()) {
+                notification_error('La pregunta 2 no puede ' +
+                    'ser igual a alguna respuesta.');
+                $(q2).addClass('errors');
+            }
+            else{
+                $(q2).css({border: '2px solid #d2d6de'});
+                $(q2).removeClass('errors');
+            }
+        }
+    });
+
+    $(q2).on('focus', function () {
+        $(q2).removeClass('errors');
+        $(q2).css({'border-color': '#8AB7B6'});
+    });
+
+    $(a2).keyup( function () {
+        if ( $(a2).val() !== ""){
+            if ( $(a2).val() === $(q2).val() ) {
+                notification_error('La respuesta no puede ' +
+                    'ser igual a la pregunta.');
+                $(a2).addClass('errors');
+            }
+            else if ( data_customer($(a2).val()) ) {
+                notification_error('La respuesta no puede ' +
+                    'contener sus datos personales.');
+                $(a2).addClass('errors');
+            }
+            else if ( $(a2).val() === $(a1).val()) {
+                notification_error('Las respuestas no pueden ' +
+                    'ser iguales.');
+                $(a2).addClass('errors');
+            }
+            else if ( $(q1).val() === $(a2).val()) {
+                notification_error('La pregunta no puede ' +
+                    'ser igual a la pregunta 1.');
+                $(a2).addClass('errors');
+            }
+            else{
+                $(a2).css({border: '2px solid #d2d6de'});
+                $(a2).removeClass('errors');
+            }
+        }
+    });
+
+    $(a2).on('focus', function () {
+        $(a2).removeClass('errors');
+        $(a2).css({'border-color': '#8AB7B6'});
     });
 
     $(password).keyup( function () {
@@ -47,16 +154,16 @@ $(document).ready(function () {
                 dataType: 'json',
                 success: function (data) {
                     if (data.correct) {
-                       if (!($('#old').hasClass('text-danger'))) {
+                        if (!($('#old').hasClass('text-danger'))) {
                             $('#old').addClass('text-danger');
                         }
                         $('#old').removeClass('text-success');
-                        $(password).addClass('errors'); 
+                        $(password).addClass('errors');
                     }
                     else {
                         $('#old').removeClass('text-danger');
                         $('#old').addClass('text-success');
-                           
+
                     }
                 },
                 error: function (data) {
@@ -74,7 +181,7 @@ $(document).ready(function () {
             else {
                 $('#repeat-carac').removeClass('text-danger');
                 $('#repeat-carac').addClass('text-success');
-                  
+
             }
             if ( data_customer($(password).val()) ) {
                 if (!($('#pers-carac').hasClass('text-danger'))) {
@@ -86,12 +193,12 @@ $(document).ready(function () {
             else {
                 $('#pers-carac').removeClass('text-danger');
                 $('#pers-carac').addClass('text-success');
-                  
+
             }
             if ( $(password).val().match(regexNum) ) {
                 $('#num-carac').removeClass('text-danger');
                 $('#num-carac').addClass('text-success');
-                  
+
             }
             else {
                 if (!($('#num-carac').hasClass('text-danger'))) {
@@ -110,7 +217,7 @@ $(document).ready(function () {
             else {
                 $('#carac').removeClass('text-danger');
                 $('#carac').addClass('text-success');
-                  
+
             }
             if ( !($(password).val().match(regexMay)) ) {
                 if (!($('#carac').hasClass('text-danger'))) {
@@ -122,7 +229,7 @@ $(document).ready(function () {
             else {
                 $('#carac').removeClass('text-danger');
                 $('#carac').addClass('text-success');
-                  
+
             }
             if ( $(password).val().length < 8) {
                 if (!($('#min-carac').hasClass('text-danger'))) {
@@ -134,7 +241,7 @@ $(document).ready(function () {
             else{
                 $('#min-carac').removeClass('text-danger');
                 $('#min-carac').addClass('text-success');
-                  
+
             }
             if ( !($(password).val().match(regexSpecial)) ) {
                 if (!($('#spec-carac').hasClass('text-danger'))) {
@@ -146,7 +253,7 @@ $(document).ready(function () {
             else{
                 $('#spec-carac').removeClass('text-danger');
                 $('#spec-carac').addClass('text-success');
-                  
+
             }
             if ( $(confirm).val() !== $(password).val()) {
                 $('#confirm').removeClass('text-success');
@@ -163,9 +270,9 @@ $(document).ready(function () {
                 $('#error-conf-pass').empty();
             }
             if ( ($('#old').hasClass('text-danger')) || ($('#spec-carac').hasClass('text-danger')) ||
-            ($('#min-carac').hasClass('text-danger')) || ($('#carac').hasClass('text-danger')) ||
-            ($('#pers-carac').hasClass('text-danger')) || ($('#num-carac').hasClass('text-danger')) || 
-            ($('#repeat-carac').hasClass('text-danger')) ) {
+                ($('#min-carac').hasClass('text-danger')) || ($('#carac').hasClass('text-danger')) ||
+                ($('#pers-carac').hasClass('text-danger')) || ($('#num-carac').hasClass('text-danger')) ||
+                ($('#repeat-carac').hasClass('text-danger')) ) {
                 $(password).css({border: '2px solid #d2d6de'});
                 $(password).removeClass('errors');
                 $('#error-pass').empty();
@@ -191,28 +298,28 @@ $(document).ready(function () {
             $('#repeat-carac').removeClass('text-success');
 
             if (!($('#min-carac').hasClass('text-danger'))) {
-                    $('#min-carac').addClass('text-danger');
-                }
+                $('#min-carac').addClass('text-danger');
+            }
             $('#min-carac').removeClass('text-success');
 
             if (!($('#spec-carac').hasClass('text-danger'))) {
-                    $('#spec-carac').addClass('text-danger');
-                }
+                $('#spec-carac').addClass('text-danger');
+            }
             $('#spec-carac').removeClass('text-success');
 
             if (!($('#carac').hasClass('text-danger'))) {
-                    $('#carac').addClass('text-danger');
-                }
+                $('#carac').addClass('text-danger');
+            }
             $('#carac').removeClass('text-success');
 
             if (!($('#pers-carac').hasClass('text-danger'))) {
-                    $('#pers-carac').addClass('text-danger');
-                }
+                $('#pers-carac').addClass('text-danger');
+            }
             $('#pers-carac').removeClass('text-success');
 
             if (!($('#confirm').hasClass('text-danger'))) {
-                    $('#confirm').addClass('text-danger');
-                }
+                $('#confirm').addClass('text-danger');
+            }
             $('#confirm').removeClass('text-success');
         }
     });
@@ -245,8 +352,8 @@ $(document).ready(function () {
             $(confirm).addClass('errors');
 
             if (!($('#confirm').hasClass('text-danger'))) {
-                    $('#confirm').addClass('text-danger');
-                }
+                $('#confirm').addClass('text-danger');
+            }
             $('#confirm').removeClass('text-success');
         }
     });
@@ -290,36 +397,36 @@ function data_customer(valor) {
     var phone_office = $("#phone-office").text().split('-');
     var birthday = $("#birthday").text();
     var birthday_split = $("#birthday").text().split('-');
-    
+
 
     return !!((first_name[0].includes(normalize(valor.toLowerCase()))) ||
-    (normalize(valor.toLowerCase()).includes(first_name[0])) ||
-    (first_name[1].includes(normalize(valor.toLowerCase()))) ||
-    (normalize(valor.toLowerCase()).includes(first_name[1])) ||
-    (last_name[0].includes(normalize(valor.toLowerCase()))) ||
-    (normalize(valor.toLowerCase()).includes(last_name[0])) ||
-    (last_name[1].includes(normalize(valor.toLowerCase()))) ||
-    (normalize(valor.toLowerCase()).includes(last_name[1])) ||
-    (ci_cust[1].includes(valor)) ||
-    (valor.includes(ci_cust[1])) ||
-    (birthday.includes(valor)) ||
-    (valor.includes(birthday)) ||
-    (valor.includes(birthday_split[0])) ||
-    (birthday_split[0].includes(valor)) ||
-    (valor.includes(birthday_split[1])) ||
-    (birthday_split[1].includes(valor)) ||
-    (valor.includes(birthday_split[2])) ||
-    (birthday_split[2].includes(valor)) ||
-    (valor.includes(cellphone[0])) ||
-    (cellphone[0].includes(valor)) ||
-    (valor.includes(cellphone[1])) ||
-    (cellphone[1].includes(valor)) ||
-    (valor.includes(phone_home[0])) ||
-    (phone_home[0].includes(valor)) ||
-    (valor.includes(phone_home[1])) ||
-    (phone_home[1].includes(valor)) ||
-    (valor.includes(phone_office[0])) ||
-    (phone_office[0].includes(valor)) ||
-    (valor.includes(phone_office[1])) ||
-    (phone_office[1].includes(valor)));
+        (normalize(valor.toLowerCase()).includes(first_name[0])) ||
+        (first_name[1].includes(normalize(valor.toLowerCase()))) ||
+        (normalize(valor.toLowerCase()).includes(first_name[1])) ||
+        (last_name[0].includes(normalize(valor.toLowerCase()))) ||
+        (normalize(valor.toLowerCase()).includes(last_name[0])) ||
+        (last_name[1].includes(normalize(valor.toLowerCase()))) ||
+        (normalize(valor.toLowerCase()).includes(last_name[1])) ||
+        (ci_cust[1].includes(valor)) ||
+        (valor.includes(ci_cust[1])) ||
+        (birthday.includes(valor)) ||
+        (valor.includes(birthday)) ||
+        (valor.includes(birthday_split[0])) ||
+        (birthday_split[0].includes(valor)) ||
+        (valor.includes(birthday_split[1])) ||
+        (birthday_split[1].includes(valor)) ||
+        (valor.includes(birthday_split[2])) ||
+        (birthday_split[2].includes(valor)) ||
+        (valor.includes(cellphone[0])) ||
+        (cellphone[0].includes(valor)) ||
+        (valor.includes(cellphone[1])) ||
+        (cellphone[1].includes(valor)) ||
+        (valor.includes(phone_home[0])) ||
+        (phone_home[0].includes(valor)) ||
+        (valor.includes(phone_home[1])) ||
+        (phone_home[1].includes(valor)) ||
+        (valor.includes(phone_office[0])) ||
+        (phone_office[0].includes(valor)) ||
+        (valor.includes(phone_office[1])) ||
+        (phone_office[1].includes(valor)));
 }

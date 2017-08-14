@@ -7,7 +7,7 @@ $(document).ready(function () {
     var regexRepeat = /(.)\1{2,}/;
     var regexMay = /[A-Z]+/;
     var regexMin = /[a-z]+/;
-    var regexEmail = /^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,3})$/;
+    var regexEmail = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,3})$/i;
     var regexSpecial = /[$!%.#_*?&]+/;
     var numtarj = '#numtarj';
     var pin = '#pin';
@@ -357,7 +357,7 @@ $(document).ready(function () {
             else {
                 $('#repeat-carac').removeClass('text-danger');
                 $('#repeat-carac').addClass('text-success');
-                  
+
             }
             if ( data_customer($(password).val()) ) {
                 if (!($('#pers-carac').hasClass('text-danger'))) {
@@ -369,13 +369,13 @@ $(document).ready(function () {
             else {
                 $('#pers-carac').removeClass('text-danger');
                 $('#pers-carac').addClass('text-success');
-                  
+
 
             }
             if ( $(password).val().match(regexNum) ) {
                 $('#num-carac').removeClass('text-danger');
                 $('#num-carac').addClass('text-success');
-                  
+
             }
             else {
                 if (!($('#num-carac').hasClass('text-danger'))) {
@@ -394,7 +394,7 @@ $(document).ready(function () {
             else {
                 $('#carac').removeClass('text-danger');
                 $('#carac').addClass('text-success');
-                  
+
             }
             if ( !($(password).val().match(regexMay)) ) {
                 if (!($('#carac').hasClass('text-danger'))) {
@@ -406,7 +406,7 @@ $(document).ready(function () {
             else {
                 $('#carac').removeClass('text-danger');
                 $('#carac').addClass('text-success');
-                  
+
             }
             if ( $(password).val().length < 8) {
                 if (!($('#min-carac').hasClass('text-danger'))) {
@@ -418,7 +418,7 @@ $(document).ready(function () {
             else{
                 $('#min-carac').removeClass('text-danger');
                 $('#min-carac').addClass('text-success');
-                  
+
             }
             if ( !($(password).val().match(regexSpecial)) ) {
                 if (!($('#spec-carac').hasClass('text-danger'))) {
@@ -430,7 +430,7 @@ $(document).ready(function () {
             else{
                 $('#spec-carac').removeClass('text-danger');
                 $('#spec-carac').addClass('text-success');
-                  
+
             }
             if ( $(confirm).val() !== $(password).val()) {
                 $('#confirm').removeClass('text-success');
@@ -447,8 +447,8 @@ $(document).ready(function () {
                 $('#error-conf-pass').empty();
             }
             if ( ($('#repeat-carac').hasClass('text-danger')) || ($('#spec-carac').hasClass('text-danger')) ||
-            ($('#min-carac').hasClass('text-danger')) || ($('#carac').hasClass('text-danger')) ||
-            ($('#pers-carac').hasClass('text-danger')) || ($('#num-carac').hasClass('text-danger')) ) {
+                ($('#min-carac').hasClass('text-danger')) || ($('#carac').hasClass('text-danger')) ||
+                ($('#pers-carac').hasClass('text-danger')) || ($('#num-carac').hasClass('text-danger')) ) {
                 $(password).css({border: '2px solid #d2d6de'});
                 $(password).removeClass('errors');
                 $('#error-pass').empty();
@@ -469,28 +469,28 @@ $(document).ready(function () {
             $('#repeat-carac').removeClass('text-success');
 
             if (!($('#min-carac').hasClass('text-danger'))) {
-                    $('#min-carac').addClass('text-danger');
-                }
+                $('#min-carac').addClass('text-danger');
+            }
             $('#min-carac').removeClass('text-success');
 
             if (!($('#spec-carac').hasClass('text-danger'))) {
-                    $('#spec-carac').addClass('text-danger');
-                }
+                $('#spec-carac').addClass('text-danger');
+            }
             $('#spec-carac').removeClass('text-success');
 
             if (!($('#carac').hasClass('text-danger'))) {
-                    $('#carac').addClass('text-danger');
-                }
+                $('#carac').addClass('text-danger');
+            }
             $('#carac').removeClass('text-success');
 
             if (!($('#pers-carac').hasClass('text-danger'))) {
-                    $('#pers-carac').addClass('text-danger');
-                }
+                $('#pers-carac').addClass('text-danger');
+            }
             $('#pers-carac').removeClass('text-success');
 
             if (!($('#confirm').hasClass('text-danger'))) {
-                    $('#confirm').addClass('text-danger');
-                }
+                $('#confirm').addClass('text-danger');
+            }
             $('#confirm').removeClass('text-success');
         }
     });
@@ -523,8 +523,8 @@ $(document).ready(function () {
             $(confirm).addClass('errors');
 
             if (!($('#confirm').hasClass('text-danger'))) {
-                    $('#confirm').addClass('text-danger');
-                }
+                $('#confirm').addClass('text-danger');
+            }
             $('#confirm').removeClass('text-success');
         }
     });
@@ -568,36 +568,36 @@ function data_customer(valor) {
     var phone_office = $("#phone-office").text().split('-');
     var birthday = $("#birthday").text();
     var birthday_split = $("#birthday").text().split('-');
-    
+
 
     return !!((first_name[0].includes(normalize(valor.toLowerCase()))) ||
-    (normalize(valor.toLowerCase()).includes(first_name[0])) ||
-    (first_name[1].includes(normalize(valor.toLowerCase()))) ||
-    (normalize(valor.toLowerCase()).includes(first_name[1])) ||
-    (last_name[0].includes(normalize(valor.toLowerCase()))) ||
-    (normalize(valor.toLowerCase()).includes(last_name[0])) ||
-    (last_name[1].includes(normalize(valor.toLowerCase()))) ||
-    (normalize(valor.toLowerCase()).includes(last_name[1])) ||
-    (ci_cust[1].includes(valor)) ||
-    (valor.includes(ci_cust[1])) ||
-    (birthday.includes(valor)) ||
-    (valor.includes(birthday)) ||
-    (valor.includes(birthday_split[0])) ||
-    (birthday_split[0].includes(valor)) ||
-    (valor.includes(birthday_split[1])) ||
-    (birthday_split[1].includes(valor)) ||
-    (valor.includes(birthday_split[2])) ||
-    (birthday_split[2].includes(valor)) ||
-    (valor.includes(cellphone[0])) ||
-    (cellphone[0].includes(valor)) ||
-    (valor.includes(cellphone[1])) ||
-    (cellphone[1].includes(valor)) ||
-    (valor.includes(phone_home[0])) ||
-    (phone_home[0].includes(valor)) ||
-    (valor.includes(phone_home[1])) ||
-    (phone_home[1].includes(valor)) ||
-    (valor.includes(phone_office[0])) ||
-    (phone_office[0].includes(valor)) ||
-    (valor.includes(phone_office[1])) ||
-    (phone_office[1].includes(valor)));
+        (normalize(valor.toLowerCase()).includes(first_name[0])) ||
+        (first_name[1].includes(normalize(valor.toLowerCase()))) ||
+        (normalize(valor.toLowerCase()).includes(first_name[1])) ||
+        (last_name[0].includes(normalize(valor.toLowerCase()))) ||
+        (normalize(valor.toLowerCase()).includes(last_name[0])) ||
+        (last_name[1].includes(normalize(valor.toLowerCase()))) ||
+        (normalize(valor.toLowerCase()).includes(last_name[1])) ||
+        (ci_cust[1].includes(valor)) ||
+        (valor.includes(ci_cust[1])) ||
+        (birthday.includes(valor)) ||
+        (valor.includes(birthday)) ||
+        (valor.includes(birthday_split[0])) ||
+        (birthday_split[0].includes(valor)) ||
+        (valor.includes(birthday_split[1])) ||
+        (birthday_split[1].includes(valor)) ||
+        (valor.includes(birthday_split[2])) ||
+        (birthday_split[2].includes(valor)) ||
+        (valor.includes(cellphone[0])) ||
+        (cellphone[0].includes(valor)) ||
+        (valor.includes(cellphone[1])) ||
+        (cellphone[1].includes(valor)) ||
+        (valor.includes(phone_home[0])) ||
+        (phone_home[0].includes(valor)) ||
+        (valor.includes(phone_home[1])) ||
+        (phone_home[1].includes(valor)) ||
+        (valor.includes(phone_office[0])) ||
+        (phone_office[0].includes(valor)) ||
+        (valor.includes(phone_office[1])) ||
+        (phone_office[1].includes(valor)));
 }

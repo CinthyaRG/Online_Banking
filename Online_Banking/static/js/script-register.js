@@ -133,7 +133,6 @@ function validation(a,b,c,d,e,f,g) {
                     effect_error("#error");
                 }
                 else {
-                    console.log('entro en else');
                     $.ajax({
                         url: url_api,
                         origin: 'localhost:8000',

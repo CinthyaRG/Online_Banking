@@ -417,6 +417,64 @@ def validate_elems(request):
     return JsonResponse(data)
 
 
+@ensure_csrf_cookie
+def modify_profile(request):
+    q1 = request.GET.get('q1', None)
+    q2 = request.GET.get('q2', None)
+    a1 = request.GET.get('a1', None)
+    a2 = request.GET.get('a2', None)
+    email = request.GET.get('email', None)
+    password = request.GET.get('password', None)
+
+    data = {
+        'user_exists': User.objects.filter(pk=request.user.id).exists(),
+        'correct':False
+    }
+
+    if data['user_exists']:
+        user = User.objects.get(pk=request.user.id)
+        customer = Customer.objects.get(user=user.pk)
+        elems = ElemSecurity.objects.get(pk=customer.elemSecurity_id)
+
+        if password != '':
+            user.set_password(password)
+        if email != '':
+            user.email = email
+        if q1 != '':
+            elems.question1 = q1
+        if a1 != '':
+            elems.answer1 = a1
+        if q2 != '':
+            elems.question2 = q2
+        if a2 != '':
+            elems.answer2 = a2
+
+        elems.save()
+        customer.save()
+        user.save()
+
+        formato = "%d/%m/%y %I:%M:%S %p"
+        date_time = datetime.datetime.today().strftime(formato).split(" ")
+        date = date_time[0]
+        time = date_time[1] + " " + date_time[2]
+
+        c = {'usuario': user.get_full_name,
+             'fecha': date,
+             'hora': time
+             }
+
+        subject = 'Actio Capital - Cambio en su Perfil de Seguridad'
+        message_template = 'modify_profile.html'
+        email = user.email
+        send_email(subject, message_template, c, email)
+
+        data['correct'] = True
+    else:
+        data['error'] = 'Ha ocurrido un error por favor reingrese sus datos.'
+
+    return JsonResponse(data)
+
+
 def send_email(subject, message_template, context, email):
     from_email = 'Actio Capital'
     email_subject = subject
@@ -1106,6 +1164,9 @@ class Profile(LoginRequiredMixin, TemplateView):
             context['session'] = 'false'
 
         context['customer'] = customer
+        context['num'] = customer.user.username[:10]
+        context['num2'] = customer.user.username[10:]
+
         return context
 
     # def post(self, request, *args, **kwargs):
