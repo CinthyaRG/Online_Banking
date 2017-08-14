@@ -13,14 +13,22 @@
         </div>
         <div class="row">
             <div class="col-md-2"></div>
-            <div class="col-md-8">
+            <div class="col-md-8 margin-t-25">
                 <div class="box box-success">
                     <div class="box-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <a id="btn-tarj_seg" class="btn btn-default btn-group btn-apps pull-right"
-                                   type="button" href="{% url 'solicitud-tarjeta-coordenadas' customer.ref %}">
-                                    Generar Tarjeta de Seguridad </a>
+                                {% if card_coor %}
+                                    <a id="btn-tarj_seg" class="btn btn-default btn-group btn-apps pull-right"
+                                       type="button" href="{% url 'solicitud-tarjeta-coordenadas' pk=customer.ref %}">
+                                        Generar Tarjeta de Seguridad </a>
+                                {% else %}
+                                    <a id="btn-tarj_seg" class="btn btn-default btn-group btn-apps pull-right"
+                                       type="button" onclick="notification_error('Estimado usuario, ya posee una tarjeta de ' +
+                                            'coordenadas activa, si quiere generar otra primero desactive la actual. ' +
+                                            'Esto lo puede realizar en Gestión de Productos.')">
+                                        Generar Tarjeta de Seguridad </a>
+                                {% endif %}
                             </div>
                             <div class="margin-l-45 col-md-5">
                                 <a id="btn-cheq" class="btn btn-default btn-group btn-apps pull-left"

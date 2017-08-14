@@ -80,6 +80,10 @@ urlpatterns = [
         validate_quest,
         name='validar-preguntas'),
     url(
+        r'^ajax/modify-profile/$',
+        modify_profile,
+        name='modificar-perfil'),
+    url(
         r'^ajax/first-login/$',
         first_login,
         name='primer-login'),

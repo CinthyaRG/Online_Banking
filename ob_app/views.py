@@ -428,7 +428,8 @@ def modify_profile(request):
 
     data = {
         'user_exists': User.objects.filter(pk=request.user.id).exists(),
-        'correct':False
+        'correct': False,
+        'password': False
     }
 
     if data['user_exists']:
@@ -438,6 +439,7 @@ def modify_profile(request):
 
         if password != '':
             user.set_password(password)
+            data['password'] = True
         if email != '':
             user.email = email
         if q1 != '':
@@ -522,6 +524,15 @@ def create_token(num):
     token = sha1.hexdigest()
     key = token[:num]
     return key
+
+
+def list_list(char):
+    l = char.split(",")
+    l = list(map(int, l))
+    a = []
+    for num in range(0, 25, 6):
+        a.append(l[num:num+6])
+    return a
 
 
 def new_token(request, pk):
@@ -1001,8 +1012,17 @@ class Request(LoginRequiredMixin, TemplateView):
             Request, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
+        card_coor = ElemSecurity.objects.get(pk=customer.elemSecurity_id).cardCoor_id
+
+        if card_coor is None:
+            context['card_coor'] = True
+        else:
+            context['card_coor'] = CardCoor.objects.get(pk=card_coor).status is False
 
         context['customer'] = customer
+        context['num'] = customer.user.username[:10]
+        context['num2'] = customer.user.username[10:]
+
         return context
 
 
@@ -1016,8 +1036,53 @@ class Request_Coord(LoginRequiredMixin, TemplateView):
             Request_Coord, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
+        elem = ElemSecurity.objects.get(pk=customer.elemSecurity_id)
+        print(elem.pk)
+        print(elem.cardCoor_id is None)
+
+        coor = ''
+        for i in range(0, 30):
+            num = random.randint(0, 999)
+            if i < 29:
+                coor = coor + str(num).zfill(3) + ','
+            else:
+                coor = coor + str(num).zfill(3)
+
+        serial = str(random.randint(1, 10000000)).zfill(7)
+
+        if elem.cardCoor_id is None:
+            card_cord = CardCoor(serial=serial,
+                                 coor=coor)
+            card_cord.save()
+            elem.cardCoor_id = card_cord.pk
+            elem.save()
+
+        else:
+            card_cord = CardCoor.objects.get(pk=elem.cardCoor_id)
+            card_cord.serial = serial
+            card_cord.coor = coor
+            card_cord.save()
+
+            formato = "%d/%m/%y %I:%M:%S %p"
+            date_time = datetime.datetime.today().strftime(formato).split(" ")
+            date = date_time[0]
+            time = date_time[1] + " " + date_time[2]
+
+            c = {'usuario': customer.user.get_full_name,
+                 'fecha': date,
+                 'hora': time
+                 }
+
+            subject = 'Actio Capital - Generación de Tarjeta de Seguridad'
+            message_template = 'card_coor_email.html'
+            email = customer.user.email
+            send_email(subject, message_template, c, email)
 
         context['customer'] = customer
+        context['num'] = customer.user.username[:10]
+        context['num2'] = customer.user.username[10:]
+        context['coor'] = list_list(coor)
+
         return context
 
 

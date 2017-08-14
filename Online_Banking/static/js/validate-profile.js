@@ -18,7 +18,7 @@ $(document).ready(function () {
     var email = '#email_user';
     var msj = "Este campo es obligatorio";
 
-    $(email).keyup( function () {
+    $(email).focusout( function () {
         if ( $(email).val().match(regexEmail)){
             $(email).css({border: '2px solid #d2d6de'});
             $(email).removeClass('errors');
@@ -36,7 +36,7 @@ $(document).ready(function () {
         $(email).css({'border-color': '#8AB7B6'});
     });
 
-    $(q1).keyup( function () {
+    $(q1).change( function () {
         if ( $(q1).val() !== ""){
             if ( $(q2).val() === $(q1).val()) {
                 notification_error('La pregunta 1 no puede ' +
@@ -48,6 +48,10 @@ $(document).ready(function () {
                 $(q1).removeClass('errors');
             }
         }
+        else {
+            notification_error('La pregunta 1 no puede estar vacía.');
+            $(q1).addClass('errors');
+        }
     });
 
     $(q1).on('focus', function () {
@@ -56,7 +60,7 @@ $(document).ready(function () {
         $('#error-q1').empty();
     });
 
-    $(a1).keyup( function () {
+    $(a1).change( function () {
         if ( $(a1).val() !== ""){
             if ( $(a1).val() === $(q1).val()) {
                 notification_error('La respuesta no puede ' +
@@ -73,14 +77,22 @@ $(document).ready(function () {
                 $(a1).removeClass('errors');
             }
         }
+        else {
+            notification_error('La respuesta 1 no puede estar vacía.');
+            $(a1).addClass('errors');
+        }
     });
 
     $(a1).on('focus', function () {
         $(a1).removeClass('errors');
         $(a1).css({'border-color': '#8AB7B6'});
+        if ( $(q1).val() === ""){
+            notification_error('La pregunta 1 no puede estar vacía.');
+            $(q1).addClass('errors');
+        }
     });
 
-    $(q2).keyup( function () {
+    $(q2).change( function () {
         if ( $(q2).val() !== ""){
             if ( $(q2).val() === $(q1).val()) {
                 notification_error('La pregunta 2 no puede ' +
@@ -97,6 +109,10 @@ $(document).ready(function () {
                 $(q2).removeClass('errors');
             }
         }
+        else {
+            notification_error('La pregunta 2 no puede estar vacía.');
+            $(q2).addClass('errors');
+        }
     });
 
     $(q2).on('focus', function () {
@@ -104,7 +120,7 @@ $(document).ready(function () {
         $(q2).css({'border-color': '#8AB7B6'});
     });
 
-    $(a2).keyup( function () {
+    $(a2).change( function () {
         if ( $(a2).val() !== ""){
             if ( $(a2).val() === $(q2).val() ) {
                 notification_error('La respuesta no puede ' +
@@ -131,11 +147,19 @@ $(document).ready(function () {
                 $(a2).removeClass('errors');
             }
         }
+        else {
+            notification_error('La respuesta 2 no puede estar vacía.');
+            $(a2).addClass('errors');
+        }
     });
 
     $(a2).on('focus', function () {
         $(a2).removeClass('errors');
         $(a2).css({'border-color': '#8AB7B6'});
+        if ( $(q2).val() === ""){
+            notification_error('La pregunta 2 no puede estar vacía.');
+            $(q2).addClass('errors');
+        }
     });
 
     $(password).keyup( function () {
