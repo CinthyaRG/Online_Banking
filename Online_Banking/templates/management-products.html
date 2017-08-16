@@ -16,12 +16,18 @@
     </script>
     <script>
         $(document).ready(function (){
-            $('#body_mng').css({display: 'none'});
-            $("#table-mng_paginate").addClass("pull-right");
-            $("#table-mng_paginate").css({height: '60px'});
+            alert(String({{session}}) === 'true');
+            var session = String({{session}}) === 'true';
+
+            if (session) {
+                $('#sec_mng').css({display: 'none'});
+            }
+            else {
+                $('#body_mng').css({display: 'none'});
+            }
+
             $("#input_frs_coor").keypad();
             $("#input_snd_coor").keypad();
-            $("#input_frs_coor").keypad({prompt: 'Enter here'});
             $.keypad.setDefaults({prompt: ''});
         });
     </script>
@@ -44,7 +50,7 @@
                                         Pregunta de Seguridad: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows no-margin">
-                                    <p> Nombre de mi primera mascota </p>
+                                    <p id="question">{{question}}</p>
                                 </div>
                             </div>
                             <div class="row">
@@ -63,11 +69,11 @@
                                         <span class="text-danger"> * </span> Coordenadas: </label>
                                 </div>
                                 <div class="col-md-5 col-xs-5 rows">
-                                    <span id="first_coor"> A5
+                                    <span> <span id="first_coor">{{first_coor}}</span>
                                     <input id="input_frs_coor" maxlength="3" type="password"
                                            class="input-register">
                                     </span>
-                                    <span id="second_coor"> D2
+                                    <span> <span id="second_coor">{{second_coor}}</span>
                                     <input id="input_snd_coor" maxlength="3" type="password"
                                            class="input-register">
                                     </span>
@@ -82,10 +88,11 @@
             <div class="col-md-5 col-xs-5"></div>
             <div class="col-md-4">
                 <a id="btn-back" class="btn btn-default btn-group btn-apps"
-                   type="button" onclick="move_back_security()"> Cancelar
+                   type="button" onclick="window.history.back()"> Cancelar
                 </a>
                 <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
-                   type="button" onclick="move_security('#body_mng','#sec_mng')">
+                   type="button" onclick="elem_Security('#resp_seg','#input_frs_coor','#input_snd_coor',
+                   '#body_mng','#sec_mng')">
                     Siguiente
                 </a>
             </div>
@@ -108,7 +115,7 @@
                         </p>
                     </div>
                     <div class="box-body no-padding">
-                        <table id="table-mng" class="table table-bordered table-hover text-center cursor">
+                        <table id="table-mng" class="table table-bordered table-hover text-center">
                             <thead>
                             <tr class="bg-gray">
                                 <th>Producto</th>
@@ -132,43 +139,5 @@
             </div>
         </div>
     </section>
-
-    <div id="Modal-Delete-Payments" class="modal">
-        <div class="modal-dialog modal-trans">
-            <div class="modal-content">
-                <div class="modal-header activate">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title text-center">Eliminar Afiliado</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-11">
-                            <p> ¿Está seguro que desea eliminar el servicio asociado al producto
-                                <strong> Prestamo-17897001 </strong>de la lista de sus servicios? </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div class="row">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-3">
-                            <button type="button" class="btn btn-default btn-apps"
-                                data-dismiss="modal">Cancelar</button>
-                        </div>
-                        <div class="col-md-3">
-                            <button type="button" class="btn btn-default btn-apps"
-                                data-dismiss="modal">Aceptar</button>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
 
 {% endblock %}

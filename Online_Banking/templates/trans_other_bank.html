@@ -16,13 +16,20 @@
     </script>
     <script>
         $(document).ready(function (){
-            $('#body_tranf_other_bank').css({display: 'none'});
+           var session = String({{session}}) === 'True';
+
+            if (session) {
+                $('#sec_tranf_other_bank').css({display: 'none'});
+            }
+            else {
+                $('#body_tranf_other_bank').css({display: 'none'});
+            }
+
             $("#table-transf_paginate").addClass("pull-right");
             $("#table-transf_paginate").css({height: '60px'});
             $("#table-transf_filter").addClass("pull-right");
             $("#input_frs_coor").keypad();
             $("#input_snd_coor").keypad();
-            $("#input_frs_coor").keypad({prompt: 'Enter here'});
             $.keypad.setDefaults({prompt: ''});
         });
     </script>
@@ -45,7 +52,7 @@
                                         Pregunta de Seguridad: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows no-margin">
-                                    <p> Nombre de mi primera mascota </p>
+                                    <p id="question">{{question}}</p>
                                 </div>
                             </div>
                             <div class="row">
@@ -64,11 +71,11 @@
                                         <span class="text-danger"> * </span> Coordenadas: </label>
                                 </div>
                                 <div class="col-md-5 col-xs-5 rows">
-                                    <span id="first_coor"> A5
+                                    <span> <span id="first_coor">{{first_coor}}</span>
                                     <input id="input_frs_coor" maxlength="3" type="password"
                                            class="input-register">
                                     </span>
-                                    <span id="second_coor"> D2
+                                    <span> <span id="second_coor">{{second_coor}}</span>
                                     <input id="input_snd_coor" maxlength="3" type="password"
                                            class="input-register">
                                     </span>
@@ -83,10 +90,11 @@
             <div class="col-md-5 col-xs-5"></div>
             <div class="col-md-4">
                 <a id="btn-back" class="btn btn-default btn-group btn-apps"
-                   type="button" onclick="move_back_security()"> Cancelar
+                   type="button" onclick="window.history.back()"> Cancelar
                 </a>
                 <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
-                   type="button" onclick="move_security('#body_tranf_other_bank','#sec_tranf_other_bank')">
+                   type="button" onclick="elem_Security('#resp_seg','#input_frs_coor','#input_snd_coor',
+                   '#body_tranf_other_bank','#sec_tranf_other_bank')">
                     Siguiente
                 </a>
             </div>
@@ -101,7 +109,7 @@
             <div class="col-md-3 col-xs-4"></div>
             <div class="col-md-8 col-xs-8">
                 <a class="btn btn-default btn-group btn-apps pull-right" type="button"
-                   href="{% url 'registro-afiliados' %}"> Agregar Afiliado </a>
+                   href="{% url 'registro-afiliados' customer.ref %}"> Agregar Afiliado </a>
             </div>
         </div>
         <div class="row">
@@ -115,7 +123,7 @@
                         </p>
                     </div>
                     <div class="box-body no-padding">
-                        <table id="table-transf" class="table table-bordered table-hover text-center cursor">
+                        <table id="table-transf" class="table table-bordered table-hover text-center">
                             <thead>
                             <tr class="bg-gray">
                                 <th>Alias</th>

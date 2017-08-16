@@ -84,6 +84,10 @@ urlpatterns = [
         modify_profile,
         name='modificar-perfil'),
     url(
+        r'^ajax/get-cardCoord/$',
+        get_cardcoor,
+        name='get-cardCoord'),
+    url(
         r'^ajax/first-login/$',
         first_login,
         name='primer-login'),

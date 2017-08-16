@@ -50,28 +50,6 @@
                 weekStart: 1
             });
 
-            $('#trans_bank').click(function () {
-                if (card) {
-                    move('transf-mi-banco');
-                }
-                else {
-                    var msg = 'Para realizar transferencias a otros usuarios debe poseer una tarjeta de coordenadas. ' +
-                        'Ingrese a "Solicitudes en Línea" y proceda a generarla.';
-                    notification_error(msg);
-                }
-            });
-
-            $('#trans_other').click(function () {
-                if (card) {
-                    move('transf-mi-banco');
-                }
-                else {
-                    var msg = 'Para realizar transferencias a otros usuarios debe poseer una tarjeta de coordenadas. ' +
-                        'Ingrese a "Solicitudes en Línea" y proceda a generarla.';
-                    notification_error(msg);
-                }
-            });
-
             $('#btn-con').click(function () {
                 var s = $('#datepicker').val();
                 var e = $('#datepicker2').val();
@@ -142,12 +120,34 @@
             <div class="col-md-4 col-xs-7"></div>
             <div class="col-md-8 col-xs-4 without-padding">
                 <a id="transf-my-acc" class="btn btn-default btn-group btn-apps" type="button"
-                   href="{% url 'transf-mis-cuentas' pk=customer.ref id=acc_id %}">
-                    Transferencias a Mis Cuentas </a>
-                <a id="trans_bank" class="btn btn-default btn-group btn-apps" type="button">
-                    Transferencias Mismo Banco </a>
-                <a id="trans_other" class="btn btn-default btn-group btn-apps" type="button">
-                    Transferencias Otros Bancos </a>
+                       href="{% url 'transf-mis-cuentas' pk=customer.ref id=acc_id %}">
+                        Transferencias a Mis Cuentas </a>
+                {% if  customer.elemSecurity.cardCoor_id is None %}
+                    <a id="trans_bank" class="btn btn-default btn-group btn-apps" type="button"
+                       onclick="notification_error('Para realizar transferencias a otros usuarios debe ' +
+                       'poseer una tarjeta de coordenadas. Ingrese a Solicitudes en Línea y proceda a generarla.')">
+                        Transferencias Mismo Banco </a>
+                    <a id="trans_other" class="btn btn-default btn-group btn-apps" type="button"
+                       onclick="notification_error('Para realizar transferencias a otros usuarios debe ' +
+                        'poseer una tarjeta de coordenadas. Ingrese a Solicitudes en Línea y proceda a generarla.')">
+                        Transferencias Otros Bancos </a>
+                {% elif  customer.elemSecurity.cardCoor.status is False %}
+                    <a id="trans_bank" class="btn btn-default btn-group btn-apps" type="button"
+                       onclick="notification_error('Para realizar transferencias a otros usuarios debe ' +
+                        'activar su tarjeta de coordenadas. Ingrese a Gestión de Productos y proceda a activarla.')">
+                        Transferencias Mismo Banco </a>
+                    <a id="trans_other" class="btn btn-default btn-group btn-apps" type="button"
+                       onclick="notification_error('Para realizar transferencias a otros usuarios debe ' +
+                        'activar su tarjeta de coordenadas. Ingrese a Gestión de Productos y proceda a activarla.')">
+                        Transferencias Otros Bancos </a>
+                {% else %}
+                    <a id="trans_bank" class="btn btn-default btn-group btn-apps" type="button"
+                       href="{% url 'transf-mi-banco' pk=customer.ref id=acc_id %}">
+                        Transferencias Mismo Banco </a>
+                    <a id="trans_other" class="btn btn-default btn-group btn-apps" type="button"
+                       href="{% url 'transf-otros-bancos' pk=customer.ref id=acc_id %}">
+                        Transferencias Otros Bancos </a>
+                {% endif %}
             </div>
         </div>
         <div class="row">

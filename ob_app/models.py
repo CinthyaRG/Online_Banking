@@ -16,7 +16,7 @@ IDEN_VALIDATOR = RegexValidator(
 class CardCoor(models.Model):
     serial = models.CharField(max_length=30, unique=True)
     coor = models.CharField(max_length=120)
-    status = models.BooleanField(default=False)
+    status = models.BooleanField(default=True)
 
 
 class ElemSecurity(models.Model):

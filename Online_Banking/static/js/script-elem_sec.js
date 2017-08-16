@@ -25,8 +25,7 @@ function move_back_security() {
     }
     else {
         url = window.location.href.split('/');
-        var new_url = url[0]+'/'+url[1]+'/'+url[2]+'/'+'inicio';
-        location.href= new_url;
+        location.href= url[0] + '/' + url[1] + '/' + url[2] + '/' + 'inicio';
     }
 }
 
@@ -71,6 +70,7 @@ function validate_elem(a,b,c) {
 function elem_Security(a,b,c,d,e) {
     var validate = validate_elem(a,b,c);
     if (validate) {
+        alert($('#first_coor').text());
         var path = window.location.href.split('/');
         var url = path[0] + "/" + path[1] + "/" + path[2] + "/ajax/validate-elems-seguridad/";
         alert(url);
@@ -82,15 +82,23 @@ function elem_Security(a,b,c,d,e) {
                 f_coord_val: $(b).val(),
                 s_coord_val: $(c).val(),
                 answer: $(a).val(),
-                question: $('#question').text(),
-                question: $('#question').text(),
+                f_coor: $('#first_coor').text(),
+                s_coor: $('#second_coor').text(),
                 question: $('#question').text()
             },
             type: 'GET',
             dataType: 'json',
             success: function (data) {
                 if (data.user_exists){
-                    move_security(d,e);
+                    if (data.question && data.coor) {
+                        move_security(d,e);
+                    }
+                    else {
+                        notification_error(data.error);
+                    }
+                }
+                else {
+                    notification_error(data.error);
                 }
             },
             error: function (data) {

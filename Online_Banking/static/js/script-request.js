@@ -102,7 +102,7 @@ function tarj_coor(coor,serial) {
 
     $('#tarj-coor').append(c);
 
-    notification_success('Tarjeta de Coordenadas generada exitosamente.');
+    notification_success('Tarjeta de Coordenadas generada y activada exitosamente.');
 
 }
 

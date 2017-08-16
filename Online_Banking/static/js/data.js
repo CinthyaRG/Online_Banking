@@ -47,6 +47,9 @@ function tables_data(a,b) {
                 else if (url[4]==='transf-mis-cuentas') {
                     drop_account_trans(data.account);
                 }
+                else if (url[4]==='gestion-productos') {
+                    management_table(data.management);
+                }
             }
         },
         error: function (data) {
