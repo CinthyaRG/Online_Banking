@@ -16,8 +16,10 @@
     </script>
     <script>
         $(document).ready(function (){
-            alert(String({{session}}) === 'true');
             var session = String({{session}}) === 'true';
+            var a = String({{num}}) + String({{num2}});
+
+            $('#abc').text(a);
 
             if (session) {
                 $('#sec_mng').css({display: 'none'});
@@ -37,6 +39,7 @@
     <section id="sec_mng" class="content-header">
         <div class="row" id="title-transf-bank">
             <h3> Elementos de Seguridad </h3>
+            <span id="abc" hidden=""></span>
         </div>
         <div class="row">
             <div class="col-md-2"></div>

@@ -88,6 +88,10 @@ urlpatterns = [
         get_cardcoor,
         name='get-cardCoord'),
     url(
+        r'^ajax/status-cardCoord/$',
+        status_cardcoor,
+        name='status-cardCoord'),
+    url(
         r'^ajax/first-login/$',
         first_login,
         name='primer-login'),

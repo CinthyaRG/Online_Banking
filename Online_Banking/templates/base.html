@@ -152,30 +152,33 @@
                     </ul>
                 </li>
                 {% if  customer.elemSecurity.cardCoor_id is None %}
-                    <li id="payments" class="menu"><a onclick="notification_error('Para realizar transferencias a otros usuarios debe ' +
+                    <li id="payments" class="menu"><a onclick="notification_error('Para realizar pagos debe ' +
                                      'poseer una tarjeta de coordenadas. Ingrese a Solicitudes en Línea y proceda a generarla.')">
                         <i class="fa fa-money"> </i><span> Pagos </span></a></li>
                     <li id="request" class="menu"><a href="{% url 'solicitudes' customer.ref %}"><i class="fa fa-list"></i>
                         <span> Solicitudes En Línea </span></a></li>
-                    <li id="management" class="menu"><a onclick="notification_error('Para realizar transferencias a otros usuarios debe ' +
+                    <li id="management" class="menu"><a onclick="notification_error('Para gestionar sus productos debe ' +
                                      'poseer una tarjeta de coordenadas. Ingrese a Solicitudes en Línea y proceda a generarla.')">
                         <i class="fa fa-check-square-o"></i><span> Gestión De Productos </span></a>
                     </li>
-                    <li id="profile" class="menu"><a onclick="notification_error('Para realizar transferencias a otros usuarios debe ' +
+                    <li id="profile" class="menu"><a onclick="notification_error('Para realizar cambios en su perfil de seguridad debe ' +
                                      'poseer una tarjeta de coordenadas. Ingrese a Solicitudes en Línea y proceda a generarla.')">
                         <i class="fa fa-user-secret"> </i><span> Perfil De Seguridad </span></a></li>
                 {% elif  customer.elemSecurity.cardCoor.status is False %}
-                    <li id="payments" class="menu"><a onclick="notification_error('Para realizar transferencias a otros usuarios debe ' +
-                                     'activar su tarjeta de coordenadas. Ingrese a Gestión de Productos y proceda a activarla.')">
+                    <li id="payments" class="menu"><a onclick="notification_error('Para realizar pagos debe ' +
+                                     'generar otra tarjeta de coordenadas, debido a que la anterior fue anulada. ' +
+                                      'Ingrese a Solicitudes en Línea y proceda a generarla.')">
                         <i class="fa fa-money"> </i><span> Pagos </span></a></li>
                     <li id="request" class="menu"><a href="{% url 'solicitudes' customer.ref %}"><i class="fa fa-list"></i>
                         <span> Solicitudes En Línea </span></a></li>
-                    <li id="management" class="menu"><a onclick="notification_error('Para realizar transferencias a otros usuarios debe ' +
-                                     'activar su tarjeta de coordenadas. Ingrese a Gestión de Productos y proceda a activarla.')">
+                    <li id="management" class="menu"><a onclick="notification_error('Para gestionar sus productos debe ' +
+                                     'generar otra tarjeta de coordenadas, debido a que la anterior fue anulada. ' +
+                                      'Ingrese a Solicitudes en Línea y proceda a generarla.')">
                         <i class="fa fa-check-square-o"></i><span> Gestión De Productos </span></a>
                     </li>
-                    <li id="profile" class="menu"><a onclick="notification_error('Para realizar transferencias a otros usuarios debe ' +
-                                    'activar su tarjeta de coordenadas. Ingrese a Gestión de Productos y proceda a activarla.')">
+                    <li id="profile" class="menu"><a onclick="notification_error('Para realizar cambios en su perfil de seguridad debe ' +
+                                    'generar otra tarjeta de coordenadas, debido a que la anterior fue anulada. ' +
+                                      'Ingrese a Solicitudes en Línea y proceda a generarla.')">
                         <i class="fa fa-user-secret"> </i><span> Perfil De Seguridad </span></a></li>
                 {% else %}
                     <li id="payments" class="menu"><a href="{% url 'pagos' pk=customer.ref %}"> <i class="fa fa-money"> </i>

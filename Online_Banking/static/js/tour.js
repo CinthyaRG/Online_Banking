@@ -137,7 +137,10 @@ function tourStart() {
         success: function (data) {
             if (data.user_exists) {
                 if (data.login) {
-                    tour();
+                    var url = document.referrer.split('/');
+                    if(url[3] === ''){
+                        tour();
+                    }
                 }
             }
             else {

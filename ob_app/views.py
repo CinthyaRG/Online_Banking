@@ -448,14 +448,9 @@ def validate_elems(request):
             l = customer.elemSecurity.cardCoor.coor.split(",")
             f = conv_coord(f_coord)
             s = conv_coord(s_coord)
-            print(f)
-            print(s)
-            print('en la lista')
-            print(l[f])
-            print(l[s])
+
             if l[f] == f_coord_value and l[s] == s_coord_value:
-                elems.sessionExpires = datetime.datetime.today() + datetime.timedelta(minutes=15)
-                print(datetime.datetime.today())
+                elems.sessionExpires = True
                 print(elems.sessionExpires)
                 elems.save()
                 data['coor'] = True
@@ -533,7 +528,65 @@ def get_cardcoor(request):
         user = User.objects.get(pk=request.user.id)
         customer = Customer.objects.get(user=user.pk)
 
-        data['coor'] = [['Tarjeta de Seguridad '+str(customer.elemSecurity.cardCoor.serial)], [customer.elemSecurity.cardCoor.status]]
+        data['coor'] = [['Tarjeta de Seguridad:'+str(customer.elemSecurity.cardCoor.serial)], [customer.elemSecurity.cardCoor.status]]
+
+    else:
+        data['error'] = 'Ha ocurrido un error por favor reingrese sus datos.'
+
+    return JsonResponse(data)
+
+
+@ensure_csrf_cookie
+def status_cardcoor(request):
+    serial = request.GET.get('s', None)
+    action = request.GET.get('action', None)
+
+    data = {
+        'user_exists': User.objects.filter(pk=request.user.id).exists(),
+        'correct': False
+    }
+
+    if data['user_exists']:
+        user = User.objects.get(pk=request.user.id)
+        customer = Customer.objects.get(user=user.pk)
+        card_coor = CardCoor.objects.get(pk=customer.elemSecurity.cardCoor_id)
+
+        if card_coor.serial == serial:
+            formato = "%d/%m/%y %I:%M:%S %p"
+            date_time = datetime.datetime.today().strftime(formato).split(" ")
+            date = date_time[0]
+            time = date_time[1] + " " + date_time[2]
+
+            if action == 'act':
+                card_coor.status = True
+                subject = 'Actio Capital - Activación de Tarjeta de Seguridad'
+
+                c = {'usuario': customer.user.get_full_name,
+                     'fecha': date,
+                     'hora': time,
+                     'title': 'Activación de Tarjeta de Seguridad',
+                     'msg': 'Ha activado su tarjeta de seguridad '
+                     }
+
+            else:
+                card_coor.status = False
+                subject = 'Actio Capital - Desactivación de Tarjeta de Seguridad'
+
+                c = {'usuario': customer.user.get_full_name,
+                     'fecha': date,
+                     'hora': time,
+                     'title': 'Desactivación de Tarjeta de Seguridad',
+                     'msg': 'Ha desactivado su tarjeta de seguridad '
+                     }
+
+            card_coor.save()
+
+            message_template = 'card_coor_email.html'
+            email = customer.user.email
+            print('antes de enviar correo coordenadas')
+            send_email(subject, message_template, c, email)
+
+            data['correct'] = True
 
     else:
         data['error'] = 'Ha ocurrido un error por favor reingrese sus datos.'
@@ -765,10 +818,11 @@ class Home_Client(LoginRequiredMixin, TemplateView):
         customer = Customer.objects.get(ref=self.kwargs['pk'])
         if not(customer.elemSecurity.cardCoor_id is None):
             elems = ElemSecurity.objects.get(pk=customer.elemSecurity_id)
-            elems.sessionExpires = datetime.datetime.today() - datetime.timedelta(minutes=2)
+            elems.sessionExpires = False
             elems.save()
 
         context['customer'] = customer
+        print(customer.elemSecurity.cardCoor.status)
         context['num'] = customer.user.username[:10]
         context['num2'] = customer.user.username[10:]
 
@@ -813,13 +867,6 @@ class Account(LoginRequiredMixin, TemplateView):
             Account, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
-        elems = ElemSecurity.objects.get(pk=customer.elemSecurity_id)
-
-        try:
-            card_coor = CardCoor.objects.get(pk=elems.cardCoor_id)
-            context['card_coor'] = 'true'
-        except CardCoor.DoesNotExist:
-            context['card_coor'] = 'false'
 
         context['customer'] = customer
         context['num'] = customer.user.username[:10]
@@ -891,29 +938,24 @@ class Transfer_my_bank(LoginRequiredMixin, TemplateView):
         customer = Customer.objects.get(ref=self.kwargs['pk'])
         elems = ElemSecurity.objects.get(pk=customer.elemSecurity_id)
 
-        try:
-            card_coor = CardCoor.objects.get(pk=elems.cardCoor_id)
-            if not(elems.sessionExpires is None) and (elems.sessionExpires > datetime.datetime.today()):
-                context['session'] = 'true'
+        if elems.sessionExpires:
+            context['session'] = 'true'
+        else:
+            quest1 = customer.elemSecurity.question1
+            quest2 = customer.elemSecurity.question2
+            num = random.randint(1, 2)
+            if num == 1:
+                context['question'] = quest1
             else:
-                quest1 = customer.elemSecurity.question1
-                quest2 = customer.elemSecurity.question2
-                num = random.randint(1, 2)
-                if num == 1:
-                    context['question'] = quest1
-                else:
-                    context['question'] = quest2
+                context['question'] = quest2
 
-                a = list('ABCDEF')
-                random.shuffle(a)
-                b = list('12345')
-                random.shuffle(b)
-                context['first_coor'] = a[0]+b[0]
-                context['second_coor'] = a[1]+b[1]
-
+            a = list('ABCDEF')
+            random.shuffle(a)
+            b = list('12345')
+            random.shuffle(b)
+            context['first_coor'] = a[0]+b[0]
+            context['second_coor'] = a[1]+b[1]
             context['card_coor'] = 'true'
-        except CardCoor.DoesNotExist:
-            context['card_coor'] = 'false'
             context['session'] = 'false'
 
         context['customer'] = customer
@@ -935,29 +977,23 @@ class Transfer_others_bank(LoginRequiredMixin, TemplateView):
         customer = Customer.objects.get(ref=self.kwargs['pk'])
         elems = ElemSecurity.objects.get(pk=customer.elemSecurity_id)
 
-        try:
-            card_coor = CardCoor.objects.get(pk=elems.cardCoor_id)
-            if not(elems.sessionExpires is None) and (elems.sessionExpires < datetime.datetime.today()):
-                context['session'] = 'true'
+        if elems.sessionExpires:
+            context['session'] = 'true'
+        else:
+            quest1 = customer.elemSecurity.question1
+            quest2 = customer.elemSecurity.question2
+            num = random.randint(1, 2)
+            if num == 1:
+                context['question'] = quest1
             else:
-                quest1 = customer.elemSecurity.question1
-                quest2 = customer.elemSecurity.question2
-                num = random.randint(1, 2)
-                if num == 1:
-                    context['question'] = quest1
-                else:
-                    context['question'] = quest2
+                context['question'] = quest2
 
-                a = list('ABCDEF')
-                random.shuffle(a)
-                b = list('12345')
-                random.shuffle(b)
-                context['first_coor'] = a[0] + b[0]
-                context['second_coor'] = a[1] + b[1]
-
-            context['card_coor'] = 'true'
-        except CardCoor.DoesNotExist:
-            context['card_coor'] = 'false'
+            a = list('ABCDEF')
+            random.shuffle(a)
+            b = list('12345')
+            random.shuffle(b)
+            context['first_coor'] = a[0] + b[0]
+            context['second_coor'] = a[1] + b[1]
             context['session'] = 'false'
 
         context['customer'] = customer
@@ -1129,6 +1165,7 @@ class Request_Coord(LoginRequiredMixin, TemplateView):
             card_cord = CardCoor.objects.get(pk=elem.cardCoor_id)
             card_cord.serial = serial
             card_cord.coor = coor
+            card_cord.status = True
             card_cord.save()
 
             formato = "%d/%m/%y %I:%M:%S %p"
@@ -1138,12 +1175,15 @@ class Request_Coord(LoginRequiredMixin, TemplateView):
 
             c = {'usuario': customer.user.get_full_name,
                  'fecha': date,
-                 'hora': time
+                 'hora': time,
+                 'title': 'Generación de Tarjeta de Seguridad',
+                 'msg': 'Ha generado una nueva tarjeta de seguridad '
                  }
 
             subject = 'Actio Capital - Generación de Tarjeta de Seguridad'
             message_template = 'card_coor_email.html'
             email = customer.user.email
+            print('antes de enviar correo coordenadas')
             send_email(subject, message_template, c, email)
 
         context['customer'] = customer
@@ -1256,32 +1296,23 @@ class Management(LoginRequiredMixin, TemplateView):
         customer = Customer.objects.get(ref=self.kwargs['pk'])
         elems = ElemSecurity.objects.get(pk=customer.elemSecurity_id)
 
-        try:
-            card_coor = CardCoor.objects.get(pk=elems.cardCoor_id)
-            print(card_coor)
-            print(elems.sessionExpires)
-            print(datetime.datetime.today())
-            if not(elems.sessionExpires is None) and (elems.sessionExpires > datetime.datetime.today()):
-                context['session'] = 'true'
+        if elems.sessionExpires:
+            context['session'] = 'true'
+        else:
+            quest1 = customer.elemSecurity.question1
+            quest2 = customer.elemSecurity.question2
+            num = random.randint(1, 2)
+            if num == 1:
+                context['question'] = quest1
             else:
-                quest1 = customer.elemSecurity.question1
-                quest2 = customer.elemSecurity.question2
-                num = random.randint(1, 2)
-                if num == 1:
-                    context['question'] = quest1
-                else:
-                    context['question'] = quest2
+                context['question'] = quest2
 
-                a = list('ABCDEF')
-                random.shuffle(a)
-                b = list('12345')
-                random.shuffle(b)
-                context['first_coor'] = a[0] + b[0]
-                context['second_coor'] = a[1] + b[1]
-
-            context['card_coor'] = 'true'
-        except CardCoor.DoesNotExist:
-            context['card_coor'] = 'false'
+            a = list('ABCDEF')
+            random.shuffle(a)
+            b = list('12345')
+            random.shuffle(b)
+            context['first_coor'] = a[0] + b[0]
+            context['second_coor'] = a[1] + b[1]
             context['session'] = 'false'
 
         context['customer'] = customer
@@ -1303,29 +1334,23 @@ class Profile(LoginRequiredMixin, TemplateView):
         customer = Customer.objects.get(ref=self.kwargs['pk'])
         elems = ElemSecurity.objects.get(pk=customer.elemSecurity_id)
 
-        try:
-            card_coor = CardCoor.objects.get(pk=elems.cardCoor_id)
-            if elems.sessionExpires < datetime.datetime.today():
-                context['session'] = 'true'
+        if elems.sessionExpires:
+            context['session'] = 'true'
+        else:
+            quest1 = customer.elemSecurity.question1
+            quest2 = customer.elemSecurity.question2
+            num = random.randint(1, 2)
+            if num == 1:
+                context['question'] = quest1
             else:
-                quest1 = customer.elemSecurity.question1
-                quest2 = customer.elemSecurity.question2
-                num = random.randint(1, 2)
-                if num == 1:
-                    context['question'] = quest1
-                else:
-                    context['question'] = quest2
+                context['question'] = quest2
 
-                a = list('ABCDEF')
-                random.shuffle(a)
-                b = list('12345')
-                random.shuffle(b)
-                context['first_coor'] = a[0] + b[0]
-                context['second_coor'] = a[1] + b[1]
-
-            context['card_coor'] = 'true'
-        except CardCoor.DoesNotExist:
-            context['card_coor'] = 'false'
+            a = list('ABCDEF')
+            random.shuffle(a)
+            b = list('12345')
+            random.shuffle(b)
+            context['first_coor'] = a[0] + b[0]
+            context['second_coor'] = a[1] + b[1]
             context['session'] = 'false'
 
         context['customer'] = customer
@@ -1334,39 +1359,39 @@ class Profile(LoginRequiredMixin, TemplateView):
 
         return context
 
-    # def post(self, request, *args, **kwargs):
-    #     """
-    #     Handles POST requests, instantiating a form instance with the passed
-    #     POST variables and then checked for validity.
-    #     """
-    #     form = ProfileForm(request.POST)
-    #     customer = Customer.objects.get(ref=self.kwargs['pk'])
-    #
-    #     if form.is_valid():
-    #         email = form.cleaned_data['email']
-    #         f_quest = form.cleaned_data['first_quest']
-    #
-    #         if email == "" or f_quest == "":
-    #             msg = ""
-    #             if username == "":
-    #                 msg = msg + "  Introduzca su número de tarjeta. "
-    #
-    #             if password == "":
-    #                 msg = msg + " Introduzca su contraseña. "
-    #
-    #             form.add_error(None, msg)
-    #
-    #             context = {'form': form,
-    #                        'pk': self.kwargs['pk'],
-    #                        'customer': customer}
-    #             return render(request, 'profile-security.html', context)
-    #
-    #     else:
-    #         print('else')
-    #         context = {'form': form,
-    #                    'pk': self.kwargs['pk'],
-    #                    'customer': customer}
-    #         return render(request, 'profile-security.html', context)
+        # def post(self, request, *args, **kwargs):
+        #     """
+        #     Handles POST requests, instantiating a form instance with the passed
+        #     POST variables and then checked for validity.
+        #     """
+        #     form = ProfileForm(request.POST)
+        #     customer = Customer.objects.get(ref=self.kwargs['pk'])
+        #
+        #     if form.is_valid():
+        #         email = form.cleaned_data['email']
+        #         f_quest = form.cleaned_data['first_quest']
+        #
+        #         if email == "" or f_quest == "":
+        #             msg = ""
+        #             if username == "":
+        #                 msg = msg + "  Introduzca su número de tarjeta. "
+        #
+        #             if password == "":
+        #                 msg = msg + " Introduzca su contraseña. "
+        #
+        #             form.add_error(None, msg)
+        #
+        #             context = {'form': form,
+        #                        'pk': self.kwargs['pk'],
+        #                        'customer': customer}
+        #             return render(request, 'profile-security.html', context)
+        #
+        #     else:
+        #         print('else')
+        #         context = {'form': form,
+        #                    'pk': self.kwargs['pk'],
+        #                    'customer': customer}
+        #         return render(request, 'profile-security.html', context)
 
 
 class Help(LoginRequiredMixin, TemplateView):

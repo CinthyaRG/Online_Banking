@@ -70,7 +70,6 @@ function validate_elem(a,b,c) {
 function elem_Security(a,b,c,d,e) {
     var validate = validate_elem(a,b,c);
     if (validate) {
-        alert($('#first_coor').text());
         var path = window.location.href.split('/');
         var url = path[0] + "/" + path[1] + "/" + path[2] + "/ajax/validate-elems-seguridad/";
         alert(url);

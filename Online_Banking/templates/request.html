@@ -25,16 +25,33 @@
                                 {% else %}
                                     <a id="btn-tarj_seg" class="btn btn-default btn-group btn-apps pull-right"
                                        type="button" onclick="notification_error('Estimado usuario, ya posee una tarjeta de ' +
-                                            'coordenadas activa, si quiere generar otra primero desactive la actual. ' +
+                                            'coordenadas activa, si quiere generar otra primero anule la actual. ' +
                                             'Esto lo puede realizar en Gestión de Productos.')">
                                         Generar Tarjeta de Seguridad </a>
                                 {% endif %}
                             </div>
-                            <div class="margin-l-45 col-md-5">
-                                <a id="btn-cheq" class="btn btn-default btn-group btn-apps pull-left"
-                                   type="button" href="{% url 'solicitud-chequeras' customer.ref %}">
-                                    Solicitud de Chequeras </a>
-                            </div>
+                            {% if  customer.elemSecurity.cardCoor_id is None %}
+                                <div class="margin-l-45 col-md-5">
+                                    <a id="btn-cheq" class="btn btn-default btn-group btn-apps pull-left"
+                                       type="button" onclick="notification_error('Para realizar una solicitud de chequera debe ' +
+                                     'poseer una tarjeta de coordenadas. Haga click en Generar Tarjeta de Seguridad para generarla.')">
+                                        Solicitud de Chequeras </a>
+                                </div>
+                            {% elif  customer.elemSecurity.cardCoor.status is False %}
+                                <div class="margin-l-45 col-md-5">
+                                    <a id="btn-cheq" class="btn btn-default btn-group btn-apps pull-left"
+                                       type="button" onclick="notification_error('Para realizar una solicitud de chequera debe ' +
+                                        'generar otra tarjeta de coordenadas, debido a que la anterior fue anulada. ' +
+                                        'Ingrese a Solicitudes en Línea y proceda a generarla.')">
+                                        Solicitud de Chequeras </a>
+                                </div>
+                            {% else %}
+                                <div class="margin-l-45 col-md-5">
+                                    <a id="btn-cheq" class="btn btn-default btn-group btn-apps pull-left"
+                                       type="button" href="{% url 'solicitud-chequeras' customer.ref %}">
+                                        Solicitud de Chequeras </a>
+                                </div>
+                            {% endif %}
                         </div>
                         <div class="row margin-t-25">
                             <div class="col-md-6">
@@ -42,11 +59,28 @@
                                    type="button" href="{% url 'solicitud-referencias' customer.ref %}">
                                     Solicitud de Referencias Bancarias </a>
                             </div>
-                            <div class="margin-l-45 col-md-5">
-                                <a id="btn-ref" class="btn btn-default btn-group btn-apps pull-left"
-                                   type="button" href="{% url 'solicitud-citas' customer.ref %}">
-                                    Solicitud de Citas Bancarias </a>
-                            </div>
+                            {% if  customer.elemSecurity.cardCoor_id is None %}
+                                <div class="margin-l-45 col-md-5">
+                                    <a id="btn-cheq" class="btn btn-default btn-group btn-apps pull-left"
+                                       type="button" onclick="notification_error('Para realizar una solicitud de citas debe ' +
+                                     'poseer una tarjeta de coordenadas. Haga click en Generar Tarjeta de Seguridad para generarla.')">
+                                        Solicitud de Citas Bancarias </a>
+                                </div>
+                            {% elif  customer.elemSecurity.cardCoor.status is False %}
+                                <div class="margin-l-45 col-md-5">
+                                    <a id="btn-cheq" class="btn btn-default btn-group btn-apps pull-left"
+                                       type="button" onclick="notification_error('Para realizar una solicitud de citas debe ' +
+                                        'generar otra tarjeta de coordenadas, debido a que la anterior fue anulada. ' +
+                                        'Ingrese a Solicitudes en Línea y proceda a generarla.')">
+                                        Solicitud de Citas Bancarias </a>
+                                </div>
+                            {% else %}
+                                <div class="margin-l-45 col-md-5">
+                                    <a id="btn-ref" class="btn btn-default btn-group btn-apps pull-left"
+                                       type="button" href="{% url 'solicitud-citas' customer.ref %}">
+                                        Solicitud de Citas Bancarias </a>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
