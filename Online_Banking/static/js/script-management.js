@@ -102,14 +102,17 @@ function activate(a,b) {
             type: 'GET',
             dataType: 'json',
             data: {
+                num: $('#abc').text(),
                 p: b,
                 action: a[1]
             },
             success: function (data) {
-                notification_success('Su Tarjeta de Seguridad se activó correctamente');
-                setTimeout(function(){
-                    location.reload();
-                }, 2000);
+                if (data.correct){
+                    notification_success('Su '+b+' se activó correctamente');
+                    setTimeout(function(){
+                        location.reload();
+                    }, 2000);
+                }
             }
 
         })
@@ -119,7 +122,7 @@ function activate(a,b) {
 
 function desactivate(a,b) {
     if (b.includes('Tarjeta')) {
-        var url = path[0] + "/" + path[1] + "/" + path[2] + "/ajax/status-cardCoord/";
+        var url = path[0] + "/" + path[1] + "/" + path[2] + "/ajax/status-product/";
         a = a.split('-');
 
         $.ajax({
@@ -141,6 +144,33 @@ function desactivate(a,b) {
             }
 
         })
+    }
+    else {
+        url = path[0] + "/" + path[1] + "/" + "localhost:8001" + "/ajax/status-product/";
+        a = a.split('-');
+
+        $.ajax({
+            url: url,
+            origin: 'localhost:8000',
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            type: 'GET',
+            dataType: 'json',
+            data: {
+                num: $('#abc').text(),
+                p: b,
+                action: a[1]
+            },
+            success: function (data) {
+                if (data.correct){
+                    notification_success('Su '+b+' se activó correctamente');
+                    setTimeout(function(){
+                        location.reload();
+                    }, 2000);
+                }
+            }
+
+        })
+
     }
 
 }

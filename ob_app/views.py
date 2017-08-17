@@ -822,7 +822,6 @@ class Home_Client(LoginRequiredMixin, TemplateView):
             elems.save()
 
         context['customer'] = customer
-        print(customer.elemSecurity.cardCoor.status)
         context['num'] = customer.user.username[:10]
         context['num2'] = customer.user.username[10:]
 
