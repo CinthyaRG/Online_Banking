@@ -38,44 +38,57 @@ function modify_profile() {
     var confirm = $('#confirm-pass');
     var email = $('#email_user');
 
-    if (!(q1.hasClass('errors') || a1.hasClass('errors') || q2.hasClass('errors') ||
-            a2.hasClass('errors') || password.hasClass('errors') ||
-            confirm.hasClass('errors') || email.hasClass('errors'))) {
-        var path = window.location.href.split('/');
-        var url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/modify-profile/";
+    notification_success('Validando sus datos....');
+    setTimeout(function(){
+        if (!(q1.hasClass('errors') || a1.hasClass('errors') || q2.hasClass('errors') ||
+                a2.hasClass('errors') || password.hasClass('errors') ||
+                confirm.hasClass('errors') || email.hasClass('errors'))) {
+            var path = window.location.href.split('/');
+            var url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/modify-profile/";
 
-        $.ajax({
-            url: url,
-            origin: 'localhost:8000',
-            headers: {'X-CSRFToken': getCookie('csrftoken')},
-            data: {
-                q1: $('#quest1').val(),
-                q2: $('#quest2').val(),
-                a1: $('#answ1').val(),
-                a2: $('#answ2').val(),
-                password: $('#password').val(),
-                email: $('#email_user').val()
-            },
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                if (data.correct) {
-                    if (data.password) {
-                        notification_success('Sus datos han sigo guardados exitosamente. ' +
-                            'Será redirijido al inicio para ingresar con su nueva contraseña.');
-                        setTimeout(function(){
-                            move('logout');
-                        }, 3500);
+            $.ajax({
+                url: url,
+                origin: 'localhost:8000',
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                data: {
+                    q1: $('#quest1').val(),
+                    q2: $('#quest2').val(),
+                    a1: $('#answ1').val(),
+                    a2: $('#answ2').val(),
+                    password: $('#password').val(),
+                    email: $('#email_user').val()
+                },
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.correct) {
+                        if (data.password) {
+                            notification_success('Sus datos han sigo guardados exitosamente. ' +
+                                'Será redirijido al inicio para ingresar con su nueva contraseña.');
+                            setTimeout(function(){
+                                move('logout');
+                            }, 3500);
+                        }
+                        else {
+                            notification_success('Sus datos han sigo guardados exitosamente.');
+                            setTimeout(function(){
+                                notification_success('Actualizando.....');
+                                setTimeout(function(){
+                                    location.reload();
+                                }, 1000);
+                            }, 3500);
+                        }
                     }
                     else {
-                        notification_success('Sus datos han sigo guardados exitosamente.');
+                        notification_error('Hubo un error, intente nuevamente guardar sus datos.');
                     }
                 }
-                else {
-                    notification_error('Hubo un error, intente nuevamente guardar sus datos.');
-                }
-            }
-        })
+            })
 
-    }
+        }
+
+        else{
+            notification_error('Sus nuevos datos presenta errores. Corríjalos e intente nuevamente.')
+        }
+    }, 1500);
 }

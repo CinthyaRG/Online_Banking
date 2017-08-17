@@ -92,6 +92,10 @@ urlpatterns = [
         status_cardcoor,
         name='status-cardCoord'),
     url(
+        r'^ajax/send-email/$',
+        send_email_product,
+        name='send-email-product'),
+    url(
         r'^ajax/first-login/$',
         first_login,
         name='primer-login'),
@@ -132,7 +136,7 @@ urlpatterns = [
         Transfer_others_bank.as_view(),
         name='transf-otros-bancos'),
     url(
-        r'^(?P<pk>\w+)/datos-transferencia/(?P<transfer>\w+)/',
+        r'^(?P<pk>\w+)/datos-transferencia/(?P<aff>\w+)/',
         DataTransfer.as_view(),
         name='datos-transferencia'),
     url(

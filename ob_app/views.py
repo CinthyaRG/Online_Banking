@@ -581,15 +581,60 @@ def status_cardcoor(request):
 
             card_coor.save()
 
-            message_template = 'card_coor_email.html'
+            message_template = 'product_email.html'
             email = customer.user.email
             print('antes de enviar correo coordenadas')
             send_email(subject, message_template, c, email)
 
             data['correct'] = True
-
     else:
-        data['error'] = 'Ha ocurrido un error por favor reingrese sus datos.'
+        data['error'] = 'Ha ocurrido un problema validando sus datos. Intente nuevamente.'
+
+    return JsonResponse(data)
+
+
+@ensure_csrf_cookie
+def send_email_product(request):
+    action = request.GET.get('p', None)
+    p = action.split(' ')
+    data = {}
+
+    customer = Customer.objects.get(user=request.user.id)
+    formato = "%d/%m/%y %I:%M:%S %p"
+    date_time = datetime.datetime.today().strftime(formato).split(" ")
+    date = date_time[0]
+    time = date_time[1] + " " + date_time[2]
+
+    c = {'usuario': customer.user.get_full_name,
+         'fecha': date,
+         'hora': time
+         }
+
+    if p[2] == 'act':
+        subject = 'Actio Capital - Activación de Producto'
+        if p[0] == 'Chequera':
+            c['title'] = 'Activación de ' + p[0]
+            c['msg'] = 'Activación de ' + p[0] + ' número ' + p[1]
+        else:
+            c['title'] = 'Activación de TDC'
+            c['msg'] = 'Activación de ' + p[0] + ' con terminación ' + p[1]
+            c['extra'] = 'Ya puede usar su TDC en cualquier establecimiento como método de pago.'
+    else:
+        subject = 'Actio Capital - Desactivación de Producto'
+        if p[0] == 'Chequera':
+            c['title'] = 'Desactivación de ' + p[0]
+            c['msg'] = 'Desactivación de ' + p[0] + ' número ' + p[1]
+            c['extra'] = 'Recuerde que todos los cheques pertenecientes a esta chequera fueron anulados. ' \
+                         'Por lo tanto, no son válidos.'
+        else:
+            c['title'] = 'Desactivación de TDC'
+            c['msg'] = 'Desactivación de ' + p[0] + ' con terminación ' + p[1]
+            c['extra'] = 'Recuerde que ya no puede usar su TDC como método de pago, hasta que la active nuevamente.'
+
+    message_template = 'product_email.html'
+    email = customer.user.email
+    print('antes de enviar correo coordenadas')
+    send_email(subject, message_template, c, email)
 
     return JsonResponse(data)
 
@@ -761,6 +806,11 @@ def user_login(request):
                         last_login = users.last_login
                         login(request, user)
                         # email_login_successful(user)
+                        if not(customer.elemSecurity.cardCoor_id is None):
+                            elems = ElemSecurity.objects.get(pk=customer.elemSecurity_id)
+                            elems.sessionExpires = False
+                            elems.save()
+
                         user_profile.intent = 0
                         user_profile.save()
                         customer.lastLogin = last_login
@@ -816,10 +866,6 @@ class Home_Client(LoginRequiredMixin, TemplateView):
             Home_Client, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
-        if not(customer.elemSecurity.cardCoor_id is None):
-            elems = ElemSecurity.objects.get(pk=customer.elemSecurity_id)
-            elems.sessionExpires = False
-            elems.save()
 
         context['customer'] = customer
         context['num'] = customer.user.username[:10]
@@ -952,14 +998,14 @@ class Transfer_my_bank(LoginRequiredMixin, TemplateView):
             random.shuffle(a)
             b = list('12345')
             random.shuffle(b)
-            context['first_coor'] = a[0]+b[0]
-            context['second_coor'] = a[1]+b[1]
-            context['card_coor'] = 'true'
+            context['first_coor'] = a[0] + b[0]
+            context['second_coor'] = a[1] + b[1]
             context['session'] = 'false'
 
         context['customer'] = customer
         context['num'] = customer.user.username[:10]
         context['num2'] = customer.user.username[10:]
+        context['affiliate'] = Affiliate.objects.filter(customer=customer.pk)
 
         return context
 
@@ -1140,8 +1186,6 @@ class Request_Coord(LoginRequiredMixin, TemplateView):
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
         elem = ElemSecurity.objects.get(pk=customer.elemSecurity_id)
-        print(elem.pk)
-        print(elem.cardCoor_id is None)
 
         coor = ''
         for i in range(0, 30):
@@ -1180,7 +1224,7 @@ class Request_Coord(LoginRequiredMixin, TemplateView):
                  }
 
             subject = 'Actio Capital - Generación de Tarjeta de Seguridad'
-            message_template = 'card_coor_email.html'
+            message_template = 'product_email.html'
             email = customer.user.email
             print('antes de enviar correo coordenadas')
             send_email(subject, message_template, c, email)
@@ -1203,8 +1247,31 @@ class Request_Checkbook(LoginRequiredMixin, TemplateView):
             Request_Checkbook, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
+        elems = ElemSecurity.objects.get(pk=customer.elemSecurity_id)
+
+        if elems.sessionExpires:
+            context['session'] = 'true'
+        else:
+            quest1 = customer.elemSecurity.question1
+            quest2 = customer.elemSecurity.question2
+            num = random.randint(1, 2)
+            if num == 1:
+                context['question'] = quest1
+            else:
+                context['question'] = quest2
+
+            a = list('ABCDEF')
+            random.shuffle(a)
+            b = list('12345')
+            random.shuffle(b)
+            context['first_coor'] = a[0] + b[0]
+            context['second_coor'] = a[1] + b[1]
+            context['session'] = 'false'
 
         context['customer'] = customer
+        context['num'] = customer.user.username[:10]
+        context['num2'] = customer.user.username[10:]
+
         return context
 
 

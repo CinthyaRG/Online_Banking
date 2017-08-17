@@ -4,8 +4,17 @@
 
 $(document).ready(function (){
     menu();
-    transf_table();
+    // transf_table();
     transf_other_table();
+
+
+    $('#myModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var name = button.data('name');
+        var modal = $(this);
+
+        modal.find('.modal-body #name-aff').text(name.replace(/_/g, ' '));
+    });
 
     if ($("#account1").val() !== '0') {
         $("#balance-acc").css({display:'inline-block'});
@@ -101,9 +110,8 @@ function transf_table() {
     var date_af = ['21/04/2016','23/08/2017','17/04/2016','17/12/2016','12/02/2016'];
 
     $.each(name,function (i,val) {
-        // $("#table-af").append('<tr onclick="move(' +"'elementos-seguridad/21')"+'">' +
-        $("#table-af").append('<tr onclick="move(' +"'datos-transferencia/1"+i+"')"+'">' +
-            '<td><span class="link">' +alias[i]+ '</span></td>' +
+        $("#table-af").append('<tr>' +
+            '<td onclick="move(' +"'datos-transferencia/1"+i+"')"+'"><span class="link cursor">' +alias[i]+ '</span></td>' +
             '<td class="text-bold">' +val+ '</td>' +
             '<td>' +ci[i]+ '</td>' +
             '<td>' +date_af[i]+ '</td>' +
@@ -158,8 +166,6 @@ function send_transfer(a,b,c,d) {
             'Por ejemplo: 23989.99, donde con el punto se indican los decimales.';
     }
     else if (parseFloat($(c).val()) > available) {
-        alert(available);
-        alert(parseFloat($(c).val()));
         $(c).addClass('errors');
         msg = 'El monto de la transferencia no puede ser mayor su monto disponible.';
     }
@@ -203,7 +209,6 @@ function send_transfer(a,b,c,d) {
     }
 }
 
-
 function DatatablesExec() {
     var table = $('#table-transf').DataTable({
         "paging": true,
@@ -213,10 +218,15 @@ function DatatablesExec() {
         "order": [ 0, 'asc' ],
         "info": true,
         "autoWidth": false,
-        "pageLength":5
+        "pageLength":5,
+        "language": {
+            "emptyTable": "No tiene registrado afiliados"
+        }
     });
 
     $("#table-payments_filter").addClass("pull-right");
+    $("#table-transf_paginate").addClass("pull-right");
+    $("#table-transf_paginate").css({height: '60px'});
 }
 
 

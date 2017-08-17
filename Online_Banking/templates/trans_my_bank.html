@@ -20,6 +20,7 @@
     <script>
         $(document).ready(function (){
             var session = String({{session}}) === 'true';
+            alert(session);
 
             if (session) {
                 $('#sec_tranf_my_bank').css({display: 'none'});
@@ -28,12 +29,11 @@
                 $('#body_tranf_my_bank').css({display: 'none'});
             }
 
-            $("#table-transf_paginate").addClass("pull-right");
-            $("#table-transf_paginate").css({height: '60px'});
+            DatatablesExec();
+
             $("#table-transf_filter").addClass("pull-right");
             $("#input_frs_coor").keypad();
             $("#input_snd_coor").keypad();
-            $("#input_frs_coor").keypad({prompt: 'Enter here'});
             $.keypad.setDefaults({prompt: ''});
         });
     </script>
@@ -138,6 +138,35 @@
                             </tr>
                             </thead>
                             <tbody id="table-af">
+                            {% for a in affiliate %}
+                                <td onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
+                                    <span class="link cursor">
+                                        {{ a.alias }}
+                                    </span>
+                                </td>
+                                <td onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
+                                    <span class="text-bold">
+                                        {{ a.name }}
+                                    </span>
+                                </td>
+                                <td onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
+                                    <span>
+                                        {{ a.ident }}
+                                    </span>
+                                </td>
+                                <td onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
+                                    <span class="link cursor">
+                                        {{ a.get_date }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a class="icon-table" href="#"><i class="fa fa-pencil color-icon"></i></a>
+                                    <a class="icon-table open_modal" data-target="#myModal" data-name="{{ a.name }}"
+                                       data-toggle="modal" href="#Modal-Delete">
+                                        <i class="fa fa-close color-delete"></i>
+                                    </a>
+                                </td>
+                            {% endfor %}
                             </tbody>
                             <tfoot>
                             <tr class="bg-gray">
@@ -170,7 +199,7 @@
                         <div class="col-md-1"></div>
                         <div class="col-md-11">
                             <p> ¿Está seguro que desea eliminar a
-                                <strong> CasaMil C.A </strong>de la lista de sus afiliados? </p>
+                                <strong id="name-aff"> </strong> de la lista de sus afiliados? </p>
                         </div>
                     </div>
                 </div>
@@ -178,12 +207,15 @@
                     <div class="row">
                         <div class="col-md-3 col-xs-2"></div>
                         <div class="col-md-3 col-xs-4">
-                            <button type="button" class="btn btn-default btn-apps"
-                                    data-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-default btn-apps" data-dismiss="modal">
+                                Cancelar
+                            </button>
                         </div>
                         <div class="col-md-3 col-xs-3">
-                            <button type="button" class="btn btn-default btn-apps"
-                                    data-dismiss="modal">Aceptar</button>
+                            <a type="button" class="btn btn-default btn-apps" data-dismiss="modal"
+                            href="#">
+                                Aceptar
+                            </a>
                         </div>
                     </div>
                 </div>

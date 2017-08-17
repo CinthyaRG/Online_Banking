@@ -74,6 +74,16 @@ class Affiliate(models.Model):
     email = models.EmailField()
     alias = models.CharField(max_length=40)
     customer = models.ForeignKey(Customer)
+    date = models.DateField(null=True, blank=True)
+
+    def get_date(self):
+        formato = "%d/%m/%y"
+        if self.date is None:
+            return ''
+
+        date = self.date.strftime(formato)
+
+        return date
 
 
 class Service(models.Model):

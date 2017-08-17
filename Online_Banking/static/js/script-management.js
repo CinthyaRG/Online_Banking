@@ -16,7 +16,10 @@ function DatatablesExec() {
         "destroy": true,
         "ordering": false,
         "info": false,
-        "autoWidth": true
+        "autoWidth": true,
+        "language": {
+            "emptyTable": "No tiene productos que activar o desactivar"
+        }
     });
 
 }
@@ -66,111 +69,169 @@ function management_table(management) {
 
 function activate(a,b) {
     var url;
-    alert(b);
-    alert(a);
-    if (b.includes('Tarjeta')) {
-        url = path[0] + "/" + path[1] + "/" + path[2] + "/ajax/status-cardCoord/";
-        a = a.split('-');
+    notification_success('Activando producto....');
+    setTimeout(function(){
+        if (b.includes('Tarjeta')) {
+            url = path[0] + "/" + path[1] + "/" + path[2] + "/ajax/status-cardCoord/";
+            a = a.split('-');
 
-        $.ajax({
-            url: url,
-            origin: 'localhost:8000',
-            headers: {'X-CSRFToken': getCookie('csrftoken')},
-            type: 'GET',
-            dataType: 'json',
-            data: {
-                s: a[0],
-                action: a[1]
-            },
-            success: function (data) {
-                notification_success('Su Tarjeta de Seguridad se activó correctamente');
-                setTimeout(function(){
-                    location.reload();
-                }, 2000);
-            }
-
-        })
-    }
-    else {
-        url = path[0] + "/" + path[1] + "/" + "localhost:8001" + "/ajax/status-cardCoord/";
-        a = a.split('-');
-
-        $.ajax({
-            url: url,
-            origin: 'localhost:8000',
-            headers: {'X-CSRFToken': getCookie('csrftoken')},
-            type: 'GET',
-            dataType: 'json',
-            data: {
-                num: $('#abc').text(),
-                p: b,
-                action: a[1]
-            },
-            success: function (data) {
-                if (data.correct){
-                    notification_success('Su '+b+' se activó correctamente');
-                    setTimeout(function(){
-                        location.reload();
-                    }, 2000);
+            $.ajax({
+                url: url,
+                origin: 'localhost:8000',
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    s: a[0],
+                    action: a[1]
+                },
+                success: function (data) {
+                    if (data.user_exists) {
+                        notification_success('Su Tarjeta de Seguridad se activó correctamente');
+                        setTimeout(function(){
+                            notification_success('Actualizando.....');
+                            setTimeout(function(){
+                                location.reload();
+                            }, 1000);
+                        }, 3500);
+                    }
+                    else {
+                        notification_error(data.error);
+                    }
                 }
-            }
+            })
+        }
+        else {
+            url = path[0] + "/" + path[1] + "/" + "localhost:8001" + "/ajax/status-product/";
+            a = a.split('-');
 
-        })
+            $.ajax({
+                url: url,
+                origin: 'localhost:8000',
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    num: $('#abc').text(),
+                    p: b,
+                    action: a[1]
+                },
+                success: function (data) {
+                    if (!(data.product)){
+                        notification_error(data.msg);
+                    }
+                    else{
+                        if (data.correct){
+                            notification_success(data.msg);
+                            send_email(b,a[1]);
+                            setTimeout(function(){
+                                notification_success('Actualizando.....');
+                                setTimeout(function(){
+                                    location.reload();
+                                }, 1000);
+                            }, 3500);
+                        }
+                        else {
+                            notification_error(data.msg);
+                        }
+                    }
+                }
 
-    }
+            })
+        }
+    }, 1500);
+
 }
 
 function desactivate(a,b) {
-    if (b.includes('Tarjeta')) {
-        var url = path[0] + "/" + path[1] + "/" + path[2] + "/ajax/status-product/";
-        a = a.split('-');
+    var url;
+    notification_success('Desactivando producto....');
+    setTimeout(function(){
+        if (b.includes('Tarjeta')) {
+            url = path[0] + "/" + path[1] + "/" + path[2] + "/ajax/status-cardCoord/";
+            a = a.split('-');
 
-        $.ajax({
-            url: url,
-            origin: 'localhost:8000',
-            headers: {'X-CSRFToken': getCookie('csrftoken')},
-            type: 'GET',
-            dataType: 'json',
-            data: {
-                s: a[0],
-                action: a[1]
-            },
-            success: function (data) {
-                notification_success('Su Tarjeta de Seguridad se anuló correctamente. Para su nuevo ingreso en ' +
-                    'la aplicación debe generar una nueva para realizar operaciones especiales.');
-                setTimeout(function(){
-                    location.reload();
-                }, 2000);
-            }
-
-        })
-    }
-    else {
-        url = path[0] + "/" + path[1] + "/" + "localhost:8001" + "/ajax/status-product/";
-        a = a.split('-');
-
-        $.ajax({
-            url: url,
-            origin: 'localhost:8000',
-            headers: {'X-CSRFToken': getCookie('csrftoken')},
-            type: 'GET',
-            dataType: 'json',
-            data: {
-                num: $('#abc').text(),
-                p: b,
-                action: a[1]
-            },
-            success: function (data) {
-                if (data.correct){
-                    notification_success('Su '+b+' se activó correctamente');
-                    setTimeout(function(){
-                        location.reload();
-                    }, 2000);
+            $.ajax({
+                url: url,
+                origin: 'localhost:8000',
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    s: a[0],
+                    action: a[1]
+                },
+                success: function (data) {
+                    if (data.user_exists) {
+                        notification_success('Su Tarjeta de Seguridad se desactivó correctamente. Para su nuevo ingreso en ' +
+                            'la aplicación debe generar una nueva para realizar operaciones especiales.');
+                        setTimeout(function(){
+                            notification_success('Actualizando.....');
+                            setTimeout(function(){
+                                location.reload();
+                            }, 1000);
+                        }, 3500);
+                    }
+                    else {
+                        notification_error(data.error);
+                    }
                 }
-            }
+            })
+        }
+        else {
+            url = path[0] + "/" + path[1] + "/" + "localhost:8001" + "/ajax/status-product/";
+            a = a.split('-');
 
-        })
+            $.ajax({
+                url: url,
+                origin: 'localhost:8000',
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    num: $('#abc').text(),
+                    p: b,
+                    action: a[1]
+                },
+                success: function (data) {
+                    if (!(data.product)){
+                        notification_error(data.msg);
+                    }
+                    else{
+                        if (data.correct){
+                            notification_success(data.msg);
+                            send_email(b,a[1]);
+                            setTimeout(function(){
+                                notification_success('Actualizando.....');
+                                setTimeout(function(){
+                                    location.reload();
+                                }, 1000);
+                            }, 3500);
+                        }
+                        else {
+                            notification_error(data.msg);
+                        }
+                    }
+                }
 
-    }
+            })
 
+        }
+    }, 1500);
+
+}
+
+function send_email(a,b) {
+    var url = path[0] + "/" + path[1] + "/" + path[2] + "/ajax/send-email/";
+
+    $.ajax({
+        url: url,
+        origin: 'localhost:8000',
+        headers: {'X-CSRFToken': getCookie('csrftoken')},
+        type: 'GET',
+        dataType: 'json',
+        data: {
+            p: String(a).replace('-',' ')+' '+String(b)
+        }
+    })
 }

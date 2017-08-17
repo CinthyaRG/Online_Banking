@@ -14,7 +14,10 @@ $(document).ready(function (){
         "order": [ 0, 'asc' ],
         "info": true,
         "autoWidth": false,
-        "pageLength":5
+        "pageLength":5,
+        "language": {
+            "emptyTable": "No tiene registrado proveedores de pago"
+        }
     });
 });
 

@@ -111,6 +111,9 @@ function DatatablesExec() {
         "info": true,
         "autoWidth": true,
         "pageLength":5,
+        "language": {
+            "emptyTable": "No tiene movimientos en la cuenta en el mes actual"
+        },
         dom:'lr<"table-filter-container">tip',
         initComplete: function () {
             $('#btn-con').click(function () {

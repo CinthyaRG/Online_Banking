@@ -17,7 +17,7 @@
                     <div class="box-body">
                         <dl class="dl-horizontal label-input">
                             <div class="row">
-                                <div class="col-md-6 col-xs-5">
+                                <div class="col-md-5 col-xs-5">
                                     <label class="pull-right">
                                         <span class="text-danger"> * </span> Banco: </label>
                                 </div>
@@ -27,7 +27,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6 col-xs-5">
+                                <div class="col-md-5 col-xs-5">
                                     <label class="pull-right">
                                         <span class="text-danger"> * </span>
                                         Número de cuenta: </label>
@@ -38,7 +38,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6 col-xs-5">
+                                <div class="col-md-5 col-xs-5">
                                     <label class="pull-right">
                                         <span class="text-danger"> * </span>
                                         Nombre del Afiliado: </label>
@@ -48,14 +48,14 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6 col-xs-5">
+                                <div class="col-md-5 col-xs-5">
                                     <label class="pull-right">
                                         <span class="text-danger"> * </span>
                                         Documento de Identidad: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows">
                                     <select id="select-ci" class="select2 input-register">
-                                        <option selected="selected">V- </option>
+                                        <option selected>V- </option>
                                         <option>E- </option>
                                         <option>J- </option>
                                     </select>
@@ -63,15 +63,16 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6 col-xs-5">
-                                    <label class="pull-right">Alias: </label>
+                                <div class="col-md-5 col-xs-5">
+                                    <label class="pull-right">
+                                        <span class="text-danger"> * </span> Alias: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-6 rows">
                                     <input id="nickname" maxlength="20" class="input-register">
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6 col-xs-5">
+                                <div class="col-md-5 col-xs-5">
                                     <label class="pull-right">
                                         <span class="text-danger"> * </span> Email: </label>
                                 </div>
@@ -80,12 +81,12 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6 col-xs-5">
+                                <div class="col-md-5 col-xs-5">
                                     <label class="pull-right">
                                         <span class="text-danger"> * </span> Confirmación Email: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows">
-                                    <input id="email" class="input-register field-register">
+                                    <input id="email-confirm" class="input-register field-register">
                                 </div>
                             </div>
                         </dl>
@@ -99,7 +100,8 @@
                 <a id="btn-back" class="btn btn-default btn-group btn-apps"
                    type="button" onclick="window.history.back()"> Cancelar </a>
                 <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
-                   type="button" onclick="window.history.back()"> Agregar </a>
+                   type="button" onclick="add_affiliate('#bank','#num-acc','#name','#select-ci','#ci',
+                   '#nickname','#email','#email-confirm')"> Agregar </a>
             </div>
 
         </div>
