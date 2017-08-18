@@ -11,9 +11,12 @@ $(document).ready(function (){
     $('#myModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
         var name = button.data('name');
+        var url = button.data('url');
         var modal = $(this);
 
         modal.find('.modal-body #name-aff').text(name.replace(/_/g, ' '));
+        modal.find('.modal-body #delete-aff').attr("href", url );
+
     });
 
     if ($("#account1").val() !== '0') {

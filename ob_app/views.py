@@ -1005,7 +1005,8 @@ class Transfer_my_bank(LoginRequiredMixin, TemplateView):
         context['customer'] = customer
         context['num'] = customer.user.username[:10]
         context['num2'] = customer.user.username[10:]
-        context['affiliate'] = Affiliate.objects.filter(customer=customer.pk)
+        context['affiliate'] = Affiliate.objects.filter(customer=customer.pk,
+                                                        bank='BANCO ACTIO CAPITAL, C.A.')
 
         return context
 
@@ -1042,6 +1043,7 @@ class Transfer_others_bank(LoginRequiredMixin, TemplateView):
             context['session'] = 'false'
 
         context['customer'] = customer
+        context['affiliate'] = Affiliate.objects.filter(customer=customer.pk).exclude(bank='BANCO ACTIO CAPITAL, C.A.')
         return context
 
 

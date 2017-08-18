@@ -162,7 +162,7 @@
                                 <td>
                                     <a class="icon-table" href="#"><i class="fa fa-pencil color-icon"></i></a>
                                     <a class="icon-table open_modal" data-target="#myModal" data-name="{{ a.name }}"
-                                       data-toggle="modal" href="#Modal-Delete">
+                                       data-toggle="modal" href="#Modal-Delete" data-url="{% url '' %}">
                                         <i class="fa fa-close color-delete"></i>
                                     </a>
                                 </td>
@@ -212,7 +212,7 @@
                             </button>
                         </div>
                         <div class="col-md-3 col-xs-3">
-                            <a type="button" class="btn btn-default btn-apps" data-dismiss="modal"
+                            <a type="button" id="delete-aff" class="btn btn-default btn-apps" data-dismiss="modal"
                             href="#">
                                 Aceptar
                             </a>
