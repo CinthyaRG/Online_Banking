@@ -146,12 +146,12 @@
                                         {{ p.identService }}
                                     </span>
                                     </td>
-                                    <td class="w-200" onclick="location.href='{% url 'datos-pago' pk=customer.ref aff=a.id %}'">
+                                    <td class="w-200" onclick="location.href='{% url 'datos-pago' pk=customer.ref aff=p.id %}'">
                                     <span  class="cursor">
                                         {{ p.get_type }}
                                     </span>
                                     </td>
-                                    <td class="w-180" onclick="location.href='{% url 'datos-pago' pk=customer.ref aff=a.id %}'">
+                                    <td class="w-180" onclick="location.href='{% url 'datos-pago' pk=customer.ref aff=p.id %}'">
                                     <span class="cursor">
                                         {{ p.numCard }}
                                     </span>

@@ -89,7 +89,7 @@ class Affiliate(models.Model):
 class Service(models.Model):
     ident = models.CharField(validators=[IDEN_VALIDATOR], max_length=11, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
-    numCard = models.CharField(max_length=16, blank=True, null=True)
+    numCard = models.CharField(max_length=32, blank=True, null=True)
     identService = models.CharField(max_length=32)
     alias = models.CharField(max_length=40)
     customer = models.ForeignKey(Customer)
@@ -97,10 +97,10 @@ class Service(models.Model):
     def get_type(self):
         if self.identService.find('TDC') == 0:
             name = 'TDC'
-        elif self.identService.find('prestamo') == 0:
+        elif self.identService.find('Préstamo') == 0:
             name = 'Préstamo'
-        elif self.identService.find('movistar') == 0 or self.identService.find('digitel') == 0 \
-                or self.identService.find('movilnet') == 0 or self.identService.find('cantv') == 0:
+        elif self.identService.find('Movistar') == 0 or self.identService.find('Digitel') == 0 \
+                or self.identService.find('Movilnet') == 0 or self.identService.find('CANTV') == 0:
             name = 'Recarga'
         else:
             name = 'Servicio'

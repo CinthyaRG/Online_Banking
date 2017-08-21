@@ -1,3 +1,5 @@
+import json
+from json import JSONDecoder
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse, HttpResponseRedirect
@@ -236,12 +238,14 @@ def validate_pass(request):
     a2 = request.GET.get('answer2', None)
     password = request.GET.get('password', None)
     ci = request.GET.get('ci', None)
+    products = json.loads(request.GET.get('p', None))
+    print(type(products))
 
     data = {
         'user_exists': User.objects.filter(username=username).exists()
     }
 
-    if data['user_exists']:
+    if data['user_exists'] and not(products is None):
         user = User.objects.get(username=username)
 
         try:
@@ -274,6 +278,17 @@ def validate_pass(request):
                             elemSecurity=elem_sec,
                             passExpires=pass_expires)
         customer.save()
+
+        for p in products:
+            print('PRODUCT****************')
+            print(p)
+            service = Service(ident=customer.ident,
+                              email=user.email,
+                              identService=p[0],
+                              numCard=p[1],
+                              alias=p[1],
+                              customer=customer)
+            service.save()
 
         key_expires = datetime.datetime.today() + datetime.timedelta(days=1)
         user_profile = UserProfile.objects.get(user=user)
@@ -648,11 +663,13 @@ def register_affiliate(request):
     nickname = request.GET.get('nick', None)
     email = request.GET.get('email', None)
     id = int(request.GET.get('option', 0))
-    print(id)
+    print(bank)
 
     data = {
         'success': False,
-        'exist': False
+        'exist': False,
+        'my_acc': False,
+        'nick_exist': False
     }
 
     try:
@@ -665,74 +682,93 @@ def register_affiliate(request):
                 data['exist'] = True
                 return JsonResponse(data)
             else:
-                affiliate.numAccount = num_acc
-                affiliate.name = name
-                affiliate.ident = ci
-                affiliate.alias = nickname
-                affiliate.email = email
-                affiliate.bank = bank
-                affiliate.save()
-                data['success'] = True
+                if bank == 'BANCO ACTIO CAPITAL, C.A.' and ci == customer.ident:
+                    data['my_acc'] = True
+                    return JsonResponse(data)
+                elif bank == 'BANCO ACTIO CAPITAL, C.A.' and Affiliate.objects.filter(bank='BANCO ACTIO CAPITAL, C.A.',
+                                                                                      customer=customer.id,
+                                                                                      alias=nickname).exclude(pk=id).exists():
+                    data['nick_exist'] = True
+                elif bank != 'BANCO ACTIO CAPITAL, C.A.' and Affiliate.objects.filter(customer=customer.id,
+                                                                                      alias=nickname). \
+                        exclude(bank='BANCO ACTIO CAPITAL, C.A.', pk=id).exists():
+                    data['nick_exist'] = True
+                else:
+                    affiliate.numAccount = num_acc
+                    affiliate.name = name
+                    affiliate.ident = ci
+                    affiliate.alias = nickname
+                    affiliate.email = email
+                    affiliate.bank = bank
+                    affiliate.save()
+                    data['success'] = True
 
-                formato = "%d/%m/%y %I:%M:%S %p"
-                date_time = datetime.datetime.today().strftime(formato).split(" ")
-                date = date_time[0]
-                time = date_time[1] + " " + date_time[2]
+                    formato = "%d/%m/%y %I:%M:%S %p"
+                    date_time = datetime.datetime.today().strftime(formato).split(" ")
+                    date = date_time[0]
+                    time = date_time[1] + " " + date_time[2]
 
-                subject = 'Actio Capital - Modificación de afiliación de cuenta'
+                    subject = 'Actio Capital - Modificación de afiliación de cuenta'
 
-                c = {'usuario': customer.user.get_full_name,
-                     'fecha': date,
-                     'hora': time,
-                     'title': 'Modificación de afiliación de cuenta',
-                     'msg': 'La cuenta número ' + num_acc[:6] + '**********' + num_acc[16:] +
-                            'del banco ' + bank + ', a nombre de ' + name
-                     }
+                    c = {'usuario': customer.user.get_full_name,
+                         'fecha': date,
+                         'hora': time,
+                         'title': 'Modificación de afiliación de cuenta',
+                         'msg': 'La cuenta número ' + num_acc[:6] + '**********' + num_acc[16:] +
+                                ' del banco ' + bank + ', a nombre de ' + name
+                         }
 
-                message_template = 'affiliate_email.html'
-                email = customer.user.email
-                print('antes de enviar correo de modificacion')
-                # send_email(subject, message_template, c, email)
+                    message_template = 'affiliate_email.html'
+                    email = customer.user.email
+                    print('antes de enviar correo de modificacion')
+                    send_email(subject, message_template, c, email)
         else:
-            print('entro else')
-            if Affiliate.objects.filter(numAccount=num_acc).exists():
-                print('existe?')
+            if Affiliate.objects.filter(numAccount=num_acc, customer=customer.id).exists():
                 data['exist'] = True
                 return JsonResponse(data)
-
             else:
-                print('no existe')
-                affiliate = Affiliate(bank=bank,
-                                      numAccount=num_acc,
-                                      name=name,
-                                      ident=ci,
-                                      email=email,
-                                      alias=nickname,
-                                      date=datetime.date.today(),
-                                      customer=customer)
-                affiliate.save()
-                print('GUARDAAAA')
-                data['success'] = True
+                if bank == 'BANCO ACTIO CAPITAL, C.A.' and ci == customer.ident:
+                    data['my_acc'] = True
+                    return JsonResponse(data)
+                elif bank == 'BANCO ACTIO CAPITAL, C.A.' and Affiliate.objects.filter(bank='BANCO ACTIO CAPITAL, C.A.',
+                                                                                      customer=customer.id,
+                                                                                      alias=nickname).exists():
+                    data['nick_exist'] = True
+                elif bank != 'BANCO ACTIO CAPITAL, C.A.' and Affiliate.objects.filter(customer=customer.id,
+                                                                                      alias=nickname).\
+                        exclude(bank='BANCO ACTIO CAPITAL, C.A.').exists():
+                    data['nick_exist'] = True
+                else:
+                    affiliate = Affiliate(bank=bank,
+                                          numAccount=num_acc,
+                                          name=name,
+                                          ident=ci,
+                                          email=email,
+                                          alias=nickname,
+                                          date=datetime.date.today(),
+                                          customer=customer)
+                    affiliate.save()
+                    data['success'] = True
 
-                formato = "%d/%m/%y %I:%M:%S %p"
-                date_time = datetime.datetime.today().strftime(formato).split(" ")
-                date = date_time[0]
-                time = date_time[1] + " " + date_time[2]
+                    formato = "%d/%m/%y %I:%M:%S %p"
+                    date_time = datetime.datetime.today().strftime(formato).split(" ")
+                    date = date_time[0]
+                    time = date_time[1] + " " + date_time[2]
 
-                subject = 'Actio Capital - Afiliación de nueva cuenta'
+                    subject = 'Actio Capital - Afiliación de nueva cuenta'
 
-                c = {'usuario': customer.user.get_full_name,
-                     'fecha': date,
-                     'hora': time,
-                     'title': 'Afiliación de nueva cuenta',
-                     'msg': 'La cuenta número ' + num_acc[:6] + '**********' + num_acc[16:] +
-                            'del banco ' + bank + ', a nombre de ' + name
-                     }
+                    c = {'usuario': customer.user.get_full_name,
+                         'fecha': date,
+                         'hora': time,
+                         'title': 'Afiliación de nueva cuenta',
+                         'msg': 'La cuenta número ' + num_acc[:6] + '**********' + num_acc[16:] +
+                                ' del banco ' + bank + ', a nombre de ' + name
+                         }
 
-                message_template = 'affiliate_email.html'
-                email = customer.user.email
-                print('antes de enviar correo de afiliacion')
-                # send_email(subject, message_template, c, email)
+                    message_template = 'affiliate_email.html'
+                    email = customer.user.email
+                    print('antes de enviar correo de afiliacion')
+                    send_email(subject, message_template, c, email)
     except Customer.DoesNotExist:
         pass
 
@@ -741,7 +777,6 @@ def register_affiliate(request):
 
 @ensure_csrf_cookie
 def delete_affiliate(request, pk):
-    print('AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII')
     print(pk)
     data = {
         'user_exist': User.objects.filter(pk=request.user.id).exists(),

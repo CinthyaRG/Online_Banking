@@ -264,56 +264,56 @@ function validation_forgot(a,b,c,d,e,f) {
                         $('#quest-sec').text(data.quest);
                         $("#data").text(data.p);
                         $.ajax({
-                        url: url_api,
-                        origin: 'localhost:8000',
-                        headers: {'X-CSRFToken': getCookie('csrftoken')},
-                        data: {
-                            numtarj: numtarj,
-                            ccv: ccv,
-                            month: month,
-                            year: year,
-                            ci: ci
-                        },
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function (data) {
-                            if (data.correct) {
-                                $("#name_customer").text(data.customer_name);
-                                $("#last-name_customer").text(data.customer_last);
-                                $("#ci_customer").text(data.customer_ident);
-                                $("#phone-home").text(data.phone_home);
-                                $("#cellphone").text(data.cellphone);
-                                $("#phone-office").text(data.phone_office);
-                                $("#birthday").text(data.birthday);
-                                pagNext(1);
-                                $('#answer').val('');
-                            }
-                            else {
-                                $("#error").append('<p class="text-danger margin-error">'+
-                                    data.error +'</p>');
-                                effect_error("#error");
+                            url: url_api,
+                            origin: 'localhost:8000',
+                            headers: {'X-CSRFToken': getCookie('csrftoken')},
+                            data: {
+                                numtarj: numtarj,
+                                ccv: ccv,
+                                month: month,
+                                year: year,
+                                ci: ci
+                            },
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function (data) {
+                                if (data.correct) {
+                                    $("#name_customer").text(data.customer_name);
+                                    $("#last-name_customer").text(data.customer_last);
+                                    $("#ci_customer").text(data.customer_ident);
+                                    $("#phone-home").text(data.phone_home);
+                                    $("#cellphone").text(data.cellphone);
+                                    $("#phone-office").text(data.phone_office);
+                                    $("#birthday").text(data.birthday);
+                                    pagNext(1);
+                                    $('#answer').val('');
+                                }
+                                else {
+                                    $("#error").append('<p class="text-danger margin-error">'+
+                                        data.error +'</p>');
+                                    effect_error("#error");
 
-                                if (!(data.product)){
-                                    $(a).addClass('errors');
+                                    if (!(data.product)){
+                                        $(a).addClass('errors');
+                                    }
+                                    if (!(data.ccv)){
+                                        $(b).addClass('errors');
+                                    }
+                                    if (!(data.month)){
+                                        $(c).addClass('errors');
+                                    }
+                                    if (!(data.year)){
+                                        $(d).addClass('errors');
+                                    }
+                                    if (!(data.ci)){
+                                        $(f).addClass('errors');
+                                    }
                                 }
-                                if (!(data.ccv)){
-                                    $(b).addClass('errors');
-                                }
-                                if (!(data.month)){
-                                    $(c).addClass('errors');
-                                }
-                                if (!(data.year)){
-                                    $(d).addClass('errors');
-                                }
-                                if (!(data.ci)){
-                                    $(f).addClass('errors');
-                                }
+                            },
+                            error: function (data) {
+                                alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
                             }
-                        },
-                        error: function (data) {
-                            alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
-                        }
-                    });
+                        });
                     }
                 }
             },
@@ -489,9 +489,9 @@ function validate_questions() {
 
     $("#error_step4").empty();
 
-    if ( (a1.hasClass('errors')) || (a1.val() == "") || 
-        (a2.hasClass('errors')) || (a2.val() == "") || 
-        (q1.hasClass('errors')) || (q1.val() == "") || 
+    if ( (a1.hasClass('errors')) || (a1.val() == "") ||
+        (a2.hasClass('errors')) || (a2.val() == "") ||
+        (q1.hasClass('errors')) || (q1.val() == "") ||
         (q2.hasClass('errors')) || (q2.val() == "") ||
         (a1.val() == a2.val()) ||
         (a1.val() == q2.val()) ||
@@ -546,8 +546,8 @@ function validate_ques() {
                         pagNext(2);
                     }
                     else {
-                       $("#error_step2").append('<p class="text-danger margin-error">'+
-                        msj_error +'</p>');
+                        $("#error_step2").append('<p class="text-danger margin-error">'+
+                            msj_error +'</p>');
                         effect_error("#error_step2");
                         a1.addClass('errors');
                     }
@@ -586,6 +586,8 @@ function validate_pass() {
     var msj_error = "Hubo un error en la conexión intente de nuevo. Gracias.";
     var path = window.location.href.split('/');
     var url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/validate-pass/";
+    var url2 = path[0]+"/"+path[1]+"/localhost:8001/ajax/get-product/";
+    var products = [];
 
     $("#error_step5").empty();
 
@@ -599,47 +601,63 @@ function validate_pass() {
         $('#confirm').addClass('text-danger');
     }
     else if ( (min.hasClass('text-danger')) ||
-        (carac.hasClass('text-danger')) || (repeat.hasClass('text-danger')) || 
-        (num.hasClass('text-danger')) || (spec.hasClass('text-danger')) || 
+        (carac.hasClass('text-danger')) || (repeat.hasClass('text-danger')) ||
+        (num.hasClass('text-danger')) || (spec.hasClass('text-danger')) ||
         (pers.hasClass('text-danger')) ) {
         $('#error-pass').text(msj);
     }
     else {
         $.ajax({
-            url: url,
-            headers: {'X-CSRFToken': getCookie('csrftoken')},
-            data: {
-                question1: q1,
-                question2: q2,
-                answer1: a1,
-                answer2: a2,
-                password: password.val(),
-                ci: ci_cust,
-                username: username
-            },
+            url: url2,
             type: 'GET',
+            data: {
+                num: username
+            },
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
             dataType: 'json',
             success: function (data) {
-                if (data.user_exists) {
-                    if (data.correct) {
-                        location.href= path[0]+"/"+path[1]+"/"+path[2]+"/registro-exitoso";
-                    }
-                    else {
-                       $("#error_step5").append('<p class="text-danger margin-error">'+
-                        msj_error +'</p>');
-                        effect_error("#error_step5"); 
-                    }
-                }
-                else {
-                    $("#error").append('<p class="text-danger margin-error">'+
-                        data.error +'</p>');
-                    effect_error("#error");
-                    pagBack(2)
-                }
+                if (data.correct) {
+                    products = JSON.stringify(data.product);
+                    alert(products);
+                    $.ajax({
+                        url: url,
+                        headers: {'X-CSRFToken': getCookie('csrftoken')},
+                        data: {
+                            question1: q1,
+                            question2: q2,
+                            answer1: a1,
+                            answer2: a2,
+                            password: password.val(),
+                            ci: ci_cust,
+                            username: username,
+                            p: products
+                        },
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.user_exists) {
+                                if (data.correct) {
+                                    location.href= path[0]+"/"+path[1]+"/"+path[2]+"/registro-exitoso";
+                                }
+                                else {
+                                    $("#error_step5").append('<p class="text-danger margin-error">'+
+                                        msj_error +'</p>');
+                                    effect_error("#error_step5");
+                                }
+                            }
+                            else {
+                                $("#error").append('<p class="text-danger margin-error">'+
+                                    data.error +'</p>');
+                                effect_error("#error");
+                                pagBack(2)
+                            }
 
-            },
-            error: function (data) {
-                alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+                        },
+                        error: function (data) {
+                            alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+                        }
+                    });
+                }
             }
         });
     }
@@ -673,8 +691,8 @@ function validate_pass_forgot() {
         $('#confirm').addClass('text-danger');
     }
     else if ( (old.hasClass('text-danger')) || (min.hasClass('text-danger')) ||
-        (carac.hasClass('text-danger')) || (repeat.hasClass('text-danger')) || 
-        (num.hasClass('text-danger')) || (spec.hasClass('text-danger')) || 
+        (carac.hasClass('text-danger')) || (repeat.hasClass('text-danger')) ||
+        (num.hasClass('text-danger')) || (spec.hasClass('text-danger')) ||
         (pers.hasClass('text-danger')) ) {
         $('#error-pass').text(msj);
     }
@@ -694,8 +712,8 @@ function validate_pass_forgot() {
                         location.href= path[0]+"/"+path[1]+"/"+path[2]+"/nueva-pass-exitosa";
                     }
                     else {
-                       $("#error_step5").append('<p class="text-danger margin-error">'+
-                        msj_error +'</p>');
+                        $("#error_step5").append('<p class="text-danger margin-error">'+
+                            msj_error +'</p>');
                         effect_error("#error_step5");
                     }
                 }

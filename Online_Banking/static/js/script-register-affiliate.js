@@ -50,6 +50,11 @@ $(document).ready(function (){
             $(c).addClass('errors');
             errors = false;
         }
+        else if ($.trim($(c).val()).split(' ')< 2) {
+            notification_error('El nombre del afiliado debe incluir al menos un nombre y un apellido.');
+            $(c).addClass('errors');
+            errors = false;
+        }
     });
 
     $(d).focusout(function () {
@@ -237,7 +242,7 @@ function add_affiliate(a,b,c,d,e,f,g,h) {
                     num: $(b).val(),
                     name: $(c).val(),
                     ci: $(d).val()+$(e).val(),
-                    nick: $(f).val(),
+                    nick: $.trim($(f).val()),
                     email: $(g).val()
                 },
                 type: 'GET',
@@ -250,9 +255,19 @@ function add_affiliate(a,b,c,d,e,f,g,h) {
                         }, 3000);
                     }
                     else{
+                        if (data.my_acc){
+                            notification_error('Registro fallido, no es necesario registrar sus cuentas ' +
+                                'con Actio Capital. Puede transferirse entre sus cuentas desde la opción del menú ' +
+                                'Transferencias-Mis Cuentas');
+                            $(e).addClass('errors');
+                        }
+                        if (data.nick_exist){
+                            notification_error('El alias escogido ya existe ingrese uno diferente.');
+                            $(f).addClass('errors');
+                        }
                         if (data.exist){
                             notification_error('Registro fallido, el número de cuenta ya está afiliado.');
-                            $('#num-acc').addClass('errors');
+                            $(b).addClass('errors');
                         }
                     }
                 }
@@ -296,9 +311,20 @@ function modify_affiliate(a,b,c,d,e,f,g,h) {
                         }, 3000);
                     }
                     else{
+                        if (data.my_acc){
+                            notification_error('Registro fallido, no es necesario registrar sus cuentas ' +
+                                'con Actio Capital. Puede transferirse entre sus cuentas desde la opción del menú ' +
+                                'Transferencias-Mis Cuentas');
+                            $(e).addClass('errors');
+                        }
+                        if (data.nick_exist){
+                            notification_error('El alias escogido ya existe ingrese uno diferente.');
+                            $(f).addClass('errors');
+                        }
                         if (data.exist){
                             notification_error('Modificación fallida, el número de cuenta ya ' +
                                 'está registrado a otro afiliado.');
+                            $(b).addClass('errors');
                         }
                     }
                 }

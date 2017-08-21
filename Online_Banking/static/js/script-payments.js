@@ -4,7 +4,6 @@
 
 $(document).ready(function (){
     menu();
-    payments_table();
 
     var table = $('#table-payments').DataTable({
         "paging": true,
