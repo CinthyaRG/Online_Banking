@@ -19,7 +19,6 @@
     <script>
         $(document).ready(function (){
             var session = String({{session}}) === 'true';
-            var a = String({{num}}) + String({{num2}});
             var path = window.location.href.split('/');
             var url_api = path[0]+"/"+path[1]+"/"+"localhost:8001"+"/ajax/validate_data/";
 
@@ -42,7 +41,7 @@
                 origin: 'localhost:8000',
                 headers: {'X-CSRFToken': getCookie('csrftoken')},
                 data: {
-                    numtarj: a,
+                    numtarj: '{{ customer.user.username }}',
                     profile: 0
                 },
                 type: 'GET',

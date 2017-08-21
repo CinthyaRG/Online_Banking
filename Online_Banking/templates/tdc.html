@@ -18,7 +18,6 @@
     <script src="{% static 'plugins/pnotify/pnotify.custom.min.js' %}"></script>
     <script>
         $(document).ready(function (){
-            var a = String({{num}}) + String({{num2}});
             menu();
             $('#tdc_drop').change(function () {
                 change_drop('#tdc_drop');
@@ -71,7 +70,7 @@
                         origin: 'localhost:8000',
                         headers: {'X-CSRFToken': getCookie('csrftoken')},
                         data: {
-                            num: a,
+                            num: '{{ customer.user.username }}',
                             start: start,
                             end: end,
                             select: select,

@@ -16,7 +16,7 @@
     </script>
     <script>
         $(document).ready(function (){
-           var session = String({{session}}) === 'true';
+            var session = String({{session}}) === 'true';
 
             if (session) {
                 $('#sec_tranf_other_bank').css({display: 'none'});
@@ -25,8 +25,8 @@
                 $('#body_tranf_other_bank').css({display: 'none'});
             }
 
-            $("#table-transf_paginate").addClass("pull-right");
-            $("#table-transf_paginate").css({height: '60px'});
+            DatatablesExec();
+
             $("#table-transf_filter").addClass("pull-right");
             $("#input_frs_coor").keypad();
             $("#input_snd_coor").keypad();
@@ -135,6 +135,42 @@
                             </tr>
                             </thead>
                             <tbody id="table-af-other">
+                            {% for a in affiliate %}
+                                <tr>
+                                    <td onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
+                                    <span class="link cursor">
+                                        {{ a.alias }}
+                                    </span>
+                                    </td>
+                                    <td onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
+                                    <span class="cursor text-bold">
+                                        {{ a.name }}
+                                    </span>
+                                    </td>
+                                    <td class="w-200" onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
+                                    <span  class="cursor">
+                                        {{ a.ident }}
+                                    </span>
+                                    </td>
+                                    <td class="w-200" onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
+                                    <span class="cursor">
+                                        {{ a.bank }}
+                                    </span>
+                                    </td>
+                                    <td class="w-180" onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
+                                    <span class="cursor">
+                                        {{ a.get_date }}
+                                    </span>
+                                    </td>
+                                    <td>
+                                        <a class="icon-table" href="{% url 'modificar-afiliado' a.id %}"><i class="fa fa-pencil color-icon"></i></a>
+                                        <a class="icon-table open_modal" data-name="{{ a.name }}"
+                                           data-toggle="modal" href="#Modal-Delete" data-url="{{ a.id }}">
+                                            <i class="fa fa-close color-delete"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
                             </tbody>
                             <tfoot>
                             <tr class="bg-gray">
@@ -148,13 +184,13 @@
                             </tfoot>
                         </table>
                     </div>
-                <!-- /.box-body -->
-              </div>
+                    <!-- /.box-body -->
+                </div>
             </div>
         </div>
     </section>
 
-    <div id="Modal-Delete-Other" class="modal">
+    <div id="Modal-Delete" class="modal">
         <div class="modal-dialog modal-trans">
             <div class="modal-content">
                 <div class="modal-header activate">
@@ -168,7 +204,7 @@
                         <div class="col-md-1"></div>
                         <div class="col-md-11">
                             <p> ¿Está seguro que desea eliminar a
-                                <strong> CasaMil C.A </strong>de la lista de sus afiliados? </p>
+                                <strong id="name-aff"> </strong> de la lista de sus afiliados? </p>
                         </div>
                     </div>
                 </div>
@@ -177,11 +213,12 @@
                         <div class="col-md-3 col-xs-2"></div>
                         <div class="col-md-3 col-xs-4">
                             <button type="button" class="btn btn-default btn-apps"
-                                data-dismiss="modal">Cancelar</button>
+                                    data-dismiss="modal">Cancelar</button>
                         </div>
                         <div class="col-md-3 col-xs-3">
-                            <button type="button" class="btn btn-default btn-apps"
-                                data-dismiss="modal">Aceptar</button>
+                            <a type="button" id="delete-aff" class="btn btn-default btn-apps" data-dismiss="modal">
+                                Aceptar
+                            </a>
                         </div>
                     </div>
 

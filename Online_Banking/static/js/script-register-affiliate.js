@@ -3,21 +3,9 @@
  */
 
 var errors = true;
+var path = window.location.href.split('/');
 
 $(document).ready(function (){
-    var url = document.referrer.split('/');
-
-    if (url[4] === 'transf-mi-banco' ) {
-        alert('aqui');
-        $("#bank").append('<option value="'+'0180'+'"> '+'BANCO ACTIO CAPITAL, C.A.'+'</option>');
-        $("#num-acc").val($("#bank").val());
-
-    }
-    else if (url[4] === 'transf-otros-bancos' ) {
-        $("#num-acc").val("");
-        drop_bank();
-    }
-
     var regexEmail = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,3})$/i;
     var regexLetters = /^[a-zA-ZáéíóúàèìòùÀÈÌÒÙÁÉÍÓÚñÑüÜ\s ]*$/;
     var a = '#bank';
@@ -94,7 +82,7 @@ $(document).ready(function (){
             $(e).addClass('errors');
             errors = false;
         }
-        else if ($(e).val().match(regexLetters)){
+        else if (!($(e).val().match(regexLetters))){
             notification_error('El alias solo admite letras.');
             $(e).addClass('errors');
             errors = false;
@@ -185,20 +173,136 @@ $(document).ready(function (){
 });
 
 
-function drop_bank(){
-    $("#bank").append('<option value="'+'0'+'"> '+'Seleccione '+'</option>');
+function drop_bank(a){
+    var url = document.referrer.split('/');
+    if (a === ''){
+        $("#bank").append('<option selected value="'+'0'+'"> '+'Seleccione '+'</option>');
+    }
     $.getJSON('../static/js/bank.json', function (data) {
         $.each( data, function( key, val ) {
-            $("#bank").append('<option value="'+val.codigo+'"> '+val.banco+'</option>');
+            if (a === val.banco){
+                $("#bank").append('<option selected value="'+val.codigo+'"> '+val.banco+'</option>');
+            }
+            if(url[4] === 'transf-otros-bancos' && !(val.banco.includes('ACTIO'))) {
+                $("#bank").append('<option value="'+val.codigo+'"> '+val.banco+'</option>');
+            }
+            if(url[4] === 'pagos'){
+                $("#bank").append('<option value="'+val.codigo+'"> '+val.banco+'</option>');
+            }
         });
     })
 }
 
-
-function add_affiliate(a,b,c,d,e,f,g,h) {
-    if (errors || $(a).val() === '0' || $(b).val().length < 20 || $(c).val() === '' || $(e).val() === '' ||
-    $(f).val() === '' || $(g).val() === '' ) {
-        alert('invalido');
+function validate_affiliates(a,b,c,d,e,f,g) {
+    if ($(a).val() === '0') {
+        $(a).addClass('errors');
+    }
+    if ($(b).val().length < 20) {
+        $(b).addClass('errors');
+    }
+    if ($(c).val() === '') {
+        $(c).addClass('errors');
+    }
+    if ($(d).val() === '') {
+        $(d).addClass('errors');
+    }
+    if ($(e).val() === '') {
+        $(e).addClass('errors');
+    }
+    if ($(f).val() === '') {
+        $(f).addClass('errors');
+    }
+    if ($(g).val() === '') {
+        $(g).addClass('errors');
     }
 }
 
+
+function add_affiliate(a,b,c,d,e,f,g,h) {
+    if (!(errors) || $(a).val() === '0' || $(b).val().length < 20 || $(c).val() === '' || $(e).val() === '' ||
+        $(f).val() === '' || $(g).val() === ''  || $(h).val() === '') {
+        validate_affiliates(a,b,c,e,f,g,h);
+        notification_error('El registro del afiliado presenta errores. Verifique los campos en rojo.');
+    }
+    else {
+        var url = path[0] + "/" + path[1] + "/" + path[2] + "/ajax/register-affiliate/";
+        notification_success('Registrando afiliado.....');
+        setTimeout(function(){
+            $.ajax({
+                url: url,
+                origin: 'http://127.0.0.1:8000',
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                data: {
+                    bank: document.getElementById('bank').options[document.getElementById('bank').selectedIndex].text,
+                    num: $(b).val(),
+                    name: $(c).val(),
+                    ci: $(d).val()+$(e).val(),
+                    nick: $(f).val(),
+                    email: $(g).val()
+                },
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.success) {
+                        notification_success('Registro de afiliado exitoso.');
+                        setTimeout(function(){
+                            location.href= document.referrer;
+                        }, 3000);
+                    }
+                    else{
+                        if (data.exist){
+                            notification_error('Registro fallido, el número de cuenta ya está afiliado.');
+                            $('#num-acc').addClass('errors');
+                        }
+                    }
+                }
+            })
+        }, 3000);
+    }
+}
+
+
+function modify_affiliate(a,b,c,d,e,f,g,h) {
+    if (!(errors) || $(a).val() === '0' || $(b).val().length < 20 || $(c).val() === '' || $(e).val() === '' ||
+        $(f).val() === '' || $(g).val() === ''  || $(h).val() === '') {
+        validate_affiliates(a,b,c,e,f,g,h);
+        notification_error('Lla modificación del afiliado presenta errores. Verifique los campos en rojo.');
+    }
+    else {
+        var url = path[0] + "/" + path[1] + "/" + path[2] + "/ajax/register-affiliate/";
+        var back = document.referrer;
+        notification_success('Modificando afiliado.....');
+        setTimeout(function(){
+            $.ajax({
+                url: url,
+                origin: 'http://127.0.0.1:8000',
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                data: {
+                    bank: document.getElementById('bank').options[document.getElementById('bank').selectedIndex].text,
+                    num: $(b).val(),
+                    name: $(c).val(),
+                    ci: $(d).val()+$(e).val(),
+                    nick: $(f).val(),
+                    email: $(g).val(),
+                    option: path[4]
+                },
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.success) {
+                        notification_success('Modificación de afiliado exitoso.');
+                        setTimeout(function(){
+                            location.href= back;
+                        }, 3000);
+                    }
+                    else{
+                        if (data.exist){
+                            notification_error('Modificación fallida, el número de cuenta ya ' +
+                                'está registrado a otro afiliado.');
+                        }
+                    }
+                }
+            })
+        }, 3000);
+    }
+}

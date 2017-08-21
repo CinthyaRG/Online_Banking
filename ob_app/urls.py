@@ -96,6 +96,10 @@ urlpatterns = [
         send_email_product,
         name='send-email-product'),
     url(
+        r'^ajax/register-affiliate/$',
+        register_affiliate,
+        name='register-affiliate'),
+    url(
         r'^ajax/first-login/$',
         first_login,
         name='primer-login'),
@@ -108,19 +112,19 @@ urlpatterns = [
         new_token,
         name='new_Token'),
     url(
-        r'^restablecer-pass',
+        r'^restablecer-pass$',
         Restore_pass.as_view(),
         name='restablecer-pass'),
     url(
-        r'^(?P<pk>\w+)/consultar-cuenta/(?P<acc_id>\w+)/',
+        r'^(?P<pk>\w+)/consultar-cuenta/(?P<acc_id>\w+)/$',
         Account.as_view(),
         name='consultar-cuenta'),
     url(
-        r'^(?P<pk>\w+)/consultar-tdc/(?P<tdc_id>\w+)/',
+        r'^(?P<pk>\w+)/consultar-tdc/(?P<tdc_id>\w+)/$',
         Tdc.as_view(),
         name='consultar-tdc'),
     url(
-        r'^(?P<pk>\w+)/consultar-prestamo/(?P<id>\w+)/',
+        r'^(?P<pk>\w+)/consultar-prestamo/(?P<id>\w+)/$',
         Loans.as_view(),
         name='consultar-prestamo'),
     url(
@@ -136,31 +140,39 @@ urlpatterns = [
         Transfer_others_bank.as_view(),
         name='transf-otros-bancos'),
     url(
-        r'^(?P<pk>\w+)/datos-transferencia/(?P<aff>\w+)/',
+        r'^(?P<pk>\w+)/datos-transferencia/(?P<aff>\w+)/$',
         DataTransfer.as_view(),
         name='datos-transferencia'),
     url(
-        r'^(?P<pk>\w+)/transferencia-exitosa',
+        r'^(?P<pk>\w+)/transferencia-exitosa$',
         Success.as_view(),
         name='transferencia-exitosa'),
     url(
-        r'^(?P<pk>\w+)/pagos',
+        r'^(?P<pk>\w+)/pagos$',
         Payments.as_view(),
         name='pagos'),
     url(
-        r'^(?P<pk>\w+)/datos-pago/(?P<payment>\w+)/',
+        r'^(?P<pk>\w+)/datos-pago/(?P<aff>\w+)/$',
         DataPayment.as_view(),
         name='datos-pago'),
     url(
-        r'^pago-exitoso',
+        r'^pago-exitoso$',
         Success_Payments.as_view(),
         name='pago-exitoso'),
     url(
-        r'^(?P<pk>\w+)/registro-afiliados',
+        r'^(?P<pk>\w+)/registro-afiliados$',
         Register_Affiliate.as_view(),
         name='registro-afiliados'),
     url(
-        r'^registro-servicios',
+        r'^eliminar-afiliado/(?P<pk>\w+)/$',
+        delete_affiliate,
+        name='eliminar-afiliado'),
+    url(
+        r'^modificar-afiliado/(?P<pk>\w+)$',
+        Modify_affiliate.as_view(),
+        name='modificar-afiliado'),
+    url(
+        r'^(?P<pk>\w+)/registro-servicios$',
         Register_Services.as_view(),
         name='registro-servicios'),
     url(

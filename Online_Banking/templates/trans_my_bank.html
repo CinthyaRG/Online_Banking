@@ -20,7 +20,6 @@
     <script>
         $(document).ready(function (){
             var session = String({{session}}) === 'true';
-            alert(session);
 
             if (session) {
                 $('#sec_tranf_my_bank').css({display: 'none'});
@@ -139,33 +138,35 @@
                             </thead>
                             <tbody id="table-af">
                             {% for a in affiliate %}
-                                <td onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
+                                <tr>
+                                    <td class="w-180" onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
                                     <span class="link cursor">
                                         {{ a.alias }}
                                     </span>
-                                </td>
-                                <td onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
-                                    <span class="text-bold">
+                                    </td>
+                                    <td onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
+                                    <span class="cursor text-bold">
                                         {{ a.name }}
                                     </span>
-                                </td>
-                                <td onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
-                                    <span>
+                                    </td>
+                                    <td class="w-200" onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
+                                    <span  class="cursor">
                                         {{ a.ident }}
                                     </span>
-                                </td>
-                                <td onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
-                                    <span class="link cursor">
+                                    </td>
+                                    <td class="w-180" onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
+                                    <span class="cursor">
                                         {{ a.get_date }}
                                     </span>
-                                </td>
-                                <td>
-                                    <a class="icon-table" href="#"><i class="fa fa-pencil color-icon"></i></a>
-                                    <a class="icon-table open_modal" data-target="#myModal" data-name="{{ a.name }}"
-                                       data-toggle="modal" href="#Modal-Delete" data-url="{% url '' %}">
-                                        <i class="fa fa-close color-delete"></i>
-                                    </a>
-                                </td>
+                                    </td>
+                                    <td>
+                                        <a class="icon-table" href="{% url 'modificar-afiliado' a.id %}"><i class="fa fa-pencil color-icon"></i></a>
+                                        <a class="icon-table open_modal" data-name="{{ a.name }}"
+                                           data-toggle="modal" href="#Modal-Delete" data-url="{{ a.id }}">
+                                            <i class="fa fa-close color-delete"></i>
+                                        </a>
+                                    </td>
+                                </tr>
                             {% endfor %}
                             </tbody>
                             <tfoot>
@@ -212,8 +213,7 @@
                             </button>
                         </div>
                         <div class="col-md-3 col-xs-3">
-                            <a type="button" id="delete-aff" class="btn btn-default btn-apps" data-dismiss="modal"
-                            href="#">
+                            <a type="button" id="delete-aff" class="btn btn-default btn-apps" data-dismiss="modal">
                                 Aceptar
                             </a>
                         </div>

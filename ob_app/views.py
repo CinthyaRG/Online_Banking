@@ -639,6 +639,128 @@ def send_email_product(request):
     return JsonResponse(data)
 
 
+@ensure_csrf_cookie
+def register_affiliate(request):
+    bank = request.GET.get('bank', None)
+    num_acc = request.GET.get('num', None)
+    name = request.GET.get('name', None)
+    ci = request.GET.get('ci', None)
+    nickname = request.GET.get('nick', None)
+    email = request.GET.get('email', None)
+    id = int(request.GET.get('option', 0))
+    print(id)
+
+    data = {
+        'success': False,
+        'exist': False
+    }
+
+    try:
+        customer = Customer.objects.get(user=request.user.id)
+
+        if id != 0:
+            affiliate = Affiliate.objects.get(pk=id)
+            print(affiliate)
+            if Affiliate.objects.filter(numAccount=num_acc, customer=customer.id).exclude(pk=id).exists():
+                data['exist'] = True
+                return JsonResponse(data)
+            else:
+                affiliate.numAccount = num_acc
+                affiliate.name = name
+                affiliate.ident = ci
+                affiliate.alias = nickname
+                affiliate.email = email
+                affiliate.bank = bank
+                affiliate.save()
+                data['success'] = True
+
+                formato = "%d/%m/%y %I:%M:%S %p"
+                date_time = datetime.datetime.today().strftime(formato).split(" ")
+                date = date_time[0]
+                time = date_time[1] + " " + date_time[2]
+
+                subject = 'Actio Capital - Modificación de afiliación de cuenta'
+
+                c = {'usuario': customer.user.get_full_name,
+                     'fecha': date,
+                     'hora': time,
+                     'title': 'Modificación de afiliación de cuenta',
+                     'msg': 'La cuenta número ' + num_acc[:6] + '**********' + num_acc[16:] +
+                            'del banco ' + bank + ', a nombre de ' + name
+                     }
+
+                message_template = 'affiliate_email.html'
+                email = customer.user.email
+                print('antes de enviar correo de modificacion')
+                # send_email(subject, message_template, c, email)
+        else:
+            print('entro else')
+            if Affiliate.objects.filter(numAccount=num_acc).exists():
+                print('existe?')
+                data['exist'] = True
+                return JsonResponse(data)
+
+            else:
+                print('no existe')
+                affiliate = Affiliate(bank=bank,
+                                      numAccount=num_acc,
+                                      name=name,
+                                      ident=ci,
+                                      email=email,
+                                      alias=nickname,
+                                      date=datetime.date.today(),
+                                      customer=customer)
+                affiliate.save()
+                print('GUARDAAAA')
+                data['success'] = True
+
+                formato = "%d/%m/%y %I:%M:%S %p"
+                date_time = datetime.datetime.today().strftime(formato).split(" ")
+                date = date_time[0]
+                time = date_time[1] + " " + date_time[2]
+
+                subject = 'Actio Capital - Afiliación de nueva cuenta'
+
+                c = {'usuario': customer.user.get_full_name,
+                     'fecha': date,
+                     'hora': time,
+                     'title': 'Afiliación de nueva cuenta',
+                     'msg': 'La cuenta número ' + num_acc[:6] + '**********' + num_acc[16:] +
+                            'del banco ' + bank + ', a nombre de ' + name
+                     }
+
+                message_template = 'affiliate_email.html'
+                email = customer.user.email
+                print('antes de enviar correo de afiliacion')
+                # send_email(subject, message_template, c, email)
+    except Customer.DoesNotExist:
+        pass
+
+    return JsonResponse(data)
+
+
+@ensure_csrf_cookie
+def delete_affiliate(request, pk):
+    print('AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII')
+    print(pk)
+    data = {
+        'user_exist': User.objects.filter(pk=request.user.id).exists(),
+        'success': False
+    }
+
+    if data['user_exist']:
+        try:
+            affilliate = Affiliate.objects.get(pk=int(pk), customer__user=request.user.id)
+            print(affilliate.name)
+            affilliate.delete()
+            data['success'] = True
+
+        except Affiliate.DoesNotExist:
+            pass
+
+    return JsonResponse(data)
+
+
 def send_email(subject, message_template, context, email):
     from_email = 'Actio Capital'
     email_subject = subject
@@ -868,8 +990,6 @@ class Home_Client(LoginRequiredMixin, TemplateView):
         customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
-        context['num'] = customer.user.username[:10]
-        context['num2'] = customer.user.username[10:]
 
         return context
 
@@ -932,8 +1052,7 @@ class Tdc(LoginRequiredMixin, TemplateView):
         customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
-        context['num'] = customer.user.username[:10]
-        context['num2'] = customer.user.username[10:]
+
         return context
 
 
@@ -964,8 +1083,6 @@ class Transfer_my_acc(LoginRequiredMixin, TemplateView):
             Transfer_my_acc, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
-        context['num'] = customer.user.username[:10]
-        context['num2'] = customer.user.username[10:]
 
         context['customer'] = customer
         return context
@@ -982,6 +1099,8 @@ class Transfer_my_bank(LoginRequiredMixin, TemplateView):
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
         elems = ElemSecurity.objects.get(pk=customer.elemSecurity_id)
+        print("entrooo aquiiii")
+        print(elems.sessionExpires)
 
         if elems.sessionExpires:
             context['session'] = 'true'
@@ -1003,8 +1122,6 @@ class Transfer_my_bank(LoginRequiredMixin, TemplateView):
             context['session'] = 'false'
 
         context['customer'] = customer
-        context['num'] = customer.user.username[:10]
-        context['num2'] = customer.user.username[10:]
         context['affiliate'] = Affiliate.objects.filter(customer=customer.pk,
                                                         bank='BANCO ACTIO CAPITAL, C.A.')
 
@@ -1087,8 +1204,29 @@ class Payments(LoginRequiredMixin, TemplateView):
             Payments, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
+        elems = ElemSecurity.objects.get(pk=customer.elemSecurity_id)
+
+        if elems.sessionExpires:
+            context['session'] = 'true'
+        else:
+            quest1 = customer.elemSecurity.question1
+            quest2 = customer.elemSecurity.question2
+            num = random.randint(1, 2)
+            if num == 1:
+                context['question'] = quest1
+            else:
+                context['question'] = quest2
+
+            a = list('ABCDEF')
+            random.shuffle(a)
+            b = list('12345')
+            random.shuffle(b)
+            context['first_coor'] = a[0] + b[0]
+            context['second_coor'] = a[1] + b[1]
+            context['session'] = 'false'
 
         context['customer'] = customer
+        context['payments'] = Service.objects.filter(customer=customer.id)
         return context
 
 
@@ -1134,6 +1272,26 @@ class Register_Affiliate(LoginRequiredMixin, TemplateView):
         customer = Customer.objects.get(ref=self.kwargs['pk'])
 
         context['customer'] = customer
+        context['title'] = 'Registro'
+
+        return context
+
+
+class Modify_affiliate(LoginRequiredMixin, TemplateView):
+    template_name = 'register-affiliate.html'
+    login_url = 'home'
+    redirect_field_name = 'logout'
+
+    def get_context_data(self, **kwargs):
+        context = super(
+            Modify_affiliate, self).get_context_data(**kwargs)
+
+        affiliate = Affiliate.objects.get(pk=self.kwargs['pk'])
+        customer = Customer.objects.get(pk=affiliate.customer_id)
+
+        context['customer'] = customer
+        context['affiliate'] = affiliate
+        context['title'] = 'Modificación'
 
         return context
 
@@ -1171,8 +1329,6 @@ class Request(LoginRequiredMixin, TemplateView):
             context['card_coor'] = CardCoor.objects.get(pk=card_coor).status is False
 
         context['customer'] = customer
-        context['num'] = customer.user.username[:10]
-        context['num2'] = customer.user.username[10:]
 
         return context
 
@@ -1271,8 +1427,6 @@ class Request_Checkbook(LoginRequiredMixin, TemplateView):
             context['session'] = 'false'
 
         context['customer'] = customer
-        context['num'] = customer.user.username[:10]
-        context['num2'] = customer.user.username[10:]
 
         return context
 
@@ -1422,8 +1576,6 @@ class Profile(LoginRequiredMixin, TemplateView):
             context['session'] = 'false'
 
         context['customer'] = customer
-        context['num'] = customer.user.username[:10]
-        context['num2'] = customer.user.username[10:]
 
         return context
 

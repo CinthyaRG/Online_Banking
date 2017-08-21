@@ -56,7 +56,7 @@
             </div>
             <div class="col-md-2 col-xs-4">
                 <a id="btn-trans" class="btn btn-default btn-group btn-apps pull-right" type="button"
-                   onclick="send_transfer('#account1', '#account2', '#amount-transf', String({{num}}) + String({{num2}}))">
+                   onclick="send_transfer('#account1', '#account2', '#amount-transf', '{{ customer.user.username }}')">
                     Transferir </a>
             </div>
         </div>

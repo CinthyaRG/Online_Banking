@@ -16,10 +16,9 @@
     </script>
     <script>
         $(document).ready(function (){
-            var session = String({{session}}) === 'true';
-            var a = String({{num}}) + String({{num2}});
+            var session = '{{session}}' === 'true';
 
-            $('#abc').text(a);
+            $('#abc').text('{{ customer.user.username }}');
 
             if (session) {
                 $('#sec_mng').css({display: 'none'});

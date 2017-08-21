@@ -4,18 +4,16 @@
 
 $(document).ready(function (){
     menu();
-    // transf_table();
-    transf_other_table();
 
-
-    $('#myModal').on('show.bs.modal', function (event) {
+    $('#Modal-Delete').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
         var name = button.data('name');
         var url = button.data('url');
         var modal = $(this);
+        url = 'delete_affiliate('+url+')';
 
         modal.find('.modal-body #name-aff').text(name.replace(/_/g, ' '));
-        modal.find('.modal-body #delete-aff').attr("href", url );
+        modal.find('#delete-aff').attr("onclick", url );
 
     });
 
@@ -232,5 +230,33 @@ function DatatablesExec() {
     $("#table-transf_paginate").css({height: '60px'});
 }
 
+function delete_affiliate(a) {
+    var path = window.location.href.split('/');
+    var url = path[0] + "/" + path[1] + "/" + path[2] + "/eliminar-afiliado/" + a + '/';
+    notification_success('Eliminando afiliado.....');
+    setTimeout(function(){
+        $.ajax({
+            url: url,
+            origin: 'http://127.0.0.1:8000',
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) {
+                    notification_success('Se ha eliminado exitosamente su afiliado.');
+                    setTimeout(function(){
+                        notification_success('Actualizando....');
+                        setTimeout(function(){
+                            location.reload();
+                        }, 1500);
+                    }, 1500);
+                }
+                else{
+                    notification_error('Hubo un error eliminando su afiliado. Intente nuevamente.');
+                }
+            }
+        })
+    }, 3000);
+}
 
 

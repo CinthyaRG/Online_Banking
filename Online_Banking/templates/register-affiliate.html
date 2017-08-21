@@ -3,12 +3,73 @@
 
 {% block script %}
     <script src="{% static 'js/script-register-affiliate.js' %}"></script>
+    <script>
+        $(document).ready(function (){
+            var url = document.referrer.split('/');
+            var path = window.location.href.split('/');
+            var a = '#bank';
+            var b = '#num-acc';
+            var c = '#name';
+            var d = '#ci';
+            var e = '#nickname';
+            var f = '#email';
+            var g = '#email-confirm';
+
+            if (url[4] === 'transf-mi-banco') {
+                $(a).append('<option value="'+'0180'+'"> '+'BANCO ACTIO CAPITAL, C.A.'+'</option>');
+                if (path[4] === 'registro-afiliados'){
+                    $(b).val($(a).val());
+                }
+                else if (path[3] === 'modificar-afiliado'){
+                    alert('aquiiiiiii path');
+                    var ci = '{{ affiliate.ident }}'.split('-');
+                    if (ci[0] === 'E') {
+                        $('#select-ci').find('option[value="E-"]').attr("selected",'selected');
+                    }
+                    else if (ci[0] === 'J') {
+                        $('#select-ci').find('option[value="E-"]').attr("selected",'selected');
+                    }
+                    $(b).val('{{ affiliate.numAccount }}');
+                    $(c).val('{{ affiliate.name }}');
+                    $(d).val(ci[1]);
+                    $(e).val('{{ affiliate.alias }}');
+                    $(f).val('{{ affiliate.email }}');
+                    $(g).val('{{ affiliate.email }}');
+                }
+            }
+            else if (url[4] === 'transf-otros-bancos' ) {
+                if (path[4] === 'registro-afiliados'){
+                    $(b).val("");
+                    drop_bank('');
+                }
+                else if (path[3] === 'modificar-afiliado'){
+                    alert('aquiiiiiii path');
+                    drop_bank('{{ affiliate.bank }}');
+                    var ci = '{{ affiliate.ident }}'.split('-');
+                    if (ci[0] === 'E') {
+                        $('#select-ci').find('option[value="E-"]').attr("selected",'selected');
+                    }
+                    else if (ci[0] === 'J') {
+                        $('#select-ci').find('option[value="E-"]').attr("selected",'selected');
+                    }
+                    $(b).val('{{ affiliate.numAccount }}');
+                    $(c).val('{{ affiliate.name }}');
+                    $(d).val(ci[1]);
+                    $(e).val('{{ affiliate.alias }}');
+                    $(f).val('{{ affiliate.email }}');
+                    $(g).val('{{ affiliate.email }}');
+                }
+
+            }
+        })
+    </script>
+
 {% endblock %}
 
 {% block content %}
     <section class="content-header">
         <div class="row" id="title-transf-bank">
-            <h3> Registro de Afiliados </h3>
+            <h3> {{ title }}  de Afiliados</h3>
         </div>
         <div class="row">
             <div class="col-md-2"></div>
@@ -55,9 +116,9 @@
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows">
                                     <select id="select-ci" class="select2 input-register">
-                                        <option selected>V- </option>
-                                        <option>E- </option>
-                                        <option>J- </option>
+                                        <option value="V-" selected>V- </option>
+                                        <option value="E-">E- </option>
+                                        <option value="J-">J- </option>
                                     </select>
                                     <input id="ci" class="input-register margin-register">
                                     <span class="margin-l-8">Incluya solo números</span>
@@ -99,10 +160,16 @@
             <div class="col-md-6 col-xs-6"></div>
             <div class="col-md-4">
                 <a id="btn-back" class="btn btn-default btn-group btn-apps"
-                   type="button" onclick="window.history.back()"> Cancelar </a>
-                <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
-                   type="button" onclick="add_affiliate('#bank','#num-acc','#name','#select-ci','#ci',
+                   type="button" onclick="location.href=document.referrer"> Cancelar </a>
+                {% if title == 'Registro' %}
+                    <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
+                       type="button" onclick="add_affiliate('#bank','#num-acc','#name','#select-ci','#ci',
                    '#nickname','#email','#email-confirm')"> Agregar </a>
+                {% else %}
+                    <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
+                       type="button" onclick="modify_affiliate('#bank','#num-acc','#name','#select-ci','#ci',
+                   '#nickname','#email','#email-confirm')"> Guardar </a>
+                {% endif %}
             </div>
 
         </div>

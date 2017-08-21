@@ -16,13 +16,20 @@
     </script>
     <script>
         $(document).ready(function (){
-            $('#body_payment').css({display: 'none'});
+            var session = String({{session}}) === 'true';
+
+            if (session) {
+                $('#sec_payment').css({display: 'none'});
+            }
+            else {
+                $('#body_payment').css({display: 'none'});
+            }
+
             $("#table-payments_paginate").addClass("pull-right");
             $("#table-payments_paginate").css({height: '60px'});
             $("#table-payments_filter").addClass("pull-right");
             $("#input_frs_coor").keypad();
             $("#input_snd_coor").keypad();
-            $("#input_frs_coor").keypad({prompt: 'Enter here'});
             $.keypad.setDefaults({prompt: ''});
         });
     </script>
@@ -45,7 +52,7 @@
                                         Pregunta de Seguridad: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows no-margin">
-                                    <p> Nombre de mi primera mascota </p>
+                                    <p id="question">{{question}}</p>
                                 </div>
                             </div>
                             <div class="row">
@@ -64,11 +71,11 @@
                                         <span class="text-danger"> * </span> Coordenadas: </label>
                                 </div>
                                 <div class="col-md-5 col-xs-5 rows">
-                                    <span id="first_coor"> A5
+                                    <span> <span id="first_coor">{{first_coor}}</span>
                                     <input id="input_frs_coor" maxlength="3" type="password"
                                            class="input-register">
                                     </span>
-                                    <span id="second_coor"> D2
+                                    <span> <span id="second_coor">{{second_coor}}</span>
                                     <input id="input_snd_coor" maxlength="3" type="password"
                                            class="input-register">
                                     </span>
@@ -83,10 +90,11 @@
             <div class="col-md-5 col-xs-5"></div>
             <div class="col-md-4">
                 <a id="btn-back" class="btn btn-default btn-group btn-apps"
-                   type="button" onclick="move_back_security()"> Cancelar
+                   type="button" onclick="window.history.back()"> Cancelar
                 </a>
                 <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
-                   type="button" onclick="move_security('#body_payment','#sec_payment')">
+                   type="button" onclick="elem_Security('#resp_seg','#input_frs_coor','#input_snd_coor',
+                   '#body_payment','#sec_payment')">
                     Siguiente
                 </a>
             </div>
@@ -101,7 +109,7 @@
             <div class="col-md-3 col-xs-4"></div>
             <div class="col-md-8 col-xs-8">
                 <a class="btn btn-default btn-group btn-apps pull-right" type="button"
-                   href="{% url 'registro-servicios' %}"> Agregar Servicio </a>
+                   href="{% url 'registro-servicios' customer.ref %}"> Agregar Servicio </a>
             </div>
         </div>
         <div class="row">
@@ -126,6 +134,37 @@
                             </tr>
                             </thead>
                             <tbody id="body-table-pay">
+                            {% for p in payments %}
+                                <tr>
+                                    <td class="w-180" onclick="location.href='{% url 'datos-pago' pk=customer.ref aff=p.id %}'">
+                                    <span class="link cursor">
+                                        {{ p.alias }}
+                                    </span>
+                                    </td>
+                                    <td onclick="location.href='{% url 'datos-pago' pk=customer.ref aff=p.id %}'">
+                                    <span class="cursor text-bold">
+                                        {{ p.identService }}
+                                    </span>
+                                    </td>
+                                    <td class="w-200" onclick="location.href='{% url 'datos-pago' pk=customer.ref aff=a.id %}'">
+                                    <span  class="cursor">
+                                        {{ p.get_type }}
+                                    </span>
+                                    </td>
+                                    <td class="w-180" onclick="location.href='{% url 'datos-pago' pk=customer.ref aff=a.id %}'">
+                                    <span class="cursor">
+                                        {{ p.numCard }}
+                                    </span>
+                                    </td>
+                                    <td>
+                                        <a class="icon-table" href=""><i class="fa fa-pencil color-icon"></i></a>
+                                        <a class="icon-table open_modal" data-name="{{ p.name }}"
+                                           data-toggle="modal" href="#Modal-Delete" data-url="{{ a.id }}">
+                                            <i class="fa fa-close color-delete"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
                             </tbody>
                             <tfoot>
                             <tr class="bg-gray">
@@ -138,27 +177,27 @@
                             </tfoot>
                         </table>
                     </div>
-                <!-- /.box-body -->
-              </div>
+                    <!-- /.box-body -->
+                </div>
             </div>
         </div>
     </section>
 
-    <div id="Modal-Delete-Payments" class="modal">
+    <div id="Modal-Delete" class="modal">
         <div class="modal-dialog modal-trans">
             <div class="modal-content">
                 <div class="modal-header activate">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title text-center">Eliminar Afiliado</h4>
+                    <h4 class="modal-title text-center">Eliminar Servicio</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-1"></div>
                         <div class="col-md-11">
                             <p> ¿Está seguro que desea eliminar el servicio asociado al producto
-                                <strong> Prestamo-17897001 </strong>de la lista de sus servicios? </p>
+                                <strong id="name-aff"> </strong> de la lista de sus servicios? </p>
                         </div>
                     </div>
                 </div>
@@ -167,11 +206,11 @@
                         <div class="col-md-3"></div>
                         <div class="col-md-3">
                             <button type="button" class="btn btn-default btn-apps"
-                                data-dismiss="modal">Cancelar</button>
+                                    data-dismiss="modal">Cancelar</button>
                         </div>
                         <div class="col-md-3">
-                            <button type="button" class="btn btn-default btn-apps"
-                                data-dismiss="modal">Aceptar</button>
+                            <a type="button" id="delete-aff" class="btn btn-default btn-apps"
+                                    data-dismiss="modal">Aceptar</a>
                         </div>
                     </div>
 
