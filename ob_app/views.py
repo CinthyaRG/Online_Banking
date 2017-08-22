@@ -1358,11 +1358,6 @@ class Request(LoginRequiredMixin, TemplateView):
         customer = Customer.objects.get(ref=self.kwargs['pk'])
         card_coor = ElemSecurity.objects.get(pk=customer.elemSecurity_id).cardCoor_id
 
-        if card_coor is None:
-            context['card_coor'] = True
-        else:
-            context['card_coor'] = CardCoor.objects.get(pk=card_coor).status is False
-
         context['customer'] = customer
 
         return context
@@ -1403,6 +1398,9 @@ class Request_Coord(LoginRequiredMixin, TemplateView):
             card_cord.coor = coor
             card_cord.status = True
             card_cord.save()
+
+            elem.sessionExpires = False
+            elem.save()
 
             formato = "%d/%m/%y %I:%M:%S %p"
             date_time = datetime.datetime.today().strftime(formato).split(" ")

@@ -346,6 +346,11 @@ div[role="tooltip"] {
     padding-top: 5px;
     padding-bottom: 0;
 }
+.color-icon-disabled {
+    color: rgba(110, 123, 125, 0.9);
+    margin-left: 5px;
+    margin-right: 5px;
+}
 .color-icon {
     color: rgba(0,11,5,0.78);
     margin-left: 5px;

@@ -153,16 +153,25 @@
                                     </td>
                                     <td class="w-180" onclick="location.href='{% url 'datos-pago' pk=customer.ref aff=p.id %}'">
                                     <span class="cursor">
-                                        {{ p.numCard }}
+                                        {{ p.numService }}
                                     </span>
                                     </td>
-                                    <td>
-                                        <a class="icon-table" href=""><i class="fa fa-pencil color-icon"></i></a>
-                                        <a class="icon-table open_modal" data-name="{{ p.name }}"
-                                           data-toggle="modal" href="#Modal-Delete" data-url="{{ a.id }}">
-                                            <i class="fa fa-close color-delete"></i>
-                                        </a>
-                                    </td>
+                                    {% if p.identService == 'Pago Préstamo' or p.identService == 'TDC Propias' %}
+                                        <td>
+                                            <a class="icon-table disabled" onclick="notification_error('No puede editar este servicio.')">
+                                                <i class="fa fa-pencil color-icon-disabled"></i></a>
+                                            <a class="icon-table disabled" onclick="notification_error('No puede eliminar este servicio.')">
+                                                <i class="fa fa-close color-icon-disabled"></i></a>
+                                        </td>
+                                    {% else %}
+                                        <td>
+                                            <a class="icon-table" href=""><i class="fa fa-pencil color-icon"></i></a>
+                                            <a class="icon-table open_modal" data-name="{{ p.name }}"
+                                               data-toggle="modal" href="#Modal-Delete" data-url="{{ a.id }}">
+                                                <i class="fa fa-close color-delete"></i>
+                                            </a>
+                                        </td>
+                                {% endif %}
                                 </tr>
                             {% endfor %}
                             </tbody>

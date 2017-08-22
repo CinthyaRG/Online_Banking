@@ -140,13 +140,13 @@ function field_banavih(_this) {
     var banavih = '<div class="row"><div class="col-md-5 col-xs-5"><label class="pull-right">'+
         '<span class="text-danger"> * </span> Número de Afiliación: </label></div>'+
         '<div class="col-md-6 col-xs-5 rows">'+
-        '<input id="num_service" maxlength="20" class="input-register"></div></div>'+
+        '<input id="num_af_banavih" maxlength="20" class="input-register"></div></div>'+
         '<div class="row"><div class="col-md-5 col-xs-5"><label class="pull-right">'+
         '<span class="text-danger"> * </span>RIF del Beneficiario: </label></div>'+
         '<div class="col-md-6 col-xs-5 rows"><select class="select2 input-register">'+
         '<option selected="selected">V- </option>'+
         '<option>J- </option></select>'+
-        '<input id="ident" maxlength="9" class="input-register margin-register"></div></div>';
+        '<input id="rif_banavih" maxlength="9" class="input-register margin-register"></div></div>';
     var field_payment = banavih;
 
     _this.append(field_payment);
@@ -169,7 +169,7 @@ function field_electricidad(_this) {
     var elec = '<div class="row"><div class="col-md-5 col-xs-5"><label class="pull-right">'+
         '<span class="text-danger"> * </span> Número de Contrato: </label></div>'+
         '<div class="col-md-6 col-xs-5 rows">'+
-        '<input id="num_service" maxlength="13" class="input-register"></div></div>';
+        '<input id="num_elec" maxlength="13" class="input-register"></div></div>';
     var field_payment = elec;
 
     _this.append(field_payment);
@@ -192,11 +192,11 @@ function field_directv(_this,valor) {
     var directv_previo = '<div class="row"><div class="col-md-5 col-xs-5"><label class="pull-right">'+
         '<span class="text-danger"> * </span> Número de Suscripción: </label></div>'+
         '<div class="col-md-6 col-xs-5 rows">'+
-        '<input id="num_service" maxlength="8" class="input-register"></div></div>';
+        '<input id="num_susc" maxlength="8" class="input-register"></div></div>';
     var directv_prepago = '<div class="row"><div class="col-md-5 col-xs-5"><label class="pull-right">'+
         '<span class="text-danger"> * </span> Número de SmartCard: </label></div>'+
         '<div class="col-md-6 col-xs-5 rows">'+
-        '<input id="num_service" maxlength="12" class="input-register"></div></div>';
+        '<input id="num_smart" maxlength="12" class="input-register"></div></div>';
     var field_payment;
 
     if (valor === 'DirecTV Previo Pago') {
@@ -228,18 +228,18 @@ function field_impuestos(_this,valor) {
         '<div class="col-md-6 col-xs-5 rows"><select class="select2 input-register">'+
         '<option selected="selected">V- </option>'+
         '<option>J- </option></select>'+
-        '<input id="ident" maxlength="9" ' +
+        '<input id="rif_impuestos_owns" maxlength="9" ' +
         'class="input-register margin-register"></div></div>';
     var others = '<div class="row"><div class="col-md-5 col-xs-5"><label class="pull-right">'+
         '<span class="text-danger"> * </span>RIF del Beneficiario: </label></div>'+
         '<div class="col-md-6 col-xs-5 rows"><select class="select2 input-register">'+
         '<option selected="selected">V- </option>'+
         '<option>J- </option></select>'+
-        '<input id="ident" maxlength="9" ' +
+        '<input id="rif_impuestos_others" maxlength="9" ' +
         'class="input-register margin-register"></div></div>'+
         '<div class="row"><div class="col-md-5 col-xs-5"><label class="pull-right">'+
         'Email: </label></div><div class="col-md-6 col-xs-5 rows">'+
-        '<input id="email" class="input-register field-register"></div></div>';
+        '<input id="email_impuestos" class="input-register field-register"></div></div>';
     var field_payment;
 
     if (valor === 'Pago de Impuestos Nacionales Propios') {
@@ -269,37 +269,34 @@ function field_tdc(_this,valor) {
     var my_bank = '<div class="row"><div class="col-md-5 col-xs-5"><label class="pull-right">'+
         '<span class="text-danger"> * </span> Número de Tarjeta: </label></div>'+
         '<div class="col-md-6 col-xs-5 rows">'+
-        '<input id="num_service" maxlength="16" class="input-register"></div></div>'+
+        '<input id="num_tdc_mybank" maxlength="16" class="input-register"></div></div>'+
         '<div class="row"><div class="col-md-5 col-xs-5"><label class="pull-right">'+
         '<span class="text-danger"> * </span> Nombre del Titular: </label></div>'+
         '<div class="col-md-6 col-xs-5 rows">'+
-        '<input id="name" class="input-register"></div></div>'+
+        '<input id="name_tdc_mybank" class="input-register"></div></div>'+
         '<div class="row"><div class="col-md-5 col-xs-5"><label class="pull-right">'+
         '<span class="text-danger"> * </span>Documento de Identidad: </label></div>'+
         '<div class="col-md-6 col-xs-5 rows"><select class="select2 input-register">'+
         '<option selected="selected">V- </option>'+
         '<option>E- </option></select>'+
-        '<input id="ident" maxlength="8" class="input-register margin-register">' +
-        '<div class="row"><div class="col-md-5 col-xs-5"><label class="pull-right">'+
-        'Email: </label></div><div class="col-md-6 col-xs-5 rows">'+
-        '<input id="email" class="input-register field-register"></div></div>';
+        '<input id="ci_tdc_mybank" maxlength="8" class="input-register margin-register"></div></div>';
     var others_banks = '<div class="row"><div class="col-md-5 col-xs-5"><label class="pull-right">'+
         '<span class="text-danger"> * </span> Número de Tarjeta: </label></div>'+
         '<div class="col-md-6 col-xs-5 rows">'+
-        '<input id="num_service" maxlength="16" class="input-register"></div></div>'+
+        '<input id="num_tdc_others" maxlength="16" class="input-register"></div></div>'+
         '<div class="row"><div class="col-md-5 col-xs-5"><label class="pull-right">'+
         '<span class="text-danger"> * </span> Nombre del Titular: </label></div>'+
         '<div class="col-md-6 col-xs-5 rows">'+
-        '<input id="name" class="input-register"></div></div>'+
+        '<input id="name_tdc_others" class="input-register"></div></div>'+
         '<div class="row"><div class="col-md-5 col-xs-5"><label class="pull-right">'+
         '<span class="text-danger"> * </span>Documento de Identidad: </label></div>'+
         '<div class="col-md-6 col-xs-5 rows"><select class="select2 input-register">'+
         '<option selected="selected">V- </option>'+
         '<option>E- </option></select>'+
-        '<input id="ident" maxlength="8" class="input-register margin-register"></div></div>'+
+        '<input id="ci_tdc_others" maxlength="8" class="input-register margin-register"></div></div>'+
         '<div class="row"><div class="col-md-5 col-xs-5"><label class="pull-right">'+
         'Email: </label></div><div class="col-md-6 col-xs-5 rows">'+
-        '<input id="email" class="input-register field-register"></div></div>';
+        '<input id="email_tdc" class="input-register field-register"></div></div>';
     var field_payment;
 
     if (valor === 'TDC de Terceros mismo banco') {
