@@ -100,6 +100,10 @@ urlpatterns = [
         register_affiliate,
         name='register-affiliate'),
     url(
+        r'^ajax/register-services/$',
+        register_services,
+        name='register-services'),
+    url(
         r'^ajax/first-login/$',
         first_login,
         name='primer-login'),
@@ -175,6 +179,14 @@ urlpatterns = [
         r'^(?P<pk>\w+)/registro-servicios$',
         Register_Services.as_view(),
         name='registro-servicios'),
+    url(
+        r'^eliminar-servicio/(?P<pk>\w+)/$',
+        delete_affiliate,
+        name='eliminar-afiliado'),
+    url(
+        r'^modificar-servicio/(?P<pk>\w+)$',
+        Modify_affiliate.as_view(),
+        name='modificar-afiliado'),
     url(
         r'^(?P<pk>\w+)/solicitudes$',
         Request.as_view(),

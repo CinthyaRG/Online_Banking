@@ -715,7 +715,8 @@ def register_affiliate(request):
                          'hora': time,
                          'title': 'Modificación de afiliación de cuenta',
                          'msg': 'La cuenta número ' + num_acc[:6] + '**********' + num_acc[16:] +
-                                ' del banco ' + bank + ', a nombre de ' + name
+                                ' del banco ' + bank + ', a nombre de ' + name,
+                         'service': 'transferencias a la cuenta afiliada'
                          }
 
                     message_template = 'affiliate_email.html'
@@ -735,7 +736,7 @@ def register_affiliate(request):
                                                                                       alias=nickname).exists():
                     data['nick_exist'] = True
                 elif bank != 'BANCO ACTIO CAPITAL, C.A.' and Affiliate.objects.filter(customer=customer.id,
-                                                                                      alias=nickname).\
+                                                                                      alias=nickname). \
                         exclude(bank='BANCO ACTIO CAPITAL, C.A.').exists():
                     data['nick_exist'] = True
                 else:
@@ -762,7 +763,8 @@ def register_affiliate(request):
                          'hora': time,
                          'title': 'Afiliación de nueva cuenta',
                          'msg': 'La cuenta número ' + num_acc[:6] + '**********' + num_acc[16:] +
-                                ' del banco ' + bank + ', a nombre de ' + name
+                                ' del banco ' + bank + ', a nombre de ' + name,
+                         'service': 'transferencias a la cuenta afiliada'
                          }
 
                     message_template = 'affiliate_email.html'
@@ -792,6 +794,157 @@ def delete_affiliate(request, pk):
 
         except Affiliate.DoesNotExist:
             pass
+
+    return JsonResponse(data)
+
+
+@ensure_csrf_cookie
+def register_services(request):
+    numServ = request.GET.get('numService', '')
+    ident = request.GET.get('ident', '')
+    identService = request.GET.get('identServ', '')
+    extra = request.GET.get('name', '')
+    nickname = request.GET.get('nick', '')
+    email = request.GET.get('email', '')
+    id = int(request.GET.get('option', 0))
+    print(numServ)
+    print(ident)
+    print(identService)
+    print(extra)
+    print(nickname)
+    print(email)
+
+    data = {
+        'success': False,
+        'exist': False,
+        'my_acc': False,
+        'nick_exist': False
+    }
+
+    try:
+        customer = Customer.objects.get(user=request.user.id)
+        if identService == 'TDC de Terceros mismo banco' or identService == 'TDC de Terceros otros bancos':
+            field = 'El número de tarjeta'
+        elif identService == 'Banavih Aportes FAOV':
+            field = 'El número de afiliación'
+        elif identService == 'Electricidad de Caracas':
+            field = 'El número de contrato'
+        elif identService == 'DirecTV Previo Pago':
+            field = 'El número de suscripción'
+        elif identService == 'DirecTV Prepago':
+            field = 'El número de smartcard'
+        elif identService == 'Pago de Impuestos Nacionales Propios' or identService == 'Pago de Impuestos Nacionales Terceros':
+            field = 'El rif del beneficiario'
+        elif (identService == 'CANTV' or identService == 'Movistar' or identService == 'Movilnet'
+              or identService == 'Digitel'):
+            field = 'El número de teléfono'
+
+        if id != 0:
+            affiliate = Affiliate.objects.get(pk=id)
+            print(affiliate)
+            if Affiliate.objects.filter(numAccount=num_acc, customer=customer.id).exclude(pk=id).exists():
+                data['exist'] = True
+                return JsonResponse(data)
+            else:
+                if bank == 'BANCO ACTIO CAPITAL, C.A.' and ci == customer.ident:
+                    data['my_acc'] = True
+                    return JsonResponse(data)
+                elif bank == 'BANCO ACTIO CAPITAL, C.A.' and Affiliate.objects.filter(bank='BANCO ACTIO CAPITAL, C.A.',
+                                                                                      customer=customer.id,
+                                                                                      alias=nickname).exclude(pk=id).exists():
+                    data['nick_exist'] = True
+                elif bank != 'BANCO ACTIO CAPITAL, C.A.' and Affiliate.objects.filter(customer=customer.id,
+                                                                                      alias=nickname). \
+                        exclude(bank='BANCO ACTIO CAPITAL, C.A.', pk=id).exists():
+                    data['nick_exist'] = True
+                else:
+                    affiliate.numAccount = num_acc
+                    affiliate.name = name
+                    affiliate.ident = ci
+                    affiliate.alias = nickname
+                    affiliate.email = email
+                    affiliate.bank = bank
+                    affiliate.save()
+                    data['success'] = True
+
+                    formato = "%d/%m/%y %I:%M:%S %p"
+                    date_time = datetime.datetime.today().strftime(formato).split(" ")
+                    date = date_time[0]
+                    time = date_time[1] + " " + date_time[2]
+
+                    subject = 'Actio Capital - Modificación de afiliación de cuenta'
+
+                    c = {'usuario': customer.user.get_full_name,
+                         'fecha': date,
+                         'hora': time,
+                         'title': 'Modificación de afiliación de cuenta',
+                         'msg': 'La cuenta número ' + num_acc[:6] + '**********' + num_acc[16:] +
+                                ' del banco ' + bank + ', a nombre de ' + name,
+                         'service': 'pagos al servicio afiliado'
+                         }
+
+                    message_template = 'affiliate_email.html'
+                    email = customer.user.email
+                    print('antes de enviar correo de modificacion')
+                    send_email(subject, message_template, c, email)
+        else:
+            if Service.objects.filter(numService=numServ, customer=customer.id).exists():
+                data['exist'] = True
+                data['error'] = field + ' ya se encuentra registrado en sus servicios.'
+                return JsonResponse(data)
+            else:
+                if identService == 'TDC de Terceros mismo banco' and ident == customer.ident:
+                    data['my_acc'] = True
+                    data['error'] = 'Sus tarjetas de crédito con Actio Capital ya se encuentran registradas ' \
+                                    'en sus servicios.'
+                    return JsonResponse(data)
+                elif Service.objects.filter(alias=nickname, customer=customer.id).exists():
+                    data['nick_exist'] = True
+                    data['error'] = 'El alias escogido ya existe ingrese uno diferente.'
+                    return JsonResponse(data)
+                else:
+                    if ident == customer.ident:
+                        email = customer.user.email
+                    service = Service(ident=ident,
+                                      email=email,
+                                      identService=identService,
+                                      numService=numServ,
+                                      extra=extra,
+                                      alias=nickname,
+                                      customer=customer)
+                    service.save()
+                    data['success'] = True
+
+                    formato = "%d/%m/%y %I:%M:%S %p"
+                    date_time = datetime.datetime.today().strftime(formato).split(" ")
+                    date = date_time[0]
+                    time = date_time[1] + " " + date_time[2]
+
+                    subject = 'Actio Capital - Afiliación de nuevo servicio'
+
+                    c = {'usuario': customer.user.get_full_name,
+                         'fecha': date,
+                         'hora': time,
+                         'title': 'Afiliación de nuevo servicio',
+                         'service': 'pagos al servicio afiliado'
+                         }
+
+                    if (identService == 'Pago de Impuestos Nacionales Propios' or identService == 'Pago de Impuestos Nacionales Terceros'
+                        or identService == 'Banavih Aportes FAOV'):
+                        c['msg'] = 'El servicio ' + identService + ' con el ' + field + ' ' + numServ + \
+                                   ', asociado al rif del beneficiario ' + ident
+                    elif identService == 'TDC de Terceros mismo banco' or identService == 'TDC de Terceros otros bancos':
+                        c['msg'] = 'El servicio ' + identService + ' con el ' + field + ' ' + numServ + \
+                                   ', asociado al documento de identidad ' + ident
+                    else:
+                        c['msg'] = 'El servicio ' + identService + ' con el ' + field + ' ' + numServ
+
+                    message_template = 'affiliate_email.html'
+                    email = customer.user.email
+                    print('antes de enviar correo de afiliacion servicio')
+                    send_email(subject, message_template, c, email)
+    except Customer.DoesNotExist:
+        pass
 
     return JsonResponse(data)
 

@@ -50,7 +50,7 @@ $(document).ready(function (){
             $(c).addClass('errors');
             errors = false;
         }
-        else if ($.trim($(c).val()).split(' ')< 2) {
+        else if ($.trim($(c).val()).split(' ').length < 2) {
             notification_error('El nombre del afiliado debe incluir al menos un nombre y un apellido.');
             $(c).addClass('errors');
             errors = false;
@@ -65,8 +65,8 @@ $(document).ready(function (){
         }
         else{
             if ($('#select-ci').val().includes('V') || $('#select-ci').val().includes('E')) {
-                if ($(d).val().length < 8) {
-                    notification_error('El documento de identidad debe contener 8 dígitos.');
+                if ($(d).val().length < 7) {
+                    notification_error('El documento de identidad debe contener mínimo 7 dígitos.');
                     $(d).addClass('errors');
                     errors = false;
                 }

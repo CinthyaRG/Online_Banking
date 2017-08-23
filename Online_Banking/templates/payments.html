@@ -17,6 +17,7 @@
     <script>
         $(document).ready(function (){
             var session = String({{session}}) === 'true';
+            alert(session);
 
             if (session) {
                 $('#sec_payment').css({display: 'none'});
@@ -166,8 +167,9 @@
                                     {% else %}
                                         <td>
                                             <a class="icon-table" href=""><i class="fa fa-pencil color-icon"></i></a>
-                                            <a class="icon-table open_modal" data-name="{{ p.name }}"
-                                               data-toggle="modal" href="#Modal-Delete" data-url="{{ a.id }}">
+                                            <a class="icon-table open_modal" data-name="{{ p.identService }}"
+                                               data-product="{{ p.numService }}"
+                                               data-toggle="modal" href="#Modal-Delete" data-url="{{ p.id }}">
                                                 <i class="fa fa-close color-delete"></i>
                                             </a>
                                         </td>
@@ -205,8 +207,8 @@
                     <div class="row">
                         <div class="col-md-1"></div>
                         <div class="col-md-11">
-                            <p> ¿Está seguro que desea eliminar el servicio asociado al producto
-                                <strong id="name-aff"> </strong> de la lista de sus servicios? </p>
+                            <p> ¿Está seguro que desea eliminar el servicio <strong id="name-aff"> </strong>
+                                asociado al producto <strong id="product-aff"> </strong> de la lista de sus servicios? </p>
                         </div>
                     </div>
                 </div>

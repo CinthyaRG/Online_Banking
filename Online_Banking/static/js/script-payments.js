@@ -9,8 +9,7 @@ $(document).ready(function (){
         "paging": true,
         "lengthChange": false,
         "searching":true,
-        "ordering": true,
-        "order": [ 0, 'asc' ],
+        "ordering": false,
         "info": true,
         "autoWidth": false,
         "pageLength":5,
@@ -22,11 +21,13 @@ $(document).ready(function (){
     $('#Modal-Delete').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
         var name = button.data('name');
+        var product = button.data('product');
         var url = button.data('url');
         var modal = $(this);
         url = 'delete_service('+url+')';
 
         modal.find('.modal-body #name-aff').text(name.replace(/_/g, ' '));
+        modal.find('.modal-body #product-aff').text(product);
         modal.find('#delete-aff').attr("onclick", url );
 
     });

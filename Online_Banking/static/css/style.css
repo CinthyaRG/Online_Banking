@@ -407,7 +407,7 @@ div[role="tooltip"] {
     min-width: 230px;
 }
 #nickname, #num_elec, #num_smart {
-    width: 133px;
+    width: 150px;
 }
 #input_frs_coor, #input_snd_coor {
     width: 43px;
