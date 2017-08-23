@@ -39,10 +39,6 @@ function drop_bank(){
 
 
 function name_service(a) {
-    var type_name_services = ['', , '',
-        'DirecTV Prepago', '','Pago de Impuestos Nacionales Terceros'];
-    var type_name_tdc = ['TDC de Terceros mismo banco', 'TDC de Terceros otros bancos'];
-    var type_name_tlf = ['CANTV', 'Digitel', 'Movilnet', 'Movistar'];
     var name = '';
     if (a === 'Banavih Aportes FAOV') {
         name = 'número de afiliación';
@@ -62,6 +58,8 @@ function name_service(a) {
     else if (a === 'CANTV' || a === 'Digitel' || a === 'Movistar' || a === 'Movilnet'){
         name = 'número de teléfono';
     }
+
+    return name
 
 }
 

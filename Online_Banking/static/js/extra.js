@@ -11,15 +11,15 @@
 
 
     $(a).focusout(function () {
-
+        var name = name_service(option);
         if (isNaN($(a).val())) {
-            notification_error('Solo se admiten números en el número de cuenta.');
+            notification_error('Solo se admiten números en el '+ name + '.');
             $(a).addClass('errors');
             errors = false;
         }
         else {
             if ($(a).val().length < 20) {
-                notification_error('El número de cuenta debe contener 20 dígitos.');
+                notification_error('El '+name+' debe contener 20 dígitos.');
                 $(b).addClass('errors');
                 errors = false;
             }
