@@ -140,6 +140,9 @@ div > div > input {
 .num-tarj {
     max-width: 230px;
 }
+#numtarj {
+    width: 170px;
+}
 div > dl > div > div > label {
     padding-top: 2px;
 }
@@ -170,6 +173,9 @@ div[role="tooltip"] {
 .cod-register {
     margin-left: 20px;
 }
+#cod {
+    width: 110px;
+}
 .clock {
     position: initial !important;
     width: 250px;
@@ -182,6 +188,9 @@ div[role="tooltip"] {
 }
 #quest1, #quest2, #answ1, #answ2, #quest, #email_user {
     width: 250px;
+}
+#email {
+    width: 200px;
 }
 #help-pass {
     position: relative;

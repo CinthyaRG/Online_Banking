@@ -285,7 +285,7 @@ def validate_pass(request):
             service = Service(ident=customer.ident,
                               email=user.email,
                               identService=p[0],
-                              numCard=p[1],
+                              numService=p[1],
                               alias=p[1],
                               customer=customer)
             service.save()

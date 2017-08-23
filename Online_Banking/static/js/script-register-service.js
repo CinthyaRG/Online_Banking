@@ -38,6 +38,34 @@ function drop_bank(){
 }
 
 
+function name_service(a) {
+    var type_name_services = ['', , '',
+        'DirecTV Prepago', '','Pago de Impuestos Nacionales Terceros'];
+    var type_name_tdc = ['TDC de Terceros mismo banco', 'TDC de Terceros otros bancos'];
+    var type_name_tlf = ['CANTV', 'Digitel', 'Movilnet', 'Movistar'];
+    var name = '';
+    if (a === 'Banavih Aportes FAOV') {
+        name = 'número de afiliación';
+    }
+    else if (a === 'Electricidad de Caracas'){
+        name = 'número de contrato';
+    }
+    else if (a === 'DirecTV Previo Pago'){
+        name = 'número de suscripción';
+    }
+    else if (a === 'DirecTV Prepago'){
+        name = 'número de smartcard';
+    }
+    else if (a.includes('TDC')){
+        name = 'número de tarjeta';
+    }
+    else if (a === 'CANTV' || a === 'Digitel' || a === 'Movistar' || a === 'Movilnet'){
+        name = 'número de teléfono';
+    }
+
+}
+
+
 function drop_codes(valor){
     $("#codes").append('<option value="'+'0'+'"> '+'Seleccione '+'</option>');
     $.getJSON('../static/js/codes.json', function (data) {

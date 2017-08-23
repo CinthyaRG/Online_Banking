@@ -18,6 +18,19 @@ $(document).ready(function (){
             "emptyTable": "No tiene registrado proveedores de pago"
         }
     });
+
+    $('#Modal-Delete').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var name = button.data('name');
+        var url = button.data('url');
+        var modal = $(this);
+        url = 'delete_service('+url+')';
+
+        modal.find('.modal-body #name-aff').text(name.replace(/_/g, ' '));
+        modal.find('#delete-aff').attr("onclick", url );
+
+    });
+
 });
 
 

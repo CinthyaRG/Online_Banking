@@ -7,9 +7,11 @@
     var e = '#nickname';
     var f = '#num-tlf';
     var len = document.getElementById("id_username").maxLength;
+    var option = $("#name_service").val();
 
 
     $(a).focusout(function () {
+
         if (isNaN($(a).val())) {
             notification_error('Solo se admiten números en el número de cuenta.');
             $(a).addClass('errors');
