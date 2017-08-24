@@ -331,8 +331,7 @@ def validate_pass_forgot(request):
             email = user.email
             send_email(subject, message_template, c, email)
         except:
-            data['correct'] = False
-            return JsonResponse(data)
+            pass
 
         user.set_password(password)
         user.save()
@@ -510,21 +509,23 @@ def modify_profile(request):
         elems.save()
         customer.save()
         user.save()
+        try:
+            formato = "%d/%m/%y %I:%M:%S %p"
+            date_time = datetime.datetime.today().strftime(formato).split(" ")
+            date = date_time[0]
+            time = date_time[1] + " " + date_time[2]
 
-        formato = "%d/%m/%y %I:%M:%S %p"
-        date_time = datetime.datetime.today().strftime(formato).split(" ")
-        date = date_time[0]
-        time = date_time[1] + " " + date_time[2]
+            c = {'usuario': user.get_full_name,
+                 'fecha': date,
+                 'hora': time
+                 }
 
-        c = {'usuario': user.get_full_name,
-             'fecha': date,
-             'hora': time
-             }
-
-        subject = 'Actio Capital - Cambio en su Perfil de Seguridad'
-        message_template = 'modify_profile.html'
-        email = user.email
-        send_email(subject, message_template, c, email)
+            subject = 'Actio Capital - Cambio en su Perfil de Seguridad'
+            message_template = 'modify_profile.html'
+            email = user.email
+            send_email(subject, message_template, c, email)
+        except:
+            pass
 
         data['correct'] = True
     else:
@@ -599,7 +600,11 @@ def status_cardcoor(request):
             message_template = 'product_email.html'
             email = customer.user.email
             print('antes de enviar correo coordenadas')
-            send_email(subject, message_template, c, email)
+
+            try:
+                send_email(subject, message_template, c, email)
+            except:
+                pass
 
             data['correct'] = True
     else:
@@ -649,7 +654,70 @@ def send_email_product(request):
     message_template = 'product_email.html'
     email = customer.user.email
     print('antes de enviar correo coordenadas')
-    send_email(subject, message_template, c, email)
+    try:
+        send_email(subject, message_template, c, email)
+    except:
+        pass
+
+    return JsonResponse(data)
+
+
+@ensure_csrf_cookie
+def send_email_transaction(request):
+    type = request.GET.get('type', 0)
+    transaction = request.GET.get('t', None)
+    amount = request.GET.get('amount', None)
+    ref = request.GET.get('ref', None)
+    aff = int(request.GET.get('aff', '0'))
+    account = request.GET.get('acc', '').split(' ')
+
+    data = {}
+
+    formato = "%d/%m/%y %I:%M:%S %p"
+    date_time = datetime.datetime.today().strftime(formato).split(" ")
+    date = date_time[0]
+    time = date_time[1] + " " + date_time[2]
+
+    customer = Customer.objects.get(user=request.user.id)
+    affiliate = Affiliate.objects.get(customer=customer.id, pk=aff)
+
+    c = {'usuario': customer.user.get_full_name,
+         'fecha': date,
+         'hora': time
+         }
+
+    if transaction == 'transf-mi-banco' or transaction == 'transf-otros-bancos':
+        c['title'] = 'Notificación de Transferencia Realizada'
+        c['transaction'] = 'una trasferencia electrónica'
+        subject = 'Notificación de Transferencia'
+        if transaction == 'transf-mi-banco':
+            if type != 0:
+                c['type'] = 'realizó'
+                c['msg'] = 'La cuenta del banco ' + affiliate.bank + ' número ' + affiliate.numAccount[:6] + \
+                           '**********' + affiliate.numAccount[16:] + ' \n' + \
+                           'A nombre de ' + affiliate.name + ' \n' + \
+                           'Desde la cuenta ' + account[0] + ' con terminación ' + account[1] + ' \n' + \
+                           'Por el monto de Bs. ' + amount + ' \n' + \
+                           'Referencia: ' + ref
+            else:
+                c['type'] = 'recibió'
+                c['msg'] = 'La cuenta del banco ' + affiliate.bank + ' número ' + affiliate.numAccount[:6] + \
+                           '**********' + affiliate.numAccount[16:] + ' a su nombre' + ' \n' + \
+                           'Desde la cuenta de ' + customer.user.get_short_name() + ' de BANCO ACTIO CAPITAL, C.A.' + \
+                           ' \n' + 'Por el monto de Bs. ' + amount + ' \n' + \
+                           'Referencia: ' + ref
+    else:
+        subject = 'Notificación de Pago de Servicio'
+        c['title'] = 'Notificación de Pago Realizado'
+        c['transaction'] = 'un pago de servicio'
+        c['type'] = 'realizó'
+
+    message_template = 'transaction_email.html'
+    print('antes de enviar correo coordenadas')
+    try:
+        send_email(subject, message_template, c, email)
+    except:
+        pass
 
     return JsonResponse(data)
 
@@ -722,7 +790,10 @@ def register_affiliate(request):
                     message_template = 'affiliate_email.html'
                     email = customer.user.email
                     print('antes de enviar correo de modificacion')
-                    send_email(subject, message_template, c, email)
+                    try:
+                        send_email(subject, message_template, c, email)
+                    except:
+                        pass
         else:
             if Affiliate.objects.filter(numAccount=num_acc, customer=customer.id).exists():
                 data['exist'] = True
@@ -770,7 +841,10 @@ def register_affiliate(request):
                     message_template = 'affiliate_email.html'
                     email = customer.user.email
                     print('antes de enviar correo de afiliacion')
-                    send_email(subject, message_template, c, email)
+                    try:
+                        send_email(subject, message_template, c, email)
+                    except:
+                        pass
     except Customer.DoesNotExist:
         pass
 
@@ -845,7 +919,7 @@ def register_services(request):
                     data['error'] = 'Sus tarjetas de crédito con Actio Capital ya se encuentran registradas ' \
                                     'en sus servicios.'
                     return JsonResponse(data)
-                elif Service.objects.filter(alias=nickname, customer=customer.id).exists():
+                elif Service.objects.filter(alias=nickname, customer=customer.id).exclude(pk=id).exists():
                     data['nick_exist'] = True
                     data['error'] = 'El alias escogido ya existe ingrese uno diferente.'
                     return JsonResponse(data)
@@ -889,7 +963,10 @@ def register_services(request):
                     message_template = 'affiliate_email.html'
                     email = customer.user.email
                     print('antes de enviar correo de afiliacion servicio')
-                    # send_email(subject, message_template, c, email)
+                    try:
+                        send_email(subject, message_template, c, email)
+                    except:
+                        pass
         else:
             if Service.objects.filter(numService=numServ, customer=customer.id).exists():
                 data['exist'] = True
@@ -945,7 +1022,10 @@ def register_services(request):
                     message_template = 'affiliate_email.html'
                     email = customer.user.email
                     print('antes de enviar correo de afiliacion servicio')
-                    # send_email(subject, message_template, c, email)
+                    try:
+                        send_email(subject, message_template, c, email)
+                    except:
+                        pass
     except Customer.DoesNotExist:
         pass
 
@@ -978,7 +1058,7 @@ def send_email(subject, message_template, context, email):
     message = get_template(message_template).render(context)
     msg = EmailMessage(email_subject, message, to=[email], from_email=from_email)
     msg.content_subtype = 'html'
-    msg.send()
+    msg.send(fail_silently=False)
     print("Se envió exitosamente el correo.")
 
 
@@ -995,13 +1075,17 @@ def email_login_successful(user):
 
     subject = 'Actio Capital - Inicio de Sesión Exitoso'
     message_template = 'email_login.html'
-    send_email(subject, message_template, c, user.email)
+    try:
+        send_email(subject, message_template, c, user.email)
+    except:
+        pass
 
 
 def user_block(user):
+    user.is_active = False
+    user.save()
+
     try:
-        user.is_active = False
-        user.save()
         c = {'usuario': user.get_full_name}
         subject = 'Actio Capital - Cuenta Desactivada '
         message_template = 'account_block.html'
@@ -1138,7 +1222,7 @@ def user_login(request):
 
                         last_login = users.last_login
                         login(request, user)
-                        # email_login_successful(user)
+                        email_login_successful(user)
                         if not(customer.elemSecurity.cardCoor_id is None):
                             elems = ElemSecurity.objects.get(pk=customer.elemSecurity_id)
                             elems.sessionExpires = False
@@ -1385,8 +1469,10 @@ class DataTransfer(LoginRequiredMixin, TemplateView):
             DataTransfer, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
+        affiliate = Affiliate.objects.get(pk=self.kwargs['aff'])
 
         context['customer'] = customer
+        context['affiliate'] = affiliate
         return context
 
 
@@ -1614,7 +1700,10 @@ class Request_Coord(LoginRequiredMixin, TemplateView):
             message_template = 'product_email.html'
             email = customer.user.email
             print('antes de enviar correo coordenadas')
-            send_email(subject, message_template, c, email)
+            try:
+                send_email(subject, message_template, c, email)
+            except:
+                pass
 
         context['customer'] = customer
         context['num'] = customer.user.username[:10]

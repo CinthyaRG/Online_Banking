@@ -152,9 +152,7 @@ div > dl > div > div > label {
 #ccv , #amount_cheq{
     max-width: 40px;
 }
-#ci ,#rif_banavih, #rif_info_bank, #num_susc,
-#rif_impuestos_owns , #rif_impuestos_others,
-#ci_tdc_mybank, #ci_tdc_others {
+#ci ,#ident {
     max-width: 90px;
 }
 .margin-register {

@@ -4,6 +4,7 @@
 
 var errors = true;
 var path = window.location.href.split('/');
+var regexLetters = /^[a-zA-ZáéíóúàèìòùÀÈÌÒÙÁÉÍÓÚñÑüÜ\s ]*$/;
 var a = '#num_service';
 var b = '#ident';
 var c = '#name';
@@ -21,7 +22,6 @@ $(document).ready(function (){
 
     $("#type_payment").click(function(){
         drop_type_payment();
-        $("#dl-nick").css({visibility:'hidden'});
     });
 
     $("#type_payment").change(function(){
@@ -52,7 +52,24 @@ $(document).ready(function (){
         $('#codes').removeClass('errors');
         $("#name_service").removeClass('errors');
         errors = true;
+    });
 
+    $(e).on("focusout", function() {
+        if ($(e).val()  === ''){
+            notification_error('El alias no puede estar vacío.');
+            $(e).addClass('errors');
+            errors = false;
+        }
+        else if (!($(e).val().match(regexLetters))){
+            notification_error('El alias solo admite letras.');
+            $(e).addClass('errors');
+            errors = false;
+        }
+    });
+
+    $(e).click(function () {
+        $(e).removeClass('errors');
+        errors = true;
     });
 
 });
@@ -60,10 +77,9 @@ $(document).ready(function (){
 
 function accions() {
     var regexEmail = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,3})$/i;
-    var regexLetters = /^[a-zA-ZáéíóúàèìòùÀÈÌÒÙÁÉÍÓÚñÑüÜ\s ]*$/;
     var option = $("#name_service").val();
 
-    $(a).change(function () {
+    $(a).on("focusout", function() {
         var name = name_service(option);
 
         if (isNaN($(a).val())) {
@@ -81,7 +97,7 @@ function accions() {
         }
     });
 
-    $(b).change(function () {
+    $(b).on("focusout", function() {
         var len = parseInt($(b).attr('maxlength'));
         var name;
         if (len === 9) {
@@ -113,7 +129,7 @@ function accions() {
         }
     });
 
-    $(c).change(function () {
+    $(c).on("focusout", function() {
         if ($(c).val()  === ''){
             notification_error('El nombre del titular no puede estar vacío.');
             $(c).addClass('errors');
@@ -131,28 +147,17 @@ function accions() {
         }
     });
 
-    $(d).change(function () {
-        if (!($(d).val().match(regexEmail))) {
-            notification_error('Ingrese un email válido.');
-            $(d).addClass('errors');
-            errors = false;
+    $(d).on("focusout", function() {
+        if ($(d).val() !== ''){
+            if (!($(d).val().match(regexEmail))) {
+                notification_error('Ingrese un email válido.');
+                $(d).addClass('errors');
+                errors = false;
+            }
         }
     });
 
-    $(e).change(function () {
-        if ($(e).val()  === ''){
-            notification_error('El alias no puede estar vacío.');
-            $(e).addClass('errors');
-            errors = false;
-        }
-        else if (!($(e).val().match(regexLetters))){
-            notification_error('El alias solo admite letras.');
-            $(e).addClass('errors');
-            errors = false;
-        }
-    });
-
-    $(f).change(function () {
+    $(f).on("focusout", function() {
         var name = name_service(option);
 
         if (isNaN($(f).val())) {
@@ -187,11 +192,6 @@ function accions() {
 
     $(d).click(function () {
         $(d).removeClass('errors');
-        errors = true;
-    });
-
-    $(e).click(function () {
-        $(e).removeClass('errors');
         errors = true;
     });
 
@@ -244,7 +244,6 @@ function name_service(a) {
 
 
 function drop_codes(valor,select){
-    alert(valor);
     $("#codes").empty();
     $("#codes").append('<option value="'+'0'+'"> '+'Seleccione '+'</option>');
     $.getJSON('../static/js/codes.json', function (data) {
@@ -321,7 +320,8 @@ function drop_name() {
         '<div class="col-md-6 col-xs-5 rows"><select id="rif" class="select2 input-register">'+
         '<option selected value="V-">V- </option>'+
         '<option value="J-">J- </option></select>'+
-        '<input id="rif_info_bank" maxlength="9" class="input-register margin-register"></div></div>';
+        '<input id="rif_info_bank" maxlength="9" class="input-register margin-register">' +
+        '<span class="margin-l-8">Incluya solo números</span></div></div>';
 
     _this.empty();
     $(e).val('');
@@ -360,7 +360,8 @@ function field_banavih(_this) {
         '<div class="col-md-6 col-xs-5 rows"><select  id="rif" class="select2 input-register">'+
         '<option selected value="V-">V- </option>'+
         '<option value="J-">J- </option></select>'+
-        '<input id="ident" maxlength="9" class="input-register margin-register"></div></div>';
+        '<input id="ident" maxlength="9" class="input-register margin-register">' +
+        '<span class="margin-l-8">Incluya solo números</span></div></div>';
     var field_payment = banavih;
 
     _this.append(field_payment);
@@ -449,14 +450,14 @@ function field_impuestos(_this,valor) {
         '<option selected value="V-">V- </option>'+
         '<option value="J-">J- </option></select>'+
         '<input id="ident" maxlength="9" ' +
-        'class="input-register margin-register"></div></div>';
+        'class="input-register margin-register"><span class="margin-l-8">Incluya solo números</span></div></div>';
     var others = '<div class="row"><div class="col-md-5 col-xs-5"><label class="pull-right">'+
         '<span class="text-danger"> * </span>RIF del Beneficiario: </label></div>'+
         '<div class="col-md-6 col-xs-5 rows"><select  id="rif" class="select2 input-register">'+
         '<option selected value="V-">V- </option>'+
         '<option value="J-">J- </option></select>'+
         '<input id="ident" maxlength="9" ' +
-        'class="input-register margin-register"></div></div>'+
+        'class="input-register margin-register"><span class="margin-l-8">Incluya solo números</span></div></div>'+
         '<div class="row"><div class="col-md-5 col-xs-5"><label class="pull-right">'+
         'Email: </label></div><div class="col-md-6 col-xs-5 rows">'+
         '<input id="email" class="input-register field-register"></div></div>';
@@ -501,7 +502,8 @@ function field_tdc(_this,valor) {
         '<div class="col-md-6 col-xs-5 rows"><select  id="rif" class="select2 input-register">'+
         '<option selected value="V-">V- </option>'+
         '<option value="E-">E- </option></select>'+
-        '<input id="ident" maxlength="8" class="input-register margin-register"></div></div>' +
+        '<input id="ident" maxlength="8" class="input-register margin-register">' +
+        '<span class="margin-l-8">Incluya solo números</span></div></div>' +
         '<div class="row"><div class="col-md-5 col-xs-5"><label class="pull-right">'+
         'Email: </label></div><div class="col-md-6 col-xs-5 rows">'+
         '<input id="email" class="input-register field-register"></div></div>';
@@ -518,7 +520,8 @@ function field_tdc(_this,valor) {
         '<div class="col-md-6 col-xs-5 rows"><select  id="rif" class="select2 input-register">'+
         '<option selected value="V-">V- </option>'+
         '<option value="E-">E- </option></select>'+
-        '<input id="ident" maxlength="8" class="input-register margin-register"></div></div>'+
+        '<input id="ident" maxlength="8" class="input-register margin-register">' +
+        '<span class="margin-l-8">Incluya solo números</span></div></div>'+
         '<div class="row"><div class="col-md-5 col-xs-5"><label class="pull-right">'+
         'Email: </label></div><div class="col-md-6 col-xs-5 rows">'+
         '<input id="email" class="input-register field-register"></div></div>';
@@ -542,8 +545,9 @@ function field_tdc(_this,valor) {
 function field_tlf(_this,valor) {
     var fields = '<div class="row"><div class="col-md-5 col-xs-5"><label class="pull-right">'+
         '<span class="text-danger"> * </span>Número de Teléfono: </label></div>'+
-        '<div class="col-md-6 col-xs-5 rows"><select id="codes" class="select2 input-register">'+
-        '<input id="num-tlf" maxlength="7" class="input-register margin-register"></div></div>';
+        '<div class="col-md-7 col-xs-6 rows"><select id="codes" class="select2 input-register">'+
+        '<input id="num-tlf" maxlength="7" class="input-register margin-register">' +
+        '<span class="margin-l-8">Incluya solo números</span></div></div>';
 
     _this.append(fields);
     $("#dl-nick").css({visibility:'visible'});
@@ -581,6 +585,9 @@ function add_services() {
     var d = '#email';
     var e = '#nickname';
     var f = '#num-tlf';
+    errors = !($(a).hasClass('errors') || $(b).hasClass('errors') || $(c).hasClass('errors') || $(d).hasClass('errors') ||
+        $(e).hasClass('errors') || $(f).hasClass('errors'));
+    alert(errors);
 
     if (type_payment === '0') {
         notification_error('Escoja un tipo de servicio.');
@@ -669,6 +676,10 @@ function modify_services() {
     var e = '#nickname';
     var f = '#num-tlf';
 
+    errors = !($(a).hasClass('errors') || $(b).hasClass('errors') || $(c).hasClass('errors') || $(d).hasClass('errors') ||
+        $(e).hasClass('errors') || $(f).hasClass('errors'));
+    alert(errors);
+
     if (type_payment === '0') {
         notification_error('Escoja un tipo de servicio.');
         $("#type_payment").addClass('errors');
@@ -686,8 +697,8 @@ function modify_services() {
     }
     else if (!(errors) || $(a).val() === '' || $(b).val() === '' ||
         $(c).val() === '' || $(e).val() === '' || $(f).val() === '') {
-        validate_affiliates(a,b,c,e,f);
         notification_error('El registro del servicio presenta errores. Verifique los campos en rojo.');
+        validate_affiliates(a,b,c,e,f);
     }
     else {
         var numService;

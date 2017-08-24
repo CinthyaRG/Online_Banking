@@ -137,28 +137,28 @@
                             <tbody id="table-af-other">
                             {% for a in affiliate %}
                                 <tr>
-                                    <td onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
-                                    <span class="link cursor">
+                                    <td class="cursor" onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
+                                    <span class="link">
                                         {{ a.alias }}
                                     </span>
                                     </td>
-                                    <td onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
-                                    <span class="cursor text-bold">
+                                    <td class="cursor" onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
+                                    <span class="text-bold">
                                         {{ a.name }}
                                     </span>
                                     </td>
-                                    <td class="w-200" onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
-                                    <span  class="cursor">
+                                    <td class="w-200 cursor" onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
+                                    <span>
                                         {{ a.ident }}
                                     </span>
                                     </td>
-                                    <td class="w-200" onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
-                                    <span class="cursor">
+                                    <td class="w-200 cursor" onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
+                                    <span>
                                         {{ a.bank }}
                                     </span>
                                     </td>
-                                    <td class="w-180" onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
-                                    <span class="cursor">
+                                    <td class="w-180 cursor" onclick="location.href='{% url 'datos-transferencia' pk=customer.ref aff=a.id %}'">
+                                    <span>
                                         {{ a.get_date }}
                                     </span>
                                     </td>

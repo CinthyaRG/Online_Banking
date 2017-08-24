@@ -96,6 +96,10 @@ urlpatterns = [
         send_email_product,
         name='send-email-product'),
     url(
+        r'^ajax/send-emails/$',
+        send_email_transaction,
+        name='send-email-transaction'),
+    url(
         r'^ajax/register-affiliate/$',
         register_affiliate,
         name='register-affiliate'),
@@ -148,7 +152,7 @@ urlpatterns = [
         DataTransfer.as_view(),
         name='datos-transferencia'),
     url(
-        r'^(?P<pk>\w+)/transferencia-exitosa$',
+        r'^(?P<pk>\w+)/transferencia-exitosa/(?P<ref>\w+)/$',
         Success.as_view(),
         name='transferencia-exitosa'),
     url(

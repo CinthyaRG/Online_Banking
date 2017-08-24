@@ -29,10 +29,10 @@
                             <div class="row">
                                 <div class="col-md-6 col-xs-6">
                                     <label class="pull-right">
-                                        Saldo Disponible: </label>
+                                         Saldo Disponible: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows margin-t-2">
-                                    <span id="balance_transf" class="field-register">
+                                    <b> Bs. </b> <span id="balance_transf" class="field-register text-bold">
                                     </span>
                                 </div>
                             </div>
@@ -42,7 +42,7 @@
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows margin-t-2">
                                     <span id="name_transf" class="field-register">
-                                        Lucia Gomez
+                                        {{ affiliate.name }}
                                     </span>
                                 </div>
                             </div>
@@ -52,7 +52,7 @@
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows margin-t-2">
                                     <span id="ci_transf" class="field-register">
-                                        V-17235431
+                                        {{ affiliate.ident }}
                                     </span>
                                 </div>
                             </div>
@@ -62,7 +62,7 @@
                                 </div>
                                 <div class="col-md-6 col-xs-6 rows margin-t-2">
                                     <span id="acc_transf" class="field-register">
-                                        01xx4251789635254125
+                                        {{ affiliate.numAccount }}
                                     </span>
                                 </div>
                             </div>
@@ -93,9 +93,12 @@
             <div class="col-md-5 col-xs-5"></div>
             <div class="col-md-4">
                 <a id="btn-back" class="btn btn-default btn-group btn-apps"
-                   type="button" onclick="window.history.back()"> Cancelar </a>
+                   type="button" onclick="location.href=document.referrer"> Cancelar </a>
                 <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
-                   type="button" href="{% url 'transferencia-exitosa' %}"> Aceptar </a>
+                   type="button" onclick="send_transfer('#account', '{{affiliate.numAccount}}', '#amount_transf',
+                        '#descrip_transf', '{{ customer.user.username }}', '{{ affiliate.id }}')">
+                    Aceptar
+                </a>
             </div>
 
         </div>
