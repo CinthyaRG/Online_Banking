@@ -3,12 +3,65 @@
 
 {% block script %}
     <script src="{% static 'js/script-register-service.js' %}"></script>
+    <script>
+        $(document).ready(function (){
+            var a = '#num_service';
+            var b = '#ident';
+            var c = '#name';
+            var d = '#email';
+            var e = '#nickname';
+            var f = '#num-tlf';
+
+            if ('{{ title }}' === 'Modificación'){
+                alert('aquiiiiiii path');
+                if ('{{ service.get_type }}' === 'Servicio') {
+                    $('#type_payment').find('option[value="Servicio"]').attr("selected",'selected');
+                }
+                else if ('{{ service.get_type }}' === 'TDC') {
+                    $('#type_payment').find('option[value="TDC"]').attr("selected",'selected');
+                }
+                else if ('{{ service.get_type }}' === 'Recarga') {
+                    $('#type_payment').find('option[value="Telefonía"]').attr("selected",'selected');
+                }
+                drop_type_payment();
+                $('#name_service').find('option[value="{{ service.identService }}"]').attr("selected",'selected');
+                drop_name();
+                var numService;
+                var type_payment = $('#type_payment').val();
+                var option = $('#name_service').val();
+                var ci = '{{ service.ident }}'.split('-');
+                if (ci[0] === 'E') {
+                    $('#rif').find('option[value="E-"]').attr("selected",'selected');
+                }
+                else if (ci[0] === 'J') {
+                    $('#rif').find('option[value="J-"]').attr("selected",'selected');
+                }
+                else {
+                    $('#rif').find('option[value="V-"]').attr("selected",'selected');
+                }
+                if (type_payment === 'Telefonía'){
+                    var num = '{{ service.numService }}'.split('-');
+                    drop_codes(option,num[0]);
+                    $(f).val(num[1]);
+                }
+                else{
+                    $(a).val('{{ service.numService }}');
+                }
+
+                $(b).val(ci[1]);
+                $(c).val('{{ service.extra }}');
+                $(d).val('{{ service.email }}');
+                $(e).val('{{ service.alias }}');
+
+            }
+        })
+    </script>
 {% endblock %}
 
 {% block content %}
     <section class="content-header">
         <div class="row" id="title-transf-bank">
-            <h3> Registro de Servicios </h3>
+            <h3> {{ title }} de Servicios </h3>
         </div>
         <div class="row">
             <div class="col-md-2"></div>
@@ -59,8 +112,13 @@
             <div class="col-md-4">
                 <a id="btn-back" class="btn btn-default btn-group btn-apps"
                    type="button" onclick="location.href=document.referrer"> Cancelar </a>
-                <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
+                {% if title == 'Registro' %}
+                    <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
                    type="button" onclick="add_services()"> Agregar </a>
+                {% else %}
+                    <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
+                   type="button" onclick="modify_services()"> Agregar </a>
+                {% endif %}
             </div>
 
         </div>

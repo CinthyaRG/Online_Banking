@@ -166,7 +166,7 @@
                                         </td>
                                     {% else %}
                                         <td>
-                                            <a class="icon-table" href=""><i class="fa fa-pencil color-icon"></i></a>
+                                            <a class="icon-table" href="{% url 'modificar-servicio' p.id %}"><i class="fa fa-pencil color-icon"></i></a>
                                             <a class="icon-table open_modal" data-name="{{ p.identService }}"
                                                data-product="{{ p.numService }}"
                                                data-toggle="modal" href="#Modal-Delete" data-url="{{ p.id }}">

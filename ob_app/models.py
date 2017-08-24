@@ -90,7 +90,7 @@ class Service(models.Model):
     ident = models.CharField(validators=[IDEN_VALIDATOR], max_length=11, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     numService = models.CharField(max_length=32, blank=True, null=True)
-    identService = models.CharField(max_length=32)
+    identService = models.CharField(max_length=40)
     alias = models.CharField(max_length=40)
     extra = models.CharField(max_length=40, default='')
     customer = models.ForeignKey(Customer)

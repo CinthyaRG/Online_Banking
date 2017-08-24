@@ -11,7 +11,7 @@ $(document).ready(function (){
         "searching":true,
         "ordering": false,
         "info": true,
-        "autoWidth": false,
+        "autoWidth": true,
         "pageLength":5,
         "language": {
             "emptyTable": "No tiene registrado proveedores de pago"
@@ -33,7 +33,6 @@ $(document).ready(function (){
     });
 
 });
-
 
 
 function payments_table() {
@@ -58,5 +57,31 @@ function payments_table() {
 }
 
 
-
-
+function delete_service(a) {
+    var path = window.location.href.split('/');
+    var url = path[0] + "/" + path[1] + "/" + path[2] + "/eliminar-servicio/" + a + '/';
+    notification_success('Eliminando servicio.....');
+    setTimeout(function(){
+        $.ajax({
+            url: url,
+            origin: 'http://127.0.0.1:8000',
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) {
+                    notification_success('Se ha eliminado exitosamente su servicio.');
+                    setTimeout(function(){
+                        notification_success('Actualizando....');
+                        setTimeout(function(){
+                            location.reload();
+                        }, 1500);
+                    }, 1500);
+                }
+                else{
+                    notification_error('Hubo un error eliminando su servicio. Intente nuevamente.');
+                }
+            }
+        })
+    }, 3000);
+}

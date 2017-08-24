@@ -19,12 +19,16 @@ $(document).ready(function (){
     $('li').removeClass("active");
     $("#dl-nick").css({visibility:'hidden'});
 
+    $("#type_payment").click(function(){
+        drop_type_payment();
+        $("#dl-nick").css({visibility:'hidden'});
+    });
+
     $("#type_payment").change(function(){
         $("#input-services").empty();
         $("#name_service").empty();
         drop_type_payment();
         $("#dl-nick").css({visibility:'hidden'});
-
         $(a).removeClass('errors');
         $(b).removeClass('errors');
         $(c).removeClass('errors');
@@ -128,7 +132,7 @@ function accions() {
     });
 
     $(d).change(function () {
-         if (!($(d).val().match(regexEmail))) {
+        if (!($(d).val().match(regexEmail))) {
             notification_error('Ingrese un email válido.');
             $(d).addClass('errors');
             errors = false;
@@ -239,14 +243,21 @@ function name_service(a) {
 }
 
 
-function drop_codes(valor){
+function drop_codes(valor,select){
+    alert(valor);
+    $("#codes").empty();
     $("#codes").append('<option value="'+'0'+'"> '+'Seleccione '+'</option>');
     $.getJSON('../static/js/codes.json', function (data) {
         $.each( data, function( key, val ) {
             if (valor === key) {
                 val.sort();
                 $.each( val, function( k, v ) {
-                    $("#codes").append('<option value="' +v+ '"> ' +v+ '</option>');
+                    if (select === v) {
+                        $("#codes").append('<option selected value="' +v+ '"> ' +v+ '</option>');
+                    }
+                    else {
+                        $("#codes").append('<option value="' +v+ '"> ' +v+ '</option>');
+                    }
                 })
             }
         });
@@ -275,8 +286,8 @@ function drop_type_payment() {
     var _this = $("#name_service");
     var type_name;
 
+    _this.empty();
     _this.append('<option value="'+'0'+'" selected> '+"Seleccione"+'</option>');
-
 
     if (valor === 'Servicio') {
         type_name = type_name_services;
@@ -564,10 +575,6 @@ function validate_affiliates(a,b,c,d,e) {
 function add_services() {
     var type_payment = $("#type_payment").val();
     var option = $("#name_service").val();
-    var type_name_services = [, 'Electricidad de Caracas', 'DirecTV Previo Pago',
-        'DirecTV Prepago', 'Pago de Impuestos Nacionales Propios','Pago de Impuestos Nacionales Terceros'];
-    var type_name_tdc = ['TDC de Terceros mismo banco', 'TDC de Terceros otros bancos'];
-    var type_name_tlf = ['CANTV', 'Digitel', 'Movilnet', 'Movistar'];
     var a = '#num_service';
     var b = '#ident';
     var c = '#name';
@@ -599,6 +606,9 @@ function add_services() {
         var numService;
         if (type_payment === 'Telefonía' ){
             numService = $("#codes").val()+ '-'+ $(f).val();
+        }
+        else if (option.includes('Impuestos')){
+            numService = $("#rif").val()+ $(b).val();
         }
         else {
             numService = $(a).val();
@@ -633,6 +643,99 @@ function add_services() {
                             $(e).addClass('errors');
                         }
                         if (data.exist){
+                            notification_error('Registro fallido ' + data.error);
+                            if (type_payment === 'Telefonía' ){
+                                $(f).addClass('errors');
+                            }
+                            else {
+                                $(a).addClass('errors');
+                            }
+                        }
+                    }
+                }
+            })
+        }, 3000);
+    }
+}
+
+
+function modify_services() {
+    var type_payment = $("#type_payment").val();
+    var option = $("#name_service").val();
+    var a = '#num_service';
+    var b = '#ident';
+    var c = '#name';
+    var d = '#email';
+    var e = '#nickname';
+    var f = '#num-tlf';
+
+    if (type_payment === '0') {
+        notification_error('Escoja un tipo de servicio.');
+        $("#type_payment").addClass('errors');
+        errors = false;
+    }
+    else if (option ==='0') {
+        notification_error('Escoja el nombre del servicio a afiliar.');
+        $("#name_service").addClass('errors');
+        errors = false;
+    }
+    else if ($("#codes").val() ==='0') {
+        notification_error('Escoja el código de área del teléfono a afiliar.');
+        $("#codes").addClass('errors');
+        errors = false;
+    }
+    else if (!(errors) || $(a).val() === '' || $(b).val() === '' ||
+        $(c).val() === '' || $(e).val() === '' || $(f).val() === '') {
+        validate_affiliates(a,b,c,e,f);
+        notification_error('El registro del servicio presenta errores. Verifique los campos en rojo.');
+    }
+    else {
+        var numService;
+        if (type_payment === 'Telefonía' ){
+            numService = $("#codes").val()+ '-'+ $(f).val();
+        }
+        else if (option.includes('Impuestos')){
+            numService = $("#rif").val()+ $(b).val();
+        }
+        else {
+            numService = $(a).val();
+        }
+        var url = path[0] + "/" + path[1] + "/" + path[2] + "/ajax/register-services/";
+        var back = document.referrer;
+        notification_success('Modificando afiliado.....');
+        setTimeout(function(){
+            $.ajax({
+                url: url,
+                origin: 'http://127.0.0.1:8000',
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                data: {
+                    numService: numService,
+                    ident: $("#rif").val()+ $(b).val(),
+                    identServ: option,
+                    name: $(c).val(),
+                    email: $(d).val(),
+                    nick: $.trim($(e).val()),
+                    option: path[4]
+                },
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.success) {
+                        notification_success('Modificación de afiliado exitoso.');
+                        setTimeout(function(){
+                            location.href= back;
+                        }, 3000);
+                    }
+                    else{
+                        if (data.my_acc){
+                            notification_error('Modificación fallida, '+ data.error);
+                            $(a).addClass('errors');
+                        }
+                        if (data.nick_exist){
+                            notification_error(data.error);
+                            $(e).addClass('errors');
+                        }
+                        if (data.exist){
                             notification_error(data.error);
                             if (type_payment === 'Telefonía' ){
                                 $(f).addClass('errors');
@@ -640,7 +743,6 @@ function add_services() {
                             else {
                                 $(a).addClass('errors');
                             }
-
                         }
                     }
                 }

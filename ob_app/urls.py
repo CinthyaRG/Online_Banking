@@ -181,12 +181,12 @@ urlpatterns = [
         name='registro-servicios'),
     url(
         r'^eliminar-servicio/(?P<pk>\w+)/$',
-        delete_affiliate,
-        name='eliminar-afiliado'),
+        delete_service,
+        name='eliminar-servicio'),
     url(
         r'^modificar-servicio/(?P<pk>\w+)$',
-        Modify_affiliate.as_view(),
-        name='modificar-afiliado'),
+        Modify_service.as_view(),
+        name='modificar-servicio'),
     url(
         r'^(?P<pk>\w+)/solicitudes$',
         Request.as_view(),
