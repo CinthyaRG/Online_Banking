@@ -3,12 +3,7 @@
  */
 
 var balance = [];
-var ref = '';
-var name = '';
-var amount = '';
-var ci = '';
-var account = '': 
-var description = '': 
+
 
 $(document).ready(function (){
     $('li').removeClass("active");
@@ -112,11 +107,6 @@ function send_transfer(a,b,c,d,e,aff) {
         notification_error(msg);
     }
     else {
-        amount = $(c).val()
-        account = b.substring(0,6) + '**********' + b.substring(16);
-        description = $(d).val();
-        ci = $('#ci_transf').text();
-        name = $('#name_transf').text();
         var url = document.referrer.split('/');
         var url_api = url[0] + "/" + url[1] + "/localhost:8001/ajax/send-transfer/";
         var acc = document.getElementById('account').options[document.getElementById('account').selectedIndex].text;
@@ -141,12 +131,13 @@ function send_transfer(a,b,c,d,e,aff) {
                         notification_error('Transferencia no exitosa. Intente más tarde.');
                     }
                     else{
+                        var path = window.location.href.split('/');
                         notification_success(data.msg);
-                        ref = data.ref;
                         send_email('send',url[4],data.amount, data.ref, aff, acc);
                         send_email(0,url[4],data.amount, data.ref, aff, '');
                         setTimeout(function(){
-                            location.href = url[0] + "/" + url[1] + "/" + url[2] + "/" + url[3] + "/transferencia-exitosa/" + data.ref + '/';
+                            location.href = url[0] + "/" + url[1] + "/" + url[2] + "/" + url[3] + "/transferencia-exitosa/"
+                                + path[5] + '/' + data.ref + '/';
                         }, 3000);
                     }
                 },
@@ -157,6 +148,7 @@ function send_transfer(a,b,c,d,e,aff) {
         }, 1000);
     }
 }
+
 
 function send_email(a,b,c,d,e,f) {
     var path = window.location.href.split('/');
@@ -179,14 +171,7 @@ function send_email(a,b,c,d,e,f) {
     })
 }
 
-function data_success(){
-    $('#ref').text(ref);
-    $('#name_transf').text(name);
-    $('#ci_transf').text(ci);
-    $('#acc_transf').text(account);
-    $('#amount').text(amount);
-    $('#decription').text(description);
-}
+
 
 
 

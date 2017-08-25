@@ -7,6 +7,7 @@
         $(document).ready(function (){
             var url = document.referrer.split('/');
             var path = window.location.href.split('/');
+            var ci;
             var a = '#bank';
             var b = '#num-acc';
             var c = '#name';
@@ -22,7 +23,7 @@
                 }
                 else if (path[3] === 'modificar-afiliado'){
                     alert('aquiiiiiii path');
-                    var ci = '{{ affiliate.ident }}'.split('-');
+                    ci = '{{ affiliate.ident }}'.split('-');
                     if (ci[0] === 'E') {
                         $('#select-ci').find('option[value="E-"]').attr("selected",'selected');
                     }
@@ -43,9 +44,8 @@
                     drop_bank('');
                 }
                 else if (path[3] === 'modificar-afiliado'){
-                    alert('aquiiiiiii path');
                     drop_bank('{{ affiliate.bank }}');
-                    var ci = '{{ affiliate.ident }}'.split('-');
+                    ci = '{{ affiliate.ident }}'.split('-');
                     if (ci[0] === 'E') {
                         $('#select-ci').find('option[value="E-"]').attr("selected",'selected');
                     }

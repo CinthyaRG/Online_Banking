@@ -152,7 +152,7 @@ urlpatterns = [
         DataTransfer.as_view(),
         name='datos-transferencia'),
     url(
-        r'^(?P<pk>\w+)/transferencia-exitosa/(?P<ref>\w+)/$',
+        r'^(?P<pk>\w+)/transferencia-exitosa/(?P<aff>\w+)/(?P<ref>\w+)/$',
         Success.as_view(),
         name='transferencia-exitosa'),
     url(

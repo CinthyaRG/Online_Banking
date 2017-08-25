@@ -8,8 +8,32 @@
         function download(url) {
             document.getElementById('myframe').src = url;
         }
+    </script>
+    <script>
+        $(document).ready(function () {
+            var path = window.location.href.split('/');
+            var url_api = path[0]+"/"+path[1]+"/"+"localhost:8001/ajax/get-references/";
 
-        data_success();
+            $.ajax({
+                url: url_api,
+                origin: 'localhost:8000',
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                data: {
+                    ref: '{{ ref }}'
+                },
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.correct) {
+                        $('#amount').text('Bs. '+data.amount);
+                        $('#decription').text(data.description);
+                    }
+                }
+            });
+            var account = '{{ affiliate.numAccount }}'.substring(0,6) + '**********' + '{{ affiliate.numAccount }}'.substring(16);
+            $('#acc_transf').text(account);
+
+        })
     </script>
 {% endblock %}
 
@@ -20,75 +44,73 @@
             <div class="row title-trans">
                 <div class="col-md-7 col-xs-8"></div>
                 <div class="col-md-5 col-xs-4">
-                    <h3>Ref. <span id="ref"> 123458-4 </span></h3>
+                    <h3>Ref. {{ ref }} </h3>
                 </div>
             </div>
             <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-7">
-                <div class="box box-success">
-                    <div class="box-body">
-                        <dl class="dl-horizontal label-input">
-                            <div class="row">
-                                <div class="col-md-6 col-xs-6">
-                                    <label class="pull-right"> Nombre del Beneficiario: 
-                                    </label>
-                                </div>
-                                <div class="col-md-6 col-xs-5 rows margin-t-2">
+                <div class="col-md-2"></div>
+                <div class="col-md-7">
+                    <div class="box box-success">
+                        <div class="box-body">
+                            <dl class="dl-horizontal label-input">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <label class="pull-right"> Nombre del Beneficiario:
+                                        </label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-5 rows margin-t-2">
                                     <span id="name_transf" class="field-register">
-                                        Lucia Gomez
+                                        {{ affiliate.name }}
                                     </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-xs-6">
-                                    <label class="pull-right">Documento de Identidad: </label>
-                                </div>
-                                <div class="col-md-6 col-xs-5 rows margin-t-2">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <label class="pull-right">Documento de Identidad: </label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-5 rows margin-t-2">
                                     <span id="ci_transf" class="field-register">
-                                        V-17235431
+                                        {{ affiliate.ident }}
                                     </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-xs-6">
-                                    <label class="pull-right">Número de cuenta: </label>
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <label class="pull-right">Número de cuenta: </label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-6 rows margin-t-2">
+                                        <span id="acc_transf" class="field-register"></span>
+                                    </div>
                                 </div>
-                                <div class="col-md-6 col-xs-6 rows margin-t-2">
-                                    <span id="acc_transf" class="field-register">
-                                        01xx4251789635254125
-                                    </span>
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <label class="pull-right">
+                                            Monto de la Transferencia: </label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-5 rows">
+                                        <span id="amount"> </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-xs-6">
-                                    <label class="pull-right">
-                                        Monto de la Transferencia: </label>
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <label class="pull-right">
+                                            Descripción: </label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-5 rows">
+                                        <span id="decription"></span>
+                                    </div>
                                 </div>
-                                <div class="col-md-6 col-xs-5 rows">
-                                    <span id="amount">Bs. 15.000,00 </span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-xs-6">
-                                    <label class="pull-right">
-                                        Descripción: </label>
-                                </div>
-                                <div class="col-md-6 col-xs-5 rows">
-                                    <span id="decription">Pago de bisuteria </span>
-                                </div>
-                            </div>
-                        </dl>
+                            </dl>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         </div>
         <div class="row">
             <div class="col-md-4 col-xs-4"></div>
             <div class="col-md-5">
                 <a id="btn-back" class="btn btn-default btn-group btn-apps"
-                   type="button" href=""> Ir a Posición Consolidada </a>
+                   type="button" href="{% url 'inicio' customer.ref %}"> Ir a Posición Consolidada </a>
                 <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
                    type="button" href="download.pdf" download="referencia.pdf"> Descargar </a>
             </div>

@@ -22,7 +22,7 @@ function notification_success(msg) {
             type: 'success',
             stack: stack,
             animate_speed: 'normal',
-            delay: 2500
+            delay: 2200
         });
     });
 }
@@ -37,7 +37,9 @@ function notification_error(msg) {
             },
             styling: 'bootstrap3',
             type: 'error',
-            stack: stack
+            stack: stack,
+            animate_speed: 'normal',
+            delay: 2200
         });
     });
 }

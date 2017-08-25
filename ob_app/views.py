@@ -664,15 +664,17 @@ def send_email_product(request):
 
 @ensure_csrf_cookie
 def send_email_transaction(request):
-    type_trans = request.GET.get('type', 0)
+    type_trans = request.GET.get('type', '0')
     transaction = request.GET.get('t', None)
     amount = request.GET.get('amount', None)
     ref = request.GET.get('ref', None)
     aff = int(request.GET.get('aff', '0'))
     account = request.GET.get('acc', '').split(' ')
+    print('Entro a enviar correo*********************************+')
     print(account)
     print(amount)
     print(ref)
+    print(type_trans)
 
     data = {}
 
@@ -684,8 +686,7 @@ def send_email_transaction(request):
     customer = Customer.objects.get(user=request.user.id)
     affiliate = Affiliate.objects.get(customer=customer.id, pk=aff)
 
-    c = {'usuario': customer.user.get_full_name,
-         'fecha': date,
+    c = {'fecha': date,
          'hora': time
          }
 
@@ -694,22 +695,24 @@ def send_email_transaction(request):
         c['transaction'] = 'una trasferencia electrónica'
         subject = 'Notificación de Transferencia'
         if transaction == 'transf-mi-banco':
-            if type_trans != 0:
+            if type_trans != '0':
                 c['type'] = 'realizó'
                 c['msg'] = 'La cuenta del banco ' + affiliate.bank + ' número ' + affiliate.numAccount[:6] + \
-                           '**********' + affiliate.numAccount[16:] + ' \n' + \
-                           'A nombre de ' + affiliate.name + ' \n' 
-                c['msg2'] = 'Desde la cuenta ' + account[0] + ' con terminación ' + account[1] + ' \n' + \
-                           'Por el monto de Bs. ' + amount + ' \n' + \
-                           'Referencia: ' + ref
-                email = customer.email
+                           '**********' + affiliate.numAccount[16:] + ', ' + \
+                           'a nombre de ' + affiliate.name + '.'
+                c['msg2'] = 'Desde la cuenta ' + account[0] + ' con terminación ' + account[1] + '.'
+                c['amount'] = 'Por el monto de Bs. ' + amount
+                c['ref'] = 'Referencia: ' + ref
+                c['usuario'] = customer.user.get_full_name
+                email = customer.user.email
             else:
                 c['type'] = 'recibió'
                 c['msg'] = 'La cuenta del banco ' + affiliate.bank + ' número ' + affiliate.numAccount[:6] + \
-                           '**********' + affiliate.numAccount[16:] + ' a su nombre' + ' \n' + \
-                           'Desde la cuenta de ' + customer.user.get_short_name() + ' de BANCO ACTIO CAPITAL, C.A.' + \
-                           ' \n' + 'Por el monto de Bs. ' + amount + ' \n' + \
-                           'Referencia: ' + ref
+                           '**********' + affiliate.numAccount[16:] + ' a su nombre.'
+                c['msg2'] = 'Desde la cuenta de ' + customer.get_name() + ' de BANCO ACTIO CAPITAL, C.A.'
+                c['amount'] = 'Por el monto de Bs. ' + amount
+                c['ref'] = 'Referencia: ' + ref
+                c['usuario'] = affiliate.name
                 email = affiliate.email
     else:
         subject = 'Notificación de Pago de Servicio'
@@ -720,6 +723,7 @@ def send_email_transaction(request):
     message_template = 'transaction_email.html'
     print('antes de enviar correo coordenadas')
     try:
+        print('el email es: ')
         print(email)
         if email is not None:
             send_email(subject, message_template, c, email)
@@ -1493,8 +1497,13 @@ class Success(LoginRequiredMixin, TemplateView):
             Success, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
+        affiliate = Affiliate.objects.get(pk=self.kwargs['aff'])
+        ref = self.kwargs['ref']
 
         context['customer'] = customer
+        context['affiliate'] = affiliate
+        context['ref'] = ref
+
         return context
 
 
