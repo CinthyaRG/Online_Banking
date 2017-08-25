@@ -462,6 +462,7 @@ div[role="tooltip"] {
 #table_coor {
     background-color: rgba(70,186,181,0.39);
     border-radius: 10px;
+    min-width: 365px;
 }
 .height-20 {
     height: 20px;

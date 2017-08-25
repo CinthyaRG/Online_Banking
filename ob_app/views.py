@@ -664,12 +664,15 @@ def send_email_product(request):
 
 @ensure_csrf_cookie
 def send_email_transaction(request):
-    type = request.GET.get('type', 0)
+    type_trans = request.GET.get('type', 0)
     transaction = request.GET.get('t', None)
     amount = request.GET.get('amount', None)
     ref = request.GET.get('ref', None)
     aff = int(request.GET.get('aff', '0'))
     account = request.GET.get('acc', '').split(' ')
+    print(account)
+    print(amount)
+    print(ref)
 
     data = {}
 
@@ -691,14 +694,15 @@ def send_email_transaction(request):
         c['transaction'] = 'una trasferencia electrónica'
         subject = 'Notificación de Transferencia'
         if transaction == 'transf-mi-banco':
-            if type != 0:
+            if type_trans != 0:
                 c['type'] = 'realizó'
                 c['msg'] = 'La cuenta del banco ' + affiliate.bank + ' número ' + affiliate.numAccount[:6] + \
                            '**********' + affiliate.numAccount[16:] + ' \n' + \
-                           'A nombre de ' + affiliate.name + ' \n' + \
-                           'Desde la cuenta ' + account[0] + ' con terminación ' + account[1] + ' \n' + \
+                           'A nombre de ' + affiliate.name + ' \n' 
+                c['msg2'] = 'Desde la cuenta ' + account[0] + ' con terminación ' + account[1] + ' \n' + \
                            'Por el monto de Bs. ' + amount + ' \n' + \
                            'Referencia: ' + ref
+                email = customer.email
             else:
                 c['type'] = 'recibió'
                 c['msg'] = 'La cuenta del banco ' + affiliate.bank + ' número ' + affiliate.numAccount[:6] + \
@@ -706,6 +710,7 @@ def send_email_transaction(request):
                            'Desde la cuenta de ' + customer.user.get_short_name() + ' de BANCO ACTIO CAPITAL, C.A.' + \
                            ' \n' + 'Por el monto de Bs. ' + amount + ' \n' + \
                            'Referencia: ' + ref
+                email = affiliate.email
     else:
         subject = 'Notificación de Pago de Servicio'
         c['title'] = 'Notificación de Pago Realizado'
@@ -715,7 +720,9 @@ def send_email_transaction(request):
     message_template = 'transaction_email.html'
     print('antes de enviar correo coordenadas')
     try:
-        send_email(subject, message_template, c, email)
+        print(email)
+        if email is not None:
+            send_email(subject, message_template, c, email)
     except:
         pass
 

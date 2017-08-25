@@ -8,6 +8,8 @@
         function download(url) {
             document.getElementById('myframe').src = url;
         }
+
+        data_success();
     </script>
 {% endblock %}
 
@@ -18,7 +20,7 @@
             <div class="row title-trans">
                 <div class="col-md-7 col-xs-8"></div>
                 <div class="col-md-5 col-xs-4">
-                    <h3>Ref. 123458-4  </h3>
+                    <h3>Ref. <span id="ref"> 123458-4 </span></h3>
                 </div>
             </div>
             <div class="row">
@@ -29,7 +31,8 @@
                         <dl class="dl-horizontal label-input">
                             <div class="row">
                                 <div class="col-md-6 col-xs-6">
-                                    <label class="pull-right"> Nombre del Beneficiario: </label>
+                                    <label class="pull-right"> Nombre del Beneficiario: 
+                                    </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows margin-t-2">
                                     <span id="name_transf" class="field-register">
@@ -63,7 +66,7 @@
                                         Monto de la Transferencia: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows">
-                                    <span>Bs. 15.000,00 </span>
+                                    <span id="amount">Bs. 15.000,00 </span>
                                 </div>
                             </div>
                             <div class="row">
@@ -72,7 +75,7 @@
                                         Descripción: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows">
-                                    <span>Pago de bisuteria </span>
+                                    <span id="decription">Pago de bisuteria </span>
                                 </div>
                             </div>
                         </dl>

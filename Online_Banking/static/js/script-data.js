@@ -3,6 +3,12 @@
  */
 
 var balance = [];
+var ref = '';
+var name = '';
+var amount = '';
+var ci = '';
+var account = '': 
+var description = '': 
 
 $(document).ready(function (){
     $('li').removeClass("active");
@@ -70,7 +76,6 @@ function drop_account_trans(account){
             $("#account").append('<option value="'+(i+1)+'"> '+val[0].substring(6)+'  '+val[1].substring(12)+'</option>');
         }
     });
-    alert(balance);
 }
 
 
@@ -107,6 +112,11 @@ function send_transfer(a,b,c,d,e,aff) {
         notification_error(msg);
     }
     else {
+        amount = $(c).val()
+        account = b.substring(0,6) + '**********' + b.substring(16);
+        description = $(d).val();
+        ci = $('#ci_transf').text();
+        name = $('#name_transf').text();
         var url = document.referrer.split('/');
         var url_api = url[0] + "/" + url[1] + "/localhost:8001/ajax/send-transfer/";
         var acc = document.getElementById('account').options[document.getElementById('account').selectedIndex].text;
@@ -132,6 +142,7 @@ function send_transfer(a,b,c,d,e,aff) {
                     }
                     else{
                         notification_success(data.msg);
+                        ref = data.ref;
                         send_email('send',url[4],data.amount, data.ref, aff, acc);
                         send_email(0,url[4],data.amount, data.ref, aff, '');
                         setTimeout(function(){
@@ -168,6 +179,14 @@ function send_email(a,b,c,d,e,f) {
     })
 }
 
+function data_success(){
+    $('#ref').text(ref);
+    $('#name_transf').text(name);
+    $('#ci_transf').text(ci);
+    $('#acc_transf').text(account);
+    $('#amount').text(amount);
+    $('#decription').text(description);
+}
 
 
 
