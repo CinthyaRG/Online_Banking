@@ -232,77 +232,121 @@ function add_affiliate(a,b,c,d,e,f,g,h) {
         var url = path[0] + "/" + path[1] + "/" + path[2] + "/ajax/register-affiliate/";
         notification_success('Registrando afiliado.....');
         setTimeout(function(){
-            var url_api = path[0] + "/" + path[1] + "/" + "localhost:8001/ajax/exist-account/";
-            $.ajax({
-                url: url_api,
-                origin: 'localhost:8000',
-                headers: {'X-CSRFToken': getCookie('csrftoken')},
-                type: 'GET',
-                dataType: 'json',
-                data: {
-                    ci: $(d).val()+$(e).val(),
-                    acc: $(b).val()
-                },
-                success: function (data) {
-                    if (data.exist){
-                        $.ajax({
-                            url: url,
-                            origin: 'http://127.0.0.1:8000',
-                            headers: {'X-CSRFToken': getCookie('csrftoken')},
-                            data: {
-                                bank: document.getElementById('bank').options[document.getElementById('bank').selectedIndex].text,
-                                num: $(b).val(),
-                                name: $(c).val(),
-                                ci: $(d).val()+$(e).val(),
-                                nick: $.trim($(f).val()),
-                                email: $(g).val()
-                            },
-                            type: 'GET',
-                            dataType: 'json',
-                            success: function (data) {
-                                if (data.success) {
-                                    notification_success('Registro de afiliado exitoso.');
-                                    setTimeout(function(){
-                                        location.href= document.referrer;
-                                    }, 3000);
-                                }
-                                else{
-                                    if (data.my_acc){
-                                        notification_error('Registro fallido, no es necesario registrar sus cuentas ' +
-                                            'con Actio Capital. Puede transferirse entre sus cuentas desde la opción del menú ' +
-                                            'Transferencias-Mis Cuentas');
-                                        $(e).addClass('errors');
-                                    }
-                                    if (data.nick_exist){
-                                        notification_error('El alias escogido ya existe ingrese uno diferente.');
-                                        $(f).addClass('errors');
-                                    }
-                                    if (data.exist){
-                                        notification_error('Registro fallido, el número de cuenta ya está afiliado.');
-                                        $(b).addClass('errors');
-                                    }
-                                }
+            if ($(a).val() !== '0180'){
+                $.ajax({
+                    url: url,
+                    origin: 'http://127.0.0.1:8000',
+                    headers: {'X-CSRFToken': getCookie('csrftoken')},
+                    data: {
+                        bank: document.getElementById('bank').options[document.getElementById('bank').selectedIndex].text,
+                        num: $(b).val(),
+                        name: $(c).val(),
+                        ci: $(d).val()+$(e).val(),
+                        nick: $.trim($(f).val()),
+                        email: $(g).val()
+                    },
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.success) {
+                            notification_success('Registro de afiliado exitoso.');
+                            setTimeout(function(){
+                                location.href= document.referrer;
+                            }, 3000);
+                        }
+                        else{
+                            if (data.my_acc){
+                                notification_error('Registro fallido, no es necesario registrar sus cuentas ' +
+                                    'con Actio Capital. Puede transferirse entre sus cuentas desde la opción del menú ' +
+                                    'Transferencias-Mis Cuentas');
+                                $(e).addClass('errors');
                             }
-                        })
+                            if (data.nick_exist){
+                                notification_error('El alias escogido ya existe ingrese uno diferente.');
+                                $(f).addClass('errors');
+                            }
+                            if (data.exist){
+                                notification_error('Registro fallido, el número de cuenta ya está afiliado.');
+                                $(b).addClass('errors');
+                            }
+                        }
                     }
-                    else {
-                        if (data.ident){
-                            notification_error('El documento de identidad no pertenece a un cliente de Actio Capital.');
-                            $(e).addClass('errors');
+                })
+            }
+            else{
+                var url_api = path[0] + "/" + path[1] + "/" + "localhost:8001/ajax/exist-account/";
+                $.ajax({
+                    url: url_api,
+                    origin: 'localhost:8000',
+                    headers: {'X-CSRFToken': getCookie('csrftoken')},
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        ci: $(d).val()+$(e).val(),
+                        acc: $(b).val()
+                    },
+                    success: function (data) {
+                        if (data.exist){
+                            $.ajax({
+                                url: url,
+                                origin: 'http://127.0.0.1:8000',
+                                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                                data: {
+                                    bank: document.getElementById('bank').options[document.getElementById('bank').selectedIndex].text,
+                                    num: $(b).val(),
+                                    name: $(c).val(),
+                                    ci: $(d).val()+$(e).val(),
+                                    nick: $.trim($(f).val()),
+                                    email: $(g).val()
+                                },
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function (data) {
+                                    if (data.success) {
+                                        notification_success('Registro de afiliado exitoso.');
+                                        setTimeout(function(){
+                                            location.href= document.referrer;
+                                        }, 3000);
+                                    }
+                                    else{
+                                        if (data.my_acc){
+                                            notification_error('Registro fallido, no es necesario registrar sus cuentas ' +
+                                                'con Actio Capital. Puede transferirse entre sus cuentas desde la opción del menú ' +
+                                                'Transferencias-Mis Cuentas');
+                                            $(e).addClass('errors');
+                                        }
+                                        if (data.nick_exist){
+                                            notification_error('El alias escogido ya existe ingrese uno diferente.');
+                                            $(f).addClass('errors');
+                                        }
+                                        if (data.exist){
+                                            notification_error('Registro fallido, el número de cuenta ya está afiliado.');
+                                            $(b).addClass('errors');
+                                        }
+                                    }
+                                }
+                            })
                         }
-                        else if (data.acc){
-                            notification_error('El número de cuenta no pertenece a un cliente de Actio Capital.');
-                            $(b).addClass('errors');
-                        }
-                        else if (data.customer){
-                            notification_error('El número de cuenta no pertenece al documento de identidad que quiere afiliar.');
-                            $(e).addClass('errors');
-                            $(b).addClass('errors');
-                        }
+                        else {
+                            if (data.ident){
+                                notification_error('El documento de identidad no pertenece a un cliente de Actio Capital.');
+                                $(e).addClass('errors');
+                            }
+                            else if (data.acc){
+                                notification_error('El número de cuenta no pertenece a un cliente de Actio Capital.');
+                                $(b).addClass('errors');
+                            }
+                            else if (data.customer){
+                                notification_error('El número de cuenta no pertenece al documento de identidad que quiere afiliar.');
+                                $(e).addClass('errors');
+                                $(b).addClass('errors');
+                            }
 
+                        }
                     }
-                }
-            });
+                });
+            }
+
         }, 3000);
     }
 }
@@ -318,79 +362,124 @@ function modify_affiliate(a,b,c,d,e,f,g,h) {
         var back = document.referrer;
         notification_success('Modificando afiliado.....');
         setTimeout(function(){
-            var url_api = path[0] + "/" + path[1] + "/" + "localhost:8001/ajax/exist-account/";
-            $.ajax({
-                url: url_api,
-                origin: 'localhost:8000',
-                headers: {'X-CSRFToken': getCookie('csrftoken')},
-                type: 'GET',
-                dataType: 'json',
-                data: {
-                    ci: $(d).val() + $(e).val(),
-                    acc: $(b).val()
-                },
-                success: function (data) {
-                    if (data.exist) {
-                        $.ajax({
-                            url: url,
-                            origin: 'http://127.0.0.1:8000',
-                            headers: {'X-CSRFToken': getCookie('csrftoken')},
-                            data: {
-                                bank: document.getElementById('bank').options[document.getElementById('bank').selectedIndex].text,
-                                num: $(b).val(),
-                                name: $(c).val(),
-                                ci: $(d).val() + $(e).val(),
-                                nick: $(f).val(),
-                                email: $(g).val(),
-                                option: path[4]
-                            },
-                            type: 'GET',
-                            dataType: 'json',
-                            success: function (data) {
-                                if (data.success) {
-                                    notification_success('Modificación de afiliado exitoso.');
-                                    setTimeout(function () {
-                                        location.href = back;
-                                    }, 3000);
-                                }
-                                else {
-                                    if (data.my_acc) {
-                                        notification_error('Registro fallido, no es necesario registrar sus cuentas ' +
-                                            'con Actio Capital. Puede transferirse entre sus cuentas desde la opción del menú ' +
-                                            'Transferencias-Mis Cuentas');
-                                        $(e).addClass('errors');
-                                    }
-                                    if (data.nick_exist) {
-                                        notification_error('El alias escogido ya existe ingrese uno diferente.');
-                                        $(f).addClass('errors');
-                                    }
-                                    if (data.exist) {
-                                        notification_error('Modificación fallida, el número de cuenta ya ' +
-                                            'está registrado a otro afiliado.');
-                                        $(b).addClass('errors');
-                                    }
-                                }
+            if ($(a).val() !== '0180'){
+                $.ajax({
+                    url: url,
+                    origin: 'http://127.0.0.1:8000',
+                    headers: {'X-CSRFToken': getCookie('csrftoken')},
+                    data: {
+                        bank: document.getElementById('bank').options[document.getElementById('bank').selectedIndex].text,
+                        num: $(b).val(),
+                        name: $(c).val(),
+                        ci: $(d).val() + $(e).val(),
+                        nick: $(f).val(),
+                        email: $(g).val(),
+                        option: path[4]
+                    },
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.success) {
+                            notification_success('Modificación de afiliado exitoso.');
+                            setTimeout(function () {
+                                location.href = back;
+                            }, 3000);
+                        }
+                        else {
+                            if (data.my_acc) {
+                                notification_error('Registro fallido, no es necesario registrar sus cuentas ' +
+                                    'con Actio Capital. Puede transferirse entre sus cuentas desde la opción del menú ' +
+                                    'Transferencias-Mis Cuentas');
+                                $(e).addClass('errors');
                             }
-                        })
+                            if (data.nick_exist) {
+                                notification_error('El alias escogido ya existe ingrese uno diferente.');
+                                $(f).addClass('errors');
+                            }
+                            if (data.exist) {
+                                notification_error('Modificación fallida, el número de cuenta ya ' +
+                                    'está registrado a otro afiliado.');
+                                $(b).addClass('errors');
+                            }
+                        }
                     }
-                    else {
-                        if (data.ident) {
-                            notification_error('El documento de identidad no pertenece a un cliente de Actio Capital.');
-                            $(e).addClass('errors');
+                })
+            }
+            else {
+                var url_api = path[0] + "/" + path[1] + "/" + "localhost:8001/ajax/exist-account/";
+                $.ajax({
+                    url: url_api,
+                    origin: 'localhost:8000',
+                    headers: {'X-CSRFToken': getCookie('csrftoken')},
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        ci: $(d).val() + $(e).val(),
+                        acc: $(b).val()
+                    },
+                    success: function (data) {
+                        if (data.exist) {
+                            $.ajax({
+                                url: url,
+                                origin: 'http://127.0.0.1:8000',
+                                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                                data: {
+                                    bank: document.getElementById('bank').options[document.getElementById('bank').selectedIndex].text,
+                                    num: $(b).val(),
+                                    name: $(c).val(),
+                                    ci: $(d).val() + $(e).val(),
+                                    nick: $(f).val(),
+                                    email: $(g).val(),
+                                    option: path[4]
+                                },
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function (data) {
+                                    if (data.success) {
+                                        notification_success('Modificación de afiliado exitoso.');
+                                        setTimeout(function () {
+                                            location.href = back;
+                                        }, 3000);
+                                    }
+                                    else {
+                                        if (data.my_acc) {
+                                            notification_error('Registro fallido, no es necesario registrar sus cuentas ' +
+                                                'con Actio Capital. Puede transferirse entre sus cuentas desde la opción del menú ' +
+                                                'Transferencias-Mis Cuentas');
+                                            $(e).addClass('errors');
+                                        }
+                                        if (data.nick_exist) {
+                                            notification_error('El alias escogido ya existe ingrese uno diferente.');
+                                            $(f).addClass('errors');
+                                        }
+                                        if (data.exist) {
+                                            notification_error('Modificación fallida, el número de cuenta ya ' +
+                                                'está registrado a otro afiliado.');
+                                            $(b).addClass('errors');
+                                        }
+                                    }
+                                }
+                            })
                         }
-                        else if (data.acc) {
-                            notification_error('El número de cuenta no pertenece a un cliente de Actio Capital.');
-                            $(b).addClass('errors');
-                        }
-                        else if (data.customer) {
-                            notification_error('El número de cuenta no pertenece al documento de identidad que quiere afiliar.');
-                            $(e).addClass('errors');
-                            $(b).addClass('errors');
-                        }
+                        else {
+                            if (data.ident) {
+                                notification_error('El documento de identidad no pertenece a un cliente de Actio Capital.');
+                                $(e).addClass('errors');
+                            }
+                            else if (data.acc) {
+                                notification_error('El número de cuenta no pertenece a un cliente de Actio Capital.');
+                                $(b).addClass('errors');
+                            }
+                            else if (data.customer) {
+                                notification_error('El número de cuenta no pertenece al documento de identidad que quiere afiliar.');
+                                $(e).addClass('errors');
+                                $(b).addClass('errors');
+                            }
 
+                        }
                     }
-                }
-            })
+                })
+            }
         }, 3000);
     }
 }

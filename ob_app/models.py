@@ -107,3 +107,24 @@ class Service(models.Model):
             name = 'Servicio'
 
         return name
+
+    def get_type_affiliate(self):
+        if self.identService == 'Banavih Aportes FAOV':
+            name = 'Afiliación: '
+        elif self.identService == 'Electricidad de Caracas':
+            name = 'Contrato: '
+        elif self.identService.find('Previo Pago') == 0:
+            name = 'Suscripción: '
+        elif self.identService.find('Prepago') == 0:
+            name = 'SmartCard: '
+        elif self.identService.find('Impuestos') == 0:
+            name = 'Beneficiario: '
+        elif self.identService.find('TDC') == 0:
+            name = 'Tarjeta: '
+        elif self.identService.find('Movistar') == 0 or self.identService.find('Digitel') == 0 \
+                or self.identService.find('Movilnet') == 0 or self.identService.find('CANTV') == 0:
+            name = 'Teléfono: '
+        else:
+            name = ''
+
+        return name

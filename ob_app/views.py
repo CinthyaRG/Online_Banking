@@ -670,11 +670,6 @@ def send_email_transaction(request):
     ref = request.GET.get('ref', None)
     aff = int(request.GET.get('aff', '0'))
     account = request.GET.get('acc', '').split(' ')
-    print('Entro a enviar correo*********************************+')
-    print(account)
-    print(amount)
-    print(ref)
-    print(type_trans)
 
     data = {}
 
@@ -694,7 +689,7 @@ def send_email_transaction(request):
         c['title'] = 'Notificación de Transferencia Realizada'
         c['transaction'] = 'una trasferencia electrónica'
         subject = 'Notificación de Transferencia'
-        if transaction == 'transf-mi-banco':
+        if transaction == 'transf-mi-banco' or transaction == 'transf-otros-bancos':
             if type_trans != '0':
                 c['type'] = 'realizó'
                 c['msg'] = 'La cuenta del banco ' + affiliate.bank + ' número ' + affiliate.numAccount[:6] + \
@@ -742,7 +737,6 @@ def register_affiliate(request):
     nickname = request.GET.get('nick', None)
     email = request.GET.get('email', None)
     id = int(request.GET.get('option', 0))
-    print(bank)
 
     data = {
         'success': False,
@@ -769,8 +763,8 @@ def register_affiliate(request):
                                                                                       alias=nickname).exclude(pk=id).exists():
                     data['nick_exist'] = True
                 elif bank != 'BANCO ACTIO CAPITAL, C.A.' and Affiliate.objects.filter(customer=customer.id,
-                                                                                      alias=nickname). \
-                        exclude(bank='BANCO ACTIO CAPITAL, C.A.', pk=id).exists():
+                                                                                      alias=nickname).\
+                        exclude(bank='BANCO ACTIO CAPITAL, C.A.').exclude(pk=id).exists():
                     data['nick_exist'] = True
                 else:
                     affiliate.numAccount = num_acc
@@ -1553,8 +1547,10 @@ class DataPayment(LoginRequiredMixin, TemplateView):
             DataPayment, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
+        service = Service.objects.get(pk=self.kwargs['aff'])
 
         context['customer'] = customer
+        context['service'] = service
         return context
 
 

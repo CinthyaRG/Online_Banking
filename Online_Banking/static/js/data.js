@@ -50,6 +50,9 @@ function tables_data(a,b) {
                 else if (url[4]==='datos-transferencia') {
                     drop_account_trans(data.account);
                 }
+                else if (url[4]==='datos-pago') {
+                    drop_account_trans(data.account);
+                }
                 else if (url[4]==='gestion-productos') {
                     management_table(data.management);
                 }

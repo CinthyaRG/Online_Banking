@@ -621,47 +621,126 @@ function add_services() {
             numService = $(a).val();
         }
         var url = path[0] + "/" + path[1] + "/" + path[2] + "/ajax/register-services/";
-        notification_success('Registrando servicio.....');
-        setTimeout(function(){
+        var url_api = path[0] + "/" + path[1] + "/" + "localhost:8001/ajax/exist-tdc/";
+        if (option === 'TDC de Terceros mismo banco'){
             $.ajax({
-                url: url,
+                url: url_api,
                 origin: 'http://127.0.0.1:8000',
                 headers: {'X-CSRFToken': getCookie('csrftoken')},
                 data: {
-                    numService: numService,
-                    ident: $("#rif").val()+ $(b).val(),
-                    identServ: option,
-                    name: $(c).val(),
-                    email: $(d).val(),
-                    nick: $.trim($(e).val())
+                    num: $(a).val(),
+                    ci: $('#rif').val()+$(b).val()
                 },
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    if (data.success) {
-                        notification_success('Registro de servicio exitoso.');
+                    if (data.exist) {
+                        notification_success('Registrando servicio.....');
                         setTimeout(function(){
-                            location.href= document.referrer;
+                            $.ajax({
+                                url: url,
+                                origin: 'http://127.0.0.1:8000',
+                                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                                data: {
+                                    numService: numService,
+                                    ident: $("#rif").val()+ $(b).val(),
+                                    identServ: option,
+                                    name: $(c).val(),
+                                    email: $(d).val(),
+                                    nick: $.trim($(e).val())
+                                },
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function (data) {
+                                    if (data.success) {
+                                        notification_success('Registro de servicio exitoso.');
+                                        setTimeout(function(){
+                                            location.href= document.referrer;
+                                        }, 3000);
+                                    }
+                                    else{
+                                        if (data.nick_exist){
+                                            notification_error(data.error);
+                                            $(e).addClass('errors');
+                                        }
+                                        if (data.exist){
+                                            notification_error('Registro fallido ' + data.error);
+                                            if (type_payment === 'Telefonía' ){
+                                                $(f).addClass('errors');
+                                            }
+                                            else {
+                                                $(a).addClass('errors');
+                                            }
+                                        }
+                                    }
+                                }
+                            })
                         }, 3000);
                     }
                     else{
-                        if (data.nick_exist){
-                            notification_error(data.error);
-                            $(e).addClass('errors');
+                        if (data.ident){
+                            notification_error('El documento de identidad no pertenece a un cliente de Actio Capital.');
+                            $(b).addClass('errors');
                         }
-                        if (data.exist){
-                            notification_error('Registro fallido ' + data.error);
-                            if (type_payment === 'Telefonía' ){
-                                $(f).addClass('errors');
-                            }
-                            else {
-                                $(a).addClass('errors');
-                            }
+                        else if (data.tdc){
+                            notification_error('El número de tarjeta de crédito no pertenece a un cliente de Actio Capital.');
+                            $(a).addClass('errors');
+                        }
+                        else if (data.customer){
+                            notification_error('El número de tarjeta de crédito no pertenece al documento' +
+                                ' de identidad que quiere registrar.');
+                            $(a).addClass('errors');
+                            $(b).addClass('errors');
                         }
                     }
                 }
             })
-        }, 3000);
+        }
+        else{
+            notification_success('Registrando servicio.....');
+            setTimeout(function(){
+                $.ajax({
+                    url: url,
+                    origin: 'http://127.0.0.1:8000',
+                    headers: {'X-CSRFToken': getCookie('csrftoken')},
+                    data: {
+                        numService: numService,
+                        ident: $("#rif").val()+ $(b).val(),
+                        identServ: option,
+                        name: $(c).val(),
+                        email: $(d).val(),
+                        nick: $.trim($(e).val())
+                    },
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.success) {
+                            notification_success('Registro de servicio exitoso.');
+                            setTimeout(function(){
+                                location.href= document.referrer;
+                            }, 3000);
+                        }
+                        else{
+                            if (data.nick_exist){
+                                notification_error(data.error);
+                                $(e).addClass('errors');
+                            }
+                            if (data.exist){
+                                notification_error('Registro fallido ' + data.error);
+                                if (type_payment === 'Telefonía' ){
+                                    $(f).addClass('errors');
+                                }
+                                else {
+                                    $(a).addClass('errors');
+                                }
+                            }
+                        }
+                    }
+                })
+            }, 3000);
+        }
+
+
     }
 }
 
@@ -712,52 +791,135 @@ function modify_services() {
             numService = $(a).val();
         }
         var url = path[0] + "/" + path[1] + "/" + path[2] + "/ajax/register-services/";
+        var url_api = path[0] + "/" + path[1] + "/" + "localhost:8001/ajax/exist-tdc/";
         var back = document.referrer;
-        notification_success('Modificando afiliado.....');
-        setTimeout(function(){
+
+        if (option === 'TDC de Terceros mismo banco'){
             $.ajax({
-                url: url,
+                url: url_api,
                 origin: 'http://127.0.0.1:8000',
                 headers: {'X-CSRFToken': getCookie('csrftoken')},
                 data: {
-                    numService: numService,
-                    ident: $("#rif").val()+ $(b).val(),
-                    identServ: option,
-                    name: $(c).val(),
-                    email: $(d).val(),
-                    nick: $.trim($(e).val()),
-                    option: path[4]
+                    num: $(a).val(),
+                    ci: $('#rif').val()+$(b).val()
                 },
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    if (data.success) {
-                        notification_success('Modificación de afiliado exitoso.');
+                    if (data.exist) {
+                        notification_success('Modificando afiliado.....');
                         setTimeout(function(){
-                            location.href= back;
+                            $.ajax({
+                                url: url,
+                                origin: 'http://127.0.0.1:8000',
+                                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                                data: {
+                                    numService: numService,
+                                    ident: $("#rif").val()+ $(b).val(),
+                                    identServ: option,
+                                    name: $(c).val(),
+                                    email: $(d).val(),
+                                    nick: $.trim($(e).val()),
+                                    option: path[4]
+                                },
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function (data) {
+                                    if (data.success) {
+                                        notification_success('Modificación de afiliado exitoso.');
+                                        setTimeout(function(){
+                                            location.href= back;
+                                        }, 3000);
+                                    }
+                                    else{
+                                        if (data.my_acc){
+                                            notification_error('Modificación fallida, '+ data.error);
+                                            $(a).addClass('errors');
+                                        }
+                                        if (data.nick_exist){
+                                            notification_error(data.error);
+                                            $(e).addClass('errors');
+                                        }
+                                        if (data.exist){
+                                            notification_error(data.error);
+                                            if (type_payment === 'Telefonía' ){
+                                                $(f).addClass('errors');
+                                            }
+                                            else {
+                                                $(a).addClass('errors');
+                                            }
+                                        }
+                                    }
+                                }
+                            })
                         }, 3000);
                     }
                     else{
-                        if (data.my_acc){
-                            notification_error('Modificación fallida, '+ data.error);
+                        if (data.ident){
+                            notification_error('El documento de identidad no pertenece a un cliente de Actio Capital.');
+                            $(b).addClass('errors');
+                        }
+                        else if (data.tdc){
+                            notification_error('El número de tarjeta de crédito no pertenece a un cliente de Actio Capital.');
                             $(a).addClass('errors');
                         }
-                        if (data.nick_exist){
-                            notification_error(data.error);
-                            $(e).addClass('errors');
-                        }
-                        if (data.exist){
-                            notification_error(data.error);
-                            if (type_payment === 'Telefonía' ){
-                                $(f).addClass('errors');
-                            }
-                            else {
-                                $(a).addClass('errors');
-                            }
+                        else if (data.customer){
+                            notification_error('El número de tarjeta de crédito no pertenece al documento' +
+                                ' de identidad que quiere registrar.');
+                            $(a).addClass('errors');
+                            $(b).addClass('errors');
                         }
                     }
                 }
             })
-        }, 3000);
+        }
+        else{
+            notification_success('Modificando afiliado.....');
+            setTimeout(function(){
+                $.ajax({
+                    url: url,
+                    origin: 'http://127.0.0.1:8000',
+                    headers: {'X-CSRFToken': getCookie('csrftoken')},
+                    data: {
+                        numService: numService,
+                        ident: $("#rif").val()+ $(b).val(),
+                        identServ: option,
+                        name: $(c).val(),
+                        email: $(d).val(),
+                        nick: $.trim($(e).val()),
+                        option: path[4]
+                    },
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.success) {
+                            notification_success('Modificación de afiliado exitoso.');
+                            setTimeout(function(){
+                                location.href= back;
+                            }, 3000);
+                        }
+                        else{
+                            if (data.my_acc){
+                                notification_error('Modificación fallida, '+ data.error);
+                                $(a).addClass('errors');
+                            }
+                            if (data.nick_exist){
+                                notification_error(data.error);
+                                $(e).addClass('errors');
+                            }
+                            if (data.exist){
+                                notification_error(data.error);
+                                if (type_payment === 'Telefonía' ){
+                                    $(f).addClass('errors');
+                                }
+                                else {
+                                    $(a).addClass('errors');
+                                }
+                            }
+                        }
+                    }
+                })
+            }, 3000);
+        }
     }
 }

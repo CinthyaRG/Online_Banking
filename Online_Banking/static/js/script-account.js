@@ -75,7 +75,6 @@ function movement_table(movements) {
 
     var mov = movements[j];
     $.each(mov, function (i, val) {
-        console.log(val);
         var d = val[0].split('-');
         var date = d[2][0]+d[2][1] + '/' + d[1] + '/' + d[0];
         var details = String(val[5].replace(/\s/g,'_'));
