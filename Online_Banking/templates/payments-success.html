@@ -3,6 +3,29 @@
 
 {% block script %}
     <script src="{% static 'js/script-data.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            var path = window.location.href.split('/');
+            var url_api = path[0]+"/"+path[1]+"/"+"localhost:8001/ajax/get-references/";
+
+            $.ajax({
+                url: url_api,
+                origin: 'localhost:8000',
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                data: {
+                    ref: '{{ ref }}'
+                },
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.correct) {
+                        $('#amount').text('Bs. '+data.amount);
+                        $('#description').text(data.description);
+                    }
+                }
+            });
+        })
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -11,7 +34,7 @@
             <div class="row title-trans">
                 <div class="col-md-7 col-xs-8"></div>
                 <div class="col-md-5 col-xs-4">
-                    <h3>Ref. 895745-5  </h3>
+                    <h3>Ref. {{ ref }}  </h3>
                 </div>
             </div>
             <div class="row">
@@ -26,7 +49,7 @@
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows margin-t-2">
                                     <span id="name_service" class="field-register">
-                                        Electricidad de Caracas
+                                        {{ service.identService }}
                                     </span>
                                 </div>
                             </div>
@@ -36,7 +59,7 @@
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows margin-t-2">
                                     <span id="product_payment" class="field-register">
-                                        Contrato: 000018219311
+                                        {{ service.get_type_affiliate }}{{ service.numService }}
                                     </span>
                                 </div>
                             </div>
@@ -46,7 +69,7 @@
                                         Monto del Pago: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows">
-                                    <span>Bs. 1.420,50 </span>
+                                    <span id="amount"></span>
                                 </div>
                             </div>
                             <div class="row">
@@ -55,7 +78,7 @@
                                         Descripción: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows">
-                                    <span>Pago de la luz 04/2017 </span>
+                                    <span id="description"></span>
                                 </div>
                             </div>
                         </dl>
@@ -68,7 +91,7 @@
             <div class="col-md-4 col-xs-4"></div>
             <div class="col-md-5">
                 <a id="btn-back" class="btn btn-default btn-group btn-apps"
-                   type="button" href=""> Ir a Posición Consolidada </a>
+                   type="button" href="{% url 'inicio' customer.ref %}"> Ir a Posición Consolidada </a>
                 <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
                    type="button" onclick="window.print();"> Descargar </a>
             </div>

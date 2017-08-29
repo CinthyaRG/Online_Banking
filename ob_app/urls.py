@@ -164,7 +164,7 @@ urlpatterns = [
         DataPayment.as_view(),
         name='datos-pago'),
     url(
-        r'^pago-exitoso$',
+        r'^(?P<pk>\w+)/pago-exitoso/(?P<aff>\w+)/(?P<ref>\w+)/$',
         Success_Payments.as_view(),
         name='pago-exitoso'),
     url(

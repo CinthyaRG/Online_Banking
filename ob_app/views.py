@@ -679,41 +679,69 @@ def send_email_transaction(request):
     time = date_time[1] + " " + date_time[2]
 
     customer = Customer.objects.get(user=request.user.id)
-    affiliate = Affiliate.objects.get(customer=customer.id, pk=aff)
 
     c = {'fecha': date,
          'hora': time
          }
 
     if transaction == 'transf-mi-banco' or transaction == 'transf-otros-bancos':
+        affiliate = Affiliate.objects.get(customer=customer.id, pk=aff)
         c['title'] = 'Notificación de Transferencia Realizada'
-        c['transaction'] = 'una trasferencia electrónica'
+        c['transaction'] = 'una trasferencia electrónica a:'
         subject = 'Notificación de Transferencia'
-        if transaction == 'transf-mi-banco' or transaction == 'transf-otros-bancos':
-            if type_trans != '0':
-                c['type'] = 'realizó'
-                c['msg'] = 'La cuenta del banco ' + affiliate.bank + ' número ' + affiliate.numAccount[:6] + \
-                           '**********' + affiliate.numAccount[16:] + ', ' + \
-                           'a nombre de ' + affiliate.name + '.'
-                c['msg2'] = 'Desde la cuenta ' + account[0] + ' con terminación ' + account[1] + '.'
-                c['amount'] = 'Por el monto de Bs. ' + amount
-                c['ref'] = 'Referencia: ' + ref
-                c['usuario'] = customer.user.get_full_name
-                email = customer.user.email
-            else:
-                c['type'] = 'recibió'
-                c['msg'] = 'La cuenta del banco ' + affiliate.bank + ' número ' + affiliate.numAccount[:6] + \
-                           '**********' + affiliate.numAccount[16:] + ' a su nombre.'
-                c['msg2'] = 'Desde la cuenta de ' + customer.get_name() + ' de BANCO ACTIO CAPITAL, C.A.'
-                c['amount'] = 'Por el monto de Bs. ' + amount
-                c['ref'] = 'Referencia: ' + ref
-                c['usuario'] = affiliate.name
-                email = affiliate.email
+        if type_trans != '0':
+            c['type'] = 'realizó'
+            c['msg'] = 'La cuenta del banco ' + affiliate.bank + ' número ' + affiliate.numAccount[:6] + \
+                       '**********' + affiliate.numAccount[16:] + ', ' + \
+                       'a nombre de ' + affiliate.name + '.'
+            c['msg2'] = 'Desde la cuenta ' + account[0] + ' con terminación ' + account[1] + '.'
+            c['amount'] = 'Por el monto de Bs. ' + amount
+            c['ref'] = 'Referencia: ' + ref
+            c['usuario'] = customer.user.get_full_name
+            email = customer.user.email
+        else:
+            c['type'] = 'recibió'
+            c['msg'] = 'La cuenta del banco ' + affiliate.bank + ' número ' + affiliate.numAccount[:6] + \
+                       '**********' + affiliate.numAccount[16:] + ' a su nombre.'
+            c['msg2'] = 'Desde la cuenta de ' + customer.get_name() + ' de BANCO ACTIO CAPITAL, C.A.'
+            c['amount'] = 'Por el monto de Bs. ' + amount
+            c['ref'] = 'Referencia: ' + ref
+            c['usuario'] = affiliate.name
+            email = affiliate.email
     else:
+        service = Service.objects.get(customer=customer.id, pk=aff)
         subject = 'Notificación de Pago de Servicio'
         c['title'] = 'Notificación de Pago Realizado'
-        c['transaction'] = 'un pago de servicio'
+        c['transaction'] = 'un pago de servicio de: '
         c['type'] = 'realizó'
+        if service.get_type() == 'TDC':
+            if service.identService == 'TDC Propias':
+                num = service.numService.split(' ')
+                c['msg'] = service.identService + num[0] + ' número ' + num[1] + \
+                           ' a su nombre.'
+            else:
+                num = '****' + service.numService[12:]
+                if service.email is not None:
+                    c['type'] = 'recibió'
+                    c['usuario'] = service.extra
+                    c['msg'] = 'Pago de TDC a su nombre número ' + num + \
+                               ' a nombre de ' + service.extra + '.'
+                    c['msg2'] = 'Desde la cuenta de ' + customer.get_name() + ' de BANCO ACTIO CAPITAL, C.A.'
+                    send_email(subject, 'transaction_email.html', c, service.email)
+                c['msg'] = service.identService + ' número ' + num + \
+                           ' a nombre de ' + service.extra + '.'
+        elif service.get_type() == 'Recarga':
+            c['msg'] = 'Pago de telefonía ' + service.identService + ' número de ' + \
+                       service.get_type_affiliate().casefold() + ' ' + service.numService + '.'
+        elif service.get_type() == 'Servicio':
+            c['msg'] = service.identService + ' número de ' + service.get_type_affiliate().casefold() +\
+                        ' ' + service.numService + '.'
+
+    c['msg2'] = 'Desde la cuenta ' + account[0] + ' con terminación ' + account[1] + '.'
+    c['amount'] = 'Por el monto de Bs. ' + amount
+    c['ref'] = 'Referencia: ' + ref
+    c['usuario'] = customer.user.get_full_name
+    email = customer.user.email
 
     message_template = 'transaction_email.html'
     print('antes de enviar correo coordenadas')
@@ -1564,8 +1592,12 @@ class Success_Payments(LoginRequiredMixin, TemplateView):
             Success_Payments, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
+        service = Service.objects.get(pk=self.kwargs['aff'])
+        ref = self.kwargs['ref']
 
         context['customer'] = customer
+        context['service'] = service
+        context['ref'] = ref
         return context
 
 

@@ -113,12 +113,12 @@ class Service(models.Model):
             name = 'Afiliación: '
         elif self.identService == 'Electricidad de Caracas':
             name = 'Contrato: '
-        elif self.identService.find('Previo Pago') == 0:
+        elif self.identService.find('DirecTV Previo Pago') == 0:
             name = 'Suscripción: '
-        elif self.identService.find('Prepago') == 0:
+        elif self.identService.find('DirecTV Prepago') == 0:
             name = 'SmartCard: '
-        elif self.identService.find('Impuestos') == 0:
-            name = 'Beneficiario: '
+        elif self.identService.find('Pago de Impuestos Nacionales Terceros') == 0:
+            name = 'Rif Beneficiario: '
         elif self.identService.find('TDC') == 0:
             name = 'Tarjeta: '
         elif self.identService.find('Movistar') == 0 or self.identService.find('Digitel') == 0 \

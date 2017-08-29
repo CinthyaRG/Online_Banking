@@ -263,11 +263,10 @@ function pay_services(a,b,c,d,e,f,aff) {
                         var path = window.location.href.split('/');
                         notification_success(data.msg);
                         send_email('send',url[4],data.amount, data.ref, aff, acc);
-                        send_email(0,url[4],data.amount, data.ref, aff, '');
                         setTimeout(function(){
-                            location.href = url[0] + "/" + url[1] + "/" + url[2] + "/" + url[3] + "/transferencia-exitosa/"
+                            location.href = url[0] + "/" + url[1] + "/" + url[2] + "/" + url[3] + "/pago-exitoso/"
                                 + path[5] + '/' + data.ref + '/';
-                        }, 3000);
+                        }, 2000);
                     }
                 },
                 error: function (data) {
