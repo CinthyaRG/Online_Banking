@@ -128,3 +128,10 @@ class Service(models.Model):
             name = ''
 
         return name
+
+
+class Request(models.Model):
+    ref = models.CharField(unique=True, max_length=8)
+    addressedTo = models.CharField(max_length=32)
+    account = models.CharField(max_length=32)
+    customer = models.ForeignKey(Customer)

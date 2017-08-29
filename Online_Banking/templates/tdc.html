@@ -94,11 +94,35 @@
                 else if (!(validate_date(s,e))) {
                     $('#datepicker2').addClass('errors');
                     var msg =  'La fecha final para la consulta de movimientos no puede ser ' +
-                            'mayor a la fecha de inicio.';
+                        'mayor a la fecha de inicio.';
                     notification_error(msg);
                 }
-            })
+            });
 
+            $('#btn-pay').click(function () {
+                var path = window.location.href.split('/');
+                var url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/get-tdc/";
+                var tdc = document.getElementById('tdc_drop').options[document.getElementById('tdc_drop').selectedIndex].text;
+                $.ajax({
+                    url: url,
+                    origin: 'localhost:8000',
+                    headers: {'X-CSRFToken': getCookie('csrftoken')},
+                    data: {
+                        tdc: tdc
+                    },
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.exist) {
+                             location.href = path[0]+"/"+path[1]+"/"+path[2]+"/"+path[3]+"/datos-pago/"+ data.id;
+                        }
+                    },
+                    error: function (data) {
+                        alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+                        // move('logout');
+                    }
+                });
+            })
         });
     </script>
 {% endblock %}
@@ -112,9 +136,9 @@
         <div class="row">
             <div class="col-md-9 col-xs-9"></div>
             <div class="col-md-2 col-xs-3">
-                <a id="btn-pay" class="btn btn-default btn-group btn-apps pull-right" type="button"
-                   onclick="move('datos-pago/1')">
-                    Pagar </a>
+                <a id="btn-pay" class="btn btn-default btn-group btn-apps pull-right" type="button">
+                    Pagar
+                </a>
             </div>
         </div>
         <div class="row">

@@ -32,6 +32,8 @@ function tables_data(a,b) {
                 menu_attr(data.account,data.tdc,data.loan);
                 if (url[3]==='inicio') {
                     tables(k,data.account,data.tdc,data.loan);
+                    console.log(data.chart);
+                    chart(data.chart);
                 }
                 else if (url[4]==='consultar-cuenta') {
                     drop_account(data.account);
@@ -55,6 +57,9 @@ function tables_data(a,b) {
                 }
                 else if (url[4]==='gestion-productos') {
                     management_table(data.management);
+                }
+                else if (url[5]==='Referencias') {
+                    drop_account(data.account);
                 }
             }
         },

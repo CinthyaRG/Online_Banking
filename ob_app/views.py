@@ -553,6 +553,26 @@ def get_cardcoor(request):
 
 
 @ensure_csrf_cookie
+def get_tdc(request):
+    tdc = request.GET.get('tdc', None)
+
+    data = {
+        'user_exists': User.objects.filter(pk=request.user.id).exists()
+    }
+
+    if data['user_exists']:
+        customer = Customer.objects.get(user=request.user.id)
+
+        data['exist'] = Service.objects.filter(customer=customer.id, numService=tdc).exists()
+
+        if data['exist']:
+            data['id'] = Service.objects.get(customer=customer.id,
+                                             numService=tdc).id
+
+    return JsonResponse(data)
+
+
+@ensure_csrf_cookie
 def status_cardcoor(request):
     serial = request.GET.get('s', None)
     action = request.GET.get('action', None)
@@ -713,19 +733,17 @@ def send_email_transaction(request):
         subject = 'Notificación de Pago de Servicio'
         c['title'] = 'Notificación de Pago Realizado'
         c['transaction'] = 'un pago de servicio de: '
-        c['type'] = 'realizó'
         if service.get_type() == 'TDC':
             if service.identService == 'TDC Propias':
                 num = service.numService.split(' ')
-                c['msg'] = service.identService + num[0] + ' número ' + num[1] + \
+                c['msg'] = service.identService + ' ' + num[0] + ' terminal número ' + num[1] + \
                            ' a su nombre.'
             else:
                 num = '****' + service.numService[12:]
                 if service.email is not None:
                     c['type'] = 'recibió'
                     c['usuario'] = service.extra
-                    c['msg'] = 'Pago de TDC a su nombre número ' + num + \
-                               ' a nombre de ' + service.extra + '.'
+                    c['msg'] = 'Pago de TDC a su nombre terminal número ' + num + '.'
                     c['msg2'] = 'Desde la cuenta de ' + customer.get_name() + ' de BANCO ACTIO CAPITAL, C.A.'
                     send_email(subject, 'transaction_email.html', c, service.email)
                 c['msg'] = service.identService + ' número ' + num + \
@@ -737,6 +755,7 @@ def send_email_transaction(request):
             c['msg'] = service.identService + ' número de ' + service.get_type_affiliate().casefold() +\
                         ' ' + service.numService + '.'
 
+    c['type'] = 'realizó'
     c['msg2'] = 'Desde la cuenta ' + account[0] + ' con terminación ' + account[1] + '.'
     c['amount'] = 'Por el monto de Bs. ' + amount
     c['ref'] = 'Referencia: ' + ref
@@ -1081,6 +1100,32 @@ def delete_service(request, pk):
 
         except Service.DoesNotExist:
             pass
+
+    return JsonResponse(data)
+
+
+@ensure_csrf_cookie
+def save_references(request):
+    option = request.GET.get('option', None)
+    acc = request.GET.get('acc', None)
+
+    data = {
+        'user_exists': User.objects.filter(pk=request.user.id).exists()
+    }
+
+    if data['user_exists']:
+        customer = Customer.objects.get(user=request.user.id)
+
+        reference = str(random.randint(1, 99999999)).zfill(8)
+        while Request.objects.filter(ref=reference).exists():
+            reference = str(random.randint(1, 99999999)).zfill(8)
+
+        if Request.objects.filter(customer=customer.id).exists():
+            ref = Request.objects.get(customer=customer.id)
+            ref.account = acc
+            ref.addressedTo = option
+            ref.ref = reference
+
 
     return JsonResponse(data)
 

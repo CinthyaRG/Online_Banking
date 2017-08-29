@@ -196,7 +196,7 @@ function send_email(a,b,c,d,e,f) {
 }
 
 
-function pay_services(a,b,c,d,e,f,aff) {
+function pay_services(a,b,c,d,e,f,aff,name) {
     var msg = '';
     var available = parseFloat($("#balance_transf").text().replace(/\./g, '').replace(',','.'));
     var regexLetters = /^[a-zA-ZáéíóúàèìòùÀÈÌÒÙÁÉÍÓÚñÑüÜ\s ]*$/;
@@ -233,11 +233,19 @@ function pay_services(a,b,c,d,e,f,aff) {
         var url_api = url[0] + "/" + url[1] + "/localhost:8001/ajax/pay-services/";
         var acc = document.getElementById('account').options[document.getElementById('account').selectedIndex].text;
         var dest = $.trim($(c).text()).split(' ');
+        var details = $(e).val() + ', ' + $.trim($(c).text());
         if (dest.length > 2){
             dest = dest[1] + ' ' + dest[2]
         }
         else{
             dest = dest[1]
+        }
+        if ($.trim($(b).text()) === 'TDC de Terceros otros bancos') {
+            details = $(e).val() + '--Pago de TDC terminal ****' + dest.substring(12,16) +
+                ' perteneciente a ' + name;
+        }
+        if ($.trim($(b).text()) === 'TDC de Terceros mismo banco') {
+            details = $(e).val() + ', Tarjeta: ****' + dest.substring(12,16);
         }
         notification_success('Transacción en proceso....');
         setTimeout(function(){
@@ -250,7 +258,7 @@ function pay_services(a,b,c,d,e,f,aff) {
                     service: $.trim($(b).text()),
                     product: dest,
                     amount: $(d).val(),
-                    detail: $(e).val() + ', ' + $.trim($(c).text()),
+                    detail: details,
                     num: f
                 },
                 type: 'GET',

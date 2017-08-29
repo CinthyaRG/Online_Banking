@@ -88,6 +88,10 @@ urlpatterns = [
         get_cardcoor,
         name='get-cardCoord'),
     url(
+        r'^ajax/get-tdc/$',
+        get_tdc,
+        name='get-tdc'),
+    url(
         r'^ajax/status-cardCoord/$',
         status_cardcoor,
         name='status-cardCoord'),
@@ -107,6 +111,10 @@ urlpatterns = [
         r'^ajax/register-services/$',
         register_services,
         name='register-services'),
+    url(
+        r'^ajax/save-references/$',
+        save_references,
+        name='save-references'),
     url(
         r'^ajax/first-login/$',
         first_login,
@@ -212,15 +220,15 @@ urlpatterns = [
         Request_References.as_view(),
         name='solicitud-referencias'),
     url(
-        r'^solicitudes/Cita/exitosa$',
+        r'^(?P<pk>\w+)/solicitudes/Cita/exitosa$',
         Request_Appointment_Success.as_view(),
         name='solicitud-citas-exitosa'),
     url(
-        r'^solicitudes/Chequeras/exitosa$',
+        r'^(?P<pk>\w+)/solicitudes/Chequeras/exitosa$',
         Request_Checkbook_Success.as_view(),
         name='solicitud-chequeras-exitosa'),
     url(
-        r'^solicitudes/Referencias/exitosa$',
+        r'^(?P<pk>\w+)/solicitudes/Referencias/exitosa/(?P<ref>\w+)$',
         Request_References_Success.as_view(),
         name='solicitud-referencias-exitosa'),
     url(

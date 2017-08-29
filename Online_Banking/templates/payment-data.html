@@ -86,7 +86,8 @@
                    type="button" onclick="location.href=document.referrer"> Cancelar </a>
                 <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
                    type="button" onclick="pay_services('#account', '#name_service', '#product_payment',
-                   '#amount_payment', '#descrip_payment', '{{ customer.user.username }}', '{{ affiliate.id }}')">
+                   '#amount_payment', '#descrip_payment', '{{ customer.user.username }}', '{{ service.id }}',
+                        '{{ service.extra }}')">
                     Aceptar
                 </a>
             </div>

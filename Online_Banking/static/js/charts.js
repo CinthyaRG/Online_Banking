@@ -3,24 +3,17 @@
  */
 
 $(document).ready(function (){
-    chart();
+
 
 });
 
-function chart() {
+function chart(a) {
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(drawChart);
 
     function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-            ['Meses', 'Activos', 'Pasivos'],
-            ['Enero',  1000,      400],
-            ['Febrero',  1170,      460],
-            ['Marzo',  660,       1120],
-            ['Abril',  1030,      540],
-            ['Mayo',  1170,      460],
-            ['Junio',  660,       1120]
-        ]);
+        alert(typeof(a[1][1]));
+        var data = google.visualization.arrayToDataTable(a);
 
         var options = {
             title: 'Últimos Movimientos',

@@ -38,24 +38,24 @@
                            <div class="form-group col-md-6 col-xs-5">
                             <div class="radio">
                                 <label>
-                                    <input name="optionsRadios" id="options1" value="option1" checked="" type="radio"
+                                    <input name="optionsRadios" id="options1" value="Al Titular" checked="" type="radio"
                                     onclick="hab_des_text(2)">
                                     Al Titular
                                 </label>
                             </div>
                             <div class="radio">
                                 <label>
-                                    <input name="optionsRadios" id="options2" value="option2" type="radio"
+                                    <input name="optionsRadios" id="options2" value="A quién pueda Interesar" type="radio"
                                     onclick="hab_des_text(2)">
                                     A quién pueda Interesar
                                 </label>
                             </div>
                             <div class="radio">
                                 <label>
-                                    <input name="optionsRadios" id="options3" value="option3" type="radio"
+                                    <input name="optionsRadios" id="options3" value="A un tercero" type="radio"
                                            onclick="hab_des_text(1)">
                                     A un tercero:
-                                    <input type="text" id="name_reference" disabled maxlength="20" class="input-register">
+                                    <input id="name_reference" disabled maxlength="20" class="input-register">
                                 </label>
                             </div>
                         </div>
@@ -72,7 +72,7 @@
                    type="button" href="{% url 'solicitudes' customer.ref %}"> Cancelar
                 </a>
                 <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
-                   type="button" href="{% url 'solicitud-referencias-exitosa' %}">  Aceptar
+                   type="button" onclick="save_references('#account')">  Aceptar
                 </a>
             </div>
         </div>

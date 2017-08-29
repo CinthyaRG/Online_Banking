@@ -6,8 +6,10 @@ $(document).ready(function (){
     menu();
     drop_num_cheq();
     drop_agen();
-    drop_account();
 
+    $('#account').click(function () {
+        $('#account').removeClass('errors');
+    });
 
 });
 
@@ -50,15 +52,15 @@ function hab_des_text(valor) {
 }
 
 
-function drop_account(){
-    var account = ['Ahorro ****2222', 'Corriente ****1234'];
+function drop_account(account){
 
-    $("#account").append('<option value="'+'0'+'" selected="selected">' +'Seleccione'+'</option>');
+    $("#account").append('<option value="'+'0'+'" selected>' +'Seleccione'+'</option>');
 
     $.each(account,function (i,val) {
-        $("#account").append('<option value="'+val+'"> '+val+'</option>');
+        $("#account").append('<option value="'+(i+1)+'"> '+val[0].substring(6)+'  '+val[1].substring(12)+'</option>');
     })
 }
+
 
 function fillzeros(len, num) {
     if (num.toString().length <= len)
@@ -66,6 +68,7 @@ function fillzeros(len, num) {
     else
         return num;
 }
+
 
 function tarj_coor(coor,serial) {
     var c= "";
@@ -77,7 +80,6 @@ function tarj_coor(coor,serial) {
     //             })
     //         })
     //     });
-
 
     c+='<table  id="table_coor">';
     c+='<tr><td></td>'+'<td align="center"><strong>A</strong></td>'+
@@ -106,4 +108,39 @@ function tarj_coor(coor,serial) {
 
 }
 
+
+function save_references(a) {
+    if ($(a).val() === '0'){
+        notification_error('Seleccione una cuenta.');
+        $(a).addClass('errors');
+    }
+    else{
+        var path = window.location.href.split('/');
+        var url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/save-references/";
+        var option = $('input:radio[name=optionsRadios]:checked').val();
+        if (option === 'A un tercero'){
+            option = $('#name_reference').val();
+        }
+        $.ajax({
+            url: url,
+            origin: 'localhost:8000',
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            data: {
+                option: option,
+                acc: document.getElementById('account').options[document.getElementById('account').selectedIndex].text
+            },
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                if (data.exist) {
+                    location.href = path[0]+"/"+path[1]+"/"+path[2]+"/"+path[3]+"/"+path[4]+"/"+path[5]+"/exitosa/"+data.id;
+                }
+            },
+            error: function (data) {
+                alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+                // move('logout');
+            }
+        });
+    }
+}
 
