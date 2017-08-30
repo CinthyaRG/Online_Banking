@@ -130,7 +130,7 @@ class Service(models.Model):
         return name
 
 
-class Request(models.Model):
+class RequestReferences(models.Model):
     ref = models.CharField(unique=True, max_length=8)
     addressedTo = models.CharField(max_length=32)
     account = models.CharField(max_length=32)

@@ -20,8 +20,9 @@
                             <div class="col-md-11 col-xs-11 margin-l-13">
                                 <p class="text-wrapper margin-l-13">
                                     Su solicitud de referencia bancaria ha sido procesada exitosamente
-                                    bajo el número de operación <strong>5018997</strong> con los siguientes
-                                    datos:
+                                    bajo el número de operación
+                                     <strong>{{reference.ref}}</strong> 
+                                     con los siguientes datos:
                                 </p>
                             </div>
                         </div>
@@ -30,7 +31,7 @@
                                 <p class="pull-right"> Cuenta:  </p>
                             </div>
                             <div class="col-md-5 col-xs-5">
-                                <p class="pull-left text-bold"> Ahorro 017600**********2222 </p>
+                                <p class="pull-left text-bold"> {{reference.account}} </p>
                             </div>
                         </div>
                         <div class="row">
@@ -38,7 +39,9 @@
                                 <p class="pull-right"> Dirigido a:  </p>
                             </div>
                             <div class="col-md-5 col-xs-5">
-                                <p class="pull-left text-bold"> A quién pueda interesar </p>
+                                <p class="pull-left text-bold"> 
+                                    {{reference.addressedTo}} 
+                                </p>
                             </div>
                         </div>
                         <div class="row">
@@ -54,7 +57,9 @@
                                 <p class="pull-right"> Número de operación:  </p>
                             </div>
                             <div class="col-md-5 col-xs-5">
-                                <p class="pull-left text-bold"> 5018997 </p>
+                                <p class="pull-left text-bold">
+                                    {{reference.ref}}
+                                </p>
                             </div>
                         </div>
                     </div>

@@ -224,7 +224,7 @@ urlpatterns = [
         Request_Appointment_Success.as_view(),
         name='solicitud-citas-exitosa'),
     url(
-        r'^(?P<pk>\w+)/solicitudes/Chequeras/exitosa$',
+        r'^(?P<pk>\w+)/solicitudes/Chequeras/exitosa/(?P<ref>\w+)$',
         Request_Checkbook_Success.as_view(),
         name='solicitud-chequeras-exitosa'),
     url(

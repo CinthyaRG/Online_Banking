@@ -61,6 +61,9 @@ function tables_data(a,b) {
                 else if (url[5]==='Referencias') {
                     drop_account(data.account);
                 }
+                else if (url[4]==='solicitudes') {
+                    checkbook(data.account);
+                }
             }
         },
         error: function (data) {

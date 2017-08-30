@@ -1086,7 +1086,6 @@ def register_services(request):
 
 @ensure_csrf_cookie
 def delete_service(request, pk):
-    print(pk)
     data = {
         'user_exist': User.objects.filter(pk=request.user.id).exists(),
         'success': False
@@ -1117,14 +1116,22 @@ def save_references(request):
         customer = Customer.objects.get(user=request.user.id)
 
         reference = str(random.randint(1, 99999999)).zfill(8)
-        while Request.objects.filter(ref=reference).exists():
+        while RequestReferences.objects.filter(ref=reference).exists():
             reference = str(random.randint(1, 99999999)).zfill(8)
 
-        if Request.objects.filter(customer=customer.id).exists():
-            ref = Request.objects.get(customer=customer.id)
+        if RequestReferences.objects.filter(customer=customer.id).exists():
+            ref = RequestReferences.objects.get(customer=customer.id)
             ref.account = acc
             ref.addressedTo = option
             ref.ref = reference
+        else:
+            ref = RequestReferences(ref=reference,
+                customer=customer,
+                account=acc,
+                addressedTo=option)
+        ref.save()
+
+        data['id'] = ref.ref
 
 
     return JsonResponse(data)
@@ -1878,8 +1885,10 @@ class Request_References_Success(LoginRequiredMixin, TemplateView):
             Request_References_Success, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
+        reference = RequestReferences.objects.get(ref=self.kwargs['ref'])
 
         context['customer'] = customer
+        context['reference'] = reference
         return context
 
 

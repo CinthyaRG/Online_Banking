@@ -11,17 +11,35 @@ $(document).ready(function (){
         $('#account').removeClass('errors');
     });
 
+    $('#amount_cheq').click(function () {
+        $('#amount_cheq').removeClass('errors');
+    });
+
 });
+
+function checkbook(account) {
+    var acc = false;
+    $.each(account,function (i,val) {
+        if (val[0].includes('Corriente')){
+            acc = true;
+        }
+    })
+    if (!(acc)) {
+        $('#btn-cheq').removeAttr('href');
+        $('#btn-cheq').removeAttr('onclick');
+        $('#btn-cheq').attr("onclick","notification_error('Usted no posee una cuenta con chequeras.')");
+    }
+}
 
 function drop_num_cheq() {
     var num = ['25', '50'];
 
     $.each(num,function (i,val) {
         if (i === 0) {
-            $("#num-cheq").append('<option value="'+(i+1)+'" selected="selected"> '+val+'</option>');
+            $("#num-cheq").append('<option value="'+val+'" selected="selected"> '+val+'</option>');
         }
         else {
-            $("#num-cheq").append('<option value="'+(i+1)+'"> '+val+'</option>');
+            $("#num-cheq").append('<option value="'+val+'"> '+val+'</option>');
         }
     })
 }
@@ -132,7 +150,38 @@ function save_references(a) {
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                if (data.exist) {
+                location.href = path[0]+"/"+path[1]+"/"+path[2]+"/"+path[3]+"/"+path[4]+"/"+path[5]+"/exitosa/"+data.id;
+            },
+            error: function (data) {
+                alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+                // move('logout');
+            }
+        });
+    }
+}
+
+
+function request_checkbook(a,b,c) {
+    if (parseInt($(a).val()) > 2 ){
+        notification_error('La cantidad de chequeras solicitar son máximo dos.');
+        $(a).addClass('errors');
+    }
+    else{
+        var path = window.location.href.split('/');
+        var url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/checkbook/";   
+        $.ajax({
+            url: url,
+            origin: 'localhost:8000',
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            data: {
+                num: c
+                checkbook: $(a).val(),
+                check: $(b).val()
+            },
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                if (data.success){
                     location.href = path[0]+"/"+path[1]+"/"+path[2]+"/"+path[3]+"/"+path[4]+"/"+path[5]+"/exitosa/"+data.id;
                 }
             },
