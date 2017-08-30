@@ -1,0 +1,44 @@
+{% extends "base-email.html" %}
+{% load static %}
+
+{% block script %}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div  id="center" class="center-block text-center">
+                <img src="www.idbcgroup.com/actio/img/logo.png">
+                <br>
+                <br>
+                <h2> {{ title }} </h2>
+                <br>
+                <br>
+                <p>Estimado(a) <b>{{usuario}}</b>
+                <br>
+                <br>
+                <p> Actio Capital se complace en informarle que el {{fecha}} a las {{hora}} usted realizó una solicitud de:
+                <br>
+                <p> {{ msg }} </p>
+                <p> Bajo el número de operación {{ ref }} </p>
+                <br>
+                <p> Gracias por utilizar los servicios de Banca por Internet que le ofrece Actio Capital.
+                </p>
+                <br>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <p><small>
+            NOTA: Esta notificación es enviada en forma automática por nuestros sistemas, por favor no
+            responda a la misma ya que no será atendido por ninguna persona en la institución.
+        </small></p>
+        <p><small>
+            Este mensaje y cualquier archivo que se adjunte contiene información privilegiada y confidencial.
+            Es para uso exclusivo del destinatario.
+        </small></p>
+    </div>
+
+{% endblock %}
+
+

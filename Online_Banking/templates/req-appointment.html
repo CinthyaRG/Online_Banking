@@ -16,10 +16,17 @@
     </script>
     <script>
         $(document).ready(function (){
-            $('#body_request_app').css({display: 'none'});
+            var session = String({{session}}) === 'true';
+
+            if (session) {
+                $('#sec_request_app').css({display: 'none'});
+            }
+            else {
+                $('#body_request_app').css({display: 'none'});
+            }
+
             $("#input_frs_coor").keypad();
             $("#input_snd_coor").keypad();
-            $("#input_frs_coor").keypad({prompt: 'Enter here'});
             $.keypad.setDefaults({prompt: ''});
 
             $('#datepicker').datepicker({
@@ -52,7 +59,7 @@
                                         Pregunta de Seguridad: </label>
                                 </div>
                                 <div class="col-md-6 col-xs-5 rows no-margin">
-                                    <p> Nombre de mi primera mascota </p>
+                                    <p id="question">{{question}}</p>
                                 </div>
                             </div>
                             <div class="row">
@@ -71,11 +78,11 @@
                                         <span class="text-danger"> * </span> Coordenadas: </label>
                                 </div>
                                 <div class="col-md-5 col-xs-5 rows">
-                                    <span id="first_coor"> A5
+                                    <span> <span id="first_coor">{{first_coor}}</span>
                                     <input id="input_frs_coor" maxlength="3" type="password"
                                            class="input-register">
                                     </span>
-                                    <span id="second_coor"> D2
+                                    <span> <span id="second_coor">{{second_coor}}</span>
                                     <input id="input_snd_coor" maxlength="3" type="password"
                                            class="input-register">
                                     </span>
@@ -90,10 +97,11 @@
             <div class="col-md-5 col-xs-5"></div>
             <div class="col-md-4">
                 <a id="btn-back" class="btn btn-default btn-group btn-apps"
-                   type="button" onclick="move_back_security()"> Cancelar
+                   type="button" onclick="window.history.back()"> Cancelar
                 </a>
                 <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
-                   type="button" onclick="move_security('#body_request_app','#sec_request_app')">
+                   type="button" onclick="elem_Security('#resp_seg','#input_frs_coor','#input_snd_coor',
+                   '#body_request_app','#sec_request_app')">
                     Siguiente
                 </a>
             </div>
@@ -128,7 +136,7 @@
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" class="form-control pull-right cursor" id="datepicker">
+                                <input class="form-control pull-right cursor" id="datepicker">
                             </div>
                         </div>
                     </div>
@@ -143,7 +151,8 @@
                    type="button" href="{% url 'solicitudes' customer.ref %}"> Cancelar
                 </a>
                 <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
-                   type="button" href="{% url 'solicitud-citas-exitosa' %}">  Aceptar
+                   type="button" onclick="save_appointment('#agen_bank', '#datepicker', '{{ customer.user.username }}')">
+                    Aceptar
                 </a>
             </div>
         </div>

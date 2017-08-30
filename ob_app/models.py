@@ -130,8 +130,19 @@ class Service(models.Model):
         return name
 
 
-class RequestReferences(models.Model):
+class RequestProduct(models.Model):
     ref = models.CharField(unique=True, max_length=8)
-    addressedTo = models.CharField(max_length=32)
-    account = models.CharField(max_length=32)
+    info = models.CharField(max_length=64)
+    name = models.CharField(max_length=32)
+    account = models.CharField(max_length=32, default='')
+    date = models.DateField()
     customer = models.ForeignKey(Customer)
+
+    def get_date(self):
+        formato = "%d/%m/%y"
+        if self.date is None:
+            return ''
+
+        date = self.date.strftime(formato)
+
+        return date

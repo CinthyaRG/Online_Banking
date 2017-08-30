@@ -4,6 +4,29 @@
 {% block script %}
     <script src="{% static 'js/menu.js' %}"></script>
     <script src="{% static 'js/script-request.js' %}"></script>
+    <script src="{% static 'plugins/datatables/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'plugins/datatables/dataTables.bootstrap.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            var table = $('#table-request').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching":true,
+                "ordering": false,
+                "order": [ 0, 'asc' ],
+                "info": true,
+                "autoWidth": false,
+                "pageLength":5,
+                "language": {
+                    "emptyTable": "No tiene solicitudes"
+                }
+            });
+
+            $("#table-request_paginate").addClass("pull-right");
+            $("#table-request_paginate").css({height: '60px'});
+            $("#table-request_filter").addClass("pull-right");
+        })
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -76,6 +99,66 @@
                             {% endif %}
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="row margin-t-25">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <div class="box box-success">
+                    <div class="box-header padding-tb">
+                        <h3 class="box-title margin">Lista de Solicitudes</h3>
+                        <p class="margin without-margin">
+                            A continuación se muestra un historial de sus solicitudes
+                        </p>
+                    </div>
+                    <div class="box-body no-padding">
+                        <table id="table-request" class="table table-bordered table-hover text-center">
+                            <thead>
+                            <tr class="bg-gray">
+                                <th>Referencia</th>
+                                <th>Solicitud</th>
+                                <th>Fecha Solicitud</th>
+                                <th>Descripción Solicitud</th>
+                            </tr>
+                            </thead>
+                            <tbody id="table-req">
+                            {% for r in req %}
+                                <tr>
+                                    <td>
+                                    <span>
+                                        {{ r.ref }}
+                                    </span>
+                                    </td>
+                                    <td>
+                                    <span>
+                                        {{ r.name }}
+                                    </span>
+                                    </td>
+                                    <td>
+                                    <span>
+                                        {{ r.get_date }}
+                                    </span>
+                                    </td>
+                                    <td class="w-360">
+                                    <span>
+                                        {{ r.info }}
+                                    </span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            <tfoot>
+                            <tr class="bg-gray">
+                                <th>Referencia</th>
+                                <th>Solicitud</th>
+                                <th>Fecha Solicitud</th>
+                                <th>Descripción Solicitud</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
                 </div>
             </div>
         </div>

@@ -19,6 +19,14 @@ from ob_app.models import *
 import datetime
 import random
 import hashlib
+from reportlab.pdfgen import canvas
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import SimpleDocTemplate, Paragraph, TableStyle
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import Table
+from reportlab.lib.enums  import *
+from io import BytesIO
 
 
 def groups():
@@ -755,12 +763,13 @@ def send_email_transaction(request):
             c['msg'] = service.identService + ' número de ' + service.get_type_affiliate().casefold() +\
                         ' ' + service.numService + '.'
 
+        email = customer.user.email
+
     c['type'] = 'realizó'
     c['msg2'] = 'Desde la cuenta ' + account[0] + ' con terminación ' + account[1] + '.'
     c['amount'] = 'Por el monto de Bs. ' + amount
     c['ref'] = 'Referencia: ' + ref
     c['usuario'] = customer.user.get_full_name
-    email = customer.user.email
 
     message_template = 'transaction_email.html'
     print('antes de enviar correo coordenadas')
@@ -1104,35 +1113,73 @@ def delete_service(request, pk):
 
 
 @ensure_csrf_cookie
-def save_references(request):
+def save_request(request):
     option = request.GET.get('option', None)
-    acc = request.GET.get('acc', None)
+    acc = request.GET.get('acc', '')
+    name = request.GET.get('name', '').casefold()
 
     data = {
-        'user_exists': User.objects.filter(pk=request.user.id).exists()
+        'user_exists': User.objects.filter(pk=request.user.id).exists(),
+        'success': False
     }
 
     if data['user_exists']:
         customer = Customer.objects.get(user=request.user.id)
 
+        formato = "%d/%m/%y %I:%M:%S %p"
+        date_time = datetime.datetime.today().strftime(formato).split(" ")
+        date = date_time[0]
+        time = date_time[1] + " " + date_time[2]
+
         reference = str(random.randint(1, 99999999)).zfill(8)
-        while RequestReferences.objects.filter(ref=reference).exists():
+        while RequestProduct.objects.filter(ref=reference).exists():
             reference = str(random.randint(1, 99999999)).zfill(8)
 
-        if RequestReferences.objects.filter(customer=customer.id).exists():
-            ref = RequestReferences.objects.get(customer=customer.id)
-            ref.account = acc
-            ref.addressedTo = option
-            ref.ref = reference
+        c = {
+            'fecha': date,
+            'hora': time,
+            'usuario': customer.user.get_full_name,
+            'title': 'Notificación de Solicitud de ' + name.capitalize()}
+
+        if option == 'Al Titular':
+            option = customer.get_name()
+
+        if name == 'referencias':
+            option = 'Dirigida a: ' + option
+            c['msg'] = 'Referencia Bancaria de su cuenta ' + acc + '. ' + option
+        elif name == 'cita':
+            op = option.split('-')
+            option = 'Cita en la sucursal: ' + op[0] + ', el día: ' + op[1]
+            c['msg'] = 'Cita bancaria en la sucursal ' + op[0] + ' para el día ' + op[1]
         else:
-            ref = RequestReferences(ref=reference,
-                customer=customer,
-                account=acc,
-                addressedTo=option)
+            op = option.split(' ')
+            option = 'Cantidad de chequeras: ' + op[0] + ', cada una de ' + op[1] + ' cheques.'
+            c['msg'] = op[0] + ' chequera(s), cada una con una cantidad de ' + op[1] + ' cheques.'
+
+        if name == 'chequeras':
+            if RequestProduct.objects.filter(name='chequeras', date=datetime.date.today()).exists():
+                return JsonResponse(data)
+
+        ref = RequestProduct(ref=reference,
+                             customer=customer,
+                             account=acc,
+                             info=option,
+                             name=name,
+                             date=datetime.date.today())
         ref.save()
 
         data['id'] = ref.ref
+        data['success'] = True
 
+        subject = 'Notificación de Solicitud de ' + name
+
+        c['ref'] = ref.ref
+        message_template = 'request_email.html'
+        print('antes de enviar correo coordenadas')
+        try:
+            send_email(subject, message_template, c, customer.user.email)
+        except:
+            pass
 
     return JsonResponse(data)
 
@@ -1734,9 +1781,10 @@ class Request(LoginRequiredMixin, TemplateView):
             Request, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
-        card_coor = ElemSecurity.objects.get(pk=customer.elemSecurity_id).cardCoor_id
+        req = RequestProduct.objects.filter(customer=customer.id)
 
         context['customer'] = customer
+        context['req'] = req
 
         return context
 
@@ -1855,6 +1903,26 @@ class Request_Appointment(LoginRequiredMixin, TemplateView):
             Request_Appointment, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
+        elems = ElemSecurity.objects.get(pk=customer.elemSecurity_id)
+
+        if elems.sessionExpires:
+            context['session'] = 'true'
+        else:
+            quest1 = customer.elemSecurity.question1
+            quest2 = customer.elemSecurity.question2
+            num = random.randint(1, 2)
+            if num == 1:
+                context['question'] = quest1
+            else:
+                context['question'] = quest2
+
+            a = list('ABCDEF')
+            random.shuffle(a)
+            b = list('12345')
+            random.shuffle(b)
+            context['first_coor'] = a[0] + b[0]
+            context['second_coor'] = a[1] + b[1]
+            context['session'] = 'false'
 
         context['customer'] = customer
         return context
@@ -1885,10 +1953,12 @@ class Request_References_Success(LoginRequiredMixin, TemplateView):
             Request_References_Success, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
-        reference = RequestReferences.objects.get(ref=self.kwargs['ref'])
+        reference = RequestProduct.objects.get(ref=self.kwargs['ref'])
 
         context['customer'] = customer
         context['reference'] = reference
+        context['info'] = reference.info.split(': ')[1]
+
         return context
 
 
@@ -1902,8 +1972,14 @@ class Request_Appointment_Success(LoginRequiredMixin, TemplateView):
             Request_Appointment_Success, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
+        req = RequestProduct.objects.get(ref=self.kwargs['ref'])
+        extra = req.info.split(',')
 
         context['customer'] = customer
+        context['req'] = req
+        context['branch'] = extra[0].split(': ')[1]
+        context['date'] = extra[1].split(': ')[1]
+
         return context
 
 
@@ -1917,8 +1993,13 @@ class Request_Checkbook_Success(LoginRequiredMixin, TemplateView):
             Request_Checkbook_Success, self).get_context_data(**kwargs)
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
+        req = RequestProduct.objects.get(ref=self.kwargs['ref'])
+        extra = req.info.split(',')
 
         context['customer'] = customer
+        context['req'] = req
+        context['num'] = extra[0].split(': ')[1]
+        context['check'] = extra[1].split(' ')[4]
         return context
 
 

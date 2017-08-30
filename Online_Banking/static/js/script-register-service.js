@@ -656,7 +656,7 @@ function add_services() {
                                         notification_success('Registro de servicio exitoso.');
                                         setTimeout(function(){
                                             location.href= document.referrer;
-                                        }, 3000);
+                                        }, 1500);
                                     }
                                     else{
                                         if (data.nick_exist){
@@ -675,7 +675,7 @@ function add_services() {
                                     }
                                 }
                             })
-                        }, 3000);
+                        }, 1500);
                     }
                     else{
                         if (data.ident){

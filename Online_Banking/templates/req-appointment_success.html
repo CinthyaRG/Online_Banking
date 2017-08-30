@@ -20,7 +20,7 @@
                             <div class="col-md-11 col-xs-11 margin-l-13">
                                 <p class="text-wrapper margin-l-13">
                                     Su solicitud de cita ha sido procesada exitosamente bajo el número
-                                    de operación <strong>1432985</strong> con los siguientes datos:
+                                    de operación <strong>{{ req.ref }}</strong> con los siguientes datos:
                                 </p>
                             </div>
                         </div>
@@ -29,7 +29,7 @@
                                 <p class="pull-right"> Agencia:  </p>
                             </div>
                             <div class="col-md-5 col-xs-5">
-                                <p class="pull-left text-bold"> Av. Rómulo Gallegos </p>
+                                <p class="pull-left text-bold"> {{ branch }} </p>
                             </div>
                         </div>
                         <div class="row detail-tdc">
@@ -37,7 +37,7 @@
                                 <p class="pull-right"> Fecha:  </p>
                             </div>
                             <div class="col-md-5 col-xs-5">
-                                <p class="pull-left text-bold"> 28/07/2017 </p>
+                                <p class="pull-left text-bold"> {{ date }} </p>
                             </div>
                         </div>
                     </div>
@@ -49,7 +49,7 @@
             <div class="col-md-3 col-xs-3"></div>
             <div class="col-md-6">
                 <a id="btn-back" class="btn btn-default btn-group btn-apps"
-                   type="button" href="{% url 'solicitudes' %}"> Ir a Solicitudes
+                   type="button" href="{% url 'solicitudes' customer.ref %}"> Ir a Solicitudes
                 </a>
                 <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
                    type="button" href="#">  Descargar Comprobante

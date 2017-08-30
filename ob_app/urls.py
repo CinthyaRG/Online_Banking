@@ -112,9 +112,9 @@ urlpatterns = [
         register_services,
         name='register-services'),
     url(
-        r'^ajax/save-references/$',
-        save_references,
-        name='save-references'),
+        r'^ajax/save-request/$',
+        save_request,
+        name='save-request'),
     url(
         r'^ajax/first-login/$',
         first_login,
@@ -220,7 +220,7 @@ urlpatterns = [
         Request_References.as_view(),
         name='solicitud-referencias'),
     url(
-        r'^(?P<pk>\w+)/solicitudes/Cita/exitosa$',
+        r'^(?P<pk>\w+)/solicitudes/Cita/exitosa/(?P<ref>\w+)$',
         Request_Appointment_Success.as_view(),
         name='solicitud-citas-exitosa'),
     url(

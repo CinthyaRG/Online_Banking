@@ -15,6 +15,14 @@ $(document).ready(function (){
         $('#amount_cheq').removeClass('errors');
     });
 
+    $('#agen_bank').click(function () {
+        $('#agen_bank').removeClass('errors');
+    });
+
+    $('#datepicker').click(function () {
+        $('#datepicker').removeClass('errors');
+    });
+
 });
 
 function checkbook(account) {
@@ -46,15 +54,15 @@ function drop_num_cheq() {
 
 
 function drop_agen() {
-    var bank = ['La California', 'C.C. Lider', 'C.C. Millenium', 'Av. Rómulo Gallegos', 'Av. Luis Roche',
-        'Centro Plaza', 'C.C. Sambil', 'C.C.C.T', 'Santa Mónica','La Trinidad', 'Boulevard Sabana Grande',
-        'Plaza Venezuela','C.C. Metrocenter', 'C.C. Propatria', 'C.C. La Cascada', 'El Silencio', 'Materidad',
-        'C.C. Multiplaza Paraiso', 'C.C. Galerias Ávila'];
+    var path = window.location.href.split('/');
+    var url = path[0]+"/"+path[1]+"/localhost:8001/ajax/branches/";
 
-    $("#agen_bank").append('<option value="'+'0'+'" selected="selected">' +'Seleccione'+'</option>');
+    $("#agen_bank").append('<option value="'+'0'+'" selected>' +'Seleccione'+'</option>');
 
-    $.each(bank.sort(),function (i,val) {
-        $("#agen_bank").append('<option value="'+val+'"> '+val+'</option>');
+    $.getJSON(url, function (data) {
+        $.each( data.branches.sort(), function( key, val ) {
+            $("#agen_bank").append('<option value="'+val+'"> '+val+'</option>');
+        })
     })
 }
 
@@ -134,62 +142,157 @@ function save_references(a) {
     }
     else{
         var path = window.location.href.split('/');
-        var url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/save-references/";
+        var url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/save-request/";
         var option = $('input:radio[name=optionsRadios]:checked').val();
         if (option === 'A un tercero'){
             option = $('#name_reference').val();
         }
-        $.ajax({
-            url: url,
-            origin: 'localhost:8000',
-            headers: {'X-CSRFToken': getCookie('csrftoken')},
-            data: {
-                option: option,
-                acc: document.getElementById('account').options[document.getElementById('account').selectedIndex].text
-            },
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                location.href = path[0]+"/"+path[1]+"/"+path[2]+"/"+path[3]+"/"+path[4]+"/"+path[5]+"/exitosa/"+data.id;
-            },
-            error: function (data) {
-                alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
-                // move('logout');
-            }
-        });
+        notification_success('Solicitud de Referencia Bancaria en proceso....');
+        setTimeout(function(){
+            $.ajax({
+                url: url,
+                origin: 'localhost:8000',
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                data: {
+                    option: option,
+                    acc: document.getElementById('account').options[document.getElementById('account').selectedIndex].text,
+                    name: path[5]
+                },
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    if(data.success){
+                        location.href = path[0]+"/"+path[1]+"/"+path[2]+"/"+path[3]+"/"+path[4]+"/"+path[5]+"/exitosa/"+data.id;
+                    }
+                    else{
+                        notification_error('Ha ocurrido un error intente nuevamente su solicitud.');
+                    }
+                },
+                error: function (data) {
+                    alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+                    // move('logout');
+                }
+            });
+        }, 1500);
     }
 }
 
 
-function request_checkbook(a,b,c) {
+function request_checkbook(a,b) {
     if (parseInt($(a).val()) > 2 ){
         notification_error('La cantidad de chequeras solicitar son máximo dos.');
         $(a).addClass('errors');
     }
     else{
         var path = window.location.href.split('/');
-        var url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/checkbook/";   
-        $.ajax({
-            url: url,
-            origin: 'localhost:8000',
-            headers: {'X-CSRFToken': getCookie('csrftoken')},
-            data: {
-                num: c
-                checkbook: $(a).val(),
-                check: $(b).val()
-            },
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                if (data.success){
-                    location.href = path[0]+"/"+path[1]+"/"+path[2]+"/"+path[3]+"/"+path[4]+"/"+path[5]+"/exitosa/"+data.id;
+        var url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/save-request/";
+        notification_success('Solicitud de Chequera en proceso....');
+        setTimeout(function(){
+            $.ajax({
+                url: url,
+                origin: 'localhost:8000',
+                headers: {'X-CSRFToken': getCookie('csrftoken')},
+                data: {
+                    option: $(a).val() + ' ' + $(b).val(),
+                    name: path[5]
+                },
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.success){
+                        location.href = path[0]+"/"+path[1]+"/"+path[2]+"/"+path[3]+"/"+path[4]+"/"+path[5]+"/exitosa/"+data.id;
+                    }
+                    else{
+                        notification_error('No puede realizar más de una solicitud de chequeras al día.');
+                        setTimeout(function(){
+                            location.href= document.referrer;
+                        }, 1500);
+                    }
+                },
+                error: function (data) {
+                    alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+                    // move('logout');
                 }
-            },
-            error: function (data) {
-                alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
-                // move('logout');
+            });
+        }, 1500);
+
+    }
+}
+
+
+function save_appointment(a,b,c) {
+    if ($(a).val() === '0'){
+        notification_error('Seleccione una sucursal del banco.');
+        $(a).addClass('errors');
+    }
+    else if ($(b).val() === ''){
+        notification_error('Seleccione una fecha para agendar su cita del banco.');
+        $(b).addClass('errors');
+    }
+    else{
+        if ($(b).val() !== ''){
+            var d = $(b).val().split('/');
+            var date = new Date(d[2],d[1]-1,d[0]);
+            if (date.getDay() === 0 || date.getDay() === 6){
+                notification_error('La cita debe ser un día laboral bancario.');
+                $(b).addClass('errors');
             }
-        });
+            else{
+                notification_success('Solicitud de Cita en proceso....');
+                var path = window.location.href.split('/');
+                var url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/save-request/";
+                var url_api = path[0]+"/"+path[1]+"/localhost:8001/ajax/appointment/";
+                setTimeout(function(){
+                    $.ajax({
+                        url: url_api,
+                        origin: 'localhost:8000',
+                        headers: {'X-CSRFToken': getCookie('csrftoken')},
+                        data: {
+                            num: c,
+                            date: $(b).val(),
+                            branch: $(a).val()
+                        },
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.success){
+                                $.ajax({
+                                    url: url,
+                                    origin: 'localhost:8000',
+                                    headers: {'X-CSRFToken': getCookie('csrftoken')},
+                                    data: {
+                                        option: $(a).val() + '-' + $(b).val(),
+                                        name: path[5]
+                                    },
+                                    type: 'GET',
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        if (data.success){
+                                            location.href = path[0]+"/"+path[1]+"/"+path[2]+"/"+path[3]+"/"+path[4]+"/"+path[5]+"/exitosa/"+data.id;
+                                        }
+                                    },
+                                    error: function (data) {
+                                        alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+                                        // move('logout');
+                                    }
+                                });
+                            }
+                            else{
+                                notification_error(data.msg);
+                                $(a).addClass('errors');
+                            }
+                        },
+                        error: function (data) {
+                            alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+                            // move('logout');
+                        }
+                    });
+                }, 1500);
+
+            }
+        }
+
+
     }
 }
 
