@@ -83,7 +83,7 @@ function drop_account(account){
     $("#account").append('<option value="'+'0'+'" selected>' +'Seleccione'+'</option>');
 
     $.each(account,function (i,val) {
-        $("#account").append('<option value="'+(i+1)+'"> '+val[0].substring(6)+'  '+val[1].substring(12)+'</option>');
+        $("#account").append('<option value="'+(i+1)+'"> '+val[0].substring(6)+'  '+val[1] +'</option>');
     })
 }
 

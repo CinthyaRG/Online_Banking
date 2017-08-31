@@ -243,4 +243,12 @@ urlpatterns = [
         r'^(?P<pk>\w+)/ayuda$',
         Help.as_view(),
         name='ayuda'),
+    url(
+        r'^generar-referencia/(?P<ref>\w+)$',
+        MyPDFView.as_view(),
+        name='generar-referencia'),
+    url(
+        r'^generar-tarjeta-coor/(?P<serial>\w+)$',
+        CardCoorPDF.as_view(),
+        name='generar-tarjeta'),
 ]

@@ -2,7 +2,7 @@ import json
 from json import JSONDecoder
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.template.loader import get_template
 from django.urls import reverse_lazy
@@ -14,6 +14,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from django.core.mail import EmailMessage
 from django.views.generic import *
+from reportlab.lib.units import inch
+
 from ob_app.forms import *
 from ob_app.models import *
 import datetime
@@ -21,11 +23,11 @@ import random
 import hashlib
 from reportlab.pdfgen import canvas
 from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.platypus import SimpleDocTemplate, Paragraph, TableStyle
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
+from reportlab.platypus import *
 from reportlab.platypus import Table
-from reportlab.lib.enums  import *
+from reportlab.lib.enums import *
 from io import BytesIO
 
 
@@ -2125,5 +2127,243 @@ class Help(LoginRequiredMixin, TemplateView):
         context['customer'] = customer
         return context
 
+
+class MyPDFView(DetailView):
+
+    def get(self, request, *args, **kwargs):
+        reference = RequestProduct.objects.get(ref=self.kwargs['ref'])
+
+        # Create the HttpResponse object with the appropriate PDF headers.
+        response = HttpResponse(content_type='application/pdf')
+        pdf_name = "Referencia-" + reference.ref + ".pdf"
+        response['Content-Disposition'] = 'attachment; filename=' + pdf_name
+        buff = BytesIO()
+        # Create the PDF object, using the response object as its "file."
+        #p = canvas.Canvas(response)
+
+        today = str(datetime.date.today()).split('-')
+        month = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre',
+               'noviembre', 'diciembre']
+        days = ['un', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez',
+                'once', 'doce', 'trece', 'catorce', 'quince', 'diéciseis', 'diécisiete',
+                'diéciocho', 'diécinueve', 'veinte', 'veintiuno', 'veintidos', 'veintitres',
+                'veinticuatro', 'veinticinco', 'veintiseis', 'veintisiete', 'veintiocho',
+                'veintinueve', 'treinta', 'treinta y un']
+
+        d = int(today[2]) - 1
+        m = int(today[1]) - 1
+
+        date = str(days[d]) + ' día(s) del mes de ' + str(month[m]) + ' del presente año.'
+
+        doc = SimpleDocTemplate(buff,
+                                pagesize=letter,
+                                rightMargin=40,
+                                leftMargin=40,
+                                topMargin=30,
+                                bottomMargin=18,
+                                )
+
+        elementos = []
+        #Definimos los estilos para el documento
+        estilo = getSampleStyleSheet()
+        print(estilo)
+        style_table = estilo["BodyText"]
+        style_table.alignment = TA_JUSTIFY
+        style_table.fontName = "Helvetica"
+        style_table.fontSize = 14
+        style_table.leading = 15
+        style_table.firstLineIndent = 15
+
+        style = estilo["title"]
+        style.alignment = TA_CENTER
+        style.fontName = "Helvetica"
+        style.fontSize = 16
+        style.leading = 50
+
+        style_header = estilo["Normal"]
+        style_header.alignment = TA_RIGHT
+        style_header.fontName = "Helvetica"
+        style_header.fontSize = 12
+        style_header.leading = 20
+
+        path = "C:\\Users\CinthyaCarolina\PycharmProjects\Online_Banking\Online_Banking\static\img\logo_negro.png"
+        I = Image(path)
+        I.hAlign = TA_LEFT
+        elementos.append(I)
+        lines = [
+            [],
+            [Paragraph('', style=estilo['h1'])],
+            [Paragraph('', style=estilo['h1'])],
+            [Paragraph('', style=estilo['h1'])],
+            [],
+        ]
+        elementos.append(Table(lines))
+        elementos.append(Paragraph('<p><strong>REFERENCIA BANCARIA DE CUENTA: </strong></p>', style_header))
+        elementos.append(Paragraph('<p><strong>Nro. de operación: ' + reference.ref + '</strong></p>', style_header))
+
+        data = [
+            [],[],[],[],
+            [Paragraph(reference.info.split(': ')[1].upper(), style)],
+            [Paragraph('<p>Sirva la presente para hacer constar que el(la) Sr(a): <b> ' +
+                           reference.customer.user.get_full_name() + '</b>, portador(a) de la C.I: ' +
+                           reference.customer.ident +
+                           ' es cliente de Nuestra Institución Bancaria donde mantiene establecida una cuenta de tipo <b>' +
+                           reference.account.split(' ')[0].upper() + '</b>' + ' bajo el número de cuenta ' +
+                           reference.account.split(' ')[1] + ' , la cual moviliza a nuestra entera satisfacción. </p>',
+                           style_table)],
+            [],
+            [],
+            [Paragraph('Constancia que se expide a petición de la parte interesada a los ' + date, style_table)],
+        ]
+
+        t = Table(data)
+        # t.setStyle(TableStyle([('VALIGN',(1,0),(1,8),'MIDDLE')]))
+
+        elementos.append(t)
+        #Construimos el documento
+        doc.build(elementos)
+        response.write(buff.getvalue())
+        buff.close()
+        return response
+
+
+class CardCoorPDF(DetailView):
+
+    def get(self, request, *args, **kwargs):
+        card = CardCoor.objects.get(serial=self.kwargs['serial'])
+
+        # Create the HttpResponse object with the appropriate PDF headers.
+        response = HttpResponse(content_type='application/pdf')
+        pdf_name = "TarjetaDeCoordenadas-" + card.serial + ".pdf"
+        response['Content-Disposition'] = 'attachment; filename=' + pdf_name
+        buff = BytesIO()
+        # Create the PDF object, using the response object as its "file."
+        #p = canvas.Canvas(response)
+
+        doc = SimpleDocTemplate(buff,
+                                pagesize=letter,
+                                rightMargin=40,
+                                leftMargin=40,
+                                topMargin=30,
+                                bottomMargin=18,
+                                )
+
+        elementos = []
+        #Definimos los estilos para el documento
+        estilo = getSampleStyleSheet()
+        style_table = estilo["BodyText"]
+        style_table.alignment = TA_CENTER
+        style_table.fontName = "Helvetica"
+        style_table.fontSize = 14
+        style_table.leading = 15
+
+        style = estilo['h3']
+        style.fontName = "Helvetica"
+
+        style_header = estilo["Normal"]
+        style_header.alignment = TA_JUSTIFY
+        style_header.fontName = "Helvetica"
+        style_header.fontSize = 12
+        style_header.leading = 15
+        style_header.firstLineIndent = 15
+
+        title = [
+            [], [],
+            [Paragraph('<p>Tarjeta De Coordenadas</p>', style=estilo['title'])],
+            [Paragraph('', style=estilo['h1'])],
+            [Paragraph('', style=estilo['h1'])],
+            [Paragraph('', style=estilo['h1'])],
+        ]
+        elementos.append(Table(title))
+
+        data = [
+            [],[],
+            [Paragraph('<p>Este es un elemento de seguridad para poder realizar transferencias, '
+                       'pagos, entre otras operaciones especiales</p>', style_header)],
+            [],
+            [],
+        ]
+
+        t = Table(data)
+        elementos.append(t)
+
+        path = "C:\\Users\CinthyaCarolina\PycharmProjects\Online_Banking\Online_Banking\static\img\logo_negro.png"
+        I = Image(path)
+        I.hAlign = TA_CENTER
+        elementos.append(I)
+
+        coor = list_list(card.coor)
+
+        coord = [
+            ['', Paragraph('<p> A </p>', style_table),
+             Paragraph('<p> B </p>', style_table),
+             Paragraph('<p> C </p>', style_table),
+             Paragraph('<p> D </p>', style_table),
+             Paragraph('<p> E </p>', style_table),
+             Paragraph('<p> F </p>', style_table),
+             ''],
+            [Paragraph('<p> 1 </p>', style_table),
+             Paragraph('<p>' + str(coor[0][0]).zfill(3) +'</p>', style_table),
+             Paragraph('<p>' + str(coor[0][1]).zfill(3) +'</p>', style_table),
+             Paragraph('<p>' + str(coor[0][2]).zfill(3) +'</p>', style_table),
+             Paragraph('<p>' + str(coor[0][3]).zfill(3) +'</p>', style_table),
+             Paragraph('<p>' + str(coor[0][4]).zfill(3) +'</p>', style_table),
+             Paragraph('<p>' + str(coor[0][5]).zfill(3) +'</p>', style_table),
+             ''],
+            [Paragraph('<p> 2 </p>', style_table),
+             Paragraph('<p>' + str(coor[1][0]).zfill(3) + '</p>', style_table),
+             Paragraph('<p>' + str(coor[1][1]).zfill(3) + '</p>', style_table),
+             Paragraph('<p>' + str(coor[1][2]).zfill(3) + '</p>', style_table),
+             Paragraph('<p>' + str(coor[1][3]).zfill(3) + '</p>', style_table),
+             Paragraph('<p>' + str(coor[1][4]).zfill(3) + '</p>', style_table),
+             Paragraph('<p>' + str(coor[1][5]).zfill(3) + '</p>', style_table),
+             ''],
+            [Paragraph('<p> 3 </p>', style_table),
+             Paragraph('<p>' + str(coor[2][0]).zfill(3) + '</p>', style_table),
+             Paragraph('<p>' + str(coor[2][1]).zfill(3) + '</p>', style_table),
+             Paragraph('<p>' + str(coor[2][2]).zfill(3) + '</p>', style_table),
+             Paragraph('<p>' + str(coor[2][3]).zfill(3) + '</p>', style_table),
+             Paragraph('<p>' + str(coor[2][4]).zfill(3) + '</p>', style_table),
+             Paragraph('<p>' + str(coor[2][5]).zfill(3) + '</p>', style_table),
+             ''],
+            [Paragraph('<p> 4 </p>', style_table),
+             Paragraph('<p>' + str(coor[3][0]).zfill(3) + '</p>', style_table),
+             Paragraph('<p>' + str(coor[3][1]).zfill(3) + '</p>', style_table),
+             Paragraph('<p>' + str(coor[3][2]).zfill(3) + '</p>', style_table),
+             Paragraph('<p>' + str(coor[3][3]).zfill(3) + '</p>', style_table),
+             Paragraph('<p>' + str(coor[3][4]).zfill(3) + '</p>', style_table),
+             Paragraph('<p>' + str(coor[3][5]).zfill(3) + '</p>', style_table),
+             ''],
+            [Paragraph('<p> 5 </p>', style_table),
+             Paragraph('<p>' + str(coor[4][0]).zfill(3) + '</p>', style_table),
+             Paragraph('<p>' + str(coor[4][1]).zfill(3) + '</p>', style_table),
+             Paragraph('<p>' + str(coor[4][2]).zfill(3) + '</p>', style_table),
+             Paragraph('<p>' + str(coor[4][3]).zfill(3) + '</p>', style_table),
+             Paragraph('<p>' + str(coor[4][4]).zfill(3) + '</p>', style_table),
+             Paragraph('<p>' + str(coor[4][5]).zfill(3) + '</p>', style_table),
+             ''],
+            ['','','','','','','','']
+        ]
+
+        t = Table(coord)
+        # t.setStyle(TableStyle([('VALIGN',(1,0),(1,8),'MIDDLE')]))
+        t.setStyle(TableStyle(
+            [
+                ('GRID', (1, 1), (6, 5), 1, colors.black),
+                ('BACKGROUND', (0, 0), (7, 6), colors.lightcyan)
+            ]
+        ))
+        elementos.append(t)
+
+        lines = [
+            ['','','',Paragraph('<p> <b> Serial: ' + card.serial + '</b></p>', style=estilo['h3'])],
+        ]
+        elementos.append(Table(lines))
+
+        #Construimos el documento
+        doc.build(elementos)
+        response.write(buff.getvalue())
+        buff.close()
+        return response
 
 
