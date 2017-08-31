@@ -1,5 +1,7 @@
 import json
 from json import JSONDecoder
+
+import os
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
@@ -15,6 +17,7 @@ from email.mime.text import MIMEText
 from django.core.mail import EmailMessage
 from django.views.generic import *
 from reportlab.lib.units import inch
+from unipath import Path
 
 from ob_app.forms import *
 from ob_app.models import *
@@ -2186,7 +2189,10 @@ class MyPDFView(DetailView):
         style_header.fontSize = 12
         style_header.leading = 20
 
-        path = "C:\\Users\CinthyaCarolina\PycharmProjects\Online_Banking\Online_Banking\static\img\logo_negro.png"
+        mypath = os.getcwd()
+        path = Path('/Online_Banking/static/img/logo_negro.png')
+        path = mypath + path
+
         I = Image(path)
         I.hAlign = TA_LEFT
         elementos.append(I)
@@ -2202,7 +2208,7 @@ class MyPDFView(DetailView):
         elementos.append(Paragraph('<p><strong>Nro. de operación: ' + reference.ref + '</strong></p>', style_header))
 
         data = [
-            [],[],[],[],
+            [], [], [], [],
             [Paragraph(reference.info.split(': ')[1].upper(), style)],
             [Paragraph('<p>Sirva la presente para hacer constar que el(la) Sr(a): <b> ' +
                            reference.customer.user.get_full_name() + '</b>, portador(a) de la C.I: ' +
@@ -2267,6 +2273,14 @@ class CardCoorPDF(DetailView):
         style_header.leading = 15
         style_header.firstLineIndent = 15
 
+        mypath = os.getcwd()
+        path = Path('/Online_Banking/static/img/logo_negro.png')
+        path = mypath + path
+
+        I = Image(path)
+        I.hAlign = TA_LEFT
+        elementos.append(I)
+
         title = [
             [], [],
             [Paragraph('<p>Tarjeta De Coordenadas</p>', style=estilo['title'])],
@@ -2277,7 +2291,7 @@ class CardCoorPDF(DetailView):
         elementos.append(Table(title))
 
         data = [
-            [],[],
+            [], [],
             [Paragraph('<p>Este es un elemento de seguridad para poder realizar transferencias, '
                        'pagos, entre otras operaciones especiales</p>', style_header)],
             [],
@@ -2287,7 +2301,10 @@ class CardCoorPDF(DetailView):
         t = Table(data)
         elementos.append(t)
 
-        path = "C:\\Users\CinthyaCarolina\PycharmProjects\Online_Banking\Online_Banking\static\img\logo_negro.png"
+        mypath = os.getcwd()
+        path = Path('/Online_Banking/static/img/logo_negro.png')
+        path = mypath + path
+
         I = Image(path)
         I.hAlign = TA_CENTER
         elementos.append(I)
@@ -2342,7 +2359,7 @@ class CardCoorPDF(DetailView):
              Paragraph('<p>' + str(coor[4][4]).zfill(3) + '</p>', style_table),
              Paragraph('<p>' + str(coor[4][5]).zfill(3) + '</p>', style_table),
              ''],
-            ['','','','','','','','']
+            ['', '', '', '', '', '', '', '']
         ]
 
         t = Table(coord)
@@ -2356,7 +2373,7 @@ class CardCoorPDF(DetailView):
         elementos.append(t)
 
         lines = [
-            ['','','',Paragraph('<p> <b> Serial: ' + card.serial + '</b></p>', style=estilo['h3'])],
+            ['', '', '', Paragraph('<p> <b> Serial: ' + card.serial + '</b></p>', style=estilo['h3'])],
         ]
         elementos.append(Table(lines))
 
@@ -2366,4 +2383,216 @@ class CardCoorPDF(DetailView):
         buff.close()
         return response
 
+
+class RequestPDF(DetailView):
+
+    def get(self, request, *args, **kwargs):
+        req = RequestProduct.objects.get(id=self.kwargs['pk'])
+
+        # Create the HttpResponse object with the appropriate PDF headers.
+        response = HttpResponse(content_type='application/pdf')
+        pdf_name = "ComprobanteSolicitud-" + req.ref + ".pdf"
+        response['Content-Disposition'] = 'attachment; filename=' + pdf_name
+        buff = BytesIO()
+        # Create the PDF object, using the response object as its "file."
+        #p = canvas.Canvas(response)
+
+        doc = SimpleDocTemplate(buff,
+                                pagesize=letter,
+                                rightMargin=40,
+                                leftMargin=40,
+                                topMargin=30,
+                                bottomMargin=18,
+                                )
+
+        elementos = []
+        #Definimos los estilos para el documento
+        estilo = getSampleStyleSheet()
+        style_table = estilo["BodyText"]
+        style_table.alignment = TA_CENTER
+        style_table.fontName = "Helvetica"
+        style_table.fontSize = 14
+        style_table.leading = 15
+
+        style = estilo['h3']
+        style.fontName = "Helvetica"
+
+        style_header = estilo["Normal"]
+        style_header.alignment = TA_JUSTIFY
+        style_header.fontName = "Helvetica"
+        style_header.fontSize = 12
+        style_header.leading = 15
+        style_header.firstLineIndent = 15
+
+
+        style_info = estilo["df"]
+        style_info.alignment = TA_JUSTIFY
+        style_info.fontName = "Helvetica"
+        style_info.fontSize = 12
+        style_info.leading = 15
+        style_info.firstLineIndent = 25
+
+        mypath = os.getcwd()
+        path = Path('/Online_Banking/static/img/logo_negro.png')
+        path = mypath + path
+
+        I = Image(path)
+        I.hAlign = TA_LEFT
+        elementos.append(I)
+
+        title = [
+            [], [], [], [],
+            [Paragraph('<p>Comprobante de Solicitud de ' + req.name.capitalize() + '</p>', style=estilo['title'])],
+            [Paragraph('', style=estilo['h1'])],
+            [Paragraph('', style=estilo['h1'])],
+            [Paragraph('', style=estilo['h1'])],
+        ]
+        elementos.append(Table(title))
+
+        info = req.info.split(', ')
+
+        if req.name == 'cita':
+            data = [
+                [], [],
+                [Paragraph('<p>Su solicitud de cita ha sido procesada exitosamente bajo el número de operación <strong>' +
+                           req.ref + '</strong> con los siguientes datos:</p>', style_header)],
+                [],
+                [Paragraph('<p> Agencia Bancaria: <strong>' + info[0].split(': ')[1] + '</strong></p>', style_info)],
+                [Paragraph('<p> Fecha: <strong>' + info[1].split(': ')[1] + '</strong></p>', style_info)],
+            ]
+        elif req.name == 'chequeras':
+            data = [
+                [], [],
+                [Paragraph(
+                    '<p>Su solicitud de chequera(s) ha sido procesada exitosamente bajo el número de operación <strong>' +
+                    req.ref + '</strong> con los siguientes datos:</p>', style_header)],
+                [],
+                [Paragraph('<p> Cantidad de chequeras: <strong>' + info[0].split(': ')[1] + '</strong></p>', style_info)],
+                [Paragraph('<p> Número de cheques: <strong>' + info[1].split(' ')[3] + '</strong> cheques </p>', style_info)],
+            ]
+
+        t = Table(data)
+
+        # t.setStyle(TableStyle([('VALIGN',(1,0),(1,8),'MIDDLE')]))
+        elementos.append(t)
+
+        #Construimos el documento
+        doc.build(elementos)
+        response.write(buff.getvalue())
+        buff.close()
+        return response
+
+
+class MovementPDF(DetailView):
+
+    def get(self, request, *args, **kwargs):
+        data = json.loads(request.GET.get('data', None))
+        user = User.objects.get(pk=request.user.id)
+        movement = data[0]
+        start = data[1]
+        end = data[2]
+        select = data[3]
+        account = data[4]
+
+        response = HttpResponse(content_type='application/pdf')
+        pdf_name = "ConsultaMovimientos.pdf"
+        response['Content-Disposition'] = 'attachment; filename=' + pdf_name
+        buff = BytesIO()
+        # Create the PDF object, using the response object as its "file."
+        # p = canvas.Canvas(response)
+
+        doc = SimpleDocTemplate(buff,
+                                pagesize=letter,
+                                rightMargin=40,
+                                leftMargin=40,
+                                topMargin=30,
+                                bottomMargin=18,
+                                )
+
+        elementos = []
+        # Definimos los estilos para el documento
+        estilo = getSampleStyleSheet()
+        style_table = estilo["BodyText"]
+        style_table.alignment = TA_CENTER
+        style_table.fontName = "Helvetica"
+        style_table.fontSize = 14
+        style_table.leading = 15
+
+        style = estilo['h3']
+        style.fontName = "Helvetica"
+
+        style_header = estilo["Normal"]
+        style_header.alignment = TA_JUSTIFY
+        style_header.fontName = "Helvetica"
+        style_header.fontSize = 12
+        style_header.leading = 15
+        style_header.firstLineIndent = 15
+
+        style_info = estilo["df"]
+        style_info.alignment = TA_JUSTIFY
+        style_info.fontName = "Helvetica"
+        style_info.fontSize = 12
+        style_info.leading = 15
+        style_info.firstLineIndent = 25
+
+        mypath = os.getcwd()
+        path = Path('/Online_Banking/static/img/logo_negro.png')
+        path = mypath + path
+
+        I = Image(path)
+        I.hAlign = TA_LEFT
+        elementos.append(I)
+
+        title = [
+            [], [], [], [],
+            [Paragraph('<p>Consulta de Movimientos</p>', style=estilo['title'])],
+            [Paragraph('', style=estilo['h1'])],
+            [Paragraph('', style=estilo['h1'])],
+            [Paragraph('', style=estilo['h1'])],
+        ]
+        elementos.append(Table(title))
+
+        if select == '0':
+            select = 'Todas'
+
+        data = [
+            [], [],
+            [Paragraph('<p>' + user.get_full_name() + ' a continuación se muestran los movimientos asociados a su cuenta </p>' +
+                       account.upper() + ' con los siguientes filtros: ', style_header)],
+            [],
+            [Paragraph('<p> Fecha Inicial: <strong>' + start + '</strong></p>', style_info)],
+            [Paragraph('<p> Fecha Final: <strong>' + end + '</strong></p>', style_info)],
+            [Paragraph('<p> Tipo de Transacción: <strong>' + select + '</strong></p>', style_info)],
+            [], [],
+        ]
+
+        elementos.append(Table(data))
+
+        heading = ('Fecha', 'Referencia', 'Transacción', 'Monto', 'Saldo Disponible')
+
+        if len(movement) == 0:
+            mov = [
+                [], [],
+                [Paragraph('<p><b> No hay movimientos disponibles </b></p>', style_table)],
+                [], []
+            ]
+            t = Table(mov)
+        else:
+            mov = [(m[0][:10], m[1], m[2], m[3], m[4]) for m in movement]
+            t = Table([heading] + mov)
+            t.setStyle(TableStyle(
+                [
+                    ('GRID', (0, 0), (len(movement)+1, len(movement)), 1, colors.black),
+                    ('BACKGROUND', (0, 0), (4, 0), colors.lightgrey),
+                    ('ALIGN', (0, 0), (4, len(movement)), 'CENTER')
+                ]
+            ))
+
+        elementos.append(t)
+
+        # Construimos el documento
+        doc.build(elementos)
+        response.write(buff.getvalue())
+        buff.close()
+        return response
 

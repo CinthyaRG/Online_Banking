@@ -112,7 +112,7 @@ function DatatablesExec() {
         "autoWidth": true,
         "pageLength":5,
         "language": {
-            "emptyTable": "No tiene movimientos en la cuenta en el mes actual"
+            "emptyTable": "No existen movimientos en la cuenta"
         },
         dom:'lr<"table-filter-container">tip',
         initComplete: function () {
@@ -130,6 +130,66 @@ function DatatablesExec() {
     $("#example2_paginate").css({height: '60px'});
 }
 
+function download_movement(a) {
+    var path = window.location.href.split('/');
+    var url_api = path[0]+"/"+path[1]+"/"+"localhost:8001"+"/ajax/data-customer/";
+    var o;
+    var s = $('#datepicker').val();
+    var e = $('#datepicker2').val();
+    var select = $('#trans').val();
+
+    if (validate_date(s,e)) {
+        var today = new Date();
+        var start = s;
+        var end = e;
+        if (s === '') {
+            start = 1 + '/' + (today.getMonth()+1) + '/' + today.getFullYear();
+        }
+        if (e === '') {
+            end = today.getDate() + '/' + (today.getMonth()+1) + '/' + today.getFullYear();
+        }
+        alert(end);
+
+        $.ajax({
+            url: url_api,
+            origin: 'localhost:8000',
+            headers: {'X-CSRFToken': getCookie('csrftoken')},
+            data: {
+                num: a,
+                start: start,
+                end: end,
+                select: select,
+                option: path[4]
+            },
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                if (data.product) {
+                    var mov;
+                    if (path[5] === '1') {
+                        mov = data.mov_acc[0];
+                    }
+                    else if (path[5] === '2'){
+                        mov = data.mov_acc[1];
+                    }
+                    var acc = document.getElementById('account').options[document.getElementById('account').selectedIndex].text;
+                    $('#my_form_data').val(JSON.stringify([mov,start,end,select,acc]));
+                    $('#my_form').submit();
+                }
+            },
+            error: function (data) {
+                alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+                // move('logout');
+            }
+        });
+    }
+    else if (!(validate_date(s,e))) {
+        $('#datepicker2').addClass('errors');
+        var msg = 'La fecha final para la consulta de movimientos no ' +
+            'puede ser mayor a la fecha de inicio.';
+        notification_error(msg);
+    }
+}
 
 
 

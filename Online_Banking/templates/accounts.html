@@ -117,8 +117,8 @@
             <div class="col-md-4 col-xs-7"></div>
             <div class="col-md-8 col-xs-4 without-padding">
                 <a id="transf-my-acc" class="btn btn-default btn-group btn-apps" type="button"
-                       href="{% url 'transf-mis-cuentas' pk=customer.ref id=acc_id %}">
-                        Transferencias a Mis Cuentas </a>
+                   href="{% url 'transf-mis-cuentas' pk=customer.ref id=acc_id %}">
+                    Transferencias a Mis Cuentas </a>
                 {% if  customer.elemSecurity.cardCoor_id is None %}
                     <a id="trans_bank" class="btn btn-default btn-group btn-apps" type="button"
                        onclick="notification_error('Para realizar transferencias a otros usuarios debe ' +
@@ -212,10 +212,14 @@
                     <a id="btn-con" class="btn btn-default btn-group btn-apps" type="button"
                        onclick=""> Consultar </a>
                     <a class="btn btn-default btn-group btn-apps" type="button"
-                       onclick=""> Descargar </a>
+                       onclick="download_movement('{{ customer.user.username }}')"> Descargar </a>
                 </div>
             </div>
         </div>
+        <form id="my_form" action="{% url 'generar-movimientos' %}">
+            {% csrf_token %}
+            <input id="my_form_data" type="hidden" name="data">
+        </form>
         <div class="row">
             <div class="col-md-1"></div>
             <div class="col-md-10">

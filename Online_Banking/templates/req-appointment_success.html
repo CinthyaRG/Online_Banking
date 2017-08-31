@@ -26,7 +26,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-4 col-xs-5 without-padding">
-                                <p class="pull-right"> Agencia:  </p>
+                                <p class="pull-right"> Agencia Bancaria:  </p>
                             </div>
                             <div class="col-md-5 col-xs-5">
                                 <p class="pull-left text-bold"> {{ branch }} </p>
@@ -52,7 +52,7 @@
                    type="button" href="{% url 'solicitudes' customer.ref %}"> Ir a Solicitudes
                 </a>
                 <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
-                   type="button" href="#">  Descargar Comprobante
+                   type="button" href="{% url 'generar-comprobante' req.id %}">  Descargar Comprobante
                 </a>
             </div>
         </div>

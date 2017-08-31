@@ -19,9 +19,9 @@ Asegurarse de tener python 3.5 y la version de pip para python 3.5
 
     $ pip -v
 
-Ir al directorio SiraDex e instalar las librerias con
+Ir al directorio Online_Banking e instalar las librerias con
 
-    $ sudo pip install -r requirements.txt.sls
+    $ sudo pip install -r requirements.txt
 
 3. BASE DE DATOS
 ################################################################################
@@ -30,21 +30,21 @@ Instalar PostgreSQL desde el terminal.
 
     $ sudo apt-get install postgresql postgresql-client
 
-Iniciar sesion como usuario postgres y crear la base de datos Siradex
+Iniciar sesion como usuario postgres y crear la base de datos Online_Banking
 
     $ sudo -su postgres
-    $ createdb NombreBaseDatos
+    $ createdb Online_Banking
 
-Crear el usuario Siradex y garantizar el acceso a la base de datos.
+Crear el usuario administrador y garantizar el acceso a la base de datos.
 
     $ psql
-    $ CREATE USER "Usuario" WITH PASSWORD 'Password';
-    $ GRANT ALL PRIVILEGES ON DATABASE "NombreBaseDatos" to "Usuario";
+    $ CREATE USER administrador WITH PASSWORD 'admin1234';
+    $ GRANT ALL PRIVILEGES ON DATABASE "Online_Banking" to "administrador";
 
-Salir y entrar en la base de datos NombreBaseDatos como usuario Usuario
+Salir y entrar en la base de datos Online_Banking como usuario administrador
 
     $ \q
-    $ psql -d NombreBaseDatos -U Usuario (recordar que el password es: Password)
+    $ psql -d Online_Banking -U administrador (recordar que el password es: admin1234)
 
     ###########################################################
     NOTA IMPORTANTE:
@@ -58,7 +58,7 @@ Salir y entrar en la base de datos NombreBaseDatos como usuario Usuario
 
 Ir al directorio de la aplicación y ejecutar:
 
-    $ python manage.py runserver
+    $ python3 manage.py runserver
 
 Si no hay errores, el sistema empezara a correr en:
 
@@ -69,7 +69,7 @@ Si no hay errores, el sistema empezara a correr en:
 
 ERROR:
 
-  FATAL: Peer authentication failed for user "NombreBaseDatos"
+  FATAL: Peer authentication failed for user "Online_Banking"
 
 SOL:
   a. Crear password para postgres:

@@ -52,7 +52,7 @@
                    type="button" href="{% url 'solicitudes' customer.ref %}"> Ir a Solicitudes
                 </a>
                 <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
-                   type="button" href="#">  Descargar Comprobante
+                   type="button" href="{% url 'generar-comprobante' req.id %}">  Descargar Comprobante
                 </a>
             </div>
         </div>

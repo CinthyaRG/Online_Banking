@@ -251,4 +251,12 @@ urlpatterns = [
         r'^generar-tarjeta-coor/(?P<serial>\w+)$',
         CardCoorPDF.as_view(),
         name='generar-tarjeta'),
+    url(
+        r'^generar-comprobante-solicitud/(?P<pk>\w+)$',
+        RequestPDF.as_view(),
+        name='generar-comprobante'),
+    url(
+        r'^generar-movimientos/$',
+        MovementPDF.as_view(),
+        name='generar-movimientos'),
 ]
