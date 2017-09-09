@@ -33,6 +33,25 @@
             var account = '{{ affiliate.numAccount }}'.substring(0,6) + '**********' + '{{ affiliate.numAccount }}'.substring(16);
             $('#acc_transf').text(account);
 
+            $('#btn-download').click(function () {
+                $.ajax({
+                    url: url_api,
+                    origin: 'localhost:8000',
+                    headers: {'X-CSRFToken': getCookie('csrftoken')},
+                    data: {
+                        ref: '{{ ref }}'
+                    },
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.correct) {
+                            $('#my_form_data').val(JSON.stringify(['Bs. '+data.amount,data.description]));
+                            $('#my_form').submit();
+                        }
+                    }
+                });
+            })
+
         })
     </script>
 {% endblock %}
@@ -111,9 +130,13 @@
             <div class="col-md-5">
                 <a id="btn-back" class="btn btn-default btn-group btn-apps"
                    type="button" href="{% url 'inicio' customer.ref %}"> Ir a Posición Consolidada </a>
-                <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
-                   type="button" href="download.pdf" download="referencia.pdf"> Descargar </a>
+                <a id="btn-download" class="btn btn-default btn-group btn-apps pull-right"
+                   type="button"> Descargar </a>
             </div>
         </div>
+        <form id="my_form" action="{% url 'generar-comprobante-transferencia'  pk=affiliate.pk ref=ref %}">
+            {% csrf_token %}
+            <input id="my_form_data" type="hidden" name="data">
+        </form>
     </section>
 {% endblock %}

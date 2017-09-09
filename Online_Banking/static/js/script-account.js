@@ -21,6 +21,10 @@ $(document).ready(function (){
         modal.find('.modal-body #amount').text(amount);
     });
 
+    $('#datepicker').val('');
+
+    $('#datepicker2').val('');
+
 });
 
 

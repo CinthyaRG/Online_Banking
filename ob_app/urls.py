@@ -259,4 +259,16 @@ urlpatterns = [
         r'^generar-movimientos/$',
         MovementPDF.as_view(),
         name='generar-movimientos'),
+    url(
+        r'^generar-movimientos-tdc/$',
+        Movement_TDC_PDF.as_view(),
+        name='generar-movimientos-tdc'),
+    url(
+        r'^generar-comprobante-pago/(?P<pk>\w+)/(?P<ref>\w+)$',
+        PaymentPDF.as_view(),
+        name='generar-comprobante-pago'),
+    url(
+        r'^generar-comprobante-transferencia/(?P<pk>\w+)/(?P<ref>\w+)$',
+        TransferPDF.as_view(),
+        name='generar-comprobante-transferencia'),
 ]

@@ -24,6 +24,25 @@
                     }
                 }
             });
+
+            $('#btn-download').click(function () {
+                $.ajax({
+                    url: url_api,
+                    origin: 'localhost:8000',
+                    headers: {'X-CSRFToken': getCookie('csrftoken')},
+                    data: {
+                        ref: '{{ ref }}'
+                    },
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.correct) {
+                            $('#my_form_data').val(JSON.stringify(['Bs. '+data.amount,data.description]));
+                            $('#my_form').submit();
+                        }
+                    }
+                });
+            })
         })
     </script>
 {% endblock %}
@@ -38,64 +57,67 @@
                 </div>
             </div>
             <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-7">
-                <div class="box box-success">
-                    <div class="box-body">
-                        <dl class="dl-horizontal label-input">
-                            <div class="row">
-                                <div class="col-md-6 col-xs-6">
-                                    <label class="pull-right"> Nombre del Servicio: </label>
-                                </div>
-                                <div class="col-md-6 col-xs-5 rows margin-t-2">
+                <div class="col-md-2"></div>
+                <div class="col-md-7">
+                    <div class="box box-success">
+                        <div class="box-body">
+                            <dl class="dl-horizontal label-input">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <label class="pull-right"> Nombre del Servicio: </label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-5 rows margin-t-2">
                                     <span id="name_service" class="field-register">
                                         {{ service.identService }}
                                     </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-xs-6">
-                                    <label class="pull-right">Producto Asociado:  </label>
-                                </div>
-                                <div class="col-md-6 col-xs-5 rows margin-t-2">
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <label class="pull-right">Producto Asociado:  </label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-5 rows margin-t-2">
                                     <span id="product_payment" class="field-register">
                                         {{ service.get_type_affiliate }}{{ service.numService }}
                                     </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-xs-6">
-                                    <label class="pull-right">
-                                        Monto del Pago: </label>
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <label class="pull-right">
+                                            Monto del Pago: </label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-5 rows">
+                                        <span id="amount"> </span>
+                                    </div>
                                 </div>
-                                <div class="col-md-6 col-xs-5 rows">
-                                    <span id="amount"></span>
+                                <div class="row">
+                                    <div class="col-md-6 col-xs-6">
+                                        <label class="pull-right">
+                                            Descripción: </label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-5 rows">
+                                        <span id="description"></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-xs-6">
-                                    <label class="pull-right">
-                                        Descripción: </label>
-                                </div>
-                                <div class="col-md-6 col-xs-5 rows">
-                                    <span id="description"></span>
-                                </div>
-                            </div>
-                        </dl>
+                            </dl>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         </div>
         <div class="row">
             <div class="col-md-4 col-xs-4"></div>
             <div class="col-md-5">
                 <a id="btn-back" class="btn btn-default btn-group btn-apps"
                    type="button" href="{% url 'inicio' customer.ref %}"> Ir a Posición Consolidada </a>
-                <a id="btn-next" class="btn btn-default btn-group btn-apps pull-right"
-                   type="button" onclick="window.print();"> Descargar </a>
+                <a id="btn-download" class="btn btn-default btn-group btn-apps pull-right"
+                   type="button"> Descargar </a>
             </div>
-
         </div>
+        <form id="my_form" action="{% url 'generar-comprobante-pago'  pk=service.pk ref=ref %}">
+            {% csrf_token %}
+            <input id="my_form_data" type="hidden" name="data">
+        </form>
     </section>
 {% endblock %}
