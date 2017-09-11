@@ -92,6 +92,10 @@ urlpatterns = [
         get_tdc,
         name='get-tdc'),
     url(
+        r'^ajax/get-loan/$',
+        get_loans,
+        name='get-loans'),
+    url(
         r'^ajax/status-cardCoord/$',
         status_cardcoor,
         name='status-cardCoord'),

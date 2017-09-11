@@ -11,10 +11,11 @@ $(document).ready(function (){
     $("#account").change(function () {
         if ($("#account").val() !== '0') {
             $.each(balance,function (i,val) {
-                if (val[0] === 'Ahorro' && $("#account").val() === '1'){
+                acc= document.getElementById('account').options[document.getElementById('account').selectedIndex].text;
+                if (val[0] === 'Ahorro' && acc.includes('Ahorro')){
                     $("#balance_transf").text(val[1])
                 }
-                else if (val[0] === 'Corriente' && $("#account").val() === '2'){
+                else if (val[0] === 'Corriente' && acc.includes('Corriente')){
                     $("#balance_transf").text(val[1])
                 }
             });
@@ -81,6 +82,19 @@ function drop_account_trans(account){
             $("#account").append('<option value="'+(i+1)+'"> '+val[0].substring(6)+'  '+val[1].substring(12)+'</option>');
         }
     });
+    if ($("#account").val() !== '0'){
+        $.each(balance,function (i,val) {
+            acc= document.getElementById('account').options[document.getElementById('account').selectedIndex].text;
+            if (val[0] === 'Ahorro' && acc.includes('Ahorro')){
+                $("#balance_transf").text(val[1])
+            }
+            else if (val[0] === 'Corriente' && acc.includes('Corriente')){
+                $("#balance_transf").text(val[1])
+            }
+        });
+
+        $("#balance_transf").css({display:'inline-block'});
+    }
 }
 
 
@@ -237,6 +251,9 @@ function pay_services(a,b,c,d,e,f,aff,name) {
         if (dest.length > 2){
             dest = dest[1] + ' ' + dest[2]
         }
+        else if (dest.length === 1){
+            dest = dest[0]
+        }
         else{
             dest = dest[1]
         }
@@ -246,6 +263,9 @@ function pay_services(a,b,c,d,e,f,aff,name) {
         }
         if ($.trim($(b).text()) === 'TDC de Terceros mismo banco') {
             details = $(e).val() + ', Tarjeta: ****' + dest.substring(12,16);
+        }
+        if ($.trim($(b).text()) === 'Pago Préstamo'){
+            details = $(e).val() + '--Pago de Préstamo número ' + dest.split('-')[1]
         }
         notification_success('Transacción en proceso....');
         setTimeout(function(){

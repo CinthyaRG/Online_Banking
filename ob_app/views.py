@@ -300,6 +300,7 @@ def validate_pass(request):
                               identService=p[0],
                               numService=p[1],
                               alias=p[1],
+                              extra=p[2],
                               customer=customer)
             service.save()
 
@@ -582,6 +583,26 @@ def get_tdc(request):
         if data['exist']:
             data['id'] = Service.objects.get(customer=customer.id,
                                              numService=tdc).id
+
+    return JsonResponse(data)
+
+
+@ensure_csrf_cookie
+def get_loans(request):
+    loan = request.GET.get('loan', None)
+
+    data = {
+        'user_exists': User.objects.filter(pk=request.user.id).exists()
+    }
+
+    if data['user_exists']:
+        customer = Customer.objects.get(user=request.user.id)
+
+        data['exist'] = Service.objects.filter(customer=customer.id, numService=loan).exists()
+
+        if data['exist']:
+            data['id'] = Service.objects.get(customer=customer.id,
+                                             numService=loan).id
 
     return JsonResponse(data)
 
@@ -921,7 +942,6 @@ def register_affiliate(request):
 
 @ensure_csrf_cookie
 def delete_affiliate(request, pk):
-    print(pk)
     data = {
         'user_exist': User.objects.filter(pk=request.user.id).exists(),
         'success': False
@@ -1651,6 +1671,14 @@ class Payments(LoginRequiredMixin, TemplateView):
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
         elems = ElemSecurity.objects.get(pk=customer.elemSecurity_id)
+        services = Service.objects.filter(customer=customer.id)
+
+        for s in services:
+            if s.identService == 'Pago Préstamo':
+                extra = s.extra.split('-')
+                date = datetime.date(int(extra[0]),int(extra[1]),int(extra[2][:2]))
+                if date < datetime.date.today():
+                    s.delete()
 
         if elems.sessionExpires:
             context['session'] = 'true'

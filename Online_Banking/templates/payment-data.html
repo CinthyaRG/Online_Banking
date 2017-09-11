@@ -3,6 +3,32 @@
 
 {% block script %}
     <script src="{% static 'js/script-data.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function (){
+            alert($.trim($('#name_service').text()));
+            if ($.trim($('#name_service').text()) === 'Pago Préstamo' ||
+                $.trim($('#name_service').text()) === 'TDC Propias') {
+                var path = window.location.href.split('/');
+                var url_api = path[0]+"/"+path[1]+"/"+"localhost:8001/ajax/get-amount/";
+                $.ajax({
+                    url: url_api,
+                    origin: 'localhost:8000',
+                    headers: {'X-CSRFToken': getCookie('csrftoken')},
+                    data: {
+                        name: '{{ service.numService }}',
+                        num: '{{customer.user.username}}'
+                    },
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.correct) {
+                            $('#amount_payment').val(data.amount);
+                        }
+                    }
+                });
+            }
+        })
+    </script>
 {% endblock %}
 
 {% block content %}

@@ -16,6 +16,31 @@
             $('#loan_drop').change(function () {
                 change_drop('#loan_drop');
             });
+
+            $('#btn-pay').click(function () {
+                var path = window.location.href.split('/');
+                var url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/get-loan/";
+                var loan = document.getElementById('loan_drop').options[document.getElementById('loan_drop').selectedIndex].text;
+                $.ajax({
+                    url: url,
+                    origin: 'localhost:8000',
+                    headers: {'X-CSRFToken': getCookie('csrftoken')},
+                    data: {
+                        loan: 'Préstamo-'+loan
+                    },
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.exist) {
+                             location.href = path[0]+"/"+path[1]+"/"+path[2]+"/"+path[3]+"/datos-pago/"+ data.id;
+                        }
+                    },
+                    error: function (data) {
+                        alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
+                        // move('logout');
+                    }
+                });
+            })
         });
     </script>
 {% endblock %}
@@ -32,9 +57,9 @@
         <div class="row">
             <div class="col-md-9 col-xs-9"></div>
             <div class="col-md-2 col-xs-3">
-                <a id="btn-pay" class="btn btn-default btn-group btn-apps pull-right" type="button"
-                   onclick="move('datos-pago/1')">
-                    Pagar </a>
+                <a id="btn-pay" class="btn btn-default btn-group btn-apps pull-right" type="button">
+                    Pagar 
+                </a>
             </div>
         </div>
         <div class="row">

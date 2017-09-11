@@ -154,7 +154,7 @@ function tables(k,account,tdc, loan) {
                 $("#table-loan").append('<tr class="cursor" onclick="move(' +"'" + k +"/consultar-prestamo/"+ (i+1) +"')"+'">' +
                     '<td>' +val[0]+ '</td>' +
                     '<td><span class="link">' +val[1]+ '</span></td>' +
-                    '<td class="text-bold">' + 'Bs. ' +val[2]+ '</td>' +
+                    '<td class="text-bold">' + 'Bs. ' +val[6]+ '</td>' +
                     '<td>' + date[2] + '/' + date[1] + '/' + date[0] + '</td>' +
                     '</tr>')
             });
