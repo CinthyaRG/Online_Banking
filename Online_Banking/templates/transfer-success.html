@@ -3,12 +3,6 @@
 
 {% block script %}
     <script src="{% static 'js/script-data.js' %}"></script>
-    <script src="{% static 'js/print.js' %}"></script>
-    <script>
-        function download(url) {
-            document.getElementById('myframe').src = url;
-        }
-    </script>
     <script>
         $(document).ready(function () {
             var path = window.location.href.split('/');
