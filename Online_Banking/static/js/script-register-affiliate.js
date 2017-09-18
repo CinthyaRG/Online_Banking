@@ -372,7 +372,7 @@ function modify_affiliate(a,b,c,d,e,f,g,h) {
                         num: $(b).val(),
                         name: $(c).val(),
                         ci: $(d).val() + $(e).val(),
-                        nick: $(f).val(),
+                        nick:  $.trim($(f).val()),
                         email: $(g).val(),
                         option: path[4]
                     },
@@ -428,7 +428,7 @@ function modify_affiliate(a,b,c,d,e,f,g,h) {
                                     num: $(b).val(),
                                     name: $(c).val(),
                                     ci: $(d).val() + $(e).val(),
-                                    nick: $(f).val(),
+                                    nick: $.trim($(f).val()),
                                     email: $(g).val(),
                                     option: path[4]
                                 },

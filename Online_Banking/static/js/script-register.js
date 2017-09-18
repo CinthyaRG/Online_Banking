@@ -618,7 +618,6 @@ function validate_pass() {
             success: function (data) {
                 if (data.correct) {
                     products = JSON.stringify(data.product);
-                    alert(products);
                     $.ajax({
                         url: url,
                         headers: {'X-CSRFToken': getCookie('csrftoken')},

@@ -175,14 +175,6 @@ def validate_email(request):
             activation_key = create_token(6)
             while UserProfile.objects.filter(activationKey=activation_key).count() > 0:
                 activation_key = create_token(6)
-            # mypath = os.getcwd()
-            # path = Path('/Online_Banking/static/img/logo.png')
-            # path = mypath + path
-            # print(path)
-            # file = open(path, "rb")
-            # attach_image = MIMEImage(file.read())
-            # attach_image.add_header('Content-Disposition', 'attachment; filename = "logo.png"')
-            # msg.attach(attach_image)
             c = {'usuario': user.get_full_name,
                  'key': activation_key}
             subject = 'Actio Capital - Confirmación de Email'
@@ -252,7 +244,6 @@ def validate_pass(request):
     password = request.GET.get('password', None)
     ci = request.GET.get('ci', None)
     products = json.loads(request.GET.get('p', None))
-    print(type(products))
 
     data = {
         'user_exists': User.objects.filter(username=username).exists()
@@ -293,8 +284,6 @@ def validate_pass(request):
         customer.save()
 
         for p in products:
-            print('PRODUCT****************')
-            print(p)
             service = Service(ident=customer.ident,
                               email=user.email,
                               identService=p[0],
@@ -445,7 +434,6 @@ def validate_quest(request):
 
 @ensure_csrf_cookie
 def validate_elems(request):
-    print(request.user.id)
     quest = request.GET.get('question', None)
     answ = request.GET.get('answer', None)
     f_coord_value = request.GET.get('f_coord_val', None)
@@ -470,8 +458,6 @@ def validate_elems(request):
         if (customer.elemSecurity.question2 == quest) and (customer.elemSecurity.answer2 == answ):
             data['question'] = True
 
-        print(data['question'])
-
         if data['question']:
             l = customer.elemSecurity.cardCoor.coor.split(",")
             f = conv_coord(f_coord)
@@ -479,7 +465,6 @@ def validate_elems(request):
 
             if l[f] == f_coord_value and l[s] == s_coord_value:
                 elems.sessionExpires = True
-                print(elems.sessionExpires)
                 elems.save()
                 data['coor'] = True
 
@@ -654,7 +639,6 @@ def status_cardcoor(request):
 
             message_template = 'product_email.html'
             email = customer.user.email
-            print('antes de enviar correo coordenadas')
 
             try:
                 send_email(subject, message_template, c, email)
@@ -708,7 +692,6 @@ def send_email_product(request):
 
     message_template = 'product_email.html'
     email = customer.user.email
-    print('antes de enviar correo coordenadas')
     try:
         send_email(subject, message_template, c, email)
     except:
@@ -755,6 +738,7 @@ def send_email_transaction(request):
             c['usuario'] = customer.user.get_full_name
             email = customer.user.email
         else:
+            c['title'] = 'Notificación de Transferencia Recibida'
             c['type'] = 'recibió'
             c['msg'] = 'La cuenta del banco ' + affiliate.bank + ' número ' + affiliate.numAccount[:6] + \
                        '**********' + affiliate.numAccount[16:] + ' a su nombre.'
@@ -777,32 +761,35 @@ def send_email_transaction(request):
                 num = '****' + service.numService[12:]
                 if service.email is not None:
                     c['type'] = 'recibió'
+                    c['title'] = 'Notificación de Pago Recibido'
                     c['usuario'] = service.extra
                     c['msg'] = 'Pago de TDC a su nombre terminal número ' + num + '.'
                     c['msg2'] = 'Desde la cuenta de ' + customer.get_name() + ' de BANCO ACTIO CAPITAL, C.A.'
+                    c['amount'] = 'Por el monto de Bs. ' + str(amount)
+                    c['ref'] = 'Referencia: ' + ref
                     send_email(subject, 'transaction_email.html', c, service.email)
                 c['msg'] = service.identService + ' número ' + num + \
                            ' a nombre de ' + service.extra + '.'
+                c['title'] = 'Notificación de Pago Realizado'
         elif service.get_type() == 'Recarga':
             c['msg'] = 'Pago de telefonía ' + service.identService + ' número de ' + \
                        service.get_type_affiliate().casefold() + ' ' + service.numService + '.'
         elif service.get_type() == 'Servicio':
             c['msg'] = service.identService + ' número de ' + service.get_type_affiliate().casefold() + \
                        ' ' + service.numService + '.'
+        else:
+            serv = service.numService.split('-')
+            c['msg'] = service.identService + ' número ' + serv[1] + '.'
 
+        c['type'] = 'realizó'
+        c['msg2'] = 'Desde la cuenta ' + account[0] + ' con terminación ' + account[1] + '.'
+        c['amount'] = 'Por el monto de Bs. ' + str(amount)
+        c['ref'] = 'Referencia: ' + ref
+        c['usuario'] = customer.user.get_full_name
         email = customer.user.email
 
-    c['type'] = 'realizó'
-    c['msg2'] = 'Desde la cuenta ' + account[0] + ' con terminación ' + account[1] + '.'
-    c['amount'] = 'Por el monto de Bs. ' + str(amount)
-    c['ref'] = 'Referencia: ' + ref
-    c['usuario'] = customer.user.get_full_name
-
     message_template = 'transaction_email.html'
-    print('antes de enviar correo coordenadas')
     try:
-        print('el email es: ')
-        print(email)
         if email is not None:
             send_email(subject, message_template, c, email)
     except:
@@ -833,7 +820,6 @@ def register_affiliate(request):
 
         if id != 0:
             affiliate = Affiliate.objects.get(pk=id)
-            print(affiliate)
             if Affiliate.objects.filter(numAccount=num_acc, customer=customer.id).exclude(pk=id).exists():
                 data['exist'] = True
                 return JsonResponse(data)
@@ -878,7 +864,6 @@ def register_affiliate(request):
 
                     message_template = 'affiliate_email.html'
                     email = customer.user.email
-                    print('antes de enviar correo de modificacion')
                     try:
                         send_email(subject, message_template, c, email)
                     except:
@@ -929,7 +914,6 @@ def register_affiliate(request):
 
                     message_template = 'affiliate_email.html'
                     email = customer.user.email
-                    print('antes de enviar correo de afiliacion')
                     try:
                         send_email(subject, message_template, c, email)
                     except:
@@ -996,7 +980,6 @@ def register_services(request):
 
         if id != 0:
             service = Service.objects.get(pk=id)
-            print(service.pk)
             if Service.objects.filter(numService=numServ, customer=customer.id).exclude(pk=id).exists():
                 data['exist'] = True
                 data[
@@ -1052,7 +1035,7 @@ def register_services(request):
 
                     message_template = 'affiliate_email.html'
                     email = customer.user.email
-                    print('antes de enviar correo de afiliacion servicio')
+                    
                     try:
                         send_email(subject, message_template, c, email)
                     except:
@@ -1112,7 +1095,7 @@ def register_services(request):
 
                     message_template = 'affiliate_email.html'
                     email = customer.user.email
-                    print('antes de enviar correo de afiliacion servicio')
+
                     try:
                         send_email(subject, message_template, c, email)
                     except:
@@ -1205,7 +1188,7 @@ def save_request(request):
 
         c['ref'] = ref.ref
         message_template = 'request_email.html'
-        print('antes de enviar correo coordenadas')
+
         try:
             send_email(subject, message_template, c, customer.user.email)
         except:
@@ -1556,8 +1539,6 @@ class Transfer_my_bank(LoginRequiredMixin, TemplateView):
 
         customer = Customer.objects.get(ref=self.kwargs['pk'])
         elems = ElemSecurity.objects.get(pk=customer.elemSecurity_id)
-        print("entrooo aquiiii")
-        print(elems.sessionExpires)
 
         if elems.sessionExpires:
             context['session'] = 'true'
@@ -1884,7 +1865,6 @@ class Request_Coord(LoginRequiredMixin, TemplateView):
             subject = 'Actio Capital - Generación de Tarjeta de Seguridad'
             message_template = 'product_email.html'
             email = customer.user.email
-            print('antes de enviar correo coordenadas')
             try:
                 send_email(subject, message_template, c, email)
             except:
@@ -2121,41 +2101,6 @@ class Profile(LoginRequiredMixin, TemplateView):
 
         return context
 
-        # def post(self, request, *args, **kwargs):
-        #     """
-        #     Handles POST requests, instantiating a form instance with the passed
-        #     POST variables and then checked for validity.
-        #     """
-        #     form = ProfileForm(request.POST)
-        #     customer = Customer.objects.get(ref=self.kwargs['pk'])
-        #
-        #     if form.is_valid():
-        #         email = form.cleaned_data['email']
-        #         f_quest = form.cleaned_data['first_quest']
-        #
-        #         if email == "" or f_quest == "":
-        #             msg = ""
-        #             if username == "":
-        #                 msg = msg + "  Introduzca su número de tarjeta. "
-        #
-        #             if password == "":
-        #                 msg = msg + " Introduzca su contraseña. "
-        #
-        #             form.add_error(None, msg)
-        #
-        #             context = {'form': form,
-        #                        'pk': self.kwargs['pk'],
-        #                        'customer': customer}
-        #             return render(request, 'profile-security.html', context)
-        #
-        #     else:
-        #         print('else')
-        #         context = {'form': form,
-        #                    'pk': self.kwargs['pk'],
-        #                    'customer': customer}
-        #         return render(request, 'profile-security.html', context)
-
-
 class Help(LoginRequiredMixin, TemplateView):
     template_name = 'help.html'
     login_url = 'home'
@@ -2208,7 +2153,7 @@ class MyPDFView(DetailView):
         elementos = []
         # Definimos los estilos para el documento
         estilo = getSampleStyleSheet()
-        print(estilo)
+
         style_table = estilo["BodyText"]
         style_table.alignment = TA_JUSTIFY
         style_table.fontName = "Helvetica"
@@ -2401,7 +2346,6 @@ class CardCoorPDF(DetailView):
         ]
 
         t = Table(coord)
-        # t.setStyle(TableStyle([('VALIGN',(1,0),(1,8),'MIDDLE')]))
         t.setStyle(TableStyle(
             [
                 ('GRID', (1, 1), (6, 5), 1, colors.black),
@@ -2633,7 +2577,7 @@ class MovementPDF(DetailView):
             t = Table([heading] + mov)
             t.setStyle(TableStyle(
                 [
-                    ('GRID', (0, 0), (len(movement) + 1, len(movement)), 1, colors.HexColor('#C0C0C0')),
+                    ('GRID', (0, 0), (4, len(movement)), 1, colors.HexColor('#C0C0C0')),
                     ('BACKGROUND', (0, 0), (4, 0), colors.HexColor('#D2D6DE')),
                     ('ALIGN', (0, 0), (4, len(movement)), 'CENTER')
                 ]
@@ -2755,7 +2699,7 @@ class Movement_TDC_PDF(DetailView):
             t = Table([heading] + mov)
             t.setStyle(TableStyle(
                 [
-                    ('GRID', (0, 0), (len(movement) + 1, len(movement)), 1, colors.HexColor('#C0C0C0')),
+                    ('GRID', (0, 0), (2, len(movement)), 1, colors.HexColor('#C0C0C0')),
                     ('BACKGROUND', (0, 0), (2, 0), colors.HexColor('#D2D6DE')),
                     ('ALIGN', (0, 0), (2, len(movement)), 'CENTER')
                 ]

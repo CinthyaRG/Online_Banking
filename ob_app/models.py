@@ -96,7 +96,6 @@ class Service(models.Model):
     customer = models.ForeignKey(Customer)
 
     def get_type(self):
-        print(self.identService)
         if self.identService.find('TDC') == 0:
             name = 'TDC'
         elif self.identService.find('Pago Préstamo') == 0:

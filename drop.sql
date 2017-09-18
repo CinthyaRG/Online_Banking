@@ -14,3 +14,4 @@ drop table django_admin_log CASCADE;
 drop table django_content_type CASCADE;
 drop table django_migrations CASCADE;
 drop table django_session CASCADE;
+drop table ob_app_requestproduct CASCADE;

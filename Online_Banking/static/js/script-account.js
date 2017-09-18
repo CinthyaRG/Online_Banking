@@ -152,7 +152,6 @@ function download_movement(a) {
         if (e === '') {
             end = today.getDate() + '/' + (today.getMonth()+1) + '/' + today.getFullYear();
         }
-        alert(end);
 
         $.ajax({
             url: url_api,

@@ -50,7 +50,6 @@ $(document).ready(function (){
 function drop_account_trans(account){
     var path = document.referrer.split('/');
     var key = path[5];
-    alert(key);
     var avaliable;
 
     $("#account").empty();
@@ -142,7 +141,6 @@ function send_transfer(a,b,c,d,e,aff) {
             $.getJSON('../../../static/js/bank.json', function (data) {
                 $.each( data, function( key, val ) {
                     if ($.trim($('#acc_transf').text()).substring(0,4) === val.codigo) {
-                        alert(val.banco.replace(/\s/g,'_'));
                         acc_dest = $.trim($('#name_transf').text()).replace(/\s/g,'_') + ' ' + val.banco.replace(/\s/g,'_');
                     }
                 });

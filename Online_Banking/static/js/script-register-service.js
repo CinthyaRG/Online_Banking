@@ -587,7 +587,6 @@ function add_services() {
     var f = '#num-tlf';
     errors = !($(a).hasClass('errors') || $(b).hasClass('errors') || $(c).hasClass('errors') || $(d).hasClass('errors') ||
         $(e).hasClass('errors') || $(f).hasClass('errors'));
-    alert(errors);
 
     if (type_payment === '0') {
         notification_error('Escoja un tipo de servicio.');
@@ -757,7 +756,6 @@ function modify_services() {
 
     errors = !($(a).hasClass('errors') || $(b).hasClass('errors') || $(c).hasClass('errors') || $(d).hasClass('errors') ||
         $(e).hasClass('errors') || $(f).hasClass('errors'));
-    alert(errors);
 
     if (type_payment === '0') {
         notification_error('Escoja un tipo de servicio.');

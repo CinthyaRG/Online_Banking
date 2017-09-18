@@ -5,7 +5,6 @@
     <script src="{% static 'js/script-data.js' %}"></script>
     <script type="text/javascript">
         $(document).ready(function (){
-            alert($.trim($('#name_service').text()));
             if ($.trim($('#name_service').text()) === 'Pago Préstamo' ||
                 $.trim($('#name_service').text()) === 'TDC Propias') {
                 var path = window.location.href.split('/');

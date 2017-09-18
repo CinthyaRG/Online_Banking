@@ -28,8 +28,6 @@ function validate_date(a, b) {
 
     var start = new Date(s[2],s[1]-1,s[0]);
     var end = new Date(e[2],e[1]-1,e[0]);
-    console.log(start);
-    console.log(end);
 
     return start <= end
 

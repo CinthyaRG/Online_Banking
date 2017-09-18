@@ -3,7 +3,6 @@
  */
 
 function tables_data(a,b) {
-    alert('data');
     var num = a;
     var k = b;
     var path = window.location.href.split('/');
@@ -32,7 +31,6 @@ function tables_data(a,b) {
                 menu_attr(data.account,data.tdc,data.loan);
                 if (url[3]==='inicio') {
                     tables(k,data.account,data.tdc,data.loan);
-                    console.log(data.chart);
                     chart(data.chart);
                 }
                 else if (url[4]==='consultar-cuenta') {
