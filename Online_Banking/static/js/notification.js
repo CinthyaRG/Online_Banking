@@ -1,5 +1,5 @@
 /**
- * Created by CinthyaCarolina on 7/8/2017.
+ * Created by Cinthya C. Ramos G. on 7/8/2017.
  */
 
 var stack = {

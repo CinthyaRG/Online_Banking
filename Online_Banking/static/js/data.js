@@ -1,7 +1,20 @@
 /**
- * Created by CinthyaCarolina on 21/6/2017.
+ * Created by Cinthya C. Ramos G. on 21/6/2017.
  */
 
+
+
+/** 
+    Función tables_data, se encarga de conectarse con el api bancario
+    y traerse los datos necesarios dependiendo de la vista en la que 
+    se este.
+
+    Parámetros:
+        a: username del cliente, en este caso el número de tarjeta
+        b: kwargs asociado al inicio de sesión del cliente, este es 
+            la ref del mismo el cual es un número aleatorio.
+
+*/
 function tables_data(a,b) {
     var num = a;
     var k = b;
@@ -66,12 +79,24 @@ function tables_data(a,b) {
         },
         error: function (data) {
             alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
-            // move('logout');
         }
     });
-
 }
 
+
+
+/** 
+    Función menu_attr, se encarga de eliminar los enlaces innecesarios en
+    el menú cuando el cliente no posea tarjetas de créditos, préstamos, 
+    cuenta de ahorros y/o cuenta corriente.
+
+    Parámetros:
+        account: lista que contiene las cuentas que posee el cliente con el banco.
+        tdc: lista que contiene las tarjetas de crédito que posee el cliente con 
+            el banco.
+        loan: lista que contiene los préstamos que tiene asociado el cliente.
+
+*/
 function menu_attr(account, tdc, loan) {
     $.each(account,function (i,val) {
         if (val[0] === "Cuenta Ahorro") {
@@ -105,6 +130,21 @@ function menu_attr(account, tdc, loan) {
 }
 
 
+
+/** 
+    Función tables, se encarga de cargar los datos en el reglón de Activos y 
+    Pasivos dependiendo de donde corresponda y en caso de que no existan
+    préstamos o tarjetas de crédito se elimina la tabla.
+
+    Parámetros:
+        k: kwargs asociado al inicio de sesión del cliente, este es 
+            la ref del mismo el cual es un número aleatorio.
+        account: lista que contiene las cuentas que posee el cliente con el banco.
+        tdc: lista que contiene las tarjetas de crédito que posee el cliente con 
+            el banco.
+        loan: lista que contiene los préstamos que tiene asociado el cliente.
+
+*/
 function tables(k,account,tdc, loan) {
     $.each(account,function (i,val) {
         var acc;

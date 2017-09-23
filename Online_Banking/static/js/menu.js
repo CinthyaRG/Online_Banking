@@ -1,5 +1,5 @@
 /**
- * Created by CinthyaCarolina on 16/6/2017.
+ * Created by v on 16/6/2017.
  */
 
 function move(url) {

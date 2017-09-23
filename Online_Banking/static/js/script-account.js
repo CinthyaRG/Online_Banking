@@ -1,5 +1,5 @@
 /**
- * Created by CinthyaCarolina on 16/6/2017.
+ * Created by Cinthya C. Ramos G. on 16/6/2017.
  */
 
 $(document).ready(function (){

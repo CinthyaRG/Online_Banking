@@ -36,12 +36,7 @@
         });
     </script>
     {% include 'session_security/all.html' %}
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script type="text/javascript" src="{% static 'js/html5shiv.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/respond.min.js' %}"></script>
-    <![endif]-->
+
     {% block script %}
         <link rel="stylesheet" href="{% static 'plugins/hopscotch/css/hopscotch.css' %}">
         <script src="{% static 'plugins/hopscotch/js/hopscotch.js' %}"></script>

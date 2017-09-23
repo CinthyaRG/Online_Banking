@@ -1,6 +1,6 @@
 /**
- * Created by CinthyaCarolina on 12/6/2017.
- */
+ * Created by Cinthya C. Ramos G. on 12/6/2017.
+*/
 
 $(document).ready(function (){
     $('#resp_seg').click(function () {

@@ -1,6 +1,6 @@
 /**
- * Created by CinthyaCarolina on 6/8/2017.
- */
+ * Created by Cinthya C. Ramos G. on 6/8/2017.
+*/
 
 function validate_date(a, b) {
     if(a === '' && b === ''){

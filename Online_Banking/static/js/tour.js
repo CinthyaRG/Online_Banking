@@ -1,11 +1,21 @@
 /**
- * Created by CinthyaCarolina on 20/7/2017.
- */
+ * Created by Cinthya C. Ramos G. on 20/7/2017.
+*/
 
 $(document).ready(function (){
     tourStart();
 });
 
+
+
+/** 
+    Función tour, se encarga de cargas los mensajes y los id's correspondientes
+    a dichos mensajes que muestran la funcionalidad de la aplicación al iniciar
+    sesión por primera vez el ususario.
+
+    Parámetros:
+        no recibe parḿetros.
+*/
 function tour() {
     var tour = {
         id: "hello-hopscotch",
@@ -121,6 +131,17 @@ function tour() {
     hopscotch.startTour(tour);
 }
 
+
+
+/** 
+    Función tourStart, se encarga de verificar si es la primera vez 
+    que el usuario inicia sesión en la aplicación para así poder 
+    ejecutar el tour inicio.
+
+    Parámetros:
+        no recibe parámetros.
+
+*/
 function tourStart() {
     var path = window.location.href.split('/');
     var url = path[0]+"/"+path[1]+"/"+path[2]+"/ajax/first-login/";

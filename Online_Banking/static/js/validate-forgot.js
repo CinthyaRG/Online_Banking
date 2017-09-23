@@ -1,6 +1,6 @@
 /**
- * Created by CinthyaCarolina on 13/7/2017.
- */
+ * Created by Cinthya C. Ramos G. on 13/7/2017.
+*/
 
 $(document).ready(function () {
     var regexNum =  /[0-9]+/;
