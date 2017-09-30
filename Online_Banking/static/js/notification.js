@@ -10,6 +10,15 @@ var stack = {
     "push": "top"
 };
 
+
+/**
+    Función notification_success, se encarga de mostrar un mensaje
+    emergente exitoso.
+
+    Parámetros:
+        msg: mensaje a ser mostrado en la notificación.
+
+*/
 function notification_success(msg) {
     $(function(){
         new PNotify({
@@ -27,6 +36,15 @@ function notification_success(msg) {
     });
 }
 
+
+/**
+    Función notification_error, se encarga de mostrar un mensaje
+    emergente de error.
+
+    Parámetros:
+        msg: mensaje a ser mostrado en la notificación.
+
+*/
 function notification_error(msg) {
     $(function(){
         new PNotify({

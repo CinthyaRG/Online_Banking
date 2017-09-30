@@ -3,7 +3,6 @@
  */
 
 
-
 /** 
     Función tables_data, se encarga de conectarse con el api bancario
     y traerse los datos necesarios dependiendo de la vista en la que 

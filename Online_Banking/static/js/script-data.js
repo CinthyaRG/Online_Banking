@@ -47,6 +47,15 @@ $(document).ready(function (){
 });
 
 
+/**
+    Función drop_account_trans, se encarga de cargar el dropdown de
+    cuentas a la cuales realizar una transferencia o un pago y mostrar el
+    saldo disponible.
+
+    Parámetros:
+        account: lista con las cuentas que posse el usuario.
+
+*/
 function drop_account_trans(account){
     var path = document.referrer.split('/');
     var key = path[5];
@@ -97,6 +106,19 @@ function drop_account_trans(account){
 }
 
 
+/**
+    Función send_transfer, se encarga de enviar al api la transferencia que
+ realiza un usuario.
+
+    Parámetros:
+        a: Cuenta a debitar.
+        b: Cuenta a acreditar.
+        c: Monto de la transferencia.
+        d: Descripción de la transacción.
+        e: username del usuario que hace la transacción.
+        aff: id del afiliado a transferir.
+
+*/
 function send_transfer(a,b,c,d,e,aff) {
     var msg = '';
     var available = parseFloat($("#balance_transf").text().replace(/\./g, '').replace(',','.'));
@@ -186,6 +208,18 @@ function send_transfer(a,b,c,d,e,aff) {
 }
 
 
+/**
+    Función send_email, se encarga de enviar correos.
+
+    Parámetros:
+        a: especifica si es una transacción enviada o recibida.
+        b: tipo de tansacción.
+        c: Monto de la transacción.
+        d: Referencia de la transacción.
+        aff: id del afiliado a transferir.
+        acc: Cuenta de donde fue debitada la transacción.
+
+*/
 function send_email(a,b,c,d,e,f) {
     var path = window.location.href.split('/');
     var url = path[0] + "/" + path[1] + "/" + path[2] + "/ajax/send-emails/";
@@ -208,6 +242,21 @@ function send_email(a,b,c,d,e,f) {
 }
 
 
+/**
+    Función pay_services, se encarga de enviar al api  el pago que
+ realiza un usuario.
+
+    Parámetros:
+        a: Cuenta a debitar.
+        b: Cuenta a acreditar.
+        c:  Nombre del servicio a pagar.
+        d: Monto de la transferencia.
+        e: Descripción de la transacción.
+        f: username del usuario que hace la transacción.
+        aff: id del afiliado a transferir.
+        name: Extra de los servicios.
+
+*/
 function pay_services(a,b,c,d,e,f,aff,name) {
     var msg = '';
     var available = parseFloat($("#balance_transf").text().replace(/\./g, '').replace(',','.'));

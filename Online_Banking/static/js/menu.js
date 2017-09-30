@@ -1,7 +1,15 @@
 /**
- * Created by v on 16/6/2017.
+ * Created by Cinthya C. Ramos G. on 16/6/2017.
  */
 
+
+/**
+    Función move, se encarga de redirigirse a una ruta especifica.
+
+    Parámetros:
+        url: ruta a la que quiere redirijirse de la aplicación.
+
+*/
 function move(url) {
     var path = window.location.href.split('/');
     var new_url = path[0]+'/'+path[1]+'/'+path[2];
@@ -9,6 +17,16 @@ function move(url) {
 }
 
 
+/**
+    Función menu, se encarga de hacer que dependiendo de la ruta
+    donde se encuentre  en la aplicación el menu muestre un distintivo
+    que indique donde esta ubicado. Además si la opción esta en un
+    submenu se encarga de mantenerlo visible.
+
+    Parámetros:
+        No recibe parámetros de entrada.
+
+*/
 function menu() {
     var animationSpeed = $.AdminLTE.options.animationSpeed;
     var path = window.location.pathname.split('/');
@@ -83,6 +101,16 @@ function menu() {
     }
 }
 
+
+/**
+    Función change_drop, se encarga de redirigir la página dependiendo
+    del identificador delproducto que reciba.
+
+    Parámetros:
+        id: identificador del product del usuario, que se utilizará como
+            kwargs.
+
+*/
 function change_drop(id) {
     var path = window.location.href.split('/');
     var url = path[0]+'/'+path[1]+'/'+path[2]+'/'+path[3]+'/'+path[4];

@@ -28,6 +28,16 @@ $(document).ready(function (){
 });
 
 
+
+/**
+    Función drop_account, se encarga de cargar las opciones del
+    dropdown  de cuentas, y seleccionar la correspondiente al
+    identificador de la ruta.
+
+    Parámetros:
+        account: lista con las cuentas del usuario que inicio sesión.
+
+*/
 function drop_account(account){
     var path = window.location.pathname.split('/');
     var key = path[3];
@@ -61,6 +71,16 @@ function drop_account(account){
     })
 }
 
+
+/**
+    Función movement_table, se encarga de cargar la tabla de los
+    movimientos de la cuenta elegida por el usuario.
+
+    Parámetros:
+        movements: lista con los movimientos a mostrar en la tabla de
+                            movimientos de la cuenta elegida.
+
+*/
 function movement_table(movements) {
     var path = window.location.pathname.split('/');
     var key = path[3];
@@ -72,7 +92,6 @@ function movement_table(movements) {
     else {
         j = 1;
     }
-
 
     $('#example2').DataTable().destroy();
     $("#mov-table").empty();
@@ -97,6 +116,16 @@ function movement_table(movements) {
     DatatablesExec();
 }
 
+
+/**
+    Función drop_trans, se encarga de cargar las opciones del
+    dropdown  de tipo de transacciones asociados al filtrado de
+    movimientos.
+
+    Parámetros:
+        no recibe parámetros.
+
+*/
 function drop_trans(){
     var type_trans = ['Depósito', 'Retiro', 'POS', 'Transferencia','Pagos'];
     $("#trans").append('<option value="'+'0'+'" selected> '+"Todas"+'</option>');
@@ -106,6 +135,15 @@ function drop_trans(){
     })
 }
 
+
+/**
+    Función DatatablesExec, se encarga de reiniciar la tabla de
+    movimientos y darle las configuraciones que requiere el datatable.
+
+    Parámetros:
+        no recibe parámetros.
+
+*/
 function DatatablesExec() {
     var table = $('#example2').DataTable({
         "paging": true,
@@ -134,10 +172,19 @@ function DatatablesExec() {
     $("#example2_paginate").css({height: '60px'});
 }
 
+
+/**
+    Función download_movement, se encarga de comunicarse con el api
+    y traerse la información necesaria para descargar los movimientos
+    mostrados en la tabla de movimientos.
+
+    Parámetros:
+        a: username asociado al  usuario que inicio sesión.
+
+*/
 function download_movement(a) {
     var path = window.location.href.split('/');
     var url_api = path[0]+"/"+path[1]+"/"+"localhost:8001"+"/ajax/data-customer/";
-    var o;
     var s = $('#datepicker').val();
     var e = $('#datepicker2').val();
     var select = $('#trans').val();
@@ -182,7 +229,6 @@ function download_movement(a) {
             },
             error: function (data) {
                 alert("Lo sentimos, hay problemas con el servidor. Intente más tarde.");
-                // move('logout');
             }
         });
     }

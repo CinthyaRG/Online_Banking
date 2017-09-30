@@ -1,30 +1,21 @@
 import json
-from json import JSONDecoder
-
 import os
+import datetime
+import random
+import hashlib
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
-from django.template import RequestContext
 from django.template.loader import get_template
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User, Group
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.shortcuts import render, get_object_or_404, render_to_response
-from email.mime.image import MIMEImage
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+from django.shortcuts import render, get_object_or_404
 from django.core.mail import EmailMessage
 from django.views.generic import *
-from reportlab.lib.units import inch
 from unipath import Path
-
 from ob_app.forms import *
 from ob_app.models import *
-import datetime
-import random
-import hashlib
-from reportlab.pdfgen import canvas
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
@@ -42,6 +33,11 @@ def groups():
             Group.objects.create(name=group)
 
 
+    # Función conv_coord, retorna la posición del arreglo en donde se
+    # encuentra  la coordenada de la tarjeta de coordenadas a consultar.
+    #
+    # Parámetros:
+    #     coor: lista que contiene la coordenada a saber su posición.
 def conv_coord(coor):
     if coor[1] == '1':
         i = 0
@@ -70,13 +66,11 @@ def conv_coord(coor):
     return i
 
 
-def get_user(user):
-    if user.is_staff:
-        return "{% url 'inicio' user.pk %}"
-    else:
-        return "{% url 'inicio' user.pk %}"
-
-
+    # Función validate_user, se encarga de verificar si un usuario está
+    # registrado en la aplicación.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http.
 @ensure_csrf_cookie
 def validate_user(request):
     groups()
@@ -92,6 +86,11 @@ def validate_user(request):
     return JsonResponse(data)
 
 
+    # Función first_login, se encarga de verificar si un usuario está
+    # iniciando por primera vez  en la aplicación.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http.
 @ensure_csrf_cookie
 def first_login(request):
     customer = request.GET.get('customer', None)
@@ -109,9 +108,13 @@ def first_login(request):
     return JsonResponse(data)
 
 
+    # Función validate_user_forgot, se encarga de verificar si un usuario
+    # puede restaurar su contraseña en la aplicación.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http.
 @ensure_csrf_cookie
 def validate_user_forgot(request):
-    groups()
     ci = request.GET.get('ci', None)
     data = {
         'user_exists': Customer.objects.filter(ident=ci).exists()
@@ -148,6 +151,12 @@ def validate_user_forgot(request):
     return JsonResponse(data)
 
 
+    # Función validate_email, se encarga de crear un nuevo usuario en la
+    # la aplicación, y enviarle un código aleatorio para confirmar que
+    # el correo suministrado le pertenece.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http.
 @ensure_csrf_cookie
 def validate_email(request):
     email = request.GET.get('email', None)
@@ -197,6 +206,11 @@ def validate_email(request):
     return JsonResponse(data)
 
 
+    # Función validate_cod, se encarga de validar el código que el usuario
+    # recibió en el correo de confirmación de la función anterior.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http.
 @ensure_csrf_cookie
 def validate_cod(request):
     username = request.GET.get('username', None)
@@ -234,6 +248,12 @@ def validate_cod(request):
     return JsonResponse(data)
 
 
+    # Función validate_pass, se encarga de validar los datos del usuario
+    # y crearlo como cliente de la aplicaciión, conjunto con sus elementos
+    # de seguridad.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http.
 @ensure_csrf_cookie
 def validate_pass(request):
     username = request.GET.get('username', None)
@@ -306,6 +326,11 @@ def validate_pass(request):
     return JsonResponse(data)
 
 
+    # Función validate_pass_forgot, se encarga de validar los datos del
+    # usuario y actualizar la contraseña del cliente.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http.
 @ensure_csrf_cookie
 def validate_pass_forgot(request):
     username = request.GET.get('username', None)
@@ -351,6 +376,11 @@ def validate_pass_forgot(request):
     return JsonResponse(data)
 
 
+    # Función old_pass, se encarga de verificar si la nuena conttraseña
+    # que desea cambiar el cliente es la misma que la anterior.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http.
 @ensure_csrf_cookie
 def old_pass(request):
     username = request.GET.get('username', None)
@@ -369,6 +399,11 @@ def old_pass(request):
     return JsonResponse(data)
 
 
+    # Función resend_email, se encarga de reenviar el código de
+    # validación de correo para el registro de usuarios.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http.
 @ensure_csrf_cookie
 def resend_email(request):
     username = request.GET.get('username', None)
@@ -406,6 +441,11 @@ def resend_email(request):
     return JsonResponse(data)
 
 
+    # Función validate_quest, se encarga de validar que la respuesta del
+    # usuario al responder los elementos de seguridad es correcta.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http.
 @ensure_csrf_cookie
 def validate_quest(request):
     question = request.GET.get('question', None)
@@ -432,6 +472,11 @@ def validate_quest(request):
     return JsonResponse(data)
 
 
+    # Función validate_elems, se encarga de validar que la respuesta del
+    # usuario al responder los elementos de seguridad es correcta.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http
 @ensure_csrf_cookie
 def validate_elems(request):
     quest = request.GET.get('question', None)
@@ -471,6 +516,11 @@ def validate_elems(request):
     return JsonResponse(data)
 
 
+    # Función modify_profile, se encarga de modificar el perfil de
+    # seguridad del usuario.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http
 @ensure_csrf_cookie
 def modify_profile(request):
     q1 = request.GET.get('q1', None)
@@ -533,6 +583,11 @@ def modify_profile(request):
     return JsonResponse(data)
 
 
+    # Función get_cardcoor, se encarga de obtener el serial de la tarjeta
+    # de coordenadas de un usuario.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http
 @ensure_csrf_cookie
 def get_cardcoor(request):
     data = {
@@ -552,6 +607,11 @@ def get_cardcoor(request):
     return JsonResponse(data)
 
 
+ # Función get_tdc, se encarga de obtener el id del servicio de pago para
+    # tarjeta de crédito de un usuario.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http
 @ensure_csrf_cookie
 def get_tdc(request):
     tdc = request.GET.get('tdc', None)
@@ -572,6 +632,11 @@ def get_tdc(request):
     return JsonResponse(data)
 
 
+ # Función get_loans, se encarga de obtener el id del servicio de pago para
+    # préstamos de un usuario.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http
 @ensure_csrf_cookie
 def get_loans(request):
     loan = request.GET.get('loan', None)
@@ -592,6 +657,11 @@ def get_loans(request):
     return JsonResponse(data)
 
 
+ # Función get_loans, se encarga de obtener el id del servicio de pago para
+    # préstamos de un usuario.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http
 @ensure_csrf_cookie
 def status_cardcoor(request):
     serial = request.GET.get('s', None)
@@ -652,6 +722,11 @@ def status_cardcoor(request):
     return JsonResponse(data)
 
 
+    # Función send_email_product, se encarga de enviar un correo al
+    # usuario cuando hace una gestión de productos.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http
 @ensure_csrf_cookie
 def send_email_product(request):
     action = request.GET.get('p', None)
@@ -700,6 +775,18 @@ def send_email_product(request):
     return JsonResponse(data)
 
 
+    # Función send_email_product, se encarga de obtener el id del servicio
+    # de pago para un préstamo de un usuario.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http
+
+
+    # Función send_email_transaction, se encarga de enviar un correo al
+    # usuario cuando hace una transferencia o un pago.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http
 @ensure_csrf_cookie
 def send_email_transaction(request):
     type_trans = request.GET.get('type', '0')
@@ -798,6 +885,11 @@ def send_email_transaction(request):
     return JsonResponse(data)
 
 
+    # Función register_affiliate, se encarga de registrar un afiliado a un
+    # usuario para realizarle una transferencia.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http
 @ensure_csrf_cookie
 def register_affiliate(request):
     bank = request.GET.get('bank', None)
@@ -924,6 +1016,11 @@ def register_affiliate(request):
     return JsonResponse(data)
 
 
+    # Función delete_affiliate, se encarga de eliminar un afiliado a un
+    # usuario.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http
 @ensure_csrf_cookie
 def delete_affiliate(request, pk):
     data = {
@@ -943,6 +1040,11 @@ def delete_affiliate(request, pk):
     return JsonResponse(data)
 
 
+    # Función register_services, se encarga de registrar un servicio a un
+    # usuario para realizarle un pago.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http
 @ensure_csrf_cookie
 def register_services(request):
     numServ = request.GET.get('numService', '')
@@ -1035,7 +1137,7 @@ def register_services(request):
 
                     message_template = 'affiliate_email.html'
                     email = customer.user.email
-                    
+
                     try:
                         send_email(subject, message_template, c, email)
                     except:
@@ -1106,6 +1208,11 @@ def register_services(request):
     return JsonResponse(data)
 
 
+    # Función delete_service, se encarga de eliminar un servicio a un
+    # usuario.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http
 @ensure_csrf_cookie
 def delete_service(request, pk):
     data = {
@@ -1125,6 +1232,11 @@ def delete_service(request, pk):
     return JsonResponse(data)
 
 
+    # Función save_request, se encarga de guardar las solicitudes que
+    # realiza un usuario.
+    #
+    # Parámetros:
+    #     request: petición que se recibe por http
 @ensure_csrf_cookie
 def save_request(request):
     option = request.GET.get('option', None)
@@ -1197,6 +1309,14 @@ def save_request(request):
     return JsonResponse(data)
 
 
+    # Función send_email, se encarga de enviar un correo con los datos
+    # de la aplicación.
+    #
+    # Parámetros:
+    #       subject: asunto del correo.
+    #       message_template: template html del correo.
+    #       context: datos a cargar en el template.
+    #       email: email a donde se enviará el correo.
 def send_email(subject, message_template, context, email):
     from_email = 'Actio Capital'
     email_subject = subject
@@ -1207,6 +1327,11 @@ def send_email(subject, message_template, context, email):
     print("Se envió exitosamente el correo.")
 
 
+    # Función email_login_successful, se encarga de enviar un correo
+    # de inicio de sesión exitoso en la aplicación.
+    #
+    # Parámetros:
+    #     user: usuario que inicio sesión.
 def email_login_successful(user):
     usuario = user.get_full_name()
     formato = "%d/%m/%y %I:%M:%S %p"
@@ -1226,6 +1351,11 @@ def email_login_successful(user):
         pass
 
 
+    # Función user_block, se encarga de bloquear un usuario y enviar un
+    # correo indicando que su cuenta está bloqueada.
+    #
+    # Parámetros:
+    #     user: usuario que se bloqueará.
 def user_block(user):
     user.is_active = False
     user.save()
@@ -1240,6 +1370,10 @@ def user_block(user):
         pass
 
 
+    # Función create_token, se encarga de crear un  token aleatorio..
+    #
+    # Parámetros:
+    #     num: tamaño del token a generar.
 def create_token(num):
     chars = list('ABCDEFGHIJKLMNOPQRSTUVWYZabcdefghijklmnopqrstuvwyz0123456789')
     random.shuffle(chars)
@@ -1250,6 +1384,11 @@ def create_token(num):
     return key
 
 
+    # Función list_list, se encarga de convertir un string a una lista. Se usa
+    # para cargar los números de la tarjeta de coordenadas
+    #
+    # Parámetros:
+    #     char: string que se volverá string, estan separados por coma.
 def list_list(char):
     l = char.split(",")
     l = list(map(int, l))
@@ -1259,6 +1398,12 @@ def list_list(char):
     return a
 
 
+    # Función new_token, se encarga de crear un código de activación de
+    # cuenta aleatorio y enviarlo por correo.
+    #
+    # Parámetros:
+    #       request: petición que se recibe por http
+    #       pk: id del usuario a activar.
 def new_token(request, pk):
     if request.user.is_authenticated():
         return HttpResponseRedirect(reverse_lazy('logout'))
@@ -1284,6 +1429,12 @@ def new_token(request, pk):
     return render(request, 'register_success.html')
 
 
+    # Función register_confirm, se encarga de activar la cuenta del usuario
+    # y enviar la notificación  por correo.
+    #
+    # Parámetros:
+    #       request: petición que se recibe por http.
+    #       activation_key: verifica si la clave de activación es válida.
 def register_confirm(request, activation_key):
     if request.user.is_authenticated():
         return HttpResponseRedirect(reverse_lazy('logout'))
@@ -1315,6 +1466,11 @@ def register_confirm(request, activation_key):
     return render(request, 'acc-active.html')
 
 
+    # Función authenticate_user, se encarga de veriificar si un usuario
+    # existe.
+    #
+    # Parámetros:
+    #     username: username del usuario a verificar.
 def authenticate_user(username=None):
     try:
         user = User.objects.get(username=username)
@@ -1324,6 +1480,11 @@ def authenticate_user(username=None):
         return None
 
 
+    # Función user_login, se encarga de realizar el inicio de sesión en la
+    # aplicación.
+    #
+    # Parámetros:
+    #     username: username del usuario a verificar.
 def user_login(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect(reverse_lazy('salir'))
@@ -2101,6 +2262,7 @@ class Profile(LoginRequiredMixin, TemplateView):
 
         return context
 
+
 class Help(LoginRequiredMixin, TemplateView):
     template_name = 'help.html'
     login_url = 'home'
@@ -2125,8 +2287,6 @@ class MyPDFView(DetailView):
         pdf_name = "Referencia-" + reference.ref + ".pdf"
         response['Content-Disposition'] = 'attachment; filename=' + pdf_name
         buff = BytesIO()
-        # Create the PDF object, using the response object as its "file."
-        # p = canvas.Canvas(response)
 
         today = str(datetime.date.today()).split('-')
         month = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre',
@@ -2207,7 +2367,6 @@ class MyPDFView(DetailView):
         ]
 
         t = Table(data)
-        # t.setStyle(TableStyle([('VALIGN',(1,0),(1,8),'MIDDLE')]))
 
         elementos.append(t)
         # Construimos el documento
@@ -2226,8 +2385,6 @@ class CardCoorPDF(DetailView):
         pdf_name = "TarjetaDeCoordenadas-" + card.serial + ".pdf"
         response['Content-Disposition'] = 'attachment; filename=' + pdf_name
         buff = BytesIO()
-        # Create the PDF object, using the response object as its "file."
-        # p = canvas.Canvas(response)
 
         doc = SimpleDocTemplate(buff,
                                 pagesize=letter,
@@ -2375,8 +2532,6 @@ class RequestPDF(DetailView):
         pdf_name = "ComprobanteSolicitud-" + req.ref + ".pdf"
         response['Content-Disposition'] = 'attachment; filename=' + pdf_name
         buff = BytesIO()
-        # Create the PDF object, using the response object as its "file."
-        # p = canvas.Canvas(response)
 
         doc = SimpleDocTemplate(buff,
                                 pagesize=letter,
@@ -2484,8 +2639,6 @@ class MovementPDF(DetailView):
         pdf_name = "ConsultaMovimientosCuenta.pdf"
         response['Content-Disposition'] = 'attachment; filename=' + pdf_name
         buff = BytesIO()
-        # Create the PDF object, using the response object as its "file."
-        # p = canvas.Canvas(response)
 
         doc = SimpleDocTemplate(buff,
                                 pagesize=letter,
@@ -2606,8 +2759,6 @@ class Movement_TDC_PDF(DetailView):
         pdf_name = "ConsultaMovimientosTDC.pdf"
         response['Content-Disposition'] = 'attachment; filename=' + pdf_name
         buff = BytesIO()
-        # Create the PDF object, using the response object as its "file."
-        # p = canvas.Canvas(response)
 
         doc = SimpleDocTemplate(buff,
                                 pagesize=letter,
@@ -2891,7 +3042,6 @@ class TransferPDF(DetailView):
             ]
         ))
 
-        # t.setStyle(TableStyle([('VALIGN',(1,0),(1,8),'MIDDLE')]))
         elementos.append(t)
 
         # Construimos el documento
